@@ -1,0 +1,107 @@
+#operations-tab {
+    .coordinate-grid {
+        margin-right: -10px !important;
+
+        .coordinate-label {
+            margin-top: 15px;
+            text-align: center;
+
+        }
+
+        .coordinate-field {
+    /* Add a 4 pixel rounded border to the OutlinedInput */
+            // .MuiOutlinedInput-root {
+            //     border: 1px solid black;
+            //     border-radius: 4px;
+            // }
+
+            /* Remove the default notched appearance and border from the fieldset */
+            .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+                border: none;
+            }
+
+            /* Remove border from the actual input */
+            .MuiInputBase-input {
+                border: none;
+            }
+
+            .MuiInputBase-root {
+                height: 25px;
+            }
+
+        }
+
+    }
+
+    #mill-row {
+        margin-top: 7px !important;
+        margin-bottom: 7px !important;
+    }
+
+    .MuiSlider-root {
+        margin-top: 15px;
+    }
+
+    .slider-container {
+        padding-left: 25px !important;
+        padding-right: 10px !important;
+    }
+
+    .input-with-button {
+
+        .MuiInputAdornment-root {
+
+            button {
+                height: fit-content;
+            }
+
+        }
+
+    }
+
+    path {
+
+        &.red {
+            stroke: #ff0000 !important;
+        }
+
+        &.orange {
+            stroke: #ffa500 !important;
+        }
+
+        &.yellow {
+            stroke: #ffff00 !important;
+        }
+    }
+
+    .mill-image {
+        margin-left: 10px !important;
+        margin-top: 25px !important;
+    }
+
+    #raw {
+        height: 105px;
+    }
+
+    #machine-output {
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+    .short-row {
+        margin-top: -10px !important;
+        margin-bottom: -10px !important;
+    }
+
+    .feedrate-label {
+        margin-top: 20px;
+    }
+
+    .help-icon {
+        padding-top: 20px;
+    }
+
+    #jog-mode-select {
+        font-size: 12px;
+    }
+}

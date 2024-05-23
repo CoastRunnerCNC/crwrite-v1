@@ -1,0 +1,138 @@
+{
+    "name": "CRWrite",
+    "machine_name": "Coast Runner",
+    "fonts": [
+        "\"Lato\"",
+        "sans-serif"
+    ],
+    "font": {
+        "weight": 500
+    },
+    "dialogs": {
+        "font": {
+            "weight": 500,
+            "color": "#000000"
+        }
+    },
+    "colors": {
+        "primary": "#75327e",
+        "secondary": "#00f1f9",
+        "accent": "#75327e",
+        "textPrimary": "#000000",
+        "textSecondary": "#000000",
+        "scrollbar": "#000000",
+        "form": "#ffffff"
+    },
+    "dashboard": {
+        "background": "./static/img/coastrunner-background.jpeg",
+        "logo": "none",
+        "buttons": "./static/img/CRWrite/buttons/",
+        "border": "none",
+        "store": {
+            "url": "https://CoastRunner.net/"
+        },
+        "run": {
+            "tooltip": "Disabled until Coast Runner is connected"
+        }
+    },
+    "milling": {
+        "background": "./static/img/milling-background.jpg",
+        "steps": {
+            "list": {
+                "background": "white"
+            },
+            "items": {
+                "background": "white",
+                "selected": "#75327e"
+            },
+            "fontColor": "black"
+        },
+        "gcodes": {
+            "background": "black",
+            "color": "black",
+            "border": "#000000 1px solid"
+        },
+        "step_number": "black",
+        "warning_text": "CR will move after pressing start",
+        "back_to_main": "./static/img/back-to-main.png"
+    },
+    "titlebar": {
+        "title": "CRWrite",
+        "icon": "./static/img/coastrunner-icon.png"
+    },
+    "toolbar": {
+        "color": "#069076",
+        "link": {
+            "display": "CoastRunner.net",
+            "url": "https://CoastRunner.net/"
+        },
+        "status": {
+            "label": "Mill Status:",
+            "statusTextColor": "#ffffff"
+        },
+        "backgroundPhoto": "",
+        "websiteLink": {
+            "color": "#ffffff"
+        }
+    },
+    "manualOperations": {
+        "sendIconColor": "#00f1f9"
+    },
+    "support": {
+        "link": "https://coastrunner.net/"
+    },
+    "chooser": {
+        "title": "Choose Mill",
+        "select": "Select a Mill"
+    },
+    "modal": {
+        "background": "",
+        "color": "#000000",
+        "border": "#FFFFFF 1px solid",
+        "backgroundColor": "#ffffff"
+    },
+    "supportButtonMenu": {
+        "color": "#ffffff",
+        "backgroundColor": "#75327e",
+        "hoverColor": "#5f2866"
+    },
+    "scrollbar": {
+        "thumbColor": "#00f1f9",
+        "trackColor": "#16b5ba"
+    },
+    "feedrateSlider": {
+        "color": "#00f1f9"
+    },
+    "button": {
+        "cancel": {
+            "color": "#000000",
+            "backgroundColor": "#ffffff"
+        },
+        "save": {
+            "color": "#000000",
+            "backgroundColor": "#00f1f9"
+        }
+    },
+    "menuButton": {
+        "backgroundColor": "#ffffff"
+    },
+    "shuttleButton": {
+        "backgroundColor": "#ffffff",
+        "hoverColor": ""
+    },
+    "image": {
+        "settingsButton": "./static/img/settings-coastrunner.png",
+        "supportButton": "./static/img/support_button-coastrunner.png",
+        "cog": "./static/img/settings-cog-coastrunner.png",
+        "joystick": "./static/img/joystick-coastrunner.png"
+    },
+    "tabs": {
+        "indicatorColor": "#c584ce"
+    },
+    "formControl": {
+        "border": "1px solid black"
+    },
+    "raw": {
+        "color": "#FFFFFF"
+    }
+}

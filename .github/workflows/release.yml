@@ -1,0 +1,152 @@
+name: Release
+on: [push, pull_request]
+jobs:
+  build:
+    name: Build
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [16.x]
+        platform: [windows-2019]
+        include:
+          - platform: windows-2019
+            vcpkg_triplet: x86-windows-static
+            cmake_platform_args: '-A Win32'
+            cmake_generator: 'VS15Win32'
+          - platform: macos-11
+            vcpkg_triplet: x64-osx_b
+            cmake_platform_args: '-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON'
+            cmake_generator: Ninja
+          #- platform: ubuntu-18.04
+          #  vcpkg_triplet: x64-linux
+          #  cmake_platform_args: ''
+          #  cmake_generator: Ninja
+    runs-on: ${{ matrix.platform }}
+    if: "!contains(github.event.head_commit.message, 'ci: Bump version')"
+    steps:
+    - name: Upgrade to gcc/g++ 8
+      if: matrix.platform == 'ubuntu-18.04'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc-8 g++-8
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 --slave /usr/bin/g++ g++ /usr/bin/g++-8 --slave /usr/bin/gcov gcov /usr/bin/gcov-8
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+    - name: Cache vcpkg artifacts
+      uses: actions/cache@v1
+      with:
+        path: ${{ github.workspace }}/vcpkg/
+        key: ${{ hashFiles( 'vcpkg.txt' ) }}-${{ hashFiles( '.git/modules/vcpkg/HEAD' ) }}--${{ hashFiles( 'custom-triplets/x64-osx_b.cmake' ) }}${{ runner.os }}
+    - name: Run vcpkg
+      uses: lukka/run-vcpkg@v7
+      with:
+        vcpkgArguments: '--debug --overlay-triplets=${{ github.workspace }}/custom-triplets --triplet ${{ matrix.vcpkg_triplet }} @${{ github.workspace }}/vcpkg.txt'
+        vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.x
+    - name: 'Run CMake'
+      uses: lukka/run-cmake@v3.1
+      with:
+        cmakeGenerator: ${{ matrix.cmake_generator }}
+        cmakeBuildType: 'Release'
+        cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+        cmakeListsTxtPath: '${{ github.workspace }}/src/CMakeLists.txt'
+        useVcpkgToolchainFile: true
+        vcpkgTriplet: '${{ matrix.vcpkg_triplet }}'
+        buildDirectory: '${{ github.workspace }}/build'
+        cmakeAppendedArgs: ' ${{ matrix.cmake_platform_args }} -DCRWRITE_AUTH_KEY="${{ secrets.AUTH_KEY }}"'
+        buildWithCMake: false
+    - name: npm install, build, and test (Win)
+      if: matrix.platform == 'windows-2019'
+      run: |
+        npm install --save-dev run-script-os@latest
+        npm install -g run-script-os copyfiles
+        cd build && cmake --build . --config Release && copy .\bin\Release\crwrite.node ..\UI\app\Backend\crwrite.node
+    - name: npm install, build, and test (Mac/Linux)
+      if: matrix.platform != 'windows-2019'
+      run: |
+        npm install --save-dev run-script-os@latest
+        npm install -g run-script-os copyfiles
+        npm install --no-optional
+      env: 
+        NPM_CONFIG_PREFIX: "~/.npm-global"
+    - name: Staging
+      if: "!contains(github.event.head_commit.message, 'RELEASE') && github.repository == 'CoastRunnerCNC/CRWrite-Private' && github.event_name == 'push' && github.ref == 'refs/heads/master'"
+      run: |
+        npm run staging
+        npm version prerelease --git-tag-version false
+      env:
+        USE_HARD_LINKS: false
+        CI: true
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
+        CSC_LINK: ${{ secrets.CSC_LINK }}
+        CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+        APPLEID: ${{ secrets.APPLEID }}
+        APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+        NPM_CONFIG_PREFIX: "~/.npm-global"
+    - name: deploy
+      if: contains(github.event.head_commit.message, 'RELEASE')
+      run: |
+        npm run release
+        npm version prerelease --git-tag-version false
+      env:
+        USE_HARD_LINKS: false
+        CI: true
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
+        CSC_LINK: ${{ secrets.CSC_LINK }}
+        CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+        APPLEID: ${{ secrets.APPLEID }}
+        APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+        NPM_CONFIG_PREFIX: "~/.npm-global"
+  bump_version:
+    name: Bump version
+    needs: build
+    #runs-on: ubuntu-18.04
+    runs-on: macos-11
+    steps:
+    - uses: actions/checkout@v2
+    - name: Beta Version
+      if: "!contains(github.event.head_commit.message, 'RELEASE') && github.repository == 'CoastRunnerCNC/CRWrite-Private' && github.event_name == 'push' && github.ref == 'refs/heads/master'"
+      run: |
+        cd UI
+        git config --global user.email "actions@github.com"
+        git config --global user.name "Github"
+        npm version prerelease --git-tag-version false
+        git add *
+        git commit -m "ci: Bump version"
+        git push origin HEAD:master
+      env:
+        USE_HARD_LINKS: false
+        CI: true
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
+        CSC_LINK: ${{ secrets.CSC_LINK }}
+        CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+        APPLEID: ${{ secrets.APPLEID }}
+        APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+        NPM_CONFIG_PREFIX: "~/.npm-global"
+    - name: Patch Version
+      if: contains(github.event.head_commit.message, 'RELEASE')
+      run: |
+        cd UI
+        git config --global user.email "actions@github.com"
+        git config --global user.name "Github"
+        npm version prerelease --git-tag-version false
+        git add *
+        git commit -m "ci: Bump version"
+        git push origin HEAD:master
+      env:
+        USE_HARD_LINKS: false
+        CI: true
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
+        CSC_LINK: ${{ secrets.CSC_LINK }}
+        CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+        APPLEID: ${{ secrets.APPLEID }}
+        APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+        NPM_CONFIG_PREFIX: "~/.npm-global"

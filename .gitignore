@@ -1,0 +1,54 @@
+ # Ignore visual studio files
+*.vcxproj.user
+*.pch
+*.sdf
+*ipch/
+.vs/
+CMakeSettings.json
+
+# Ignore built files
+build/
+darwin/
+dist/
+*.Intermediate/
+*.pdb
+*.exp
+*.obj
+*.cod
+
+# Ignore Node Files
+node_modules/
+app/node
+
+# Ignore Temp Files
+*cncmill.conf
+logs/
+Cutting Code/
+
+# Ignore OS Files
+*.DS_Store
+thumbs.db
+
+# Ignore dll files
+*.dll
+
+.idea
+.vscode
+cmake-build*
+*.a
+*.kdev4
+
+UI/app/app.js
+UI/app/index.js
+UI/app/Backend/
+UI/app/Backend/*.so*
+UI/app/Backend/*.lib
+UI/app/Backend/crwrite.node
+UI/app/Backend/CRWRITE_TEST.exe
+UI/app/Backend/CRWRITE_TEST
+UI/app/Backend/example.exe
+UI/app/Backend/minigzip.exe
+UI/app/Backend/zlib.dll
+UI/app/Backend/CRUtil
+UI/app/Backend/Tests
+UI/app/Backend/*.exe

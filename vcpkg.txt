@@ -1,0 +1,12 @@
+boost-asio
+boost-thread
+boost-system
+boost-iostreams
+boost-filesystem
+catch2
+jsoncpp
+minizip
+openssl
+spdlog
+tiny-process-library
+zlib

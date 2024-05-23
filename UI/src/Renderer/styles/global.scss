@@ -1,0 +1,73 @@
+$primary-color: #ffffff;
+$secondary-color: #cccccc;
+
+body {
+    min-height: 710px !important;
+    min-width: 1205px !important;
+}
+
+// .MuiDialog-container {
+
+//     .MuiDialogContent-root {
+
+//         .no-scroll {
+//             overflow: hidden !important;
+//         }
+//     }
+
+// }
+
+.MuiFormControl-root {
+
+    .MuiFormLabel-root {
+        padding-left: 3px;
+    }
+
+    .MuiInputBase-root {
+        padding-left: 7px;
+    }
+
+    .MuiInputBase-input {
+        padding-top: 1px;
+        padding-bottom: 2px;
+    }
+
+    .MuiInputAdornment-root {
+        padding-left: 6px !important;
+        padding-right: 8px !important;
+    }
+
+}
+
+.show-line-breaks {
+    white-space: pre-line;
+}
+
+.text-primary {
+    color: $primary-color;
+}
+
+.text-secondary {
+    color: $secondary-color;
+}
+
+.MuiDialog-paper {
+    margin-top: 35px !important;
+    max-height: 90% !important;
+}
+
+.MuiTabs-root {
+
+    .MuiTab-root {
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.MuiDialogTitle-root {
+    .MuiTypography-root {
+        padding-top: 25px !important;
+    }
+}

@@ -87,6 +87,7 @@ jobs:
         CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
         APPLEID: ${{ secrets.APPLEID }}
         APPLEIDPASS: ${{ secrets.APPLEIDPASS }}
+        TEAMID: ${{ secrets.TEAMID }}
         NPM_CONFIG_PREFIX: "~/.npm-global"
     - name: deploy
       if: contains(github.event.head_commit.message, 'RELEASE')

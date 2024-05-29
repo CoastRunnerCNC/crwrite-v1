@@ -72,7 +72,7 @@
         },
         "dmg": {
             "artifactName": "CRWrite ${version} Setup.${ext}",
-            "icon": "./icon.icns"
+            "icon": "./app/static/img/coastrunner-icon.icns"
         },
         "fileAssociations": {
             "ext": "crproj",

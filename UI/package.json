@@ -30,7 +30,7 @@
             {
                 "provider": "github",
                 "owner": "CoastRunnerCNC",
-                "repo": "crwrite"
+                "repo": "crwrite-v1"
             }
         ],
         "afterSign": "./scripts/notarize.js",
@@ -86,7 +86,7 @@
         "release": "webpack --config=scripts/webpack.app.config.js --env=production --app=coastrunner && electron-builder -w --ia32 -p 'always' --config.nsis.artifactName=\"CoastRunner ${version} Setup x32.${ext}\"",
         "release:mac": "webpack --config=scripts/webpack.app.config.js --env=production --app=crwrite && electron-builder -p 'always'",
         "release:linux": "webpack --config=scripts/webpack.app.config.js --env=production --app=crwrite && electron-builder -l -p 'always'",
-        "staging": "webpack --config=scripts/webpack.app.config.js --env=productionCoastRunner --app=coastrunner && electron-builder -w --ia32 -p 'always' --config.nsis.artifactName=\"CRWrite ${version} Setup x32 - Staging.${ext}\" --config.publish.repo=\"CRWrite-Staging\" --config.publish.private=true",
+        "staging": "webpack --config=scripts/webpack.app.config.js --env=productionCoastRunner --app=coastrunner && electron-builder -w --ia32 -p 'always' --config.nsis.artifactName=\"CRWrite ${version} Setup x32 - Staging.${ext}\" --config.publish.repo=\"crwrite-v1\" --config.publish.private=true",
         "staging:mac": "webpack --config=scripts/webpack.app.config.js --env=developmentCoastRunner --app=coastrunner && electron-builder -p 'always' --config.publish.repo=\"CRWrite-Staging\" --config.publish.private=true",
         "staging:linux": "webpack --config=scripts/webpack.app.config.js --env=production --app=crwrite && electron-builder -l -p 'always' --config.publish.repo=\"CRWrite-Staging\"",
         "postinstall": "electron-builder install-app-deps",

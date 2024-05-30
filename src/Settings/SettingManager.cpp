@@ -101,6 +101,66 @@ JogKeys SettingManager::GetJogKeys() const
 		jogKeys.m_retract = m_settingsByKey.at("retract");
 	}
 
+  if (m_settingsByKey.find("focus_manual_entry") != m_settingsByKey.cend())
+	{
+		jogKeys.m_focus_manual_entry = m_settingsByKey.at("focus_manual_entry");
+	}
+
+  if (m_settingsByKey.find("focus_max_distance") != m_settingsByKey.cend())
+	{
+		jogKeys.m_focus_max_distance = m_settingsByKey.at("focus_max_distance");
+	}
+
+  if (m_settingsByKey.find("switch_units") != m_settingsByKey.cend())
+	{
+		jogKeys.m_switch_units = m_settingsByKey.at("switch_units");
+	}
+
+  if (m_settingsByKey.find("switch_jog_mode") != m_settingsByKey.cend())
+	{
+		jogKeys.m_switch_jog_mode = m_settingsByKey.at("switch_jog_mode");
+	}
+
+  if (m_settingsByKey.find("increase_units") != m_settingsByKey.cend())
+	{
+		jogKeys.m_increase_units = m_settingsByKey.at("increase_units");
+	}
+
+  if (m_settingsByKey.find("decrease_units") != m_settingsByKey.cend())
+	{
+		jogKeys.m_decrease_units = m_settingsByKey.at("decrease_units");
+	}
+
+	if (m_settingsByKey.find("escape_textbox") != m_settingsByKey.cend())
+	{
+		jogKeys.m_escape_textbox = m_settingsByKey.at("escape_textbox");
+	}
+
+  if (m_settingsByKey.find("home_preset") != m_settingsByKey.cend())
+	{
+		jogKeys.m_home_preset = m_settingsByKey.at("home_preset");
+	}
+
+  if (m_settingsByKey.find("preset_1") != m_settingsByKey.cend())
+	{
+		jogKeys.m_preset_1 = m_settingsByKey.at("preset_1");
+	}
+
+  if (m_settingsByKey.find("preset_2") != m_settingsByKey.cend())
+	{
+		jogKeys.m_preset_2 = m_settingsByKey.at("preset_2");
+	}
+
+  if (m_settingsByKey.find("preset_3") != m_settingsByKey.cend())
+	{
+		jogKeys.m_preset_3 = m_settingsByKey.at("preset_3");
+	}
+
+  if (m_settingsByKey.find("preset_4") != m_settingsByKey.cend())
+	{
+		jogKeys.m_preset_4 = m_settingsByKey.at("preset_4");
+	}
+
 	return jogKeys;
 }
 
@@ -113,6 +173,18 @@ void SettingManager::SetJogKeys(const JogKeys& jogKeys)
 		{"lower_table", jogKeys.m_lowerTable},
 		{"plunge", jogKeys.m_plunge},
 		{"retract", jogKeys.m_retract},
+		{"focus_manual_entry", jogKeys.m_focus_manual_entry},
+		{"focus_max_distance", jogKeys.m_focus_max_distance},
+		{"switch_units", jogKeys.m_switch_units},
+		{"switch_jog_mode", jogKeys.m_switch_jog_mode},
+		{"increase_units", jogKeys.m_increase_units},
+		{"decrease_units", jogKeys.m_decrease_units},
+		{"escape_textbox", jogKeys.m_escape_textbox},
+		{"home_preset", jogKeys.m_home_preset},
+		{"preset_1", jogKeys.m_preset_1},
+		{"preset_2", jogKeys.m_preset_2},
+		{"preset_3", jogKeys.m_preset_3},
+		{"preset_4", jogKeys.m_preset_4}
 	};
 	UpdateSettings(settings);
 }

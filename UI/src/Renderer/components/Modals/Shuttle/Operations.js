@@ -332,6 +332,11 @@ class Operations extends React.Component {
         this.unitRef = React.createRef();
         this.wcsRef = React.createRef();
         this.jogModeRef = React.createRef();
+        this.homePresetRef = React.createRef();
+        this.preset1Ref = React.createRef();
+        this.preset2Ref = React.createRef();
+        this.preset3Ref = React.createRef();
+        this.preset4Ref = React.createRef();
         this.commandKeys = {};
         this.eventKeyFrontEndCommandMap = {};
         this.backEndKeyMap = {
@@ -816,10 +821,11 @@ class Operations extends React.Component {
 
     keydownListener(event) {
         let eventKey = event.key;
+        //console.log(eventKey);
 
         if (this.state.focusedInput) {
           if(
-            eventKey == 'Escape' ||
+            eventKey == this.getCommandKey('escape_textbox') ||
             (
               this.state.focusedInput == 'max_distance' &&
               eventKey == 'Enter'
@@ -862,18 +868,22 @@ class Operations extends React.Component {
 
           return;
         }
-        else {
-          if(eventKey == 'Control') {
+        else if(!this.state.openShuttleSettings) {
+          if(eventKey == this.getCommandKey('escape_textbox')) {
+            //Putting this condition here so that the escape button doesn't fall through and throw an error message
+            return;
+          }
+          else if(eventKey == this.getCommandKey('focus_manual_entry')) {
             this.manual_entry_ref.current.focus();
             this.handleInputHasFocus('manual_entry');
             return;
           }
-          else if(eventKey == 'NumLock') {
+          else if(eventKey == this.getCommandKey('focus_max_distance')) {
             this.max_distance_ref.current.focus();
             this.handleInputHasFocus('max_distance');
             return;
           }
-          else if(eventKey == '*') {
+          else if(eventKey == this.getCommandKey('switch_units')) {
             if(this.state.units == 'mm') {
               this.sendUnitsInputChange('inch');
             }
@@ -882,7 +892,7 @@ class Operations extends React.Component {
             }
             return;
           }
-          else if(eventKey == '/') {
+          else if(eventKey == this.getCommandKey('switch_jog_mode')) {
             if(this.state.mode == 'Continuous') {
               this.setState({mode: 'Fixed'});
             }
@@ -891,25 +901,47 @@ class Operations extends React.Component {
             }
             return;
           }
-          else if(eventKey == 'PageUp') {
+          else if(eventKey == this.getCommandKey('increase_units')) {
             this.setState({fixed_distance: { 
               value: this.state.fixed_distance.value * 10, 
               unit: this.state.units 
             }});
             return;
           }
-          else if(eventKey == 'PageDown') {
+          else if(eventKey == this.getCommandKey('decrease_units')) {
             this.setState({fixed_distance: { 
               value: this.state.fixed_distance.value / 10, 
               unit: this.state.units 
             }});
             return;
           }
+          else if(eventKey == this.getCommandKey('home_preset')) {
+            this.homePresetRef.current.handleClick();
+            return;
+          }
+          else if(eventKey == this.getCommandKey('preset_1')) {
+            this.preset1Ref.current.handleClick();
+            return;
+          }
+          else if(eventKey == this.getCommandKey('preset_2')) {
+            this.preset2Ref.current.handleClick();
+            return;
+          }
+          else if(eventKey == this.getCommandKey('preset_3')) {
+            this.preset3Ref.current.handleClick();
+            return;
+          }
+          else if(eventKey == this.getCommandKey('preset_4')) {
+            this.preset4Ref.current.handleClick();
+            return;
+          }
         }
 
         try {
-            let frontEndCommand = this.getFrontEndCommand(eventKey);
-            this.jogStart(frontEndCommand);
+            if(!this.state.openShuttleSettings) {
+              let frontEndCommand = this.getFrontEndCommand(eventKey);
+              this.jogStart(frontEndCommand);
+            }
         } catch (e) {
             // do nothing, not all keys have bindings
             console.log(e);
@@ -1934,19 +1966,19 @@ class Operations extends React.Component {
                                                         <ItemPanel title="Position Presets" small>
                                                             <Grid container justify='space-between' style={{padding: '10px'}}>
                                                                 <Grid item>
-                                                                    <PositionPreset home editParentState={() => {this.setState({isHome: true})}}>Home</PositionPreset>
+                                                                    <PositionPreset ref={this.homePresetRef} home editParentState={() => {this.setState({isHome: true})}}>Home</PositionPreset>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <PositionPreset units={this.state.units} getPosition={this.get_position}>1</PositionPreset>
+                                                                    <PositionPreset ref={this.preset1Ref} units={this.state.units} getPosition={this.get_position}>1</PositionPreset>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <PositionPreset units={this.state.units} getPosition={this.get_position}>2</PositionPreset>
+                                                                    <PositionPreset ref={this.preset2Ref} units={this.state.units} getPosition={this.get_position}>2</PositionPreset>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <PositionPreset units={this.state.units} getPosition={this.get_position}>3</PositionPreset>
+                                                                    <PositionPreset ref={this.preset3Ref} units={this.state.units} getPosition={this.get_position}>3</PositionPreset>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <PositionPreset units={this.state.units} getPosition={this.get_position}>4</PositionPreset>
+                                                                    <PositionPreset ref={this.preset4Ref} units={this.state.units} getPosition={this.get_position}>4</PositionPreset>
                                                                 </Grid>
                                                             </Grid>
                                                         </ItemPanel>

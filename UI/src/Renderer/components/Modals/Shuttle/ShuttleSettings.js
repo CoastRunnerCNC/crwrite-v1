@@ -101,7 +101,7 @@ class ShuttleSettings extends React.Component {
                             }
                         }
                     }>
-                    <InputLabel id={`${command_key}-input`}>{label}</InputLabel>
+                    <InputLabel shrink id={`${command_key}-input`}>{label}</InputLabel>
                     <Input
                         id={`${command_key}-input`}
                         className="shuttle-settings-input"
@@ -181,6 +181,130 @@ class ShuttleSettings extends React.Component {
             );
         }
 
+        function display_focus_textbox() {
+            return (
+                <React.Fragment>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'focus_manual_entry', 'Switch to Manual Entry')}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'focus_max_distance', 'Switch to Max Distance')}
+                        </Grid>
+                    </Grid>
+
+                </React.Fragment>
+            );
+        }
+
+        function display_switch_options() {
+            return (
+                <React.Fragment>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'switch_units', 'Switch Units')}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'switch_jog_mode', 'Switch Jog Mode')}
+                        </Grid>
+                    </Grid>
+
+                </React.Fragment>
+            );
+        }
+
+
+        function display_modify_units() {
+            return (
+                <React.Fragment>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'increase_units', 'Increase Units')}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'decrease_units', 'Decrease Units')}
+                        </Grid>
+                    </Grid>
+
+                </React.Fragment>
+            );
+        }
+
+
+        function display_escape_and_home() {
+            return (
+                <React.Fragment>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'escape_textbox', 'Escape Textbox')}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'home_preset', 'Home Preset')}
+                        </Grid>
+                    </Grid>
+
+                </React.Fragment>
+            );
+        }
+
+
+        function display_presets_a() {
+            return (
+                <React.Fragment>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'preset_1', 'Preset 1')}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'preset_2', 'Preset 2')}
+                        </Grid>
+                    </Grid>
+
+                </React.Fragment>
+            );
+        }
+
+
+        function display_presets_b() {
+            return (
+                <React.Fragment>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'preset_3', 'Preset 3')}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'preset_4', 'Preset 4')}
+                        </Grid>
+                    </Grid>
+
+                </React.Fragment>
+            );
+        }
+
         return (
 
 
@@ -211,10 +335,28 @@ class ShuttleSettings extends React.Component {
                         {displayX.call(this)}
                     </Grid>
                     <Grid item xs={6}>
+                        {displayY.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
                         {displayZ.call(this)}
                     </Grid>
                     <Grid item xs={6}>
-                        {displayY.call(this)}
+                        {display_focus_textbox.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {display_switch_options.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {display_modify_units.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {display_escape_and_home.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {display_presets_a.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {display_presets_b.call(this)}
                     </Grid>
                 </Grid>
             </DialogContent>

@@ -265,7 +265,7 @@ class Operations extends React.Component {
             forceShowUnitTooltip: false,
             forceShowJoggingTooltipMaxDistance: false,
             joggingTooltipText: '',
-            anInputHasFocus: false,
+            focusedInput: '',
             maxDistanceIsValid: true,
             milling: false,
             millingProgress: -1,
@@ -328,6 +328,7 @@ class Operations extends React.Component {
         this.currentJog = null;
         this.manual_entry_focused = false;
         this.manual_entry_ref = React.createRef();
+        this.max_distance_ref = React.createRef();
         this.unitRef = React.createRef();
         this.wcsRef = React.createRef();
         this.jogModeRef = React.createRef();
@@ -365,12 +366,12 @@ class Operations extends React.Component {
         this.setState({settings: settings});
     }
 
-    handleInputHasFocus() {
-        this.setState({anInputHasFocus: true});
+    handleInputHasFocus(focusName) {
+        this.setState({focusedInput: focusName});
     }
 
     handleInputNoLongerHasFocus() {
-        this.setState({anInputHasFocus: false});
+        this.setState({focusedInput: ''});
     }
 
     updateMovementType(event, command) {
@@ -419,29 +420,7 @@ class Operations extends React.Component {
     }
 
     fetchAsyncData() {
-        ipcRenderer.once('CNC::GetShuttleKeysResponse', (event, commandKeys) => {
-            this.commandKeys = commandKeys;
-
-            // populate eventKeyFrontEndCommandMap
-            _.each(
-                this.commandKeys,
-                (commandKey, commandValue) => this.eventKeyFrontEndCommandMap[commandKey.toLowerCase()] = commandValue
-            );
-
-            // this is a test
-            // populate pathIdEventKeyMap
-            this.setState({
-                pathIdEventKeyMap: {
-                    'y_neg_path': this.getCommandKey('gantry_left'),
-                    'y_pos_path': this.getCommandKey('gantry_right'),
-                    'z_neg_path': this.getCommandKey('plunge'),
-                    'z_pos_path': this.getCommandKey('retract'),
-                    'x_pos_path': this.getCommandKey('lower_table'),
-                    'x_neg_path': this.getCommandKey('raise_table')
-                }
-            });
-        });
-        ipcRenderer.send('CNC::GetShuttleKeys');
+        this.refreshShuttleKeys();
 
         ipcRenderer.once('Settings::GetSettingsResponse', (event, settings) => {
             this.setState({settings: settings});
@@ -621,6 +600,7 @@ class Operations extends React.Component {
         setTimeout(() => {
             if (document.activeElement instanceof HTMLElement) {
                 document.activeElement.blur();
+                this.setState({focusedInput: ''});
             }
         }, 0);
     }
@@ -767,6 +747,23 @@ class Operations extends React.Component {
         let sanitizedEventKey = (eventKey || '').toLowerCase();
         let frontEndCommand = this.eventKeyFrontEndCommandMap[sanitizedEventKey];
 
+        //We hard key these but allow the jog commands to be bound to other keys as well
+        //These are hardcoded because now that NumLock is used to quick-jump to max_distance
+        //it causes my preferred keybindings (the number pad) to inadvertently switch between
+        //the bound keys (4, 8, etc.) and the arrow keys. This allows me to keep my preferred keybindings
+        if(eventKey == 'ArrowLeft') {
+          frontEndCommand = 'gantry_left';
+        }
+        else if(eventKey == 'ArrowRight') {
+          frontEndCommand = 'gantry_right';
+        }
+        else if(eventKey == 'ArrowUp') {
+          frontEndCommand = 'raise_table';
+        }
+        else if(eventKey == 'ArrowDown') {
+          frontEndCommand = 'lower_table';
+        }
+
         if (!frontEndCommand) {
             throw new Error(`Cannot determine frontEndCommand from eventKey: ${sanitizedEventKey}`);
         }
@@ -818,41 +815,96 @@ class Operations extends React.Component {
     }
 
     keydownListener(event) {
-        if (this.state.anInputHasFocus) {
-            return;
-        }
-
         let eventKey = event.key;
 
-        if (this.manual_entry_focused) {
-            if (eventKey == 'Enter') {
-                this.state.settings.disableLimitCatch ? this.executeCommand() : this.sendCommand();
-            }
-            else if (eventKey === 'ArrowDown' && this.state.isSeekingHistory) {
-                let index = this.state.historyIndex + 1;
-                let command = '';
-                if (index < this.state.entryHistory.length) {
-                    command = this.state.entryHistory[index];
-                } else {
-                    index = this.state.entryHistory.length;
-                }
-                this.setState({
-                    manualEntry: command,
-                    historyIndex: index,
-                    isSeekingHistory: true
-                });
-            }
-            else if (eventKey === 'ArrowUp') {
-                let index = this.state.historyIndex - 1;
-                if (index < 0) { index = 0; }
-                this.setState({
-                    manualEntry: this.state.entryHistory[index],
-                    historyIndex: index,
-                    isSeekingHistory: true
-                });
-            }
-
+        if (this.state.focusedInput) {
+          if(
+            eventKey == 'Escape' ||
+            (
+              this.state.focusedInput == 'max_distance' &&
+              eventKey == 'Enter'
+            )
+          ) {
+            this.focusOnNothing();
             return;
+          }
+
+          if (this.state.focusedInput == 'manual_entry') {
+              if (eventKey == 'Enter') {
+                  this.state.settings.disableLimitCatch ? this.executeCommand() : this.sendCommand();
+              }
+              else if (eventKey === 'ArrowDown' && this.state.isSeekingHistory) {
+                  let index = this.state.historyIndex + 1;
+                  let command = '';
+                  if (index < this.state.entryHistory.length) {
+                      command = this.state.entryHistory[index];
+                  } else {
+                      index = this.state.entryHistory.length;
+                  }
+                  this.setState({
+                      manualEntry: command,
+                      historyIndex: index,
+                      isSeekingHistory: true
+                  });
+              }
+              else if (eventKey === 'ArrowUp') {
+                  let index = this.state.historyIndex - 1;
+                  if (index < 0) { index = 0; }
+                  this.setState({
+                      manualEntry: this.state.entryHistory[index],
+                      historyIndex: index,
+                      isSeekingHistory: true
+                  });
+              }
+
+              return;
+          }
+
+          return;
+        }
+        else {
+          if(eventKey == 'Control') {
+            this.manual_entry_ref.current.focus();
+            this.handleInputHasFocus('manual_entry');
+            return;
+          }
+          else if(eventKey == 'NumLock') {
+            this.max_distance_ref.current.focus();
+            this.handleInputHasFocus('max_distance');
+            return;
+          }
+          else if(eventKey == '*') {
+            if(this.state.units == 'mm') {
+              this.sendUnitsInputChange('inch');
+            }
+            else if(this.state.units == 'inch') {
+              this.sendUnitsInputChange('mm');
+            }
+            return;
+          }
+          else if(eventKey == '/') {
+            if(this.state.mode == 'Continuous') {
+              this.setState({mode: 'Fixed'});
+            }
+            else if(this.state.mode == 'Fixed') {
+              this.setState({mode: 'Continuous'});
+            }
+            return;
+          }
+          else if(eventKey == 'PageUp') {
+            this.setState({fixed_distance: { 
+              value: this.state.fixed_distance.value * 10, 
+              unit: this.state.units 
+            }});
+            return;
+          }
+          else if(eventKey == 'PageDown') {
+            this.setState({fixed_distance: { 
+              value: this.state.fixed_distance.value / 10, 
+              unit: this.state.units 
+            }});
+            return;
+          }
         }
 
         try {
@@ -1228,7 +1280,8 @@ class Operations extends React.Component {
                                         handleMaxDistanceChange(component, e);
                                     }}
                                     disableUnderline
-                                    onFocus={() => component.handleInputHasFocus()}
+                                    inputRef={component.max_distance_ref}
+                                    onFocus={() => component.handleInputHasFocus('max_distance')}
                                     onBlur={() => component.handleInputNoLongerHasFocus()}
                                 />
                             </FormControl>
@@ -1649,9 +1702,11 @@ class Operations extends React.Component {
                                 component.setState({manualEntry: e.currentTarget.value});
                             }}
                             onFocus={() => {
+                                component.handleInputHasFocus('manual_entry');
                                 component.manual_entry_focused = true;
                             }}
                             onBlur={() => {
+                                component.handleInputNoLongerHasFocus();
                                 component.manual_entry_focused = false;
                             }}
                             endAdornment={

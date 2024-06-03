@@ -1,6 +1,7 @@
-import { Grid, Dialog, DialogContent, Button } from '@material-ui/core';
+import { Grid, Dialog, DialogContent, Button, TextField, Checkbox, MenuItem, Select } from '@material-ui/core';
 import React, { useState } from 'react'
 import ItemPanel from '../../ItemPanel/ItemPanel';
+import FeatureSizes from './FeatureSizes/FeatureSizes';
 
 const ProbingWizard = (props) => {
     const [open, setOpen] = useState();
@@ -81,7 +82,15 @@ const ProbingWizard = (props) => {
                         <Grid container direction='column'>
                             <Grid item>
                                 <ItemPanel small title="Probe Feature">
-                                    <h1>Test</h1>
+                                    <Grid container>
+                                        <Grid item>
+                                            <Select>
+                                                <MenuItem value={1}>First option</MenuItem>
+                                                <MenuItem value={2}>Second option</MenuItem>
+                                                <MenuItem value={3}>Third option</MenuItem>
+                                            </Select>
+                                        </Grid>
+                                    </Grid>
                                 </ItemPanel>
                             </Grid>
                             <Grid item xs={12}>
@@ -93,7 +102,59 @@ const ProbingWizard = (props) => {
                         <Grid container direction='column'>
                             <Grid item>
                                 <ItemPanel small title="Settings">
-                                    
+                                    <Grid container direction='column'>
+                                        <Grid item>
+                                            <TextField />
+                                        </Grid>
+                                        <Grid item>
+                                            <TextField />
+                                        </Grid>
+                                        <Grid item>
+                                            <TextField />
+                                        </Grid>
+                                        <Grid item>
+                                            <Grid container>
+                                                <Grid item>
+                                                    <TextField />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField />
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item>
+                                            <TextField />
+                                        </Grid>
+                                        <Grid item>
+                                            <Grid container>
+                                                <Grid item>
+                                                    <Checkbox value="checkedX" />
+                                                </Grid>
+                                                <Grid item>
+                                                    <Checkbox value="checkedY" />
+                                                </Grid>
+                                                <Grid item>
+                                                    <Checkbox value="checkedZ" />
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item>
+                                            <FeatureSizes shape="circle" />
+                                        </Grid>
+                                        <Grid item>
+                                        <Grid container>
+                                                <Grid item>
+                                                    <TextField />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField />
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
                                 </ItemPanel>
                             </Grid>
                             <Grid item>

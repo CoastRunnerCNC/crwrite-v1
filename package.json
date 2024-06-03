@@ -20,7 +20,7 @@
     "install": "run-script-os",
     "install:win32": "cd build && cmake --build . --config Release && copyfiles --flat bin/Release/crwrite.node ../UI/app/Backend/",
     "install:darwin:linux": "cd build && cmake --build . --config Release && copyfiles --flat Release/* ../UI/app/Backend/",
-    "start": "electron ./UI",
+    "start": "cd ui && node scripts/startCoastRunner.js",
     "dist": "node package.js",
     "release": "run-script-os",
     "release:win32": "cd UI && npm install && npm run release",

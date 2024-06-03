@@ -22,6 +22,7 @@ import TransformToInput from '../../util/TransformToInput';
 import PopUpInput from '../../components/Modals/PopUpInput/PopUpInput';
 import Throbber from '../../components/Modals/Throbber/Throbber';
 import ItemPanel from '../../components/ItemPanel/ItemPanel';
+import ProbingWizard from '../../components/Modals/ProbingWizard/ProbingWizard';
 
 
 
@@ -1127,6 +1128,8 @@ class Milling extends React.Component {
                     onOk={() => {this.setState({showPopUpGCodeInput: false})}}
                     onCancel={() => {this.setState({showPopUpGCodeInput: false, editGCode: this.state.selectedStep.RawGCode})}}
                 />
+
+                <ProbingWizard open={true} />
 
                 <JobSelection open={this.showJobSelection()} onClose={this.onCloseJobSelection} jobs={this.state.availableJobs} status={status} refreshJobs={this.refreshJobs} enableEditButton={this.props.settings.enableEditButton} />
 

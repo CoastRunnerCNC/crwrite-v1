@@ -1,10 +1,15 @@
-import { Grid, Dialog, DialogContent, Button, TextField, Checkbox, MenuItem, Select } from '@material-ui/core';
+import { Grid, Dialog, DialogContent, Button, TextField, Checkbox, MenuItem, Select, FormControl, InputLabel } from '@material-ui/core';
 import React, { useState } from 'react'
 import ItemPanel from '../../ItemPanel/ItemPanel';
 import FeatureSizes from './FeatureSizes/FeatureSizes';
 
 const ProbingWizard = (props) => {
-    const [open, setOpen] = useState();
+    const [featureType, setFeatureType] = useState("");
+    const [probeWhere, setProbeWhere] = useState("");
+    const [probingType, setProbingType] = useState("");
+    const [toolUnits, setToolUnits] = useState("");
+    const [wcs, setWcs] = useState("");
+
 
     const PictureSVG = () => {
         return (
@@ -68,6 +73,26 @@ const ProbingWizard = (props) => {
         );
     }
 
+    const onFeatureChange = (event) => {
+        setFeatureType(event.target.value);
+    }
+
+    const onChangeProbeWhere = (event) => {
+        setProbeWhere(event.target.value);
+    }
+
+    const onChangeProbingType = (event) => {
+        setProbingType(event.target.value);
+    }
+
+    const onChangeToolUnits = (event) => {
+        setToolUnits(event.target.value);
+    }
+
+    const onChangeWcs = (event) => {
+        setWcs(event.target.value);
+    }
+
   return (
     <React.Fragment>
         <Dialog
@@ -84,11 +109,15 @@ const ProbingWizard = (props) => {
                                 <ItemPanel small title="Probe Feature">
                                     <Grid container>
                                         <Grid item>
-                                            <Select>
-                                                <MenuItem value={1}>First option</MenuItem>
-                                                <MenuItem value={2}>Second option</MenuItem>
-                                                <MenuItem value={3}>Third option</MenuItem>
-                                            </Select>
+                                            <FormControl>
+                                                <InputLabel id='probe-feature'>Probe Feature</InputLabel>
+                                                <Select labelId='probe-feature' value={featureType} onChange={onFeatureChange}>
+                                                    <MenuItem value="surface">Surface (Z Only)</MenuItem>
+                                                    <MenuItem value="circlePocket">Circle Pocket / Bore</MenuItem>
+                                                    <MenuItem value="rectanglePocket">Rectangle Pocket</MenuItem>
+                                                    <MenuItem value="circleProtrusion">Circle Protrusion</MenuItem>
+                                                </Select>
+                                            </FormControl>
                                         </Grid>
                                     </Grid>
                                 </ItemPanel>
@@ -104,26 +133,58 @@ const ProbingWizard = (props) => {
                                 <ItemPanel small title="Settings">
                                     <Grid container direction='column'>
                                         <Grid item>
+                                            <FormControl>
+                                                <InputLabel id='probeWhere'>Probe Where</InputLabel>
+                                                <Select labelId='probeWhere' value={probeWhere} onChange={onChangeProbeWhere}>
+                                                    <MenuItem value="corner">Corner</MenuItem>
+                                                    <MenuItem value="midpoint-x">Midpoint X</MenuItem>
+                                                    <MenuItem value="midpoint-y">Midpoint Y</MenuItem>
+                                                    <MenuItem value="midpoint-x-y">Midpoint X&Y</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid item>
+                                            {/* Location details */}
                                             <TextField />
                                         </Grid>
                                         <Grid item>
-                                            <TextField />
-                                        </Grid>
-                                        <Grid item>
-                                            <TextField />
+                                            <FormControl>
+                                                <InputLabel id='probingType'>Probing Method</InputLabel>
+                                                <Select labelId='probingType' value={probingType} onChange={onChangeProbingType}>
+                                                    <MenuItem value="electrical">Electrical</MenuItem>
+                                                    <MenuItem value="manual">Manual</MenuItem>
+                                                </Select>
+                                            </FormControl>
                                         </Grid>
                                         <Grid item>
                                             <Grid container>
                                                 <Grid item>
+                                                    {/* Probe Tool Width */}
                                                     <TextField />
                                                 </Grid>
                                                 <Grid item>
-                                                    <TextField />
+                                                    <FormControl>
+                                                        <InputLabel id="toolUnits">Units</InputLabel>
+                                                        <Select labelId='toolUnits' value={toolUnits} onChange={onChangeToolUnits}>
+                                                            <MenuItem value="mm">MM</MenuItem>
+                                                            <MenuItem value="inches">Inches</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
                                         <Grid item>
-                                            <TextField />
+                                            <FormControl>
+                                                <InputLabel id="target-wcs">Target WCS</InputLabel>
+                                                <Select labelId='target-wcs' id={wcs} onChange={onChangeWcs}>
+                                                    <MenuItem value="G54">G54</MenuItem>
+                                                    <MenuItem value="G55">G55</MenuItem>
+                                                    <MenuItem value="G56">G56</MenuItem>
+                                                    <MenuItem value="G57">G57</MenuItem>
+                                                    <MenuItem value="G58">G58</MenuItem>
+                                                    <MenuItem value="G59">G59</MenuItem>
+                                                </Select>
+                                            </FormControl>
                                         </Grid>
                                         <Grid item>
                                             <Grid container>

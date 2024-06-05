@@ -389,42 +389,62 @@ const ProbingWizard = (props) => {
                                                 </Grid>
                                             </Grid>
                                             <Grid item xs={12}>
-                                                    <Select
-                                                        labelId="target-wcs"
-                                                        id={wcs}
-                                                        onChange={onChangeWcs}
-                                                    >
-                                                        <MenuItem value="G54">
-                                                            G54
-                                                        </MenuItem>
-                                                        <MenuItem value="G55">
-                                                            G55
-                                                        </MenuItem>
-                                                        <MenuItem value="G56">
-                                                            G56
-                                                        </MenuItem>
-                                                        <MenuItem value="G57">
-                                                            G57
-                                                        </MenuItem>
-                                                        <MenuItem value="G58">
-                                                            G58
-                                                        </MenuItem>
-                                                        <MenuItem value="G59">
-                                                            G59
-                                                        </MenuItem>
-                                                    </Select>
-                                                <CustomInputLabel>Target WCS</CustomInputLabel>
+                                                <Select
+                                                    labelId="target-wcs"
+                                                    id={wcs}
+                                                    onChange={onChangeWcs}
+                                                >
+                                                    <MenuItem value="G54">
+                                                        G54
+                                                    </MenuItem>
+                                                    <MenuItem value="G55">
+                                                        G55
+                                                    </MenuItem>
+                                                    <MenuItem value="G56">
+                                                        G56
+                                                    </MenuItem>
+                                                    <MenuItem value="G57">
+                                                        G57
+                                                    </MenuItem>
+                                                    <MenuItem value="G58">
+                                                        G58
+                                                    </MenuItem>
+                                                    <MenuItem value="G59">
+                                                        G59
+                                                    </MenuItem>
+                                                </Select>
+                                                <CustomInputLabel>
+                                                    Target WCS
+                                                </CustomInputLabel>
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <Grid container>
                                                     <Grid item>
-                                                        <Checkbox value="checkedX" />
+                                                        <Grid container>
+                                                            <Grid item>
+                                                                <CustomInputLabel>
+                                                                    X
+                                                                </CustomInputLabel>
+                                                                <Checkbox value="checkedX" />
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <CustomInputLabel>
+                                                                    Y
+                                                                </CustomInputLabel>
+                                                                <Checkbox value="checkedY" />
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <CustomInputLabel>
+                                                                    Z
+                                                                </CustomInputLabel>
+                                                                <Checkbox value="checkedZ" />
+                                                            </Grid>
+                                                        </Grid>
                                                     </Grid>
                                                     <Grid item>
-                                                        <Checkbox value="checkedY" />
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <Checkbox value="checkedZ" />
+                                                        <CustomInputLabel>
+                                                            Axis Selection
+                                                        </CustomInputLabel>
                                                     </Grid>
                                                 </Grid>
                                             </Grid>
@@ -435,14 +455,26 @@ const ProbingWizard = (props) => {
                                                 <Grid container>
                                                     <Grid item>
                                                         <TextField fullWidth />
+                                                        <CustomInputLabel>
+                                                            X
+                                                        </CustomInputLabel>
                                                     </Grid>
                                                     <Grid item>
                                                         <TextField fullWidth />
+                                                        <CustomInputLabel>
+                                                            Y
+                                                        </CustomInputLabel>
                                                     </Grid>
                                                     <Grid item>
                                                         <TextField fullWidth />
+                                                        <CustomInputLabel>
+                                                            Z
+                                                        </CustomInputLabel>
                                                     </Grid>
                                                 </Grid>
+                                                <CustomInputLabel>
+                                                    Additional Offset
+                                                </CustomInputLabel>
                                             </Grid>
                                         </Grid>
                                     </ItemPanel>

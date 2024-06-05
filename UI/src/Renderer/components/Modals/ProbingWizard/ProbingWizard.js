@@ -266,11 +266,12 @@ const ProbingWizard = (props) => {
                                             style={{ width: "100%" }}
                                             justify="center"
                                         >
-                                            <Grid item xs={3}>
+                                            <Grid item xs={4}>
                                                 <Select
                                                     labelId="probe-feature"
                                                     value={featureType}
                                                     onChange={onFeatureChange}
+                                                    fullWidth
                                                 >
                                                     <MenuItem value="surface">
                                                         Surface (Z Only)
@@ -305,14 +306,20 @@ const ProbingWizard = (props) => {
                                             container
                                             spacing={2}
                                             direction="column"
+                                            style={{
+                                                paddingTop: "16px",
+                                                paddingBottom: "16px",
+                                            }}
+                                            alignContent="center"
                                         >
-                                            <Grid item xs={12}>
+                                            <Grid item xs={10}>
                                                 <Select
                                                     labelId="probeWhere"
                                                     value={probeWhere}
                                                     onChange={
                                                         onChangeProbeWhere
                                                     }
+                                                    fullWidth
                                                 >
                                                     <MenuItem value="corner">
                                                         Corner
@@ -331,19 +338,20 @@ const ProbingWizard = (props) => {
                                                     Probe Where
                                                 </CustomInputLabel>
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={10}>
                                                 {/* Location details */}
                                                 <TextField fullWidth />
                                                 <CustomInputLabel>
                                                     Location Details
                                                 </CustomInputLabel>
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={10}>
                                                 <Select
                                                     value={probingType}
                                                     onChange={
                                                         onChangeProbingType
                                                     }
+                                                    fullWidth
                                                 >
                                                     <MenuItem value="electrical">
                                                         Electrical
@@ -356,7 +364,7 @@ const ProbingWizard = (props) => {
                                                     Probing Type
                                                 </CustomInputLabel>
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={10}>
                                                 <Grid
                                                     container
                                                     style={{ width: "100%" }}
@@ -374,6 +382,7 @@ const ProbingWizard = (props) => {
                                                             onChange={
                                                                 onChangeToolUnits
                                                             }
+                                                            fullWidth
                                                         >
                                                             <MenuItem value="mm">
                                                                 MM
@@ -388,11 +397,12 @@ const ProbingWizard = (props) => {
                                                     </Grid>
                                                 </Grid>
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={10}>
                                                 <Select
                                                     labelId="target-wcs"
                                                     id={wcs}
                                                     onChange={onChangeWcs}
+                                                    fullWidth
                                                 >
                                                     <MenuItem value="G54">
                                                         G54
@@ -417,59 +427,113 @@ const ProbingWizard = (props) => {
                                                     Target WCS
                                                 </CustomInputLabel>
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={10}>
                                                 <Grid container>
-                                                    <Grid item>
-                                                        <Grid container>
-                                                            <Grid item>
-                                                                <CustomInputLabel>
-                                                                    X
-                                                                </CustomInputLabel>
-                                                                <Checkbox value="checkedX" />
-                                                            </Grid>
-                                                            <Grid item>
-                                                                <CustomInputLabel>
-                                                                    Y
-                                                                </CustomInputLabel>
-                                                                <Checkbox value="checkedY" />
-                                                            </Grid>
-                                                            <Grid item>
-                                                                <CustomInputLabel>
-                                                                    Z
-                                                                </CustomInputLabel>
-                                                                <Checkbox value="checkedZ" />
-                                                            </Grid>
-                                                        </Grid>
-                                                    </Grid>
                                                     <Grid item>
                                                         <CustomInputLabel>
                                                             Axis Selection
                                                         </CustomInputLabel>
                                                     </Grid>
+                                                    <Grid item>
+                                                        <Grid container>
+                                                            <Grid item>
+                                                                <Grid
+                                                                    container
+                                                                    direction="column"
+                                                                >
+                                                                    <Grid item>
+                                                                        <Checkbox value="checkedX" />
+                                                                    </Grid>
+                                                                    <Grid item>
+                                                                        <CustomInputLabel>
+                                                                            X
+                                                                        </CustomInputLabel>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Grid
+                                                                    container
+                                                                    direction="column"
+                                                                >
+                                                                    <Grid item>
+                                                                        <Checkbox value="checkedY" />
+                                                                    </Grid>
+                                                                    <Grid item>
+                                                                        <CustomInputLabel>
+                                                                            Y
+                                                                        </CustomInputLabel>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <Grid
+                                                                    container
+                                                                    direction="column"
+                                                                >
+                                                                    <Grid item>
+                                                                        <Checkbox value="checkedZ" />
+                                                                    </Grid>
+                                                                    <Grid item>
+                                                                        <CustomInputLabel>
+                                                                            Z
+                                                                        </CustomInputLabel>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </Grid>
                                                 </Grid>
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={10}>
                                                 <FeatureSizes shape="circle" />
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={10}>
                                                 <Grid container>
                                                     <Grid item>
-                                                        <TextField fullWidth />
-                                                        <CustomInputLabel>
-                                                            X
-                                                        </CustomInputLabel>
+                                                        <Grid
+                                                            container
+                                                            direction="column"
+                                                        >
+                                                            <Grid item>
+                                                                <TextField />
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <CustomInputLabel>
+                                                                    X
+                                                                </CustomInputLabel>
+                                                            </Grid>
+                                                        </Grid>
                                                     </Grid>
                                                     <Grid item>
-                                                        <TextField fullWidth />
-                                                        <CustomInputLabel>
-                                                            Y
-                                                        </CustomInputLabel>
+                                                        <Grid
+                                                            container
+                                                            direction="column"
+                                                        >
+                                                            <Grid item>
+                                                                <TextField />
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <CustomInputLabel>
+                                                                    Y
+                                                                </CustomInputLabel>
+                                                            </Grid>
+                                                        </Grid>
                                                     </Grid>
                                                     <Grid item>
-                                                        <TextField fullWidth />
-                                                        <CustomInputLabel>
-                                                            Z
-                                                        </CustomInputLabel>
+                                                        <Grid
+                                                            container
+                                                            direction="column"
+                                                        >
+                                                            <Grid item>
+                                                                <TextField />
+                                                            </Grid>
+                                                            <Grid item>
+                                                                <CustomInputLabel>
+                                                                    Z
+                                                                </CustomInputLabel>
+                                                            </Grid>
+                                                        </Grid>
                                                     </Grid>
                                                 </Grid>
                                                 <CustomInputLabel>

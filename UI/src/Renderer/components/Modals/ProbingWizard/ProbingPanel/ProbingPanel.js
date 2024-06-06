@@ -1,4 +1,7 @@
 import React from "react";
+import MachineJogging from "./MachineJogging/MachineJogging";
+import ItemPanel from "../../../ItemPanel/ItemPanel";
+import { Grid } from "@material-ui/core";
 
 const ProbingPanel = (props) => {
     return (
@@ -14,7 +17,7 @@ const ProbingPanel = (props) => {
                 alignContent="center"
             >
                 <Grid item xs={10}>
-
+                    <MachineJogging />
                 </Grid>
                 <Grid item xs={10}>
 

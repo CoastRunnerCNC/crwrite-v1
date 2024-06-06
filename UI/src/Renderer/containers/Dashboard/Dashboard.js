@@ -1,126 +1,135 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import Menu from '../../components/Menu';
-import {Button, Container, Grid, Tooltip, Typography} from "@material-ui/core";
-import withStyles from '@material-ui/core/styles/withStyles';
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import Menu from "../../components/Menu";
+import {
+    Button,
+    Container,
+    Grid,
+    Tooltip,
+    Typography,
+} from "@material-ui/core";
+import withStyles from "@material-ui/core/styles/withStyles";
 import path from "path";
-import {ipcRenderer, shell} from "electron";
-import JobSelection from '../../components/Modals/JobSelection';
-import {Redirect} from 'react-router-dom';
-import SupportCenter from '../../components/Support/SupportCenter';
-import Alert from '../../components/Modals/Alert';
-import app from 'app';
-import packageJSON from '../../../../package.json';
-import ItemPanel from '../../components/ItemPanel/ItemPanel';
+import { ipcRenderer, shell } from "electron";
+import JobSelection from "../../components/Modals/JobSelection";
+import { Redirect } from "react-router-dom";
+import SupportCenter from "../../components/Support/SupportCenter";
+import Alert from "../../components/Modals/Alert";
+import app from "app";
+import packageJSON from "../../../../package.json";
+import ItemPanel from "../../components/ItemPanel/ItemPanel";
+import ProbingWizard from "../../components/Modals/ProbingWizard/ProbingWizard";
 const crwrite = require("crwrite");
 
-const styles = theme => ({
+const styles = (theme) => ({
     main: {
-        width: '80%',
-        height: '45%',
-        marginTop: 'auto',
-        marginBottom: 'auto',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        position: 'absolute',
+        width: "80%",
+        height: "45%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "auto",
+        marginRight: "auto",
+        position: "absolute",
         borderLeft: app.dashboard.border,
         borderRight: app.dashboard.border,
         borderBottom: app.dashboard.border,
     },
     dashboardStyle: {
         backgroundColor: "#F1F2F2",
-        backgroundSize: 'cover',
-        overflow: 'hidden',
-        width: '100%',
-        height: '100%',
-        position: 'fixed',
+        backgroundSize: "cover",
+        overflow: "hidden",
+        width: "100%",
+        height: "100%",
+        position: "fixed",
         left: 0,
         top: 0,
         z: -1,
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        display: 'flex',
-        verticalAlign: 'middle',
+        justifyContent: "center",
+        alignItems: "center",
+        display: "flex",
+        verticalAlign: "middle",
     },
     topLeft: {
-        width: 'calc(40% - 60px)',
-        height: '45%',
-        marginTop: 'auto',
-        marginBottom: 'auto',
-        marginLeft: 'calc(-20% - 30px)',
-        position: 'absolute',
+        width: "calc(40% - 60px)",
+        height: "45%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "calc(-20% - 30px)",
+        position: "absolute",
         borderTop: app.dashboard.border,
     },
     topRight: {
-        width: 'calc(40% - 60px)',
-        height: '45%',
-        marginTop: 'auto',
-        marginBottom: 'auto',
-        marginLeft: 'calc(20% + 30px)',
-        position: 'absolute',
+        width: "calc(40% - 60px)",
+        height: "45%",
+        marginTop: "auto",
+        marginBottom: "auto",
+        marginLeft: "calc(20% + 30px)",
+        position: "absolute",
         borderTop: app.dashboard.border,
     },
     runButton: {
-        '&:hover': {
-            filter: 'brightness(0.65)'
+        "&:hover": {
+            filter: "brightness(0.65)",
         },
-        lineHeight: '1.2',
+        lineHeight: "1.2",
     },
     runButtonDisabled: {
-        '&:disabled': {
-            opacity: 0.5
+        "&:disabled": {
+            opacity: 0.5,
         },
-        lineHeight: '1.2',
+        lineHeight: "1.2",
     },
     dashButton: {
-        lineHeight: '1.2',
-        '&:hover': {
-            filter: 'brightness(0.65)'
-        }
+        lineHeight: "1.2",
+        "&:hover": {
+            filter: "brightness(0.65)",
+        },
     },
     buttonText: {
-        color: '#9B43A7',
-        fontSize: '65px',
-        fontWeight: 'bold',
-        WebkitTextStroke: '2px black',
-        paddingBottom: '0'
+        color: "#9B43A7",
+        fontSize: "65px",
+        fontWeight: "bold",
+        WebkitTextStroke: "2px black",
+        paddingBottom: "0",
     },
     buttonSubtext: {
-        color: '#34B5B6',
-        fontSize: '30px',
-        fontWeight: 'bold',
-        WebkitTextStroke: '2px black'
+        color: "#34B5B6",
+        fontSize: "30px",
+        fontWeight: "bold",
+        WebkitTextStroke: "2px black",
     },
     standardButton: {
-        borderColor: 'black', // changing the border color
-        borderWidth: '2px', // setting border width
-        borderStyle: 'solid', // setting border style
+        borderColor: "black", // changing the border color
+        borderWidth: "2px", // setting border width
+        borderStyle: "solid", // setting border style
         boxShadow: "-1px 1px 0px 0px #4A4A4A", // setting shadow
         fontFamily: '"Public Sans", sans-serif', // specifying "public sans" font with a fallback to generic sans-serif
-        fontWeight: 'bold', // making the text bold
-        fontSize: '35px',
-        padding: '0px 25px',
-        backgroundColor: 'white', // setting the background color
-        '&:hover': { // styles for hover state
-            backgroundColor: '#D6CDC2', // changing the background color on hover
-        }
+        fontWeight: "bold", // making the text bold
+        fontSize: "35px",
+        padding: "0px 25px",
+        backgroundColor: "white", // setting the background color
+        "&:hover": {
+            // styles for hover state
+            backgroundColor: "#D6CDC2", // changing the background color on hover
+        },
     },
     smallGreyButton: {
-        borderColor: 'black', // changing the border color
-        borderWidth: '2px', // setting border width
-        borderStyle: 'solid', // setting border style
+        borderColor: "black", // changing the border color
+        borderWidth: "2px", // setting border width
+        borderStyle: "solid", // setting border style
         boxShadow: "-1px 1px 0px 0px #4A4A4A", // setting shadow
         fontFamily: '"Public Sans", sans-serif', // specifying "public sans" font with a fallback to generic sans-serif
-        fontWeight: 'bold', // making the text bold
-        fontSize: '20px',
-        padding: '5px 15px',
-        backgroundColor: 'white', // setting the background color
-        '&:hover': { // styles for hover state
-            backgroundColor: '#F0F0F0', // changing the background color on hover
+        fontWeight: "bold", // making the text bold
+        fontSize: "20px",
+        padding: "5px 15px",
+        backgroundColor: "white", // setting the background color
+        "&:hover": {
+            // styles for hover state
+            backgroundColor: "#F0F0F0", // changing the background color on hover
         },
-        width: '240px'
-    }
+        width: "240px",
+    },
 });
 
 function Dashboard(props) {
@@ -133,46 +142,48 @@ function Dashboard(props) {
     const [showNewFileAlert, setShowNewFileAlert] = React.useState(false);
     const [enableEditButton, setEnableEditButton] = React.useState(false);
 
-    ipcRenderer.send('Logs::LogString', 'CRWrite Version: ' + packageJSON.version);
+    ipcRenderer.send(
+        "Logs::LogString",
+        "CRWrite Version: " + packageJSON.version
+    );
 
     ipcRenderer.removeAllListeners("CRFileDoubleClick");
     ipcRenderer.on("CRFileDoubleClick", (event, path) => {
-        ipcRenderer.send('Logs::LogString', "command line:");
-        ipcRenderer.send('Logs::LogString', path.cl);
-        ipcRenderer.send('Logs::LogString', "working directory:");
-        ipcRenderer.send('Logs::LogString', path.wd);
+        ipcRenderer.send("Logs::LogString", "command line:");
+        ipcRenderer.send("Logs::LogString", path.cl);
+        ipcRenderer.send("Logs::LogString", "working directory:");
+        ipcRenderer.send("Logs::LogString", path.wd);
 
         ipcRenderer.removeAllListeners("Jobs::JobSelected");
         ipcRenderer.on("Jobs::JobSelected", (event) => {
             setNavigateToMilling(true);
         });
-        
-        ipcRenderer.send('File::DoubleClickSetFilePath', path);
-        ipcRenderer.once('Jobs::ResponseGetJobsFromPath', (event, jobs) => {
+
+        ipcRenderer.send("File::DoubleClickSetFilePath", path);
+        ipcRenderer.once("Jobs::ResponseGetJobsFromPath", (event, jobs) => {
             if (typeof jobs !== "string") {
                 setAvailableJobs(jobs);
                 setShowJobSelection(true);
-            }
-            else {
-                setAlertMessage("File error: " + jobs);  // Jobs is an error string instead
+            } else {
+                setAlertMessage("File error: " + jobs); // Jobs is an error string instead
             }
         });
-        ipcRenderer.send('Jobs::GetJobsFromPath', path);
-
+        ipcRenderer.send("Jobs::GetJobsFromPath", path);
     });
 
     const CoastRunnerImage = () => {
         return (
-                <img style={{
-                        border: '2px solid black',
-                        borderRadius: '4px',
-                        boxShadow: "-3px 3px 0px 0px #4A4A4A",
-                        width: '100%',
-                        }}
-                        src='./static/img/CoastRunner.svg' 
-                        />
+            <img
+                style={{
+                    border: "2px solid black",
+                    borderRadius: "4px",
+                    boxShadow: "-3px 3px 0px 0px #4A4A4A",
+                    width: "100%",
+                }}
+                src="./static/img/CoastRunner.svg"
+            />
         );
-    }
+    };
 
     function showFilePicker() {
         ipcRenderer.removeAllListeners("Jobs::JobSelected");
@@ -191,7 +202,7 @@ function Dashboard(props) {
             setAlertMessage("CR file error: " + error);
         });
 
-        ipcRenderer.send('File::OpenFileDialog');
+        ipcRenderer.send("File::OpenFileDialog");
     }
 
     function onClickRun() {
@@ -215,10 +226,19 @@ function Dashboard(props) {
     function getRunButton() {
         if (status == 2) {
             return (
-                <Button className={classes.runButton} style={{ backgroundColor: "transparent" }} onClick={onClickRun} disabled={status != 2}>
-                    <div 
-                        id="run-code" 
-                        style={{ marginTop: '20px', marginRight: '30px', height: '14vh' }}
+                <Button
+                    className={classes.runButton}
+                    style={{ backgroundColor: "transparent" }}
+                    onClick={onClickRun}
+                    disabled={status != 2}
+                >
+                    <div
+                        id="run-code"
+                        style={{
+                            marginTop: "20px",
+                            marginRight: "30px",
+                            height: "14vh",
+                        }}
                     >
                         <div className={classes.buttonText}>RUN</div>
                         <div className={classes.buttonSubtext}>RUN GCODE</div>
@@ -233,13 +253,24 @@ function Dashboard(props) {
                     title={app.dashboard.run.tooltip}
                 >
                     <span>
-                        <Button className={classes.runButtonDisabled} style={{ backgroundColor: "transparent" }} onClick={onClickRun} disabled={status != 2}>
-                            <div 
-                                id="run-code" 
-                                style={{ marginTop: '20px', marginRight: '30px', height: '14vh' }}
+                        <Button
+                            className={classes.runButtonDisabled}
+                            style={{ backgroundColor: "transparent" }}
+                            onClick={onClickRun}
+                            disabled={status != 2}
+                        >
+                            <div
+                                id="run-code"
+                                style={{
+                                    marginTop: "20px",
+                                    marginRight: "30px",
+                                    height: "14vh",
+                                }}
                             >
                                 <div className={classes.buttonText}>RUN</div>
-                                <div className={classes.buttonSubtext}>RUN GCODE</div>
+                                <div className={classes.buttonSubtext}>
+                                    RUN GCODE
+                                </div>
                             </div>
                         </Button>
                     </span>
@@ -251,18 +282,21 @@ function Dashboard(props) {
     function getIcon() {
         if (app.dashboard.logo != "none") {
             return (
-                <img src={path.join(__dirname, app.dashboard.logo)} width="88px" style={{ marginTop: "-44px" }} />
+                <img
+                    src={path.join(__dirname, app.dashboard.logo)}
+                    width="88px"
+                    style={{ marginTop: "-44px" }}
+                />
             );
         }
     }
 
     function refreshJobs() {
-        ipcRenderer.once('File::ResponseGetExistingJobs', (event, jobs) => {
+        ipcRenderer.once("File::ResponseGetExistingJobs", (event, jobs) => {
             console.log("refreshJobs - jobs: " + JSON.stringify(jobs));
             setAvailableJobs(jobs);
         });
         ipcRenderer.send("File::GetExistingJobs");
-
     }
 
     function handleNewFileYes() {
@@ -276,11 +310,14 @@ function Dashboard(props) {
             setAvailableJobs(jobs);
             setShowJobSelection(true);
         });
-        ipcRenderer.once('File::ResponsePickNewCRFileDirectory', (event, filepath) => {
-            console.log("filepath: " + JSON.stringify(filepath));
-            setShowNewFileAlert(false);
-        });
-        ipcRenderer.send('File::PickNewCRFileDirectory')
+        ipcRenderer.once(
+            "File::ResponsePickNewCRFileDirectory",
+            (event, filepath) => {
+                console.log("filepath: " + JSON.stringify(filepath));
+                setShowNewFileAlert(false);
+            }
+        );
+        ipcRenderer.send("File::PickNewCRFileDirectory");
     }
 
     function handleNewFileNo() {
@@ -300,13 +337,13 @@ function Dashboard(props) {
         props.toggleShuttle();
     }
 
-    setTimeout(function() {
-        ipcRenderer.once('ResponseGetPassedInFilePath', (event, filePath) => {
+    setTimeout(function () {
+        ipcRenderer.once("ResponseGetPassedInFilePath", (event, filePath) => {
             if (filePath != null) {
-                ipcRenderer.send('File::DoubleClickSetFilePath', filePath);
+                ipcRenderer.send("File::DoubleClickSetFilePath", filePath);
             }
         });
-        ipcRenderer.once('ResponseGetPassedInJobs', (event, jobs) => {
+        ipcRenderer.once("ResponseGetPassedInJobs", (event, jobs) => {
             if (jobs != null) {
                 ipcRenderer.removeAllListeners("Jobs::JobSelected");
                 ipcRenderer.on("Jobs::JobSelected", (event) => {
@@ -317,9 +354,8 @@ function Dashboard(props) {
             }
         });
         ipcRenderer.send("GetPassedInFilePath");
-        ipcRenderer.send('GetPassedInJobs');
-    },
-    500);
+        ipcRenderer.send("GetPassedInJobs");
+    }, 500);
 
     useEffect(() => {
         if (settings) {
@@ -329,79 +365,183 @@ function Dashboard(props) {
 
     if (navigateToMilling) {
         ipcRenderer.removeAllListeners("CRFileDoubleClick");
-        return (<Redirect to='/milling' />);
+        return <Redirect to="/milling" />;
     }
 
     return (
         <section className={classes.dashboardStyle}>
-			<Alert open={alertMessage.length > 0} message={alertMessage} onOk={(event) => { setAlertMessage("") }} onCancel={(e) => { setAlertMessage("")}} />
-            <Alert open={showNewFileAlert} message="Would you like to create a new file?" yesNo={true} onOk={handleNewFileYes} onCancel={handleNewFileNo} />
+            {/* <ProbingWizard open={true} /> */}
+            <Alert
+                open={alertMessage.length > 0}
+                message={alertMessage}
+                onOk={(event) => {
+                    setAlertMessage("");
+                }}
+                onCancel={(e) => {
+                    setAlertMessage("");
+                }}
+            />
+            <Alert
+                open={showNewFileAlert}
+                message="Would you like to create a new file?"
+                yesNo={true}
+                onOk={handleNewFileYes}
+                onCancel={handleNewFileNo}
+            />
             <Menu />
-            <JobSelection open={showJobSelection} onClose={onCloseJobSelection} jobs={availableJobs} status={status} refreshJobs={refreshJobs} enableEditButton={enableEditButton} />
+            <JobSelection
+                open={showJobSelection}
+                onClose={onCloseJobSelection}
+                jobs={availableJobs}
+                status={status}
+                refreshJobs={refreshJobs}
+                enableEditButton={enableEditButton}
+            />
 
-
-                <Grid container
-                    justify="space-evenly"
-                    spacing={6}
-                    style={{ height: '100%', padding: "38px" }}
-                >
-                    <Grid item xs={4}>
-                        <Grid container direction='column' spacing={4}  style={{ flexWrap: 'inherit' }}>
-                            <Grid item>
-                                <CoastRunnerImage />
-                            </Grid>
-                            <Grid item>
-                                <ItemPanel title="Quick Actions" color="secondary">
-                                    <Grid container direction='column' justify='space-evenly' alignItems='center' style={{height: '200px'}}>
-                                        <Grid item>
-                                            <Button classes={{root: classes.smallGreyButton}}>Open Last Job</Button>
-                                        </Grid>
-                                        <Grid item>
-                                            <Button classes={{root: classes.smallGreyButton}}>Set Home Position</Button>
-                                        </Grid>
-                                        <Grid item>
-                                            <Button classes={{root: classes.smallGreyButton}}>Auto Level</Button>
-                                        </Grid>
-                                    </Grid>
-                                </ItemPanel>
-                            </Grid>
+            <Grid
+                container
+                justify="space-evenly"
+                spacing={6}
+                style={{ height: "100%", padding: "38px" }}
+            >
+                <Grid item xs={4}>
+                    <Grid
+                        container
+                        direction="column"
+                        spacing={4}
+                        style={{ flexWrap: "inherit" }}
+                    >
+                        <Grid item>
+                            <CoastRunnerImage />
                         </Grid>
-                    </Grid>
-                    <Grid item xs={8}>
-                        <Grid container direction='column' spacing={4}>
-                            <Grid item>
-                                <ItemPanel title="Guided Mode">
-                                    <Grid container alignItems="center" justify="space-evenly" style={{height: '120px', width: '100%'}}>
-                                        <Grid item>
-                                            <Button onClick={onClickRun} classes={{root: classes.standardButton}}>Open</Button>
-                                        </Grid>
-                                        <Grid item>
-                                            <Button onClick={() => { shell.openExternal(app.dashboard.store.url) }}classes={{root: classes.standardButton}}>Store</Button>
-                                        </Grid>
-                                        <Grid item>
-                                            <Button classes={{root: classes.standardButton}}>Help</Button>
-                                        </Grid>
+                        <Grid item>
+                            <ItemPanel title="Quick Actions" color="secondary">
+                                <Grid
+                                    container
+                                    direction="column"
+                                    justify="space-evenly"
+                                    alignItems="center"
+                                    style={{ height: "200px" }}
+                                >
+                                    <Grid item>
+                                        <Button
+                                            classes={{
+                                                root: classes.smallGreyButton,
+                                            }}
+                                        >
+                                            Open Last Job
+                                        </Button>
                                     </Grid>
-                                </ItemPanel>
-                            </Grid>
-                            <Grid item>
-                                <ItemPanel title="Manual Mode">
-                                    <Grid container alignItems='center' style={{height: '120px', width: '100%'}}>
-                                        <Grid item>
-                                            <Button style={{marginLeft: '100px'}} onClick={handleManualOpenClick} classes={{root: classes.standardButton}}>Open</Button>
-                                        </Grid>
-                                        <Grid item>
-                                            <Button style={{marginLeft: '100px'}} classes={{root: classes.standardButton}}>File Editor</Button>
-                                        </Grid>
+                                    <Grid item>
+                                        <Button
+                                            classes={{
+                                                root: classes.smallGreyButton,
+                                            }}
+                                        >
+                                            Set Home Position
+                                        </Button>
                                     </Grid>
-                                </ItemPanel>
-                            </Grid>
+                                    <Grid item>
+                                        <Button
+                                            classes={{
+                                                root: classes.smallGreyButton,
+                                            }}
+                                        >
+                                            Auto Level
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </ItemPanel>
                         </Grid>
                     </Grid>
                 </Grid>
+                <Grid item xs={8}>
+                    <Grid container direction="column" spacing={4}>
+                        <Grid item>
+                            <ItemPanel title="Guided Mode">
+                                <Grid
+                                    container
+                                    alignItems="center"
+                                    justify="space-evenly"
+                                    style={{ height: "120px", width: "100%" }}
+                                >
+                                    <Grid item>
+                                        <Button
+                                            onClick={onClickRun}
+                                            classes={{
+                                                root: classes.standardButton,
+                                            }}
+                                        >
+                                            Open
+                                        </Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            onClick={() => {
+                                                shell.openExternal(
+                                                    app.dashboard.store.url
+                                                );
+                                            }}
+                                            classes={{
+                                                root: classes.standardButton,
+                                            }}
+                                        >
+                                            Store
+                                        </Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            classes={{
+                                                root: classes.standardButton,
+                                            }}
+                                        >
+                                            Help
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </ItemPanel>
+                        </Grid>
+                        <Grid item>
+                            <ItemPanel title="Manual Mode">
+                                <Grid
+                                    container
+                                    alignItems="center"
+                                    style={{ height: "120px", width: "100%" }}
+                                >
+                                    <Grid item>
+                                        <Button
+                                            style={{ marginLeft: "100px" }}
+                                            onClick={handleManualOpenClick}
+                                            classes={{
+                                                root: classes.standardButton,
+                                            }}
+                                        >
+                                            Open
+                                        </Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            style={{ marginLeft: "100px" }}
+                                            classes={{
+                                                root: classes.standardButton,
+                                            }}
+                                        >
+                                            File Editor
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </ItemPanel>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
 
-            <SupportCenter open={openCustomerSupport} onClose={() => { setOpenCustomerSupport(false) }} />
-
+            <SupportCenter
+                open={openCustomerSupport}
+                onClose={() => {
+                    setOpenCustomerSupport(false);
+                }}
+            />
         </section>
         // <Grid container>
         //     <Grid item xs={6}>
@@ -416,14 +556,14 @@ function Dashboard(props) {
         //     </Grid>
         //     <Grid item xs={6}>
         //         <Typography variant='h1'>Test Header</Typography>
-        //     </Grid> 
+        //     </Grid>
         // </Grid>
     );
 }
 
 Dashboard.propTypes = {
     classes: PropTypes.object.isRequired,
-    status: PropTypes.number.isRequired
+    status: PropTypes.number.isRequired,
 };
 
 export default withStyles(styles)(Dashboard);

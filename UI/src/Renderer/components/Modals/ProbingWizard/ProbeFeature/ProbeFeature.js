@@ -16,6 +16,7 @@ const ProbeFeature = (props) => {
                         labelId="probe-feature"
                         value={props.featureType}
                         onChange={onFeatureChange}
+                        disabled={props.probingActive}
                         fullWidth
                     >
                         <MenuItem value="surface">Surface (Z Only)</MenuItem>

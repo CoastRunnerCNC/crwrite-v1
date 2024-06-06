@@ -2,18 +2,16 @@ import {
     Grid,
     Dialog,
     DialogContent,
-    Button,
-    MenuItem,
-    Select,
+    Button
 } from "@material-ui/core";
 import React, { useState } from "react";
-import ItemPanel from "../../ItemPanel/ItemPanel";
-import CustomInputLabel from "../Shuttle/CustomInputLabel/CustomInputLabel";
 import ProbingSettings from "./ProbingSettings/ProbingSettings";
 import ProbeFeature from "./ProbeFeature/ProbeFeature";
+import RightPanel from "./RightPanel/RightPanel";
 
 const ProbingWizard = (props) => {
     const [featureType, setFeatureType] = useState("");
+    const [probingActive, setProbingActive] = useState(false);
 
     const PictureSVG = () => {
         return (
@@ -220,6 +218,10 @@ const ProbingWizard = (props) => {
         );
     };
 
+    const handleStart = () => {
+        setProbingActive(true);
+    }
+
     return (
         <React.Fragment>
             <Dialog
@@ -236,6 +238,7 @@ const ProbingWizard = (props) => {
                                     <ProbeFeature
                                         featureType={featureType}
                                         setFeatureType={setFeatureType}
+                                        probingActive={probingActive}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -246,10 +249,10 @@ const ProbingWizard = (props) => {
                         <Grid item xs={6}>
                             <Grid container direction="column">
                                 <Grid item>
-                                    <ProbingSettings />
+                                    <RightPanel probingActive={probingActive} />
                                 </Grid>
                                 <Grid item>
-                                    <Button fullWidth>Start</Button>
+                                    <Button onClick={handleStart} fullWidth>Start</Button>
                                 </Grid>
                             </Grid>
                         </Grid>

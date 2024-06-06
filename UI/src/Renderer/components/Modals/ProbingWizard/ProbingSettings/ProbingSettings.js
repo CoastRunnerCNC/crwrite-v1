@@ -115,7 +115,7 @@ const ProbingSettings = (props) => {
                     <Grid item xs={10}>
                         <Select
                             labelId="target-wcs"
-                            id={wcs}
+                            value={wcs}
                             onChange={onChangeWcs}
                             fullWidth
                         >

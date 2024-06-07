@@ -28,7 +28,7 @@ const styles = theme => ({
         borderBottom: app.dashboard.border,
     },
     dashboardStyle: {
-        backgroundColor: "#F1F2F2",
+        backgroundColor: "#F6F6F6",
         backgroundSize: 'cover',
         overflow: 'hidden',
         width: '100%',

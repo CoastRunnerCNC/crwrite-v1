@@ -22,6 +22,7 @@ import TransformToInput from '../../util/TransformToInput';
 import PopUpInput from '../../components/Modals/PopUpInput/PopUpInput';
 import Throbber from '../../components/Modals/Throbber/Throbber';
 import ItemPanel from '../../components/ItemPanel/ItemPanel';
+import CoastRunnerLogo from '../../components/CoastRunnerLogo/CoastRunnerLogo';
 
 
 
@@ -54,9 +55,6 @@ const styles = theme => ({
         // verticalAlign: 'middle',
         // paddingLeft: '10px'
     },
-    stepsList: {
-
-    },
     // middle: {
     //     height: 'calc(100% - 110px)',
     //     marginTop: '60px'
@@ -76,41 +74,7 @@ const styles = theme => ({
     nextPrevButtonDisable: {
         background: '#b6eaeb',
         color: 'white !important',
-    },
-    // warning: {
-    //     height: '60px',
-    //     textAlign: 'center',
-    // },
-    // slider: {
-    //     width: '100%',
-    //     height: '40px',
-    //     textAlign: 'center',
-    // },
-    // actions: {
-    //     textAlign: 'center',
-    // },
-    // right: {
-    //     height: 'calc(100% - 160px)',
-    //     marginTop: '110px'
-    // },
-    // prev: {
-	// 	float: 'left',
-	// 	padding: '5px'
-    // },
-    // addStep: {
-    //     float: 'left',
-    //     padding: '5px'
-    // },
-    // next: {
-	// 	float: 'right',
-	// 	padding: '5px'
-    // },
-    // stepNumber: {
-    //     marginTop: '6px',
-    //     opacity: 0.87,
-    //     fontSize: '14px',
-    //     color: app.milling.step_number
-    // }
+    }
 });
 
 class Milling extends React.Component {
@@ -1131,7 +1095,9 @@ class Milling extends React.Component {
                 <JobSelection open={this.showJobSelection()} onClose={this.onCloseJobSelection} jobs={this.state.availableJobs} status={status} refreshJobs={this.refreshJobs} enableEditButton={this.props.settings.enableEditButton} />
 
                 <Grid container direction='column' className={classes.millingStyle}>
-                    <Box p={2} style={{height: '100%'}}>
+                    {/* <Grid item>
+                        <h1>test</h1>
+                    </Grid> */}
                         <Grid item>
                             <Grid container direction='column'>
                                 <Grid item>
@@ -1149,15 +1115,15 @@ class Milling extends React.Component {
                             </Grid>
                         </Grid>
                         <Grid item xs>
-                            <Grid container spacing={2} style={{height: '100%'}}>
-                                <Grid item xs={4} id="steps" className={classes.stepsList}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={4} id="steps">
                                     {/* <Button color="secondary" style={{ color: 'black', fontFamily: ["Lato", "sans-serif"], fontSize: '14px', textTransform: 'none' }} onClick={(event) => { onClickBack(this) }}>
                                     <ArrowBackIosRoundedIcon style={{fontSize: 18}} /> Back
                                     </Button>
                                     <Button color="secondary" style={{ color: 'black', fontFamily: ["Lato", "sans-serif"], fontSize: '14px', textTransform: 'none'}} onClick={this.onClickChangeJob} >
                                         Change Job
                                     </Button> */}
-                                    <ItemPanel title="Project Steps" small contentStyle={{height: '74vh', padding: '8px'}}>
+                                    <ItemPanel title="Project Steps" small contentStyle={{padding: '8px'}}>
                                         <Grid container direction='column'>
                                             <Grid item style={{height: '66vh'}}>
                                                 <StepList
@@ -1214,7 +1180,7 @@ class Milling extends React.Component {
                                     {/* {this.getAddStepButton()} */}
                                     {/* <Button color="secondary" disabled={!isSkipAvailable(this)} className={classes.next} style={{ marginTop: '-4px' }} onClick={handleSkip.bind(this)}>Skip Forward &#62;</Button> */}
                                 </Grid>
-                                <Grid item xs={3} id="middle_section" className={classes.middle}>
+                                <Grid item xs={3} id="middle_section">
                                     <Grid container direction='column' justify='space-between' spacing={0} style={{height: '100%'}}>
                                         <StartMilling open={this.state.showStartMilling} onClose={handleCloseStartMilling.bind(this)}/>
                                         <Grid item>
@@ -1257,14 +1223,13 @@ class Milling extends React.Component {
                                         </Grid> */}
                                     </Grid>
                                 </Grid>
-                                <Grid item xs={5} id="image" className={classes.right}>
+                                <Grid item xs={5} id="image">
                                     <ItemPanel title="Machine Output" color="secondary" style={{height: '100%'}} small>
                                         <ImageRaw selectedStep={this.state.selectedStep} millingInProgress={this.state.millingProgress != -1} editMode={this.state.editMode} onEditImage={this.showImagePopUpInput} onEditGCode={this.showGCodePopUpInput} />
                                     </ItemPanel>
                                 </Grid>
                             </Grid>
                         </Grid>
-                    </Box>
                 </Grid>
 			</React.Fragment>
         );

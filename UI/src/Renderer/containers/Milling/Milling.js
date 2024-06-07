@@ -1115,17 +1115,11 @@ class Milling extends React.Component {
                             </Grid>
                         </Grid>
                         <Grid item xs>
-                            <Grid container spacing={2}>
+                            <Grid container spacing={2} style={{height: '100%'}}>
                                 <Grid item xs={4} id="steps">
-                                    {/* <Button color="secondary" style={{ color: 'black', fontFamily: ["Lato", "sans-serif"], fontSize: '14px', textTransform: 'none' }} onClick={(event) => { onClickBack(this) }}>
-                                    <ArrowBackIosRoundedIcon style={{fontSize: 18}} /> Back
-                                    </Button>
-                                    <Button color="secondary" style={{ color: 'black', fontFamily: ["Lato", "sans-serif"], fontSize: '14px', textTransform: 'none'}} onClick={this.onClickChangeJob} >
-                                        Change Job
-                                    </Button> */}
-                                    <ItemPanel title="Project Steps" small contentStyle={{padding: '8px'}}>
-                                        <Grid container direction='column'>
-                                            <Grid item style={{height: '66vh'}}>
+                                    <ItemPanel title="Project Steps" small style={{height: '100%'}} contentStyle={{padding: '8px'}}>
+                                        <Grid container direction='column' style={{height: '100%'}}>
+                                            <Grid item>
                                                 <StepList
                                                     steps={this.state.steps} 
                                                     selectedStep={this.state.selectedStepIndex} 
@@ -1176,9 +1170,6 @@ class Milling extends React.Component {
                                             </Grid>
                                         </Grid>
                                     </ItemPanel>
-
-                                    {/* {this.getAddStepButton()} */}
-                                    {/* <Button color="secondary" disabled={!isSkipAvailable(this)} className={classes.next} style={{ marginTop: '-4px' }} onClick={handleSkip.bind(this)}>Skip Forward &#62;</Button> */}
                                 </Grid>
                                 <Grid item xs={3} id="middle_section">
                                     <Grid container direction='column' justify='space-between' spacing={0} style={{height: '100%'}}>

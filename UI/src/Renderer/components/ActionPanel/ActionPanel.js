@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, withStyles } from "@material-ui/core";
+import { Grid, withStyles, IconButton, Button, Typography } from "@material-ui/core";
 
 const ActionPanel = (props) => {
     return (
@@ -7,7 +7,7 @@ const ActionPanel = (props) => {
             <Grid item>
                 <IconButton
                     onClick={(event) => {
-                        onClickBack(this);
+                        props.onClickBack();
                     }}
                     style={{
                         padding: "0px",
@@ -26,35 +26,35 @@ const ActionPanel = (props) => {
             <Grid item>
                 <Button
                     classes={{
-                        root: classes.nextPrevButtonRoot,
-                        disabled: classes.nextPrevButtonDisable,
+                        root: props.classes.nextPrevButtonRoot,
+                        disabled: props.classes.nextPrevButtonDisable,
                     }}
                     color="secondary"
-                    disabled={!isPrevAvailable(this)}
-                    className={classes.prev}
-                    onClick={handlePrev.bind(this)}
+                    disabled={!props.isPrevAvailable}
+                    className={props.classes.prev}
+                    onClick={props.handlePrev}
                 >
                     &#60; Prev
                 </Button>
             </Grid>
             <Grid item xs>
                 <center>
-                    <Typography className={classes.stepNumber}>
-                        Step {this.state.selectedStepIndex + 1}/
-                        {this.state.steps.length}
+                    <Typography className={props.classes.stepNumber}>
+                        Step {props.this.state.selectedStepIndex + 1}/
+                        {props.this.state.steps.length}
                     </Typography>
                 </center>
             </Grid>
             <Grid item>
                 <Button
                     classes={{
-                        root: classes.nextPrevButtonRoot,
-                        disabled: classes.nextPrevButtonDisable,
+                        root: props.classes.nextPrevButtonRoot,
+                        disabled: props.classes.nextPrevButtonDisable,
                     }}
                     color="secondary"
-                    disabled={!isNextAvailable(this)}
-                    className={classes.next}
-                    onClick={handleNext.bind(this)}
+                    disabled={!props.isNextAvailable}
+                    className={props.classes.next}
+                    onClick={props.handleNext}
                 >
                     Next &#62;
                 </Button>

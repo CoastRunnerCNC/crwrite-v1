@@ -3,9 +3,9 @@ import { Typography, Grid } from "@material-ui/core";
 import LineBox from "./LineBox/LineBox";
 
 const ItemPanel = (props) => {
-    let titleSize = props.small ? "h6" : "h4";
+    let titleSize = props.small ? "subtitle1" : "h4";
     let svgHeight = props.small ? "12" : "12";
-    let titleBarPadding = props.small ? "4px" : "8px";
+    let titleBarPadding = props.small ? "4px 4px 0px 4px" : "8px";
 
     const MinimizeIcon = () => {
         let minimizeBackgroundColor =

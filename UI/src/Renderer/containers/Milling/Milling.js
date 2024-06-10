@@ -31,6 +31,7 @@ import PopUpInput from "../../components/Modals/PopUpInput/PopUpInput";
 import Throbber from "../../components/Modals/Throbber/Throbber";
 import ItemPanel from "../../components/ItemPanel/ItemPanel";
 import CoastRunnerLogo from "../../components/CoastRunnerLogo/CoastRunnerLogo";
+import ActionPanel from "../../components/ActionPanel/ActionPanel";
 
 const styles = (theme) => ({
     millingStyle: {
@@ -152,6 +153,8 @@ class Milling extends React.Component {
         this.editPopupNoHandler = this.editPopupNoHandler.bind(this);
         this.handleDeleteStep = this.handleDeleteStep.bind(this);
         this.moveStep = this.moveStep.bind(this);
+        this.handlePrev = this.handlePrev.bind(this);
+        // this.handleNext = this.handleNext.bind(this);
         this.handleWriteChangesYes = this.handleWriteChangesYes.bind(this);
         this.handleWriteChangesNo = this.handleWriteChangesNo.bind(this);
         this.closeFailedImageLoad = this.closeFailedImageLoad.bind(this);
@@ -856,6 +859,10 @@ class Milling extends React.Component {
         return items;
     }
 
+    handlePrev(event) {
+        this.showPrevStep(this);
+    }
+
     render() {
         const { classes, status } = this.props;
 
@@ -907,10 +914,6 @@ class Milling extends React.Component {
                     />
                 </div>
             );
-        }
-
-        function handlePrev(event) {
-            this.showPrevStep(this);
         }
 
         function handleNext(event) {
@@ -1398,111 +1401,25 @@ class Milling extends React.Component {
                                             />
                                         </Grid>
                                         <Grid item>
-                                            <Grid
-                                                container
-                                                justify="space-around"
-                                                alignItems="center"
-                                                spacing={1}
-                                                style={{ marginTop: "4px" }}
-                                            >
-                                                <Grid
-                                                    item
-                                                    style={{
-                                                        height: "33px",
-                                                        width: "33px",
-                                                        padding: "0px",
-                                                    }}
-                                                >
-                                                    <IconButton
-                                                        onClick={(event) => {
-                                                            onClickBack(this);
-                                                        }}
-                                                        style={{
-                                                            padding: "0px",
-                                                        }}
-                                                    >
-                                                        <img
-                                                            style={{
-                                                                height: "33px",
-                                                                width: "33px",
-                                                                padding: "0px",
-                                                            }}
-                                                            src="./static/img/back_button.png"
-                                                        />
-                                                    </IconButton>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Button
-                                                        classes={{
-                                                            root: classes.nextPrevButtonRoot,
-                                                            disabled:
-                                                                classes.nextPrevButtonDisable,
-                                                        }}
-                                                        color="secondary"
-                                                        disabled={
-                                                            !isPrevAvailable(
-                                                                this
-                                                            )
-                                                        }
-                                                        className={classes.prev}
-                                                        onClick={handlePrev.bind(
-                                                            this
-                                                        )}
-                                                    >
-                                                        &#60; Prev
-                                                    </Button>
-                                                </Grid>
-                                                <Grid item>
-                                                    <center>
-                                                        <Typography
-                                                            className={
-                                                                classes.stepNumber
-                                                            }
-                                                        >
-                                                            Step{" "}
-                                                            {this.state
-                                                                .selectedStepIndex +
-                                                                1}
-                                                            /
-                                                            {
-                                                                this.state.steps
-                                                                    .length
-                                                            }
-                                                        </Typography>
-                                                    </center>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Button
-                                                        classes={{
-                                                            root: classes.nextPrevButtonRoot,
-                                                            disabled:
-                                                                classes.nextPrevButtonDisable,
-                                                        }}
-                                                        color="secondary"
-                                                        disabled={
-                                                            !isNextAvailable(
-                                                                this
-                                                            )
-                                                        }
-                                                        className={classes.next}
-                                                        onClick={handleNext.bind(
-                                                            this
-                                                        )}
-                                                    >
-                                                        Next &#62;
-                                                    </Button>
-                                                </Grid>
-                                                <Grid
-                                                    item
-                                                    style={{
-                                                        height: "33px",
-                                                        width: "33px",
-                                                        padding: "0px",
-                                                    }}
-                                                >
-                                                    <img src="./static/img/next_milling_button.png" />
-                                                </Grid>
-                                            </Grid>
+                                            <ActionPanel
+                                                onClickBack={() => {
+                                                    onClickBack(this);
+                                                }}
+                                                isPrevAvailable={() => {
+                                                    isPrevAvailable(this);
+                                                }}
+                                                classes={classes}
+                                                handlePrev={() => {
+                                                    this.handlePrev();
+                                                }}
+                                                this={this}
+                                                isNextAvailable={() => {
+                                                    isNextAvailable(this);
+                                                }}
+                                                handleNext={() => {
+                                                    handleNext.bind(this)();
+                                                }}
+                                            />
                                         </Grid>
                                     </Grid>
                                 </ItemPanel>

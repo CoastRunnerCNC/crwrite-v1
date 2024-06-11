@@ -70,7 +70,7 @@ const ItemPanel = (props) => {
                             component="span"
                             variant={titleSize}
                             style={{
-                                fontFamily: ["Public Sans", "sans-serif"],
+                                fontFamily: ["ChicagoFLF", "Public Sans", "sans-serif"],
                                 fontWeight: "bold",
                             }}
                         >

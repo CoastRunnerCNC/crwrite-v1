@@ -23,6 +23,8 @@ const styles = theme => ({
         backgroundColor: '#f6f6f6',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        boxShadow: 'none',
+        borderTop: '1px solid black'
     },
     right: {
         float: 'right'
@@ -32,7 +34,7 @@ const styles = theme => ({
         flexDirection: 'row'
     },
     websiteLink: {
-        color: app.toolbar.websiteLink.color
+        color: 'black'
     }
 
 });

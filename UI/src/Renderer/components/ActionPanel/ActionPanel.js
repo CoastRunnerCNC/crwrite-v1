@@ -77,7 +77,7 @@ const RewindArrow = () => {
 
 const ActionPanel = (props) => {
     return (
-        <Grid container style={{ border: "1px solid black" }}>
+        <Grid container style={{ border: "1px solid black", boxShadow: '1px 1px 0 0 #000000' }}>
             <Grid item>
                 <Button
                     onClick={(event) => {

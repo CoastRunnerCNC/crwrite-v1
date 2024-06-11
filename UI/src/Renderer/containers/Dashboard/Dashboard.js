@@ -96,12 +96,13 @@ const styles = theme => ({
         borderColor: 'black', // changing the border color
         borderWidth: '2px', // setting border width
         borderStyle: 'solid', // setting border style
-        boxShadow: "-1px 1px 0px 0px #4A4A4A", // setting shadow
+        boxShadow: "1px 1px 0px 0px black", // setting shadow
         fontFamily: '"Public Sans", sans-serif', // specifying "public sans" font with a fallback to generic sans-serif
         fontWeight: 'bold', // making the text bold
         fontSize: '35px',
+        borderRadius: '0px',
         padding: '0px 25px',
-        backgroundColor: 'white', // setting the background color
+        backgroundColor: '#f6f6f6', // setting the background color
         '&:hover': { // styles for hover state
             backgroundColor: '#D6CDC2', // changing the background color on hover
         }
@@ -110,12 +111,13 @@ const styles = theme => ({
         borderColor: 'black', // changing the border color
         borderWidth: '2px', // setting border width
         borderStyle: 'solid', // setting border style
-        boxShadow: "-1px 1px 0px 0px #4A4A4A", // setting shadow
+        boxShadow: "1px 1px 0px 0px black", // setting shadow
         fontFamily: '"Public Sans", sans-serif', // specifying "public sans" font with a fallback to generic sans-serif
         fontWeight: 'bold', // making the text bold
         fontSize: '20px',
+        borderRadius: '0px',
         padding: '5px 15px',
-        backgroundColor: 'white', // setting the background color
+        backgroundColor: '#f6f6f6', // setting the background color
         '&:hover': { // styles for hover state
             backgroundColor: '#F0F0F0', // changing the background color on hover
         },
@@ -164,9 +166,9 @@ function Dashboard(props) {
     const CoastRunnerImage = () => {
         return (
                 <img style={{
-                        border: '2px solid black',
-                        borderRadius: '4px',
-                        boxShadow: "-3px 3px 0px 0px #4A4A4A",
+                        border: '1px solid black',
+                        borderRadius: '0px',
+                        boxShadow: "2px 2px 0px 0px black",
                         width: '100%',
                         }}
                         src='./static/img/CoastRunner.svg' 

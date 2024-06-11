@@ -80,7 +80,7 @@ const styles = (theme) => ({
         color: "black",
         height: "100%",
         width: "30px",
-        minWidth: "0px",
+        boxShadow: "1px 1px 0px 0px #000000",
         borderRadius: "0px"
     },
     nextPrevButtonDisable: {

@@ -130,9 +130,9 @@ class Shuttle extends React.Component {
                     title={tooltip}
                 >
                     <span>
-                        <Fab className={this.props.classes.shuttleButton} onClick={this.props.toggleShuttle} disabled={disabled}>
+                        <Button className={this.props.classes.shuttleButton} onClick={this.props.toggleShuttle} disabled={disabled} style={{border: '1px solid black', backgroundColor: '#f6f6f6', borderRadius: '0px', boxShadow: "1px 1px 0px 0px #000000"}}>
                             <img src={path.join(__dirname, app.image.joystick)} style={{ width: '20px', height: '20x' }} />
-                        </Fab>
+                        </Button>
                     </span>
                 </Tooltip>
 

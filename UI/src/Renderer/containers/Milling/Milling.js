@@ -45,7 +45,7 @@ const styles = (theme) => ({
         top: 0,
         paddingTop: 60,
         paddingLeft: "16px",
-        paddingRight: "16px"
+        paddingRight: "16px",
         // z: -1,
         // flex: 1,
         // justifyContent: 'center',
@@ -81,13 +81,59 @@ const styles = (theme) => ({
         height: "100%",
         width: "30px",
         boxShadow: "1px 1px 0px 0px #000000",
-        borderRadius: "0px"
+        borderRadius: "0px",
     },
     nextPrevButtonDisable: {
         background: "#F6F6F6",
         color: "black !important",
     },
 });
+
+const HorizontalLines = () => {
+    return (
+        <svg
+            width="100%"
+            height="100%"
+            viewBox="0 0 300 10"
+            preserveAspectRatio="none"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <line
+                x1="0"
+                y1="6.75"
+                x2="300"
+                y2="6.75"
+                stroke="black"
+                strokeWidth="0.5"
+            />
+            <line
+                x1="0"
+                y1="9.75"
+                x2="300"
+                y2="9.75"
+                stroke="black"
+                strokeWidth="0.5"
+            />
+            <line
+                x1="0"
+                y1="3.75"
+                x2="300"
+                y2="3.75"
+                stroke="black"
+                strokeWidth="0.5"
+            />
+            <line
+                x1="0"
+                y1="0.75"
+                x2="300"
+                y2="0.75"
+                stroke="black"
+                strokeWidth="0.5"
+            />
+        </svg>
+    );
+};
 
 class Milling extends React.Component {
     constructor() {
@@ -1329,79 +1375,107 @@ class Milling extends React.Component {
                     direction="column"
                     className={classes.millingStyle}
                 >
-
-                    {/* <Grid item>
-                        <Grid container direction="column">
-                            <Grid item>
-
-                                <div
-                                    style={{
-                                        color: "#3EC6CB",
-                                        fontFamily: [
-                                            "Public Sans",
-                                            "sans-serif",
-                                        ],
-                                        fontSize: "14px",
-                                        maxHeight: "17px",
-                                        overflow: "hidden",
-                                    }}
-                                >
-                                    File:{" "}
-                                    <span style={{ color: "#3EC6CB" }}>
-                                        {this.state.fileName}
-                                    </span>
-                                </div>
-                            </Grid>
-                            <Grid item>
-                                <div
-                                    style={{
-                                        maxHeight: "33.6px",
-                                        overflow: "hidden",
-                                        fontFamily: [
-                                            "Public Sans",
-                                            "sans-serif",
-                                        ],
-                                        fontSize: "18px",
-                                    }}
-                                >
-                                    Job:{" "}
-                                    <span style={{ color: "black" }}>
-                                        {this.state.jobName}
-                                    </span>
-                                </div>
-                            </Grid>
-                        </Grid>
-                    </Grid> */}
                     <Grid item xs>
-                        <Grid container spacing={2}>
+                        <Grid container spacing={2} style={{ height: "100%" }}>
                             <Grid item xs={4} id="steps">
-                                {/* <Button color="secondary" style={{ color: 'black', fontFamily: ["Lato", "sans-serif"], fontSize: '14px', textTransform: 'none' }} onClick={(event) => { onClickBack(this) }}>
-                                    <ArrowBackIosRoundedIcon style={{fontSize: 18}} /> Back
-                                    </Button>
-                                    <Button color="secondary" style={{ color: 'black', fontFamily: ["Lato", "sans-serif"], fontSize: '14px', textTransform: 'none'}} onClick={this.onClickChangeJob} >
-                                        Change Job
-                                    </Button> */}
                                 <ItemPanel
                                     title="Project Steps"
                                     small
-                                    contentStyle={{ padding: "8px" }}
+                                    contentStyle={{
+                                        padding: "8px",
+                                        flexGrow: "1",
+                                    }}
+                                    style={{ height: "100%" }}
                                 >
-                                    <Grid container direction="column">
-                                        <Grid item style={{ height: "66vh" }}>
-                                            <StepList
-                                                steps={this.state.steps}
-                                                selectedStep={
-                                                    this.state.selectedStepIndex
-                                                }
-                                                editMode={this.state.editMode}
-                                                submanifestUsed={
-                                                    this.state.submanifestUsed
-                                                }
-                                                deleteStep={
-                                                    this.handleDeleteStep
-                                                }
-                                                moveStep={this.moveStep}
-                                            />
+                                    <Grid
+                                        container
+                                        direction="column"
+                                        style={{ height: "100%" }}
+                                    >
+                                        <Grid item>
+                                            <Grid
+                                                container
+                                                alignItems="center"
+                                                style={{
+                                                    backgroundColor: "black",
+                                                    color: "white",
+                                                    height: "35px",
+                                                    fontFamily: [
+                                                        "Public Sans",
+                                                        "sans-serif",
+                                                    ],
+                                                    fontSize: "14px",
+                                                    overflow: "hidden",
+                                                    marginBottom: "4px",
+                                                    paddingLeft: "8px",
+                                                    boxShadow:
+                                                        "1px 1px 0 0 #000000",
+                                                }}
+                                            >
+                                                <Grid item>
+                                                    File: {this.state.fileName}
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item>
+                                            <Grid
+                                                container
+                                                alignItems="center"
+                                                style={{
+                                                    backgroundColor: "black",
+                                                    color: "white",
+                                                    height: "35px",
+                                                    overflow: "hidden",
+                                                    fontFamily: [
+                                                        "Public Sans",
+                                                        "sans-serif",
+                                                    ],
+                                                    fontSize: "14px",
+                                                    paddingLeft: "8px",
+                                                    boxShadow:
+                                                        "1px 1px 0 0 #000000",
+                                                    marginBottom: "10px",
+                                                }}
+                                            >
+                                                <Grid item>
+                                                    Job: {this.state.jobName}
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item>
+                                            <HorizontalLines />
+                                        </Grid>
+                                        <Grid item style={{ flexGrow: "1" }}>
+                                            <Grid
+                                                container
+                                                direction="column"
+                                                style={{
+                                                    marginTop: "10px",
+                                                    height: "100%",
+                                                }}
+                                            >
+                                                <Grid item>
+                                                    <StepList
+                                                        steps={this.state.steps}
+                                                        selectedStep={
+                                                            this.state
+                                                                .selectedStepIndex
+                                                        }
+                                                        editMode={
+                                                            this.state.editMode
+                                                        }
+                                                        submanifestUsed={
+                                                            this.state
+                                                                .submanifestUsed
+                                                        }
+                                                        deleteStep={
+                                                            this
+                                                                .handleDeleteStep
+                                                        }
+                                                        moveStep={this.moveStep}
+                                                    />
+                                                </Grid>
+                                            </Grid>
                                         </Grid>
                                         <Grid item>
                                             <ActionPanel

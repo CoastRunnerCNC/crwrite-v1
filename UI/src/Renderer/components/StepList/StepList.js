@@ -42,7 +42,6 @@ const styles = theme => ({
         marginLeft: '0px',
         marginRight: '0px',
         marginBottom: '0px',
-        borderRadius: '3px',
         paddingLeft: '8px'
     },
     itemText: {

@@ -20,7 +20,7 @@ const styles = theme => ({
         height: 39,
         bottom: 0,
         backgroundImage: `url(${app.toolbar.backgroundPhoto})`,
-        backgroundColor: '#75327e',
+        backgroundColor: '#f6f6f6',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
     },

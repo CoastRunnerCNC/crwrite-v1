@@ -17,7 +17,7 @@ const styles = theme => ({
         alignItems: 'center'
     },
     statusText: {
-        color: app.toolbar.status.statusTextColor
+        color: 'black'
     }
 });
 
@@ -74,7 +74,7 @@ function Status(props) {
                     <StatusIcon color={getColor()} style={{ width: "18px" }} />
                     <Typography variant="body1" color={getColor()}>
                         <b>
-                            <span className={classes.leftRightPadding} style={{ color: '#ffffff' }}>
+                            <span className={classes.leftRightPadding} style={{ color: 'black' }}>
                                 {app.toolbar.status.label}
                             </span>
                             <span className={classes.statusText}>

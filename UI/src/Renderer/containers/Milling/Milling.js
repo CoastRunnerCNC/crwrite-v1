@@ -44,6 +44,8 @@ const styles = (theme) => ({
         left: 0,
         top: 0,
         paddingTop: 60,
+        paddingLeft: "16px",
+        paddingRight: "16px"
         // z: -1,
         // flex: 1,
         // justifyContent: 'center',
@@ -73,13 +75,17 @@ const styles = (theme) => ({
         padding: "16px",
     },
     nextPrevButtonRoot: {
-        background: "#3EC6CB",
+        background: "#F6F6F6",
         border: "1px solid black",
-        color: "white",
+        color: "black",
+        height: "100%",
+        width: "30px",
+        minWidth: "0px",
+        borderRadius: "0px"
     },
     nextPrevButtonDisable: {
-        background: "#b6eaeb",
-        color: "white !important",
+        background: "#F6F6F6",
+        color: "black !important",
     },
 });
 
@@ -1323,13 +1329,11 @@ class Milling extends React.Component {
                     direction="column"
                     className={classes.millingStyle}
                 >
+
                     {/* <Grid item>
-                        <h1>test</h1>
-                    </Grid> */}
-                    <Grid item>
                         <Grid container direction="column">
                             <Grid item>
-                                {/* , "Agency FB" */}
+
                                 <div
                                     style={{
                                         color: "#3EC6CB",
@@ -1349,7 +1353,6 @@ class Milling extends React.Component {
                                 </div>
                             </Grid>
                             <Grid item>
-                                {/* , "Agency FB" */}
                                 <div
                                     style={{
                                         maxHeight: "33.6px",
@@ -1368,7 +1371,7 @@ class Milling extends React.Component {
                                 </div>
                             </Grid>
                         </Grid>
-                    </Grid>
+                    </Grid> */}
                     <Grid item xs>
                         <Grid container spacing={2}>
                             <Grid item xs={4} id="steps">
@@ -1445,6 +1448,7 @@ class Milling extends React.Component {
                                         <ItemPanel
                                             title="Step Description"
                                             small
+                                            contentStyle={{ padding: "8px" }}
                                         >
                                             <div>
                                                 <TransformToInput

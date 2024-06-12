@@ -1360,7 +1360,6 @@ class Milling extends React.Component {
                         });
                     }}
                 />
-
                 <JobSelection
                     open={this.showJobSelection()}
                     onClose={this.onCloseJobSelection}

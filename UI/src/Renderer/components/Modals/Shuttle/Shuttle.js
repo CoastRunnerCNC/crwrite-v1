@@ -139,7 +139,7 @@ class Shuttle extends React.Component {
                 <Dialog
                     open={this.props.openShuttle}
                     aria-labelledby="form-dialog-title"
-                    PaperProps={{ style: {height: '100%', maxWidth: '1600px'}}}
+                    PaperProps={{ style: {height: '100%', maxWidth: '1600px', backgroundColor: '#f6f6f6'}}}
                     maxWidth="xl"
                     fullWidth
                 >

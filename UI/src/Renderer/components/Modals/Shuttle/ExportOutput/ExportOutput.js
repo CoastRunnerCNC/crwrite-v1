@@ -14,7 +14,7 @@ const ExportOutput = (props) => {
   }
 
   return (
-    <Button onClick={handleClick} variant='contained' color='secondary'><Save /></Button>
+    <Button onClick={handleClick} variant='contained'><Save /></Button>
   );
 }
 

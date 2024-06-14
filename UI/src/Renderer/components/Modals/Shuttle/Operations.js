@@ -48,27 +48,24 @@ const DEFAULT_COORDINATE_LIMITS = {
 };
 
 const styles = theme => ({
+    slider: {
+        padding: '11px 0px'
+    },
     millImageStyle: {
         width: '265px',
         height: '135px',
         backgroundImage: app.manualOperations.millImage
     },
-    formControl: {
-        minWidth: 50,
-        variant: 'outlined',
-        borderRadius: '4px', 
-        border: '1px solid black'
-    },
     yellow: {
-        stroke: '#ffff00',
-        fill: '#ffff00'
+        stroke: '#000000',
+        fill: '#000000'
     },
     orange: {
-        stoke: '#ffa500'
+        stroke: '#000000'
     },
     red: {
-        stroke: '#ff0000',
-        fill: '#ff0000'
+        stroke: '#000000',
+        fill: '#000000'
     },
     jogButton: {
         '&:hover': {
@@ -111,25 +108,25 @@ const CoastRunnerSVG = (props) => {
             <path d="M360.493 154.798C363.121 154.798 365.252 152.667 365.252 150.039C365.252 147.411 363.121 145.281 360.493 145.281C357.865 145.281 355.735 147.411 355.735 150.039C355.735 152.667 357.865 154.798 360.493 154.798Z" fill="#444444"/>
             <rect x="90.1882" y="41.2706" width="396.424" height="275.718" stroke="black" strokeWidth="2.54118"/>
             <g id="x_neg_path" className={props.classes.jogButton} onMouseDown={component.pathClickStarted} onMouseUp={component.pathClickEnded}>
-                <rect id="x_neg_path" x="40.5241" y="65.9359" width="26.9047" height="26.9047" rx="2.01706" fill="#E2D9CE"/> {/*X-Minus*/}
+                <rect id="x_neg_path" x="40.5241" y="65.9359" width="26.9047" height="26.9047" rx="2.01706" fill="#f6f6f6"/> {/*X-Minus*/}
                 
                 <path id="x_neg_path" className={component.getPathColorClass('x', false)} d="M63.2994 77.6761C63.2994 77.3253 63.015 77.0408 62.6641 77.0408H45.2888C44.938 77.0408 44.6535 77.3253 44.6535 77.6761V81.1004C44.6535 81.4512 44.938 81.7357 45.2888 81.7357H62.6641C63.015 81.7357 63.2994 81.4512 63.2994 81.1004V77.6761Z" fill="#3EC6CB" stroke="black" strokeWidth="0.635294"/>
             </g>
             <rect x="40.5241" y="65.9359" width="26.9047" height="26.9047" rx="2.01706" stroke="black" strokeWidth="1.04824"/>
             <path d="M53.9765 105.718L53.9765 255.718" stroke="black" strokeWidth="3" strokeLinecap="round"/>
             <g id="x_pos_path" className={props.classes.jogButton} onMouseDown={component.pathClickStarted} onMouseUp={component.pathClickEnded}>
-                <rect id="x_pos_path" x="40.5241" y="268.595" width="26.9047" height="26.9047" rx="2.01706" fill="#E2D9CE"/> {/*X-Plus*/}
+                <rect id="x_pos_path" x="40.5241" y="268.595" width="26.9047" height="26.9047" rx="2.01706" fill="#f6f6f6"/> {/*X-Plus*/}
                 <path id="x_pos_path" className={component.getPathColorClass('x', true)} d="M63.2994 280.354C63.2994 280.003 63.015 279.719 62.6641 279.719H56.3429V273.359C56.3429 273.009 56.0585 272.724 55.7076 272.724H52.2834C51.9325 272.724 51.6481 273.009 51.6481 273.359V279.719H45.2888C44.938 279.719 44.6535 280.003 44.6535 280.354V283.778C44.6535 284.129 44.938 284.414 45.2888 284.414H51.6481V290.735C51.6481 291.086 51.9325 291.37 52.2834 291.37H55.7076C56.0585 291.37 56.3429 291.086 56.3429 290.735V284.414H62.6641C63.015 284.414 63.2994 284.129 63.2994 283.778V280.354Z" fill="#3EC6CB" stroke="black" strokeWidth="0.635294"/>
             </g>
             <rect x="40.5241" y="268.595" width="26.9047" height="26.9047" rx="2.01706" stroke="black" strokeWidth="1.04824"/>
             <g id='y_neg_path' className={props.classes.jogButton} onMouseDown={component.pathClickStarted} onMouseUp={component.pathClickEnded}>
-                <rect id='y_neg_path' x="111.677" y="336.571" width="26.9047" height="26.9047" rx="2.01706" fill="#E2D9CE"/> {/*Y-Minus*/}
+                <rect id='y_neg_path' x="111.677" y="336.571" width="26.9047" height="26.9047" rx="2.01706" fill="#f6f6f6"/> {/*Y-Minus*/}
                 <path id='y_neg_path' className={component.getPathColorClass('y', false)} d="M134.452 348.311C134.452 347.961 134.168 347.676 133.817 347.676H116.442C116.091 347.676 115.806 347.961 115.806 348.311V351.736C115.806 352.087 116.091 352.371 116.442 352.371H133.817C134.168 352.371 134.452 352.087 134.452 351.736V348.311Z" fill="#3EC6CB" stroke="black" strokeWidth="0.635294"/>
             </g>
             <rect x="111.677" y="336.571" width="26.9047" height="26.9047" rx="2.01706" stroke="black" strokeWidth="1.04824"/>
             <path d="M150.9 350.024L425.9 350.024" stroke="black" strokeWidth="3" strokeLinecap="round"/>
             <g id='y_pos_path' className={props.classes.jogButton} onMouseDown={component.pathClickStarted} onMouseUp={component.pathClickEnded}>
-                <rect id='y_pos_path' x="438.218" y="336.571" width="26.9047" height="26.9047" rx="2.01706" fill="#E2D9CE"/> {/*Y-Plus*/}
+                <rect id='y_pos_path' x="438.218" y="336.571" width="26.9047" height="26.9047" rx="2.01706" fill="#f6f6f6"/> {/*Y-Plus*/}
                 <path id='y_pos_path' className={component.getPathColorClass('y', true)} d="M460.994 348.33C460.994 347.98 460.709 347.695 460.358 347.695H454.037V341.336C454.037 340.985 453.753 340.701 453.402 340.701H449.978C449.627 340.701 449.342 340.985 449.342 341.336V347.695H442.983C442.632 347.695 442.348 347.98 442.348 348.33V351.755C442.348 352.106 442.632 352.39 442.983 352.39H449.342V358.711C449.342 359.062 449.627 359.346 449.978 359.346H453.402C453.753 359.346 454.037 359.062 454.037 358.711V352.39H460.358C460.709 352.39 460.994 352.106 460.994 351.755V348.33Z" fill="#3EC6CB" stroke="black" strokeWidth="0.635294"/>
             </g>
             <rect x="438.218" y="336.571" width="26.9047" height="26.9047" rx="2.01706" stroke="black" strokeWidth="1.04824"/>
@@ -165,13 +162,13 @@ const CoastRunnerSVG = (props) => {
             <path d="M592.003 246.899V252.89C592.003 253.843 591.647 254.822 591.151 255.806C590.815 256.473 590.402 257.153 590.008 257.82C589.601 258.5 589.188 259.192 588.832 259.891C588.724 260.114 588.616 260.342 588.515 260.571C588.515 260.571 588.515 260.584 588.515 260.59V246.906H592.003V246.899Z" fill="#767576"/>
             <rect x="529.153" y="41.2706" width="123.882" height="275.718" stroke="black" strokeWidth="2.54118"/>
             <g id='z_pos_path' className={props.classes.jogButton} onMouseDown={component.pathClickStarted} onMouseUp={component.pathClickEnded}>
-                <rect id='z_pos_path' x="668.171" y="62.7594" width="26.9047" height="26.9047" rx="2.01706" fill="#E2D9CE"/> {/*Z-Plus*/}
+                <rect id='z_pos_path' x="668.171" y="62.7594" width="26.9047" height="26.9047" rx="2.01706" fill="#f6f6f6"/> {/*Z-Plus*/}
                 <path id='z_pos_path' className={component.getPathColorClass('z', true)} d="M690.946 74.5187C690.946 74.1678 690.662 73.8834 690.311 73.8834H683.99V67.5241C683.99 67.1733 683.706 66.8888 683.355 66.8888H679.93C679.58 66.8888 679.295 67.1733 679.295 67.5241V73.8834H672.936C672.585 73.8834 672.301 74.1678 672.301 74.5187V77.9429C672.301 78.2938 672.585 78.5782 672.936 78.5782H679.295V84.8994C679.295 85.2503 679.58 85.5347 679.93 85.5347H683.355C683.706 85.5347 683.99 85.2503 683.99 84.8994V78.5782H690.311C690.662 78.5782 690.946 78.2938 690.946 77.9429V74.5187Z" fill="#3EC6CB" stroke="black" strokeWidth="0.635294"/>
             </g>
             <rect x="668.171" y="62.7594" width="26.9047" height="26.9047" rx="2.01706" stroke="black" strokeWidth="1.04824"/>
             <path d="M681.623 104.129V254.129" stroke="black" strokeWidth="3" strokeLinecap="round"/>
             <g id='z_neg_path' className={props.classes.jogButton} onMouseDown={component.pathClickStarted} onMouseUp={component.pathClickEnded}>
-                <rect id='z_neg_path' x="668.171" y="268.595" width="26.9047" height="26.9047" rx="2.01706" fill="#E2D9CE"/> {/*Z-minus*/} 
+                <rect id='z_neg_path' x="668.171" y="268.595" width="26.9047" height="26.9047" rx="2.01706" fill="#f6f6f6"/> {/*Z-minus*/} 
                 <path id='z_neg_path' className={component.getPathColorClass('z', false)} d="M690.946 280.335C690.946 279.984 690.662 279.7 690.311 279.7H672.936C672.585 279.7 672.301 279.984 672.301 280.335V283.759C672.301 284.11 672.585 284.394 672.936 284.394H690.311C690.662 284.394 690.946 284.11 690.946 283.759V280.335Z" fill="#3EC6CB" stroke="black" strokeWidth="0.635294"/>
             </g>
             <rect x="668.171" y="268.595" width="26.9047" height="26.9047" rx="2.01706" stroke="black" strokeWidth="1.04824"/>
@@ -954,8 +951,12 @@ class Operations extends React.Component {
     }
 
     getPathColorClass(coordinate, isMax) {
+        // temporary override
+        return this.props.classes.red;
+
         const units = this.state.units;
         const value = this.get_position(coordinate, units);
+
 
         if (this.state.isHome) {
             return '';
@@ -1615,7 +1616,7 @@ class Operations extends React.Component {
 
         function getStatusDisplay(component) {
             return (
-                <FormControl style={{border: 'none'}} className={component.props.classes.formControl} fullWidth>
+                <FormControl style={{border: 'none', backgroundColor: '#f6f6f6'}} className={component.props.classes.formControl} fullWidth>
                     <Input
                         className="text-box status"
                         id="status-input-label"
@@ -1624,7 +1625,8 @@ class Operations extends React.Component {
                             color: app.modal.color,
                             textAlign: 'center',
                             fontWeight: 'bold',
-                            fontSize: '1.5em'
+                            fontSize: '1.5em',
+                            backgroundColor: '#f6f6f6'
                             }}}
                         disableUnderline
                         disabled
@@ -1641,7 +1643,7 @@ class Operations extends React.Component {
                         <Input
                             id="manual-entry-input"
                             inputRef={component.manual_entry_ref}
-                            style={{color: app.modal.color, borderRadius: '4px', border: '2px', height: '32px'}}
+                            style={{color: app.modal.color, height: '32px'}}
                             inputProps={{style: {color: app.modal.color}}}
                             value={component.state.manualEntry}
                             placeholder='Manual Entry'
@@ -1726,27 +1728,24 @@ class Operations extends React.Component {
                                                 </ItemPanel> 
                                             </Grid>
                                             <Grid item style={{marginTop: '15px'}}>
-                                                <Button  variant='contained' color='secondary' style={{backgroundColor: 'white'}} onClick={this.openShuttleSettings} fullWidth>Key Bindings</Button>
+                                                <Button  variant='contained' onClick={this.openShuttleSettings} fullWidth>Key Bindings</Button>
                                             </Grid>
                                         </Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>
                             <Grid item style={{marginTop: '-10px'}}>
-                                <Grid container justify='space-between'>
+                                <Grid container justify='space-between' spacing={1}>
                                     <Grid item xs={3}>
                                         <ItemPanel title="Status" small>
                                             {getStatusDisplay(this)}
                                         </ItemPanel>
                                     </Grid>
-                                    <Grid item xs={8}>
-                                        <Grid container direction='column'>
-                                            <Grid item>
-                                                <CustomInputLabel fitContent>
-                                                    Feedrate
-                                                </CustomInputLabel>
-                                            </Grid>
-                                            <Grid item>
+                                    <Grid item xs={9}>
+                                        <Grid container alignItems='center'>
+                                            <Grid item xs>
+                                                <ItemPanel title="Feedrate" small contentStyle={{paddingLeft: '16px', paddingRight: '16px'}}>
+
                                                 <Slider
                                                     className={this.props.classes.slider}
                                                     value={this.state.feedRate}
@@ -1758,6 +1757,7 @@ class Operations extends React.Component {
                                                     onChange={this.onFeedRateChange}
                                                     onChangeCommitted={(event, value) => { this.props.updateFeedRate(value); }}
                                                 />
+                                                </ItemPanel>
                                             </Grid>
                                         </Grid>
                                     </Grid>

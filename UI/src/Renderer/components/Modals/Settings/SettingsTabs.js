@@ -18,7 +18,7 @@ function SettingsTabs(props) {
             // className={classes.indicator}
             value={selectedTab}
             onChange={(e, value) => { selectTab(value); }}
-            indicatorColor="secondary"
+            TabIndicatorProps={{style: {background:'#000000'}}}
             textColor="primary"
             centered
         >

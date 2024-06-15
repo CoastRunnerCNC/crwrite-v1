@@ -375,10 +375,10 @@ function Dashboard(props) {
                                 <ItemPanel title="Guided Mode">
                                     <Grid container alignItems="center" justify="space-evenly" style={{height: '120px', width: '100%'}}>
                                         <Grid item>
-                                            <Button onClick={onClickRun} classes={{root: classes.standardButton}}>Open</Button>
+                                            <Button id="run-code" onClick={onClickRun} classes={{root: classes.standardButton}}>Open</Button>
                                         </Grid>
                                         <Grid item>
-                                            <Button onClick={() => { shell.openExternal(app.dashboard.store.url) }}classes={{root: classes.standardButton}}>Store</Button>
+                                            <Button id="store" onClick={() => { shell.openExternal(app.dashboard.store.url) }}classes={{root: classes.standardButton}}>Store</Button>
                                         </Grid>
                                         <Grid item>
                                             <Button classes={{root: classes.standardButton}}>Help</Button>

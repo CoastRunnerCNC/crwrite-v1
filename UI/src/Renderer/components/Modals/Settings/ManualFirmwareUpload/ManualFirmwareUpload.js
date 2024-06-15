@@ -16,8 +16,8 @@ const styles = theme => ({
         }
     },
     actionButton: {
-        color: app.button.save.color,
-        backgroundColor: app.button.save.backgroundColor
+        color: 'black',
+        backgroundColor: '#f6f6f6'
     }
 });
 

@@ -8,8 +8,9 @@ const styles = theme => ({
     button: {
         '&:disabled': {
             opacity: 0.5,
-            backgroundColor: theme.palette.secondary.main
-        }
+            backgroundColor: '#f6f6f6'
+        },
+        backgroundColor: '#f6f6f6'
     }
 })
 

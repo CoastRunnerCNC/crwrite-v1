@@ -3,7 +3,9 @@
     top: 10px;
     width: 116px;
     height: 25px;
-    background-color: #00f1f9;
+    background-color: #f6f6f6;
+    border: 1px solid black;
+    box-shadow: 1px 1px 0px 0px;
     cursor: pointer;
     font-size: 14px;
     font-weight: normal;

@@ -52,7 +52,7 @@ function BottomToolbar(props) {
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <Grid container spacing={1} className={classes.root} alignItems="center">
-                        <Grid className={classes.connectionArea} item xs={4}>
+                        <Grid className={classes.connectionArea} item xs={4} id="status">
                             <Status status={status} />
                             <CNCChooser disabled={milling} />
                         </Grid>

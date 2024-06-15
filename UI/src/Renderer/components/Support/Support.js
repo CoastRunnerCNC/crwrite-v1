@@ -16,12 +16,13 @@ const styles = theme => ({
     paper: {
         marginBottom: '5px',
         border: '#FFFFFF 1px solid',
-        color: app.supportButtonMenu.color,
-        backgroundColor: app.supportButtonMenu.backgroundColor
+        color: "black",
+        backgroundColor: "#f6f6f6"
     },
     menuItem: {
         '&:hover': {
-            backgroundColor: app.supportButtonMenu.hoverColor
+            backgroundColor: 'black',
+            color: 'white'
         }
     },
     supportButton: {

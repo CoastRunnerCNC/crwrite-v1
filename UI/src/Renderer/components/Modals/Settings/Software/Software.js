@@ -13,7 +13,12 @@ const os = require('os');
 const releaseRawString = os.release();
 
 const styles = theme => ({
-
+    button: {
+        backgroundColor: '#f6f6f6',
+        '&:hover': { // styles for hover state
+            backgroundColor: '#D6CDC2', // changing the background color on hover
+        }
+    }
 });
 
 const RedTextTypography = withStyles({
@@ -150,6 +155,8 @@ class Software extends React.Component {
                     <Button
                         variant="contained"
                         color="secondary"
+                        size="large"
+                        className={this.props.classes.button}
                         onClick={ () => {
                             this.props.setSelectedTab(3);
                             } 

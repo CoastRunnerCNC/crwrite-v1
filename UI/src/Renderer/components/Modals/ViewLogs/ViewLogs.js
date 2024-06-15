@@ -9,14 +9,14 @@ const styles = theme => ({
     cancel: {
         marginTop: theme.spacing(-1),
         marginBottom: theme.spacing(1),
-        backgroundColor: app.button.cancel.backgroundColor,
-        color: app.button.cancel.color
+        backgroundColor: "#f6f6f6",
+        color: "black"
     },
     open: {
         marginTop: theme.spacing(-1),
         marginBottom: theme.spacing(1),
-        backgroundColor: app.button.save.backgroundColor,
-        color: app.button.save.color
+        backgroundColor: "#f6f6f6",
+        color: "black"
     },
     logOutput: {
         width: "calc(100% - 6px)",

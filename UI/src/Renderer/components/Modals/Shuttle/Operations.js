@@ -1927,6 +1927,7 @@ class Operations extends React.Component {
                                                     <Tabs
                                                         value={this.state.currentTab}
                                                         onChange={(event, newVal) => {this.setState({currentTab: newVal})}}
+                                                        TabIndicatorProps={{style: {background:'#000000'}}}
                                                     >
                                                         <Tab label="Output" />
                                                         <Tab label='file' disabled={this.state.rawGCodes.length > 0 ? false : true} />

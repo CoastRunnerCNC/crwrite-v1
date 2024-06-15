@@ -71,7 +71,7 @@ function Status(props) {
         <React.Fragment>
             <MuiThemeProvider theme={statusTheme}>
                 <div className={classes.statusSection}>
-                    <StatusIcon color={getColor()} style={{ width: "18px" }} />
+                    {/* <StatusIcon color={getColor()} style={{ width: "18px" }} /> */}
                     <Typography variant="body1" color={getColor()}>
                         <b>
                             <span className={classes.leftRightPadding} style={{ color: 'black' }}>

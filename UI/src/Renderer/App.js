@@ -66,6 +66,26 @@ const theme = createMuiTheme({
                 backgroundColor: "#f6f6f6"
             }
         },
+        MuiRadio: {
+            root: {
+              color: 'black',
+            },
+            colorSecondary: {
+              '&$checked': {
+                color: 'black',
+              },
+            },
+          },
+          MuiCheckbox: {
+            root: {
+              color: 'black',
+            },
+            colorSecondary: {
+              '&$checked': {
+                color: 'black',
+              },
+            },
+          },
         MuiFormControl: {
             root: {
                 backgroundColor: app.colors.form,

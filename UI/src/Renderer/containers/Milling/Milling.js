@@ -1375,8 +1375,8 @@ class Milling extends React.Component {
                     className={classes.millingStyle}
                 >
                     <Grid item xs>
-                        <Grid container spacing={2} style={{ height: "100%" }}>
-                            <Grid item xs={4} id="steps">
+                        <Grid container spacing={2}>
+                            <Grid item xs={4} id="steps" style={{ height: "85vh" }}>
                                 <ItemPanel
                                     title="Project Steps"
                                     small
@@ -1453,7 +1453,7 @@ class Milling extends React.Component {
                                                     height: "100%",
                                                 }}
                                             >
-                                                <Grid item>
+                                                <Grid item style={{height: '55vh'}}>
                                                     <StepList
                                                         steps={this.state.steps}
                                                         selectedStep={

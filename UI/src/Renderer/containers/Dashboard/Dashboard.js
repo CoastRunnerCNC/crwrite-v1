@@ -356,13 +356,13 @@ function Dashboard(props) {
                                 <ItemPanel title="Quick Actions" color="secondary">
                                     <Grid container direction='column' justify='space-evenly' alignItems='center' style={{height: '200px'}}>
                                         <Grid item>
-                                            <Button classes={{root: classes.smallGreyButton}}>Open Last Job</Button>
+                                            <Button disabled={true} classes={{root: classes.smallGreyButton}}>Open Last Job</Button>
                                         </Grid>
                                         <Grid item>
-                                            <Button classes={{root: classes.smallGreyButton}}>Set Home Position</Button>
+                                            <Button disabled={true} classes={{root: classes.smallGreyButton}}>Set Home Position</Button>
                                         </Grid>
                                         <Grid item>
-                                            <Button classes={{root: classes.smallGreyButton}}>Auto Level</Button>
+                                            <Button disabled={true} classes={{root: classes.smallGreyButton}}>Auto Level</Button>
                                         </Grid>
                                     </Grid>
                                 </ItemPanel>
@@ -381,7 +381,7 @@ function Dashboard(props) {
                                             <Button id="store" onClick={() => { shell.openExternal(app.dashboard.store.url) }}classes={{root: classes.standardButton}}>Store</Button>
                                         </Grid>
                                         <Grid item>
-                                            <Button classes={{root: classes.standardButton}}>Help</Button>
+                                            <Button disabled={true} classes={{root: classes.standardButton}}>Help</Button>
                                         </Grid>
                                     </Grid>
                                 </ItemPanel>
@@ -393,7 +393,7 @@ function Dashboard(props) {
                                             <Button style={{marginLeft: '100px'}} onClick={handleManualOpenClick} classes={{root: classes.standardButton}}>Open</Button>
                                         </Grid>
                                         <Grid item>
-                                            <Button style={{marginLeft: '100px'}} classes={{root: classes.standardButton}}>File Editor</Button>
+                                            <Button disabled={true} style={{marginLeft: '100px'}} classes={{root: classes.standardButton}}>File Editor</Button>
                                         </Grid>
                                     </Grid>
                                 </ItemPanel>

@@ -187,7 +187,7 @@ function Settings(props) {
                             className={classes.settingsButton}
                             size="small"
                             id="settings"
-                            style={{border: '1px solid black', backgroundColor: '#f6f6f6', borderRadius: '0px', height: '100%', boxShadow: "1px 1px 0px 0px #000000"}}
+                            style={{border: '1px solid black', backgroundColor: '#f6f6f6', borderRadius: '0px', minHeight: '34px', boxShadow: "1px 1px 0px 0px #000000"}}
                         >
                             <img src={path.join(__dirname, app.image.cog)} className={classes.settingsCog} />
                             <img src={path.join(__dirname, app.image.settingsButton)} className={classes.settingsText}/>

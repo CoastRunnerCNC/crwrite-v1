@@ -32,6 +32,7 @@ const styles = theme => ({
         paddingRight: theme.spacing(1),
         borderRadius: '0px',
         border: '1px solid black',
+        minHeight: '34px',
         backgroundColor: '#f6f6f6',
         '&:disabled': {
             opacity: 0.5

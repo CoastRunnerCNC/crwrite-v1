@@ -39,7 +39,7 @@ const styles = (theme) => ({
         backgroundSize: "cover",
         overflow: "hidden",
         width: "100%",
-        height: "calc(100% - 39px)",
+        height: "calc(100% - 44px)",
         position: "fixed",
         left: 0,
         top: 0,

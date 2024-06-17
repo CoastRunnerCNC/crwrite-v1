@@ -12,12 +12,13 @@ import app from 'app';
 
 const styles = theme => ({
     root: {
-        marginBottom: theme.spacing(3),
+        //marginBottom: theme.spacing(3),
         // flexGrow: 1
+        marginBottom: 19
     },
     appBar: {
         top: 'auto',
-        height: 39,
+        height: 44,
         bottom: 0,
         backgroundImage: `url(${app.toolbar.backgroundPhoto})`,
         backgroundColor: '#f6f6f6',

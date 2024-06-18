@@ -59,12 +59,16 @@ const createWindow = async () => {
     });
 
     // and load the index.html of the app.
-    mainWindow.loadURL(`file://${__dirname}/index.html`);
+    
 
     // Open the DevTools.
     crwrite.LogString("env.name: " + env.name);
     if (env.name == 'development') {
+        require('./webpack-server.js');
+        mainWindow.loadURL(`http://localhost:3000/`);
         mainWindow.webContents.openDevTools({mode:'undocked'});
+    } else {
+        mainWindow.loadURL(`file://${__dirname}/index.html`);
     }
 
     // Emitted when the window is closed.

@@ -9,7 +9,7 @@ const translateEnvToMode = (env) => {
     return "development";
 };
 
-module.exports = (env, app) => {
+module.exports = {
     return {
         target: "electron-renderer",
         mode: translateEnvToMode(env),

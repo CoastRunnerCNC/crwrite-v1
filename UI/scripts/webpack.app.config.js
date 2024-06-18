@@ -4,6 +4,7 @@ const base = require("./webpack.base.config");
 
 module.exports = (env, app) => {
 
+    console.log("Current dir" + path.resolve(__dirname, "../app"))
     return merge(base(env, app.app), {
         entry: {
             index: "./src/index.js",
@@ -11,7 +12,8 @@ module.exports = (env, app) => {
         },
         output: {
             filename: "[name].js",
-            path: path.resolve(__dirname, "../app")
+            path: path.resolve(__dirname, "../app"),
+            publicPath: '/'
         }
     });
 };

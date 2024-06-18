@@ -16,7 +16,7 @@ for (var i = 0; i < process.argv.length; i++) {
 
 console.log("Running " + app);
 
-const env = "developmentCoastRunner";
+const env = "development";
 const compiler = webpack(config(env, app));
 let electronStarted = false;
 

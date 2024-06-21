@@ -702,8 +702,8 @@ class Operations extends React.Component {
             forceShowJoggingTooltip: false,
             forceShowUnitTooltip: false,
             forceShowJoggingTooltipMaxDistance: false,
-            joggingTooltipText: "",
-            anInputHasFocus: false,
+            joggingTooltipText: '',
+            focusedInput: '',
             maxDistanceIsValid: true,
             milling: false,
             millingProgress: -1,
@@ -768,9 +768,15 @@ class Operations extends React.Component {
         this.currentJog = null;
         this.manual_entry_focused = false;
         this.manual_entry_ref = React.createRef();
+        this.max_distance_ref = React.createRef();
         this.unitRef = React.createRef();
         this.wcsRef = React.createRef();
         this.jogModeRef = React.createRef();
+        this.homePresetRef = React.createRef();
+        this.preset1Ref = React.createRef();
+        this.preset2Ref = React.createRef();
+        this.preset3Ref = React.createRef();
+        this.preset4Ref = React.createRef();
         this.commandKeys = {};
         this.eventKeyFrontEndCommandMap = {};
         this.backEndKeyMap = {
@@ -805,12 +811,12 @@ class Operations extends React.Component {
         this.setState({ settings: settings });
     }
 
-    handleInputHasFocus() {
-        this.setState({ anInputHasFocus: true });
+    handleInputHasFocus(focusName) {
+        this.setState({focusedInput: focusName});
     }
 
     handleInputNoLongerHasFocus() {
-        this.setState({ anInputHasFocus: false });
+        this.setState({focusedInput: ''});
     }
 
     updateMovementType(event, command) {
@@ -866,35 +872,7 @@ class Operations extends React.Component {
     }
 
     fetchAsyncData() {
-        ipcRenderer.once(
-            "CNC::GetShuttleKeysResponse",
-            (event, commandKeys) => {
-                this.commandKeys = commandKeys;
-
-                // populate eventKeyFrontEndCommandMap
-                _.each(
-                    this.commandKeys,
-                    (commandKey, commandValue) =>
-                        (this.eventKeyFrontEndCommandMap[
-                            commandKey.toLowerCase()
-                        ] = commandValue)
-                );
-
-                // this is a test
-                // populate pathIdEventKeyMap
-                this.setState({
-                    pathIdEventKeyMap: {
-                        y_neg_path: this.getCommandKey("gantry_left"),
-                        y_pos_path: this.getCommandKey("gantry_right"),
-                        z_neg_path: this.getCommandKey("plunge"),
-                        z_pos_path: this.getCommandKey("retract"),
-                        x_pos_path: this.getCommandKey("lower_table"),
-                        x_neg_path: this.getCommandKey("raise_table"),
-                    },
-                });
-            }
-        );
-        ipcRenderer.send("CNC::GetShuttleKeys");
+        this.refreshShuttleKeys();
 
         ipcRenderer.once("Settings::GetSettingsResponse", (event, settings) => {
             this.setState({ settings: settings });
@@ -1090,6 +1068,7 @@ class Operations extends React.Component {
         setTimeout(() => {
             if (document.activeElement instanceof HTMLElement) {
                 document.activeElement.blur();
+                this.setState({focusedInput: ''});
             }
         }, 0);
     }
@@ -1240,6 +1219,23 @@ class Operations extends React.Component {
         let frontEndCommand =
             this.eventKeyFrontEndCommandMap[sanitizedEventKey];
 
+        //We hard key these but allow the jog commands to be bound to other keys as well
+        //These are hardcoded because now that NumLock is used to quick-jump to max_distance
+        //it causes my preferred keybindings (the number pad) to inadvertently switch between
+        //the bound keys (4, 8, etc.) and the arrow keys. This allows me to keep my preferred keybindings
+        if(eventKey == 'ArrowLeft') {
+          frontEndCommand = 'gantry_left';
+        }
+        else if(eventKey == 'ArrowRight') {
+          frontEndCommand = 'gantry_right';
+        }
+        else if(eventKey == 'ArrowUp') {
+          frontEndCommand = 'raise_table';
+        }
+        else if(eventKey == 'ArrowDown') {
+          frontEndCommand = 'lower_table';
+        }
+
         if (!frontEndCommand) {
             throw new Error(
                 `Cannot determine frontEndCommand from eventKey: ${sanitizedEventKey}`
@@ -1299,51 +1295,128 @@ class Operations extends React.Component {
     }
 
     keydownListener(event) {
-        if (this.state.anInputHasFocus) {
-            return;
-        }
-
         let eventKey = event.key;
+        //console.log(eventKey);
 
-        if (this.manual_entry_focused) {
-            if (eventKey == "Enter") {
-                this.state.settings.disableLimitCatch
-                    ? this.executeCommand()
-                    : this.sendCommand();
-            } else if (
-                eventKey === "ArrowDown" &&
-                this.state.isSeekingHistory
-            ) {
-                let index = this.state.historyIndex + 1;
-                let command = "";
-                if (index < this.state.entryHistory.length) {
-                    command = this.state.entryHistory[index];
-                } else {
-                    index = this.state.entryHistory.length;
-                }
-                this.setState({
-                    manualEntry: command,
-                    historyIndex: index,
-                    isSeekingHistory: true,
-                });
-            } else if (eventKey === "ArrowUp") {
-                let index = this.state.historyIndex - 1;
-                if (index < 0) {
-                    index = 0;
-                }
-                this.setState({
-                    manualEntry: this.state.entryHistory[index],
-                    historyIndex: index,
-                    isSeekingHistory: true,
-                });
-            }
-
+        if (this.state.focusedInput) {
+          if(
+            eventKey == this.getCommandKey('escape_textbox') ||
+            (
+              this.state.focusedInput == 'max_distance' &&
+              eventKey == 'Enter'
+            )
+          ) {
+            this.focusOnNothing();
             return;
+          }
+
+          if (this.state.focusedInput == 'manual_entry') {
+              if (eventKey == 'Enter') {
+                  this.state.settings.disableLimitCatch ? this.executeCommand() : this.sendCommand();
+              }
+              else if (eventKey === 'ArrowDown' && this.state.isSeekingHistory) {
+                  let index = this.state.historyIndex + 1;
+                  let command = '';
+                  if (index < this.state.entryHistory.length) {
+                      command = this.state.entryHistory[index];
+                  } else {
+                      index = this.state.entryHistory.length;
+                  }
+                  this.setState({
+                      manualEntry: command,
+                      historyIndex: index,
+                      isSeekingHistory: true
+                  });
+              }
+              else if (eventKey === 'ArrowUp') {
+                  let index = this.state.historyIndex - 1;
+                  if (index < 0) { index = 0; }
+                  this.setState({
+                      manualEntry: this.state.entryHistory[index],
+                      historyIndex: index,
+                      isSeekingHistory: true
+                  });
+              }
+
+              return;
+          }
+
+          return;
+        }
+        else if(!this.state.openShuttleSettings) {
+          if(eventKey == this.getCommandKey('escape_textbox')) {
+            //Putting this condition here so that the escape button doesn't fall through and throw an error message
+            return;
+          }
+          else if(eventKey == this.getCommandKey('focus_manual_entry')) {
+            this.manual_entry_ref.current.focus();
+            this.handleInputHasFocus('manual_entry');
+            return;
+          }
+          else if(eventKey == this.getCommandKey('focus_max_distance')) {
+            this.max_distance_ref.current.focus();
+            this.handleInputHasFocus('max_distance');
+            return;
+          }
+          else if(eventKey == this.getCommandKey('switch_units')) {
+            if(this.state.units == 'mm') {
+              this.sendUnitsInputChange('inch');
+            }
+            else if(this.state.units == 'inch') {
+              this.sendUnitsInputChange('mm');
+            }
+            return;
+          }
+          else if(eventKey == this.getCommandKey('switch_jog_mode')) {
+            if(this.state.mode == 'Continuous') {
+              this.setState({mode: 'Fixed'});
+            }
+            else if(this.state.mode == 'Fixed') {
+              this.setState({mode: 'Continuous'});
+            }
+            return;
+          }
+          else if(eventKey == this.getCommandKey('increase_units')) {
+            this.setState({fixed_distance: { 
+              value: this.state.fixed_distance.value * 10, 
+              unit: this.state.units 
+            }});
+            return;
+          }
+          else if(eventKey == this.getCommandKey('decrease_units')) {
+            this.setState({fixed_distance: { 
+              value: this.state.fixed_distance.value / 10, 
+              unit: this.state.units 
+            }});
+            return;
+          }
+          else if(eventKey == this.getCommandKey('home_preset')) {
+            this.homePresetRef.current.handleClick();
+            return;
+          }
+          else if(eventKey == this.getCommandKey('preset_1')) {
+            this.preset1Ref.current.handleClick();
+            return;
+          }
+          else if(eventKey == this.getCommandKey('preset_2')) {
+            this.preset2Ref.current.handleClick();
+            return;
+          }
+          else if(eventKey == this.getCommandKey('preset_3')) {
+            this.preset3Ref.current.handleClick();
+            return;
+          }
+          else if(eventKey == this.getCommandKey('preset_4')) {
+            this.preset4Ref.current.handleClick();
+            return;
+          }
         }
 
         try {
-            let frontEndCommand = this.getFrontEndCommand(eventKey);
-            this.jogStart(frontEndCommand);
+            if(!this.state.openShuttleSettings) {
+              let frontEndCommand = this.getFrontEndCommand(eventKey);
+              this.jogStart(frontEndCommand);
+            }
         } catch (e) {
             // do nothing, not all keys have bindings
             console.log(e);
@@ -1769,22 +1842,16 @@ class Operations extends React.Component {
                                     }
                                     style={{ width: "100%" }}
                                 >
-                                    <Input
-                                        value={distance}
-                                        onChange={(e) => {
-                                            handleMaxDistanceChange(
-                                                component,
-                                                e
-                                            );
-                                        }}
-                                        disableUnderline
-                                        onFocus={() =>
-                                            component.handleInputHasFocus()
-                                        }
-                                        onBlur={() =>
-                                            component.handleInputNoLongerHasFocus()
-                                        }
-                                    />
+                                <Input
+                                    value={distance}
+                                    onChange={e => {
+                                        handleMaxDistanceChange(component, e);
+                                    }}
+                                    disableUnderline
+                                    inputRef={component.max_distance_ref}
+                                    onFocus={() => component.handleInputHasFocus('max_distance')}
+                                    onBlur={() => component.handleInputNoLongerHasFocus()}
+                                />
                                 </FormControl>
                             </Tooltip>
                         </Grid>
@@ -2384,9 +2451,11 @@ class Operations extends React.Component {
                                 });
                             }}
                             onFocus={() => {
+                                component.handleInputHasFocus('manual_entry');
                                 component.manual_entry_focused = true;
                             }}
                             onBlur={() => {
+                                component.handleInputNoLongerHasFocus();
                                 component.manual_entry_focused = false;
                             }}
                             endAdornment={
@@ -2906,78 +2975,19 @@ class Operations extends React.Component {
                                                                 }}
                                                             >
                                                                 <Grid item>
-                                                                    <PositionPreset
-                                                                        home
-                                                                        editParentState={() => {
-                                                                            this.setState(
-                                                                                {
-                                                                                    isHome: true,
-                                                                                }
-                                                                            );
-                                                                        }}
-                                                                    >
-                                                                        Home
-                                                                    </PositionPreset>
+                                                                    <PositionPreset ref={this.homePresetRef} home editParentState={() => {this.setState({isHome: true})}}>Home</PositionPreset>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <PositionPreset
-                                                                        units={
-                                                                            this
-                                                                                .state
-                                                                                .units
-                                                                        }
-                                                                        getPosition={
-                                                                            this
-                                                                                .get_position
-                                                                        }
-                                                                    >
-                                                                        1
-                                                                    </PositionPreset>
+                                                                    <PositionPreset ref={this.preset1Ref} units={this.state.units} getPosition={this.get_position}>1</PositionPreset>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <PositionPreset
-                                                                        units={
-                                                                            this
-                                                                                .state
-                                                                                .units
-                                                                        }
-                                                                        getPosition={
-                                                                            this
-                                                                                .get_position
-                                                                        }
-                                                                    >
-                                                                        2
-                                                                    </PositionPreset>
+                                                                    <PositionPreset ref={this.preset2Ref} units={this.state.units} getPosition={this.get_position}>2</PositionPreset>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <PositionPreset
-                                                                        units={
-                                                                            this
-                                                                                .state
-                                                                                .units
-                                                                        }
-                                                                        getPosition={
-                                                                            this
-                                                                                .get_position
-                                                                        }
-                                                                    >
-                                                                        3
-                                                                    </PositionPreset>
+                                                                    <PositionPreset ref={this.preset3Ref} units={this.state.units} getPosition={this.get_position}>3</PositionPreset>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <PositionPreset
-                                                                        units={
-                                                                            this
-                                                                                .state
-                                                                                .units
-                                                                        }
-                                                                        getPosition={
-                                                                            this
-                                                                                .get_position
-                                                                        }
-                                                                    >
-                                                                        4
-                                                                    </PositionPreset>
+                                                                    <PositionPreset ref={this.preset4Ref} units={this.state.units} getPosition={this.get_position}>4</PositionPreset>
                                                                 </Grid>
                                                             </Grid>
                                                         </ItemPanel>

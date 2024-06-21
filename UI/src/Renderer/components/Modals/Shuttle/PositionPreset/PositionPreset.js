@@ -1,6 +1,6 @@
 import { Button } from '@material-ui/core'
 import { ipcRenderer } from 'electron'
-import React, { useEffect } from 'react'
+import React, { useEffect, forwardRef, useImperativeHandle } from 'react'
 import { useState } from 'react'
 import Alert from '../../Alert'
 
@@ -9,10 +9,15 @@ button loads and fills state
 onClick send command
 */
 
-const PositionPreset = (props) => {
+const PositionPreset = forwardRef(function PositionPreset(props, ref) {
   const [position, setPosition] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
+  useImperativeHandle(ref, () => {
+    return {
+      handleClick: handleClick,
+    }
+  });
 
   const setCurrentPosition = () => {
     ipcRenderer.once('Settings::ResponseSetPositionButton', (event) => {
@@ -81,6 +86,6 @@ const PositionPreset = (props) => {
       <Button variant='contained' onClick={handleClick} onContextMenu={handleRightClick}>{props.children}</Button>
     </>
   )
-}
+});
 
 export default PositionPreset

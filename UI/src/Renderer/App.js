@@ -388,6 +388,7 @@ export default class App extends React.Component {
         return (
             <React.Fragment>
                 <MuiThemeProvider theme={theme}>
+                    {console.time("Alert")}
                     <Alert
                         open={this.state.alertMessage.length > 0 && this.state.walkthrough_showing === false}
                         message={this.state.alertMessage}
@@ -395,7 +396,8 @@ export default class App extends React.Component {
                         onOk={(event) => { this.setState({ alertMessage: '' }) }}
                         onCancel={(event) => {}}
                     />
-
+                    {console.timeEnd("Alert")}
+                    {console.time("Routes")}
                     <Routes 
                         status={this.state.cncMillStatus} 
                         showOperationsWindow={this.state.showOperationsWindow}
@@ -404,7 +406,8 @@ export default class App extends React.Component {
                         updateFeedRate={this.updateFeedrate} 
                         settings={this.state.settings}
                     />
-
+                    {console.timeEnd("Routes")}
+                    {console.time("BottomToolbar")}
                     <BottomToolbar
                         openShuttle={this.state.openShuttle}
                         shuttleSelectedTab={this.state.shuttleSelectedTab}
@@ -422,6 +425,7 @@ export default class App extends React.Component {
                         updateFeedRate={this.updateFeedrate}
                         updateSetting={this.updateSetting}
                     />
+                    {console.timeEnd("BottomToolbar")}
                 </MuiThemeProvider>
             </React.Fragment>
         );

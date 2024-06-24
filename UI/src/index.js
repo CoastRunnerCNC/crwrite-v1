@@ -1,6 +1,9 @@
 console.time("Startup");
 import {app, BrowserWindow} from 'electron';
+
+console.time("LoadCRWrite");
 const crwrite = require("crwrite");
+console.timeEnd("LoadCRWrite");
 import CNCController from './Main/CNCController';
 import Updater from './Main/Updater.js';
 import env from 'env';
@@ -34,8 +37,9 @@ const createWindow = async () => {
         },
         icon: __dirname + '/static/image/coastrunner-icon.ico'
     });
-
+    console.time("CNCController");
     CNCController.Initialize();
+    console.timeEnd("CNCController");
  
     mainWindow.webContents.on('crashed', (event, killed) => {
         let name = "AUTO TICKET";

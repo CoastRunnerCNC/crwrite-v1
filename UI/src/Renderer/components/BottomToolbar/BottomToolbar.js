@@ -1,7 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/core/styles";
-import {AppBar, Button, Grid, Select, TextField, Toolbar, Typography, LinearProgress} from "@material-ui/core";
+import {
+    AppBar,
+    Button,
+    Grid,
+    Select,
+    TextField,
+    Toolbar,
+    Typography,
+    LinearProgress,
+    Slider,
+} from "@material-ui/core";
 import {shell} from "electron";
 import Status from '../Status';
 import Settings from '../Modals/Settings';
@@ -156,7 +166,7 @@ function BottomToolbar(props) {
                                     <MachineSVG />
                                 </Grid>
                                 <Grid item>
-                                    <Typography style={{color: 'black'}}>Connected</Typography>
+                                    <Status status={status} />
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -165,7 +175,11 @@ function BottomToolbar(props) {
                                 <Grid item>
                                     <Grid container>
                                         <Grid item>
-                                            <Typography style={{color: 'black'}}>Mill</Typography>
+                                            <Typography
+                                                style={{ color: "black" }}
+                                            >
+                                                Mill
+                                            </Typography>
                                         </Grid>
                                         <Grid item>
                                             <TextField disabled />
@@ -184,7 +198,11 @@ function BottomToolbar(props) {
                                 <Grid item>
                                     <Grid container>
                                         <Grid item>
-                                        <Typography style={{color: 'black'}}>Work</Typography>
+                                            <Typography
+                                                style={{ color: "black" }}
+                                            >
+                                                Work
+                                            </Typography>
                                         </Grid>
                                         <Grid item>
                                             <TextField disabled />
@@ -225,7 +243,21 @@ function BottomToolbar(props) {
                         <Grid item>
                             <Grid container direction="column">
                                 <Grid item>
-                                    {/* Feedrate */}
+                                    <Slider
+                                        // className={this.props.classes.slider}
+                                        // value={this.state.feedRate}
+                                        // step={2}
+                                        // min={30}
+                                        // disabled={
+                                        //     !this.state.settings.enable_slider
+                                        // }
+                                        // max={this.state.settings.maxFeedRate}
+                                        // aria-labelledby="label"
+                                        // onChange={this.onFeedRateChange}
+                                        // onChangeCommitted={(event, value) => {
+                                        //     this.props.updateFeedRate(value);
+                                        // }}
+                                    />
                                 </Grid>
                                 <Grid item>
                                     <Grid container>

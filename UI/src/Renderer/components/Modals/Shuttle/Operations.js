@@ -2717,7 +2717,7 @@ class Operations extends React.Component {
                                                                                 2
                                                                             }
                                                                         >
-                                                                                X
+                                                                            X
                                                                         </Grid>
                                                                         <Grid
                                                                             item
@@ -2755,7 +2755,7 @@ class Operations extends React.Component {
                                                                                 2
                                                                             }
                                                                         >
-                                                                                Y
+                                                                            Y
                                                                         </Grid>
                                                                         <Grid
                                                                             item
@@ -2793,7 +2793,7 @@ class Operations extends React.Component {
                                                                                 2
                                                                             }
                                                                         >
-                                                                                Z
+                                                                            Z
                                                                         </Grid>
                                                                         <Grid
                                                                             item
@@ -2975,19 +2975,98 @@ class Operations extends React.Component {
                                                                 }}
                                                             >
                                                                 <Grid item>
-                                                                    <PositionPreset ref={this.homePresetRef} home editParentState={() => {this.setState({isHome: true})}}>Home</PositionPreset>
+                                                                    <PositionPreset
+                                                                        ref={
+                                                                            this
+                                                                                .homePresetRef
+                                                                        }
+                                                                        home
+                                                                        editParentState={() => {
+                                                                            this.setState(
+                                                                                {
+                                                                                    isHome: true,
+                                                                                }
+                                                                            );
+                                                                        }}
+                                                                    >
+                                                                        Home
+                                                                    </PositionPreset>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <PositionPreset ref={this.preset1Ref} units={this.state.units} getPosition={this.get_position}>1</PositionPreset>
+                                                                    <PositionPreset
+                                                                        ref={
+                                                                            this
+                                                                                .preset1Ref
+                                                                        }
+                                                                        units={
+                                                                            this
+                                                                                .state
+                                                                                .units
+                                                                        }
+                                                                        getPosition={
+                                                                            this
+                                                                                .get_position
+                                                                        }
+                                                                    >
+                                                                        1
+                                                                    </PositionPreset>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <PositionPreset ref={this.preset2Ref} units={this.state.units} getPosition={this.get_position}>2</PositionPreset>
+                                                                    <PositionPreset
+                                                                        ref={
+                                                                            this
+                                                                                .preset2Ref
+                                                                        }
+                                                                        units={
+                                                                            this
+                                                                                .state
+                                                                                .units
+                                                                        }
+                                                                        getPosition={
+                                                                            this
+                                                                                .get_position
+                                                                        }
+                                                                    >
+                                                                        2
+                                                                    </PositionPreset>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <PositionPreset ref={this.preset3Ref} units={this.state.units} getPosition={this.get_position}>3</PositionPreset>
+                                                                    <PositionPreset
+                                                                        ref={
+                                                                            this
+                                                                                .preset3Ref
+                                                                        }
+                                                                        units={
+                                                                            this
+                                                                                .state
+                                                                                .units
+                                                                        }
+                                                                        getPosition={
+                                                                            this
+                                                                                .get_position
+                                                                        }
+                                                                    >
+                                                                        3
+                                                                    </PositionPreset>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <PositionPreset ref={this.preset4Ref} units={this.state.units} getPosition={this.get_position}>4</PositionPreset>
+                                                                    <PositionPreset
+                                                                        ref={
+                                                                            this
+                                                                                .preset4Ref
+                                                                        }
+                                                                        units={
+                                                                            this
+                                                                                .state
+                                                                                .units
+                                                                        }
+                                                                        getPosition={
+                                                                            this
+                                                                                .get_position
+                                                                        }
+                                                                    >
+                                                                        4
+                                                                    </PositionPreset>
                                                                 </Grid>
                                                             </Grid>
                                                         </ItemPanel>

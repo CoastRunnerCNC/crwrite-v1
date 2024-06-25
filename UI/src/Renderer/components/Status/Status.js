@@ -61,7 +61,7 @@ function Status(props) {
         } else if (status === 2) {
             statusText = "Connected";
         } else if (status === -1) {
-            statusText = "Connect Failed";
+            statusText = "Disconnected";
         }
 
         return statusText;
@@ -73,15 +73,9 @@ function Status(props) {
                 <div className={classes.statusSection}>
                     {/* <StatusIcon color={getColor()} style={{ width: "18px" }} /> */}
                     <Typography variant="body1" color={getColor()}>
-                        <b>
-                            <span className={classes.leftRightPadding} style={{ color: 'black' }}>
-                                {app.toolbar.status.label}
-                            </span>
                             <span className={classes.statusText}>
                                 {getStatusText()}
                             </span>
-
-                        </b>
                     </Typography>
                 </div>
             </MuiThemeProvider>

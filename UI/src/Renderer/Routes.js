@@ -7,13 +7,13 @@ import Milling from './containers/Milling';
 
 
 function Routes(props) {
-    const { status, showOperationsWindow, feedRate, updateFeedRate, settings, toggleShuttle } = props;
+    const { status, showOperationsWindow, firmware, feedRate, updateFeedRate, settings, toggleShuttle, milling, openShuttle, shuttleSelectedTab, closeOperationsWindow, setOperationsWindowOpen } = props;
 
     return (
         <Router>
             <ScrollToTop>
                 <Switch>
-                    <Route exact path='/' render={(props) => <Dashboard {...props} status={status} settings={settings} toggleShuttle={toggleShuttle} />} />
+                    <Route exact path='/' render={(props) => <Dashboard {...props} firmware={firmware} status={status} milling={milling} settings={settings} openShuttle={openShuttle} shuttleSelectedTab={shuttleSelectedTab} toggleShuttle={toggleShuttle} closeOperationsWindow={closeOperationsWindow} setOperationsWindowOpen={setOperationsWindowOpen}  />} />
                     <Route exact path='/milling' render={(props) => <Milling {...props} status={status} showOperationsWindow={showOperationsWindow} feedRate={feedRate} updateFeedRate={updateFeedRate} settings={settings} />} />
                 </Switch>
             </ScrollToTop>

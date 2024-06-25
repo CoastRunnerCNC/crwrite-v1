@@ -7,7 +7,7 @@ using std::string;
 using std::unique_ptr;
 using std::shared_ptr;
 
-//#define USE_MOCK_GRBL
+#define USE_MOCK_GRBL
 
 #ifdef USE_MOCK_GRBL
 #include "Mock_GRBL.h"

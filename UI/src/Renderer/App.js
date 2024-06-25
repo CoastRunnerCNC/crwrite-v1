@@ -401,10 +401,16 @@ export default class App extends React.Component {
                     <Routes 
                         status={this.state.cncMillStatus} 
                         showOperationsWindow={this.state.showOperationsWindow}
-                        toggleShuttle={this.toggleShuttle}   
                         feedRate={this.state.feedRate}
                         updateFeedRate={this.updateFeedrate} 
                         settings={this.state.settings}
+                        milling={this.state.millingInProgress}
+                        openShuttle={this.state.openShuttle}
+                        shuttleSelectedTab={this.state.shuttleSelectedTab}
+                        toggleShuttle={this.toggleShuttle}
+                        closeOperationsWindow={this.closeOperationsWindow}
+                        setOperationsWindowOpen={this.setOperationsWindowOpen}
+                        firmware={this.state.firmware}   
                     />
                     {console.timeEnd("Routes")}
                     {console.time("BottomToolbar")}

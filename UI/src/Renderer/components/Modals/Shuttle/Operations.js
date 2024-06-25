@@ -965,7 +965,7 @@ class Operations extends React.Component {
 
     componentDidMount() {
         this.fetchAsyncData.call(this);
-
+        
         window.addEventListener("keydown", this.keydownListener, true);
         window.addEventListener("keyup", this.keyupListener, true);
 
@@ -1069,6 +1069,7 @@ class Operations extends React.Component {
             if (document.activeElement instanceof HTMLElement) {
                 document.activeElement.blur();
                 this.setState({focusedInput: ''});
+                console.log("focusOnNothing fired!");
             }
         }, 0);
     }

@@ -13,7 +13,7 @@ function Routes(props) {
         <Router>
             <ScrollToTop>
                 <Switch>
-                    <Route exact path='/' render={(props) => <Dashboard {...props} firmware={firmware} status={status} milling={milling} settings={settings} openShuttle={openShuttle} shuttleSelectedTab={shuttleSelectedTab} toggleShuttle={toggleShuttle} closeOperationsWindow={closeOperationsWindow} setOperationsWindowOpen={setOperationsWindowOpen}  />} />
+                    <Route exact path='/' render={(props) => <Dashboard {...props} firmware={firmware} status={status} feedRate={feedRate} milling={milling} settings={settings} openShuttle={openShuttle} shuttleSelectedTab={shuttleSelectedTab} toggleShuttle={toggleShuttle} closeOperationsWindow={closeOperationsWindow} setOperationsWindowOpen={setOperationsWindowOpen} updateFeedRate={updateFeedRate} />} />
                     <Route exact path='/milling' render={(props) => <Milling {...props} status={status} showOperationsWindow={showOperationsWindow} feedRate={feedRate} updateFeedRate={updateFeedRate} settings={settings} />} />
                 </Switch>
             </ScrollToTop>

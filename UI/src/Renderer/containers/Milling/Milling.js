@@ -32,6 +32,9 @@ import Throbber from "../../components/Modals/Throbber/Throbber";
 import ItemPanel from "../../components/ItemPanel/ItemPanel";
 import CoastRunnerLogo from "../../components/CoastRunnerLogo/CoastRunnerLogo";
 import ActionPanel from "../../components/ActionPanel/ActionPanel";
+import StepsPanel from "./StepsPanel/StepsPanel";
+import InstructionsPanel from "./InstructionsPanel/InstructionsPanel";
+import MachineOutputPanel from "./MachineOutputPanel/MachineOutputPanel";
 
 const styles = (theme) => ({
     millingStyle: {
@@ -89,51 +92,7 @@ const styles = (theme) => ({
     },
 });
 
-const HorizontalLines = () => {
-    return (
-        <svg
-            width="100%"
-            height="100%"
-            viewBox="0 0 300 10"
-            preserveAspectRatio="none"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <line
-                x1="0"
-                y1="6.75"
-                x2="300"
-                y2="6.75"
-                stroke="black"
-                strokeWidth="0.5"
-            />
-            <line
-                x1="0"
-                y1="9.75"
-                x2="300"
-                y2="9.75"
-                stroke="black"
-                strokeWidth="0.5"
-            />
-            <line
-                x1="0"
-                y1="3.75"
-                x2="300"
-                y2="3.75"
-                stroke="black"
-                strokeWidth="0.5"
-            />
-            <line
-                x1="0"
-                y1="0.75"
-                x2="300"
-                y2="0.75"
-                stroke="black"
-                strokeWidth="0.5"
-            />
-        </svg>
-    );
-};
+
 
 class Milling extends React.Component {
     constructor() {
@@ -1377,128 +1336,22 @@ class Milling extends React.Component {
                     <Grid item xs>
                         <Grid container spacing={2}>
                             <Grid item xs={4} id="steps" style={{ height: "85vh" }}>
-                                <ItemPanel
-                                    title="Project Steps"
-                                    small
-                                    contentStyle={{
-                                        padding: "8px",
-                                        flexGrow: "1",
-                                    }}
-                                    style={{ height: "100%" }}
-                                >
-                                    <Grid
-                                        container
-                                        direction="column"
-                                        style={{ height: "100%" }}
-                                    >
-                                        <Grid item>
-                                            <Grid
-                                                container
-                                                alignItems="center"
-                                                style={{
-                                                    backgroundColor: "black",
-                                                    color: "white",
-                                                    height: "35px",
-                                                    fontFamily: [
-                                                        "Public Sans",
-                                                        "sans-serif",
-                                                    ],
-                                                    fontSize: "14px",
-                                                    overflow: "hidden",
-                                                    marginBottom: "4px",
-                                                    paddingLeft: "8px",
-                                                    boxShadow:
-                                                        "1px 1px 0 0 #000000",
-                                                }}
-                                            >
-                                                <Grid item>
-                                                    File: {this.state.fileName}
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item>
-                                            <Grid
-                                                container
-                                                alignItems="center"
-                                                style={{
-                                                    backgroundColor: "black",
-                                                    color: "white",
-                                                    height: "35px",
-                                                    overflow: "hidden",
-                                                    fontFamily: [
-                                                        "Public Sans",
-                                                        "sans-serif",
-                                                    ],
-                                                    fontSize: "14px",
-                                                    paddingLeft: "8px",
-                                                    boxShadow:
-                                                        "1px 1px 0 0 #000000",
-                                                    marginBottom: "10px",
-                                                }}
-                                            >
-                                                <Grid item>
-                                                    Job: {this.state.jobName}
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item>
-                                            <HorizontalLines />
-                                        </Grid>
-                                        <Grid item style={{ flexGrow: "1" }}>
-                                            <Grid
-                                                container
-                                                direction="column"
-                                                style={{
-                                                    marginTop: "10px",
-                                                    height: "100%",
-                                                }}
-                                            >
-                                                <Grid item style={{height: '55vh'}}>
-                                                    <StepList
-                                                        steps={this.state.steps}
-                                                        selectedStep={
-                                                            this.state
-                                                                .selectedStepIndex
-                                                        }
-                                                        editMode={
-                                                            this.state.editMode
-                                                        }
-                                                        submanifestUsed={
-                                                            this.state
-                                                                .submanifestUsed
-                                                        }
-                                                        deleteStep={
-                                                            this
-                                                                .handleDeleteStep
-                                                        }
-                                                        moveStep={this.moveStep}
-                                                    />
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item>
-                                            <ActionPanel
-                                                onClickBack={() => {
-                                                    onClickBack(this);
-                                                }}
-                                                isPrevAvailable={() => {
-                                                    isPrevAvailable(this);
-                                                }}
-                                                classes={classes}
-                                                handlePrev={() => {
-                                                    this.handlePrev();
-                                                }}
-                                                this={this}
-                                                isNextAvailable={() => {
-                                                    isNextAvailable(this);
-                                                }}
-                                                handleNext={() => {
-                                                    handleNext.bind(this)();
-                                                }}
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                </ItemPanel>
+                                <StepsPanel 
+                                    fileName={this.state.fileName}
+                                    jobName={this.state.jobName}
+                                    steps={this.state.steps}
+                                    selectedStepIndex={this.state.selectedStepIndex}
+                                    editMode={this.state.editMode}
+                                    submanifestUsed={this.state.submanifestUsed}
+                                    handleDeleteStep={this.handleDeleteStep}
+                                    moveStep={this.moveStep}
+                                    onClickBack={(event) => {onClickBack(this)}}
+                                    isPrevAvailable={() => {this.isPrevAvailable(this)}}
+                                    handlePrev={this.handlePrev}
+                                    isNextAvailable={() => {this.isNextAvailable(this)}}
+                                    handleNext={handleNext.bind(this)}
+                                    classes={classes}
+                                />
 
                                 {/* {this.getAddStepButton()} */}
                                 {/* <Button color="secondary" disabled={!isSkipAvailable(this)} className={classes.next} style={{ marginTop: '-4px' }} onClick={handleSkip.bind(this)}>Skip Forward &#62;</Button> */}
@@ -1518,70 +1371,16 @@ class Milling extends React.Component {
                                         )}
                                     />
                                     <Grid item>
-                                        <ItemPanel
-                                            title="Step Description"
-                                            small
-                                            contentStyle={{ padding: "8px" }}
-                                        >
-                                            <div>
-                                                <TransformToInput
-                                                    editMode={
-                                                        this.state.editMode
-                                                    }
-                                                    value={
-                                                        this.state
-                                                            .editTitleValue
-                                                    }
-                                                    setValue={
-                                                        this.setEditTitleValue
-                                                    }
-                                                >
-                                                    <Typography
-                                                        color="textPrimary"
-                                                        variant="subtitle1"
-                                                        style={{
-                                                            textTransform:
-                                                                "uppercase",
-                                                        }}
-                                                    >
-                                                        <b className="show-line-breaks">
-                                                            {" "}
-                                                            {
-                                                                this.state
-                                                                    .selectedStep
-                                                                    .Title
-                                                            }{" "}
-                                                        </b>
-                                                    </Typography>
-                                                </TransformToInput>
-                                                {this.getEditButton()}
-                                                <br />
-                                                <TransformToInput
-                                                    editMode={
-                                                        this.state.editMode
-                                                    }
-                                                    value={
-                                                        this.state
-                                                            .editJobTextValue
-                                                    }
-                                                    setValue={
-                                                        this.onEditJobTextChange
-                                                    }
-                                                    multiline={true}
-                                                    rows={10}
-                                                >
-                                                    <Typography
-                                                        className="show-line-breaks"
-                                                        color="textPrimary"
-                                                    >
-                                                        {getJobText(
-                                                            this.state
-                                                                .selectedStep
-                                                        )}
-                                                    </Typography>
-                                                </TransformToInput>
-                                            </div>
-                                        </ItemPanel>
+                                        <InstructionsPanel 
+                                            editMode={this.state.editMode}
+                                            editTitleValue={this.state.editTitleValue}
+                                            setEditTitleValue={this.setEditTitleValue}
+                                            selectedStep={this.state.selectedStep}
+                                            getEditButton={this.getEditButton}
+                                            editJobTextValue={this.state.editJobTextValue}
+                                            onEditJobTextChange={this.onEditJobTextChange}
+                                            getJobText={getJobText}
+                                        />
                                     </Grid>
                                     <Grid item>
                                         <Grid container direction="column">
@@ -1624,22 +1423,14 @@ class Milling extends React.Component {
                                 </Grid>
                             </Grid>
                             <Grid item xs={5} id="image">
-                                <ItemPanel
-                                    title="Machine Output"
-                                    color="secondary"
-                                    style={{ height: "100%" }}
-                                    small
-                                >
-                                    <ImageRaw
-                                        selectedStep={this.state.selectedStep}
-                                        millingInProgress={
-                                            this.state.millingProgress != -1
-                                        }
-                                        editMode={this.state.editMode}
-                                        onEditImage={this.showImagePopUpInput}
-                                        onEditGCode={this.showGCodePopUpInput}
-                                    />
-                                </ItemPanel>
+                                <MachineOutputPanel 
+                                    onEditGCode={this.showGCodePopUpInput}
+                                    selectedStep={this.state.selectedStep}
+                                    millingInProgress={
+                                        this.state.millingProgress != -1
+                                    }
+                                    editMode={this.state.editMode}
+                                />
                             </Grid>
                         </Grid>
                     </Grid>

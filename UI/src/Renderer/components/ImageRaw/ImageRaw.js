@@ -135,68 +135,6 @@ class ImageRaw extends React.Component {
             }
         }
 
-        function onClickImage(event) {
-            this.setState({
-                imageSelected: true
-            });
-        }
-
-        function onClickRaw(event) {
-            if (selectedStep.GCode != null) {
-                this.setState({
-                    imageSelected: false
-                });
-            }
-        }
-
-        function getButtons(component) {
-            let imageButton;
-            let gcodeButton;
-            let imageButtonFunction;
-            let gcodeButtonFunction;
-            if (component.props.editMode) {
-                imageButton = "EDIT IMAGE";
-                imageButtonFunction = (component) => {component.props.onEditImage()}//(component) => {component.editImage()}
-                gcodeButton = "EDIT GCODE";
-                gcodeButtonFunction = (component) => {component.props.onEditGCode()}//(component) => {component.editGcode()}
-            } else {
-                imageButton = "IMAGE";
-                imageButtonFunction = (component) => {onClickImage.bind(component)}
-                gcodeButton = "GCODE";
-                gcodeButtonFunction = (component) => {onClickRaw.bind(component)}
-            }
-            return (
-                <React.Fragment>
-                    <Grid item xs={3}>
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            color={component.state.imageSelected == true ? "secondary" : "primary"}
-                            size="small"
-                            onClick={() => {imageButtonFunction(component)}}
-                            style={{ borderRadius: '0px', padding: '0px' }}
-                        >
-                            {imageButton}
-                        </Button>
-                    </Grid>
-                    <Grid item xs={3}>
-
-                        {/*disabled={selectedStep.GCode == null ? true : false}*/}
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            color={component.state.imageSelected == true ? "primary" : "secondary"}
-                            size="small"
-                            onClick={() => {gcodeButtonFunction(component)}}
-                            style={{ borderRadius: '0px', padding: '0px' }}
-                        >
-                            {gcodeButton}
-                        </Button>
-                    </Grid>
-                </React.Fragment>
-            );
-        }
-
         function scrollToBottom(component) {
             if (millingInProgress && component.gcodeEnd != null && !component.state.imageSelected) {
                 component.gcodeEnd.scrollIntoView({ behavior: "auto", block: 'center' });

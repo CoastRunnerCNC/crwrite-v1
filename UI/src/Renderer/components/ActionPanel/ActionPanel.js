@@ -111,8 +111,8 @@ const ActionPanel = (props) => {
             <Grid item xs>
                 <center>
                     <Typography className={props.classes.stepNumber}>
-                        Step {props.this.state.selectedStepIndex + 1}/
-                        {props.this.state.steps.length}
+                        Step {props.selectedStepIndex + 1}/
+                        {props.steps.length}
                     </Typography>
                 </center>
             </Grid>

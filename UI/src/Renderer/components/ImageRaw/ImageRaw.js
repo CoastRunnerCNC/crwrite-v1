@@ -120,11 +120,11 @@ class ImageRaw extends React.Component {
                             }}
                             fullWidth
                         >
-                            {getImageButton(component, false)}
+                            {getImageButton(false)}
                         </Dialog>
                     );
                 } else {
-                    return getImageButton(component, true);
+                    return getImageButton(true);
                 }
             } else {
                 return (

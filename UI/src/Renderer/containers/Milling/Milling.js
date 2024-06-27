@@ -35,6 +35,7 @@ import ActionPanel from "../../components/ActionPanel/ActionPanel";
 import StepsPanel from "./StepsPanel/StepsPanel";
 import InstructionsPanel from "./InstructionsPanel/InstructionsPanel";
 import MachineOutputPanel from "./MachineOutputPanel/MachineOutputPanel";
+import ImagePanel from "./ImagePanel/ImagePanel";
 
 const styles = (theme) => ({
     millingStyle: {
@@ -1423,14 +1424,23 @@ class Milling extends React.Component {
                                 </Grid>
                             </Grid>
                             <Grid item xs={5} id="image">
-                                <MachineOutputPanel 
-                                    onEditGCode={this.showGCodePopUpInput}
-                                    selectedStep={this.state.selectedStep}
-                                    millingInProgress={
-                                        this.state.millingProgress != -1
-                                    }
-                                    editMode={this.state.editMode}
-                                />
+                                <Grid container direction="column">
+                                    <Grid item>
+                                        <MachineOutputPanel 
+                                            onEditGCode={this.showGCodePopUpInput}
+                                            selectedStep={this.state.selectedStep}
+                                            millingInProgress={
+                                                this.state.millingProgress != -1
+                                            }
+                                            editMode={this.state.editMode}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        <ImagePanel
+                                            selectedStep={this.state.selectedStep}
+                                        />
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>

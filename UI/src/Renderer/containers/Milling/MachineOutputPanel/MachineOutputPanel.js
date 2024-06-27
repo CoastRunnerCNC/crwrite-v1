@@ -48,10 +48,12 @@ const MachineOutputPanel = (props) => {
 
     const updateReadWrites = (event, newLines) => {
         if (newLines.length > 0) {
-            this.setState({
-                readWrites: [...this.state.readWrites, ...newLines],
-            });
+            setReadWrites((prevReadWrites) => [...prevReadWrites, ...newLines]);
         }
+
+        return () => {
+          ipcRenderer.removeAllListeners("Jobs::ReadWrites", updateReadWrites);
+      };
     };
 
     function getDisplay() {

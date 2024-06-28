@@ -5,7 +5,7 @@ import LineBox from "./LineBox/LineBox";
 const ItemPanel = (props) => {
     let titleSize = props.small ? "subtitle1" : "h4";
     let svgHeight = props.small ? "12" : "12";
-    let titleBarPadding = props.small ? "4px 4px 0px 4px" : "8px";
+    let titleBarPadding = props.small ? "4px 4px 0px 4px" : "3px 5px";
 
     const MinimizeIcon = () => {
         let minimizeBackgroundColor =
@@ -36,8 +36,8 @@ const ItemPanel = (props) => {
     };
 
     return (
-        <Grid container direction="column" style={{ ...style, ...props.style }}>
-            <Grid item>
+        <Grid className="item-panel" container direction="column" style={{ ...style, ...props.style }}>
+            <Grid className="item-panel-header" item>
                 <Grid
                     container
                     alignItems="center"
@@ -62,7 +62,7 @@ const ItemPanel = (props) => {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xs style={{padding: '3px'}}>
+                    <Grid item xs style={{padding: '3px', marginRight: '5px'}}>
                         <LineBox />
                     </Grid>
                     <Grid item>

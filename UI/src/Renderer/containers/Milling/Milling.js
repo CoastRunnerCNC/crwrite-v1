@@ -40,7 +40,7 @@ const styles = (theme) => ({
         backgroundSize: "cover",
         overflow: "hidden",
         width: "100%",
-        height: "calc(100% - 39px)",
+        height: "calc(100% - 44px)",
         position: "fixed",
         left: 0,
         top: 0,
@@ -1091,9 +1091,9 @@ class Milling extends React.Component {
                             {component.state.paused ? "RUN" : "PAUSE"}
                         </Button>
                         <Button
-                            style={{ marginLeft: "4px" }}
+                            style={{ marginLeft: "4px", backgroundColor: "#FF4345" }}
                             onClick={handleStop.bind(component)}
-                            color="error"
+                            //color="error"
                             classes={{ root: classes.nextPrevButtonRoot }}
                         >
                             Stop

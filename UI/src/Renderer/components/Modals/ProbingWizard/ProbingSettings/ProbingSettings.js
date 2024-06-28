@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import ItemPanel from "../../../ItemPanel/ItemPanel";
-import { Grid, Select, MenuItem, TextField, Checkbox } from "@material-ui/core";
-import CustomInputLabel from "../../Shuttle/CustomInputLabel/CustomInputLabel";
+import {
+    Grid,
+    Select,
+    MenuItem,
+    TextField,
+    Checkbox,
+    Typography,
+} from "@material-ui/core";
 import FeatureSizes from "../FeatureSizes/FeatureSizes";
 
 const ProbingSettings = (props) => {
@@ -40,13 +46,15 @@ const ProbingSettings = (props) => {
                     alignContent="center"
                 >
                     <Grid item xs={10}>
-                        <Grid container direction="column">
+                        <Grid container>
+                            <Grid item>
+                                <Typography>Probe Where</Typography>
+                            </Grid>
                             <Grid item>
                                 <Select
                                     labelId="probeWhere"
                                     value={probeWhere}
                                     onChange={onChangeProbeWhere}
-                                    fullWidth
                                 >
                                     <MenuItem value="corner">Corner</MenuItem>
                                     <MenuItem value="midpoint-x">
@@ -60,116 +68,115 @@ const ProbingSettings = (props) => {
                                     </MenuItem>
                                 </Select>
                             </Grid>
-                            <Grid item>
-                                <Grid
-                                    container
-                                    justify="flex-end"
-                                    style={{ width: "100%" }}
-                                >
-                                    <Grid item>
-                                        <CustomInputLabel>
-                                            Probe Where
-                                        </CustomInputLabel>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
                         </Grid>
                     </Grid>
 
                     <Grid item xs={10}>
-                        {/* Location details */}
-                        <TextField fullWidth />
-                        <CustomInputLabel>Location Details</CustomInputLabel>
-                    </Grid>
-                    <Grid item xs={10}>
-                        <Select
-                            value={probingType}
-                            onChange={onChangeProbingType}
-                            fullWidth
-                        >
-                            <MenuItem value="electrical">Electrical</MenuItem>
-                            <MenuItem value="manual">Manual</MenuItem>
-                        </Select>
-                        <CustomInputLabel>Probing Type</CustomInputLabel>
-                    </Grid>
-                    <Grid item xs={10}>
-                        <Grid container style={{ width: "100%" }}>
-                            <Grid item xs>
-                                <TextField fullWidth />
-                                <CustomInputLabel>Tool Width</CustomInputLabel>
+                        <Grid container>
+                            <Grid item>
+                                <Typography>Location Details</Typography>
                             </Grid>
-                            <Grid item xs={2}>
-                                <Select
-                                    labelId="toolUnits"
-                                    value={toolUnits}
-                                    onChange={onChangeToolUnits}
-                                    fullWidth
-                                >
-                                    <MenuItem value="mm">MM</MenuItem>
-                                    <MenuItem value="inches">Inches</MenuItem>
-                                </Select>
-                                <CustomInputLabel>Units</CustomInputLabel>
+                            <Grid item>
+                                <TextField />
                             </Grid>
                         </Grid>
                     </Grid>
                     <Grid item xs={10}>
-                        <Select
-                            labelId="target-wcs"
-                            value={wcs}
-                            onChange={onChangeWcs}
-                            fullWidth
-                        >
-                            <MenuItem value="G54">G54</MenuItem>
-                            <MenuItem value="G55">G55</MenuItem>
-                            <MenuItem value="G56">G56</MenuItem>
-                            <MenuItem value="G57">G57</MenuItem>
-                            <MenuItem value="G58">G58</MenuItem>
-                            <MenuItem value="G59">G59</MenuItem>
-                        </Select>
-                        <CustomInputLabel>Target WCS</CustomInputLabel>
+                        <Grid container>
+                            <Grid item>
+                                <Typography>Probing Type</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Select
+                                    value={probingType}
+                                    onChange={onChangeProbingType}
+                                >
+                                    <MenuItem value="electrical">
+                                        Electrical
+                                    </MenuItem>
+                                    <MenuItem value="manual">Manual</MenuItem>
+                                </Select>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={10}>
+                        <Grid container style={{ width: "100%" }}>
+                            <Grid item>
+                                <Typography>Tool Width</Typography>
+                            </Grid>
+                            <Grid item>
+                                <TextField />
+                            </Grid>
+                            <Grid item>
+                                <Typography>Units</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Select
+                                    labelId="toolUnits"
+                                    value={toolUnits}
+                                    onChange={onChangeToolUnits}
+                                >
+                                    <MenuItem value="mm">MM</MenuItem>
+                                    <MenuItem value="inches">Inches</MenuItem>
+                                </Select>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item>
+                        <Grid container>
+                            <Grid item>
+                                <Typography>Target WCS</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Select
+                                    labelId="target-wcs"
+                                    value={wcs}
+                                    onChange={onChangeWcs}
+                                >
+                                    <MenuItem value="G54">G54</MenuItem>
+                                    <MenuItem value="G55">G55</MenuItem>
+                                    <MenuItem value="G56">G56</MenuItem>
+                                    <MenuItem value="G57">G57</MenuItem>
+                                    <MenuItem value="G58">G58</MenuItem>
+                                    <MenuItem value="G59">G59</MenuItem>
+                                </Select>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs={10}>
                         <Grid container>
                             <Grid item>
-                                <CustomInputLabel>
-                                    Axis Selection
-                                </CustomInputLabel>
+                                <Typography>Axis Selection</Typography>
                             </Grid>
                             <Grid item>
                                 <Grid container>
                                     <Grid item>
-                                        <Grid container direction="column">
+                                        <Grid container>
+                                            <Grid item>
+                                                <Typography>X</Typography>
+                                            </Grid>
                                             <Grid item>
                                                 <Checkbox value="checkedX" />
                                             </Grid>
-                                            <Grid item>
-                                                <CustomInputLabel>
-                                                    X
-                                                </CustomInputLabel>
-                                            </Grid>
                                         </Grid>
                                     </Grid>
                                     <Grid item>
-                                        <Grid container direction="column">
+                                        <Grid container>
+                                            <Grid item>
+                                                <Typography>Y</Typography>
+                                            </Grid>
                                             <Grid item>
                                                 <Checkbox value="checkedY" />
                                             </Grid>
-                                            <Grid item>
-                                                <CustomInputLabel>
-                                                    Y
-                                                </CustomInputLabel>
-                                            </Grid>
                                         </Grid>
                                     </Grid>
                                     <Grid item>
-                                        <Grid container direction="column">
+                                        <Grid container>
                                             <Grid item>
-                                                <Checkbox value="checkedZ" />
+                                                <Typography>Z</Typography>
                                             </Grid>
                                             <Grid item>
-                                                <CustomInputLabel>
-                                                    Z
-                                                </CustomInputLabel>
+                                                <Checkbox value="checkedZ" />
                                             </Grid>
                                         </Grid>
                                     </Grid>
@@ -181,39 +188,39 @@ const ProbingSettings = (props) => {
                         <FeatureSizes shape="circle" />
                     </Grid>
                     <Grid item xs={10}>
+                        <Typography>Additional Offset</Typography>
                         <Grid container>
                             <Grid item>
-                                <Grid container direction="column">
+                                <Grid container>
                                     <Grid item>
-                                        <TextField />
+                                        <Typography>X</Typography>
                                     </Grid>
                                     <Grid item>
-                                        <CustomInputLabel>X</CustomInputLabel>
+                                        <TextField />
                                     </Grid>
                                 </Grid>
                             </Grid>
                             <Grid item>
-                                <Grid container direction="column">
+                                <Grid container>
                                     <Grid item>
-                                        <TextField />
+                                        <Typography>Y</Typography>
                                     </Grid>
                                     <Grid item>
-                                        <CustomInputLabel>Y</CustomInputLabel>
+                                        <TextField />
                                     </Grid>
                                 </Grid>
                             </Grid>
                             <Grid item>
-                                <Grid container direction="column">
+                                <Grid container>
                                     <Grid item>
-                                        <TextField />
+                                        <Typography>Z</Typography>
                                     </Grid>
                                     <Grid item>
-                                        <CustomInputLabel>Z</CustomInputLabel>
+                                        <TextField />
                                     </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <CustomInputLabel>Additional Offset</CustomInputLabel>
                     </Grid>
                 </Grid>
             </ItemPanel>

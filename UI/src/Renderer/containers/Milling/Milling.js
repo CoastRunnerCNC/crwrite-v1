@@ -32,6 +32,7 @@ import Throbber from "../../components/Modals/Throbber/Throbber";
 import ItemPanel from "../../components/ItemPanel/ItemPanel";
 import CoastRunnerLogo from "../../components/CoastRunnerLogo/CoastRunnerLogo";
 import ActionPanel from "../../components/ActionPanel/ActionPanel";
+import ProbingWizard from "../../components/Modals/ProbingWizard/ProbingWizard";
 
 const styles = (theme) => ({
     millingStyle: {
@@ -1360,6 +1361,7 @@ class Milling extends React.Component {
                         });
                     }}
                 />
+
                 <JobSelection
                     open={this.showJobSelection()}
                     onClose={this.onCloseJobSelection}

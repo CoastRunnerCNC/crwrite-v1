@@ -226,9 +226,8 @@ const ProbingWizard = (props) => {
         <React.Fragment>
             <Dialog
                 open={props.open}
-                fullWidth
-                PaperProps={{ style: { height: "100%", maxWidth: "1600px" } }}
-                maxWidth="xl"
+                PaperProps={{ style: { maxWidth: "1600px" } }}
+                maxWidth="lg"
             >
                 <DialogContent>
                     <Grid container spacing={2}>

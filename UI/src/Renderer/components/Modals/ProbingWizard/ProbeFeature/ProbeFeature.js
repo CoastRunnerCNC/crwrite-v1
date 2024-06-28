@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ItemPanel from "../../../ItemPanel/ItemPanel";
-import { Grid, Select, MenuItem } from "@material-ui/core";
+import { Grid, Select, MenuItem, Typography } from "@material-ui/core";
 import CustomInputLabel from "../../Shuttle/CustomInputLabel/CustomInputLabel";
 
 const ProbeFeature = (props) => {
@@ -10,14 +10,16 @@ const ProbeFeature = (props) => {
 
     return (
         <ItemPanel small title="Probe Feature">
-            <Grid container alignContent="center" direction="column">
+            <Grid container alignContent="center">
+                <Grid item>
+                    <Typography>Probe Feature</Typography>
+                </Grid>
                 <Grid item xs={4}>
                     <Select
                         labelId="probe-feature"
                         value={props.featureType}
                         onChange={onFeatureChange}
                         disabled={props.probingActive}
-                        fullWidth
                     >
                         <MenuItem value="surface">Surface (Z Only)</MenuItem>
                         <MenuItem value="circlePocket">
@@ -30,13 +32,6 @@ const ProbeFeature = (props) => {
                             Circle Protrusion
                         </MenuItem>
                     </Select>
-                </Grid>
-                <Grid item>
-                    <Grid container>
-                        <Grid item>
-                            <CustomInputLabel>Probe Feature</CustomInputLabel>
-                        </Grid>
-                    </Grid>
                 </Grid>
             </Grid>
         </ItemPanel>

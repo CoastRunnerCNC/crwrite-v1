@@ -1336,7 +1336,7 @@ class Milling extends React.Component {
                 >
                     <Grid item xs>
                         <Grid container spacing={2}>
-                            <Grid item xs={4} id="steps" style={{ height: "85vh" }}>
+                            <Grid item xs={3} id="steps" style={{ height: "85vh" }}>
                                 <StepsPanel 
                                     fileName={this.state.fileName}
                                     jobName={this.state.jobName}
@@ -1357,7 +1357,7 @@ class Milling extends React.Component {
                                 {/* {this.getAddStepButton()} */}
                                 {/* <Button color="secondary" disabled={!isSkipAvailable(this)} className={classes.next} style={{ marginTop: '-4px' }} onClick={handleSkip.bind(this)}>Skip Forward &#62;</Button> */}
                             </Grid>
-                            <Grid item xs={3} id="middle_section">
+                            <Grid item xs={6} id="middle_section">
                                 <Grid
                                     container
                                     direction="column"
@@ -1423,8 +1423,13 @@ class Milling extends React.Component {
                                         </Grid> */}
                                 </Grid>
                             </Grid>
-                            <Grid item xs={5} id="image">
+                            <Grid item xs={3} id="image">
                                 <Grid container direction="column">
+                                    <Grid item>
+                                        <ImagePanel
+                                            selectedStep={this.state.selectedStep}
+                                        />
+                                    </Grid>
                                     <Grid item>
                                         <MachineOutputPanel 
                                             onEditGCode={this.showGCodePopUpInput}
@@ -1433,11 +1438,6 @@ class Milling extends React.Component {
                                                 this.state.millingProgress != -1
                                             }
                                             editMode={this.state.editMode}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <ImagePanel
-                                            selectedStep={this.state.selectedStep}
                                         />
                                     </Grid>
                                 </Grid>

@@ -44,6 +44,7 @@ const ImagePanel = (props) => {
     function getDisplay() {
         if (zoom === true) {
             return (
+              <>
                 <Dialog
                     open={zoom}
                     aria-labelledby="form-dialog-title"
@@ -55,6 +56,8 @@ const ImagePanel = (props) => {
                 >
                     {getImageButton(false)}
                 </Dialog>
+                {getImageButton(true)}
+              </>
             );
         } else {
             return getImageButton(true);

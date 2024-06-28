@@ -1,6 +1,9 @@
-import { Grid, TextField, Typography } from "@material-ui/core";
+import { Grid, TextField, Typography, withStyles } from "@material-ui/core";
 import React from "react";
 
+const styles = {
+    xyzTextField: { width: '50px'}
+}
 
 const FeatureSizes = (props) => {
     if (props.shape === "square") {
@@ -26,14 +29,14 @@ const FeatureSizes = (props) => {
         );
     } else if (props.shape === "circle") {
         return (
-            <Grid container>
+            <Grid container justify="space-between">
                 <Grid item>
                     <Grid container>
                         <Grid item>
                             <Typography>Diameter</Typography>
                         </Grid>
                         <Grid item>
-                            <TextField />
+                            <TextField className={props.classes.xyzTextField} />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -43,7 +46,7 @@ const FeatureSizes = (props) => {
                             <Typography>Height</Typography>
                         </Grid>
                         <Grid item>
-                            <TextField />
+                            <TextField className={props.classes.xyzTextField} />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -52,4 +55,4 @@ const FeatureSizes = (props) => {
     }
 };
 
-export default FeatureSizes;
+export default withStyles(styles)(FeatureSizes);

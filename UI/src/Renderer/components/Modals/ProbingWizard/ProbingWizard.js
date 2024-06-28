@@ -16,8 +16,7 @@ const ProbingWizard = (props) => {
     const PictureSVG = () => {
         return (
             <svg
-                width="505"
-                height="494"
+                width="350"
                 viewBox="0 0 505 494"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -226,8 +225,8 @@ const ProbingWizard = (props) => {
         <React.Fragment>
             <Dialog
                 open={props.open}
-                PaperProps={{ style: { maxWidth: "1600px" } }}
-                maxWidth="lg"
+                PaperProps={{ style: { minWidth: "800px" } }}
+                maxWidth="xl"
             >
                 <DialogContent>
                     <Grid container spacing={2}>

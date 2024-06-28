@@ -60,22 +60,47 @@ const theme = createMuiTheme({
     overrides: {
         MuiButton: {
             contained: {
-                border: '2px solid black',
-                borderRadius: '4px',
-                boxShadow: "-2px 2px 0px 0px #4A4A4A"
+                border: '1px solid black',
+                borderRadius: '0px',
+                boxShadow: "1px 1px 0px 0px #000000",
+                backgroundColor: "#f6f6f6"
             }
         },
+        MuiRadio: {
+            root: {
+              color: 'black',
+            },
+            colorSecondary: {
+              '&$checked': {
+                color: 'black',
+              },
+            },
+          },
+          MuiCheckbox: {
+            root: {
+              color: 'black',
+            },
+            colorSecondary: {
+              '&$checked': {
+                color: 'black',
+              },
+            },
+          },
         MuiFormControl: {
             root: {
-                backgroundColor: app.colors.form
+                backgroundColor: app.colors.form,
+                border: 'none',
             },
-            marginDense: true
+            marginDense: true,
+            border: 'none'
         },
-        // MuiInput: {
-        //     root: {
-        //         border: '1px solid #000000'
-        //     }
-        // },
+        MuiInput: {
+            root: {
+                border: '1px solid #000000',
+                borderRadius: '0px',
+                backgroundColor: '#f6f6f6'
+            }
+        },
         // MuiFormControl: {
         //     root: {
         //       border: '1px solid #000', // Setting a black outline
@@ -112,7 +137,7 @@ const theme = createMuiTheme({
             paper: {
                 border: app.modal.border,
                 color: app.modal.color,
-                backgroundColor: '#F1F2F2'
+                backgroundColor: '#f6f6f6'
             }
         },
         MuiFab: {

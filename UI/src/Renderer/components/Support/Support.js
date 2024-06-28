@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import path from "path";
 import {ipcRenderer, shell} from 'electron';
-import {ClickAwayListener, Fab, Grow, MenuItem, MenuList, Paper, Popper, Tooltip} from "@material-ui/core";
+import {ClickAwayListener, Button, Grow, MenuItem, MenuList, Paper, Popper, Tooltip} from "@material-ui/core";
 import {withStyles} from "@material-ui/core/styles";
 import CustomerSupport from '../Modals/CustomerSupport';
 import ViewLogs from '../Modals/ViewLogs';
@@ -16,12 +16,13 @@ const styles = theme => ({
     paper: {
         marginBottom: '5px',
         border: '#FFFFFF 1px solid',
-        color: app.supportButtonMenu.color,
-        backgroundColor: app.supportButtonMenu.backgroundColor
+        color: "black",
+        backgroundColor: "#f6f6f6"
     },
     menuItem: {
         '&:hover': {
-            backgroundColor: app.supportButtonMenu.hoverColor
+            backgroundColor: 'black',
+            color: 'white'
         }
     },
     supportButton: {
@@ -29,10 +30,13 @@ const styles = theme => ({
         paddingBottom: 0,
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1),
-        backgroundColor: app.menuButton.backgroundColor,
+        borderRadius: '0px',
+        border: '1px solid black',
+        minHeight: '34px',
+        backgroundColor: '#f6f6f6',
         '&:disabled': {
             opacity: 0.5
-        }
+        }, boxShadow: "1px 1px 0px 0px #000000"
     },
     supportImg: {
         width: '100px',
@@ -165,8 +169,7 @@ class Support extends React.Component {
                     title="Disabled while machine is running"
                 >
                     <span>
-                        <Fab
-                            variant="extended"
+                        <Button
                             aria-label="Support"
                             onClick={this.handleToggleMenu}
                             className={classes.supportButton}
@@ -176,7 +179,7 @@ class Support extends React.Component {
 					        id="support"
                         >
                             <img src={path.join(__dirname, app.image.supportButton)} className={classes.supportImg} />
-                        </Fab>
+                        </Button>
                     </span>
                 </Tooltip>
 

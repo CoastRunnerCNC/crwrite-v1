@@ -10,7 +10,7 @@ const styles = theme => ({
         marginTop: theme.spacing(-1),
         marginBottom: theme.spacing(1),
         color: app.button.cancel.color,
-        backgroundColor: app.button.cancel.backgroundColor
+        backgroundColor: '#f6f6f6'
     },
     select: {
         marginTop: theme.spacing(-1),
@@ -23,7 +23,7 @@ const styles = theme => ({
     },
     switch: {
         // marginLeft: -2 * theme.spacing(1),
-        color: 'white'
+        color: 'black'
     }
 });
 

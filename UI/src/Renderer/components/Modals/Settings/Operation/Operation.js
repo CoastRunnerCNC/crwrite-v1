@@ -40,13 +40,13 @@ const styles = theme => ({
     },
     cancel: {
         marginRight: theme.spacing(1),
-        backgroundColor: app.button.cancel.backgroundColor,
-        color: app.button.cancel.color
+        backgroundColor: '#f6f6f6',
+        color: "#000000"
     },
     save: {
         marginLeft: theme.spacing(1),
-        backgroundColor: app.button.save.backgroundColor,
-        color: app.button.save.color
+        backgroundColor: "#f6f6f6",
+        color: 'black'
     }
 });
 
@@ -143,7 +143,7 @@ class Operation extends React.Component {
                             disableTouchListener={true}
                             title='During motion, overrides the programmed feedrate by the specified percentage.'
                         >
-                            <span>FeedRate Percentage <HelpIcon fontSize="small" style={{ verticalAlign: 'middle', color: app.colors.secondary }} /></span>
+                            <span>FeedRate Percentage <HelpIcon fontSize="small" style={{ verticalAlign: 'middle', color: 'black' }} /></span>
                         </Tooltip>
                     </FormLabel>
                     <RadioGroup>

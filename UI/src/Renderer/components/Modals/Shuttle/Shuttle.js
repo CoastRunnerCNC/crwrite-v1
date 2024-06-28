@@ -130,16 +130,16 @@ class Shuttle extends React.Component {
                     title={tooltip}
                 >
                     <span>
-                        <Fab className={this.props.classes.shuttleButton} onClick={this.props.toggleShuttle} disabled={disabled}>
+                        <Button className={this.props.classes.shuttleButton} onClick={this.props.toggleShuttle} disabled={disabled} style={{border: '1px solid black', backgroundColor: '#f6f6f6', borderRadius: '0px', boxShadow: "1px 1px 0px 0px #000000"}}>
                             <img src={path.join(__dirname, app.image.joystick)} style={{ width: '20px', height: '20x' }} />
-                        </Fab>
+                        </Button>
                     </span>
                 </Tooltip>
 
                 <Dialog
                     open={this.props.openShuttle}
                     aria-labelledby="form-dialog-title"
-                    PaperProps={{ style: {height: '100%', maxWidth: '1600px'}}}
+                    PaperProps={{ style: {height: '100%', maxWidth: '1600px', backgroundColor: '#f6f6f6'}}}
                     maxWidth="xl"
                     fullWidth
                 >

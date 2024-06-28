@@ -1,41 +1,52 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {ipcRenderer, shell} from 'electron';
-import withStyles from '@material-ui/core/styles/withStyles';
-import StepList from '../../components/StepList';
-import RPMDivergence from '../../components/Modals/RPMDivergence/RPMDivergence';
-import Feedrate from '../../components/Feedrate';
-import StartMilling from '../../components/Modals/StartMilling';
-import Alert from '../../components/Modals/Alert';
-import PopUp from '../../components/Modals/PopUp';
+import React from "react";
+import PropTypes from "prop-types";
+import { ipcRenderer, shell } from "electron";
+import withStyles from "@material-ui/core/styles/withStyles";
+import StepList from "../../components/StepList";
+import RPMDivergence from "../../components/Modals/RPMDivergence/RPMDivergence";
+import Feedrate from "../../components/Feedrate";
+import StartMilling from "../../components/Modals/StartMilling";
+import Alert from "../../components/Modals/Alert";
+import PopUp from "../../components/Modals/PopUp";
 import path from "path";
-import {Button, Grid, Box, IconButton, LinearProgress, Typography, CircularProgress} from '@material-ui/core';
-import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
-import {Redirect} from 'react-router-dom';
-import app from 'app';
+import {
+    Button,
+    Grid,
+    Box,
+    IconButton,
+    LinearProgress,
+    Typography,
+    CircularProgress,
+} from "@material-ui/core";
+import ArrowBackIosRoundedIcon from "@material-ui/icons/ArrowBackIosRounded";
+import { Redirect } from "react-router-dom";
+import app from "app";
 import ImageRaw from "../../components/ImageRaw/ImageRaw";
-import logger from 'electron-log';
-import ReactMarkdown from 'react-markdown'
-import {version} from '../../../../package.json';
-import JobSelection from '../../components/Modals/JobSelection';
-import TransformToInput from '../../util/TransformToInput';
-import PopUpInput from '../../components/Modals/PopUpInput/PopUpInput';
-import Throbber from '../../components/Modals/Throbber/Throbber';
-import ItemPanel from '../../components/ItemPanel/ItemPanel';
+import logger from "electron-log";
+import ReactMarkdown from "react-markdown";
+import { version } from "../../../../package.json";
+import JobSelection from "../../components/Modals/JobSelection";
+import TransformToInput from "../../util/TransformToInput";
+import PopUpInput from "../../components/Modals/PopUpInput/PopUpInput";
+import Throbber from "../../components/Modals/Throbber/Throbber";
+import ItemPanel from "../../components/ItemPanel/ItemPanel";
+import CoastRunnerLogo from "../../components/CoastRunnerLogo/CoastRunnerLogo";
+import ActionPanel from "../../components/ActionPanel/ActionPanel";
+import ProbingWizard from "../../components/Modals/ProbingWizard/ProbingWizard";
 
-
-
-const styles = theme => ({
+const styles = (theme) => ({
     millingStyle: {
-        backgroundColor: "#F1F2F2",
-        backgroundSize: 'cover',
-        overflow: 'hidden',
-        width: '100%',
-        height: 'calc(100% - 39px)',
-        position: 'fixed',
+        backgroundColor: "#F6F6F6",
+        backgroundSize: "cover",
+        overflow: "hidden",
+        width: "100%",
+        height: "calc(100% - 44px)",
+        position: "fixed",
         left: 0,
         top: 0,
         paddingTop: 60,
+        paddingLeft: "16px",
+        paddingRight: "16px",
         // z: -1,
         // flex: 1,
         // justifyContent: 'center',
@@ -54,64 +65,76 @@ const styles = theme => ({
         // verticalAlign: 'middle',
         // paddingLeft: '10px'
     },
-    stepsList: {
-
-    },
     // middle: {
     //     height: 'calc(100% - 110px)',
     //     marginTop: '60px'
     // },
     instructions: {
-        backgroundColor: '#FFFFFF',
-        border: '1.5px solid black',
-        borderRadius: '4px',
-        padding: '16px'
-        
+        backgroundColor: "#FFFFFF",
+        border: "1.5px solid black",
+        borderRadius: "4px",
+        padding: "16px",
     },
     nextPrevButtonRoot: {
-        background: '#3EC6CB',
-        border: '1px solid black',
-        color: 'white',
+        background: "#F6F6F6",
+        border: "1px solid black",
+        color: "black",
+        height: "100%",
+        width: "30px",
+        boxShadow: "1px 1px 0px 0px #000000",
+        borderRadius: "0px",
     },
     nextPrevButtonDisable: {
-        background: '#b6eaeb',
-        color: 'white !important',
+        background: "#F6F6F6",
+        color: "black !important",
     },
-    // warning: {
-    //     height: '60px',
-    //     textAlign: 'center',
-    // },
-    // slider: {
-    //     width: '100%',
-    //     height: '40px',
-    //     textAlign: 'center',
-    // },
-    // actions: {
-    //     textAlign: 'center',
-    // },
-    // right: {
-    //     height: 'calc(100% - 160px)',
-    //     marginTop: '110px'
-    // },
-    // prev: {
-	// 	float: 'left',
-	// 	padding: '5px'
-    // },
-    // addStep: {
-    //     float: 'left',
-    //     padding: '5px'
-    // },
-    // next: {
-	// 	float: 'right',
-	// 	padding: '5px'
-    // },
-    // stepNumber: {
-    //     marginTop: '6px',
-    //     opacity: 0.87,
-    //     fontSize: '14px',
-    //     color: app.milling.step_number
-    // }
 });
+
+const HorizontalLines = () => {
+    return (
+        <svg
+            width="100%"
+            height="100%"
+            viewBox="0 0 300 10"
+            preserveAspectRatio="none"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <line
+                x1="0"
+                y1="6.75"
+                x2="300"
+                y2="6.75"
+                stroke="black"
+                strokeWidth="0.5"
+            />
+            <line
+                x1="0"
+                y1="9.75"
+                x2="300"
+                y2="9.75"
+                stroke="black"
+                strokeWidth="0.5"
+            />
+            <line
+                x1="0"
+                y1="3.75"
+                x2="300"
+                y2="3.75"
+                stroke="black"
+                strokeWidth="0.5"
+            />
+            <line
+                x1="0"
+                y1="0.75"
+                x2="300"
+                y2="0.75"
+                stroke="black"
+                strokeWidth="0.5"
+            />
+        </svg>
+    );
+};
 
 class Milling extends React.Component {
     constructor() {
@@ -119,11 +142,11 @@ class Milling extends React.Component {
         this.state = {
             filePath: ipcRenderer.sendSync("File::FetchFilePath"),
             fileName: "",
-            jobName: ipcRenderer.sendSync("Jobs::FetchJobName"), 
+            jobName: ipcRenderer.sendSync("Jobs::FetchJobName"),
             steps: ipcRenderer.sendSync("Jobs::GetSteps"),
             selectedStepIndex: 0,
             selectedStep: ipcRenderer.sendSync("Jobs::GetStep", 0),
-			previousMillingStep: -1,
+            previousMillingStep: -1,
             editMode: false,
             editTitleValue: "",
             editPromptValue: "",
@@ -137,11 +160,18 @@ class Milling extends React.Component {
             milling: false,
             millingProgress: -1,
             showAlert: false,
-			promptClearWCS: ipcRenderer.sendSync("CNC::HasNonzeroWCS")
-                && ipcRenderer.sendSync("CNC::AllowWcsClearPrompt"),   // Possibly prompt to clear WCS
-            wcsValueCheckFailedMessage: ipcRenderer.sendSync("CNC::WcsValueCheck"),    // Empty string means no issue (no check needed or check succeeded)
-            firmwareMinVersionMet: ipcRenderer.sendSync("Firmware::FirmwareMeetsMinimumVersion"),
-            crwriteMinVersionMet: ipcRenderer.sendSync("Firmware::CRWriteMeetsMinimumVersion", version),
+            promptClearWCS:
+                ipcRenderer.sendSync("CNC::HasNonzeroWCS") &&
+                ipcRenderer.sendSync("CNC::AllowWcsClearPrompt"), // Possibly prompt to clear WCS
+            wcsValueCheckFailedMessage:
+                ipcRenderer.sendSync("CNC::WcsValueCheck"), // Empty string means no issue (no check needed or check succeeded)
+            firmwareMinVersionMet: ipcRenderer.sendSync(
+                "Firmware::FirmwareMeetsMinimumVersion"
+            ),
+            crwriteMinVersionMet: ipcRenderer.sendSync(
+                "Firmware::CRWriteMeetsMinimumVersion",
+                version
+            ),
             alertTitle: "",
             alertMessage: "",
             status_loop: false,
@@ -152,7 +182,7 @@ class Milling extends React.Component {
             showSaveEditsPopup: false,
             showPopupImageInput: false,
             showPopupGCodeInput: false,
-            writeInProgress: false
+            writeInProgress: false,
         };
 
         this.onClickChangeJob = this.onClickChangeJob.bind(this);
@@ -176,6 +206,8 @@ class Milling extends React.Component {
         this.editPopupNoHandler = this.editPopupNoHandler.bind(this);
         this.handleDeleteStep = this.handleDeleteStep.bind(this);
         this.moveStep = this.moveStep.bind(this);
+        this.handlePrev = this.handlePrev.bind(this);
+        // this.handleNext = this.handleNext.bind(this);
         this.handleWriteChangesYes = this.handleWriteChangesYes.bind(this);
         this.handleWriteChangesNo = this.handleWriteChangesNo.bind(this);
         this.closeFailedImageLoad = this.closeFailedImageLoad.bind(this);
@@ -186,8 +218,8 @@ class Milling extends React.Component {
         this.parseGoTo = this.parseGoTo.bind(this);
         ipcRenderer.removeAllListeners("CRFileDoubleClick");
         ipcRenderer.on("CRFileDoubleClick", (event, path) => {
-            ipcRenderer.send('File::DoubleClickSetFilePath', path);
-            let jobs = ipcRenderer.sendSync('Jobs::GetJobsFromPath', path);
+            ipcRenderer.send("File::DoubleClickSetFilePath", path);
+            let jobs = ipcRenderer.sendSync("Jobs::GetJobsFromPath", path);
             this.setState({ availableJobs: jobs, showJobSelection: true });
         });
     }
@@ -204,11 +236,11 @@ class Milling extends React.Component {
         let value;
 
         // check for positive or negative sign
-        if (rawValue.startsWith('+')) {
-            sign = '+';
+        if (rawValue.startsWith("+")) {
+            sign = "+";
             valueStr = rawValue.substring(1);
-        } else if (rawValue.startsWith('-')) {
-            sign = '-';
+        } else if (rawValue.startsWith("-")) {
+            sign = "-";
             valueStr = rawValue.substring(1);
         } else {
             valueStr = rawValue;
@@ -219,8 +251,9 @@ class Milling extends React.Component {
         if (isNaN(value)) {
             this.setState({
                 alertMessage: "Relative step movement",
-                alertTitle: "Relative step movement syntax error in manifest. Please check your manifest and confirm that the syntax is correct (+4, -5)."
-            })
+                alertTitle:
+                    "Relative step movement syntax error in manifest. Please check your manifest and confirm that the syntax is correct (+4, -5).",
+            });
             return -1;
         }
         // calculate absolute index
@@ -240,7 +273,7 @@ class Milling extends React.Component {
             this.setState({
                 showJobSelection: false,
                 filePath: newPath,
-                jobName: ipcRenderer.sendSync("Jobs::FetchJobName"), 
+                jobName: ipcRenderer.sendSync("Jobs::FetchJobName"),
                 steps: ipcRenderer.sendSync("Jobs::GetSteps"),
                 selectedStepIndex: 0,
                 selectedStep: ipcRenderer.sendSync("Jobs::GetStep", 0),
@@ -252,20 +285,27 @@ class Milling extends React.Component {
                 milling: false,
                 millingProgress: -1,
                 showAlert: false,
-                promptClearWCS: ipcRenderer.sendSync("CNC::HasNonzeroWCS")
-                    && ipcRenderer.sendSync("CNC::AllowWcsClearPrompt"),   // Possibly prompt to clear WCS
-                wcsValueCheckFailedMessage: ipcRenderer.sendSync("CNC::WcsValueCheck"),    // Empty string means no issue (no check needed or check succeeded)
-                firmwareMinVersionMet: ipcRenderer.sendSync("Firmware::FirmwareMeetsMinimumVersion"),
-                crwriteMinVersionMet: ipcRenderer.sendSync("Firmware::CRWriteMeetsMinimumVersion", version),
+                promptClearWCS:
+                    ipcRenderer.sendSync("CNC::HasNonzeroWCS") &&
+                    ipcRenderer.sendSync("CNC::AllowWcsClearPrompt"), // Possibly prompt to clear WCS
+                wcsValueCheckFailedMessage:
+                    ipcRenderer.sendSync("CNC::WcsValueCheck"), // Empty string means no issue (no check needed or check succeeded)
+                firmwareMinVersionMet: ipcRenderer.sendSync(
+                    "Firmware::FirmwareMeetsMinimumVersion"
+                ),
+                crwriteMinVersionMet: ipcRenderer.sendSync(
+                    "Firmware::CRWriteMeetsMinimumVersion",
+                    version
+                ),
                 alertTitle: "",
                 alertMessage: "",
                 status_loop: false,
                 paused: false,
-                submanifestUsed: undefined
-            });   
+                submanifestUsed: undefined,
+            });
         } else {
             this.setState({
-                showJobSelection: false
+                showJobSelection: false,
             });
         }
     }
@@ -279,51 +319,71 @@ class Milling extends React.Component {
         }
         // this.setState({writeInProgress: true});
         // Start listener for write success
-        this.setState({writeInProgress: true, showSaveEditsPopup: false});
-        let showPremillingStepPopup = this.state.preEditModeStepIndex === this.state.selectedStepIndex ? false : true;
+        this.setState({ writeInProgress: true, showSaveEditsPopup: false });
+        let showPremillingStepPopup =
+            this.state.preEditModeStepIndex === this.state.selectedStepIndex
+                ? false
+                : true;
         // Listeners for successful write out
-        ipcRenderer.removeAllListeners("Jobs::WriteEditsSuccessful")
+        ipcRenderer.removeAllListeners("Jobs::WriteEditsSuccessful");
         ipcRenderer.once("Jobs::WriteEditsSuccessful", () => {
             this.setState({
                 editMode: false,
-                selectedStep: ipcRenderer.sendSync("Jobs::GetStep", this.state.selectedStepIndex),
+                selectedStep: ipcRenderer.sendSync(
+                    "Jobs::GetStep",
+                    this.state.selectedStepIndex
+                ),
                 steps: ipcRenderer.sendSync("Jobs::GetSteps"),
-                showPremillingStepPopup: showPremillingStepPopup
+                showPremillingStepPopup: showPremillingStepPopup,
             });
         });
 
-
         // Send request to start right out
-        ipcRenderer.send("Jobs::SetStepValues", {
-                title: this.state.editTitleValue,  
+        ipcRenderer.send(
+            "Jobs::SetStepValues",
+            {
+                title: this.state.editTitleValue,
                 markdown: newStepText,
                 prompt: "Please download the latest version of CRWrite at https://coastrunner.net/downloads/",
                 set_image: this.state.editImage,
                 set_gcode: this.state.editGCode,
-                set_gcode_path: this.state.editGCodePath
-            }, 
-            this.state.selectedStepIndex);
+                set_gcode_path: this.state.editGCodePath,
+            },
+            this.state.selectedStepIndex
+        );
     }
 
     handleAddStep() {
-        this.setState({writeInProgress: true});
-        let showPremillingStepPopup = this.state.preEditModeStepIndex === this.state.selectedStepIndex ? false : true;
-        ipcRenderer.removeAllListeners("Jobs::WriteEditsSuccessful")
+        this.setState({ writeInProgress: true });
+        let showPremillingStepPopup =
+            this.state.preEditModeStepIndex === this.state.selectedStepIndex
+                ? false
+                : true;
+        ipcRenderer.removeAllListeners("Jobs::WriteEditsSuccessful");
         ipcRenderer.once("Jobs::WriteEditsSuccessful", () => {
             this.setState({
-                selectedStep: ipcRenderer.sendSync("Jobs::GetStep", this.state.selectedStepIndex),
+                selectedStep: ipcRenderer.sendSync(
+                    "Jobs::GetStep",
+                    this.state.selectedStepIndex
+                ),
                 steps: ipcRenderer.sendSync("Jobs::GetSteps"),
-                showPremillingStepPopup: showPremillingStepPopup
+                showPremillingStepPopup: showPremillingStepPopup,
             });
         });
 
-        ipcRenderer.send("Jobs::AddNewOperation", this.state.selectedStepIndex + 1);
+        ipcRenderer.send(
+            "Jobs::AddNewOperation",
+            this.state.selectedStepIndex + 1
+        );
     }
 
     handleDeleteStep(stepIndex) {
-        this.setState({writeInProgress: true});
+        this.setState({ writeInProgress: true });
         let newStepIndex = this.state.selectedStepIndex;
-        let showPremillingStepPopup = this.state.preEditModeStepIndex === this.state.selectedStepIndex ? false : true;
+        let showPremillingStepPopup =
+            this.state.preEditModeStepIndex === this.state.selectedStepIndex
+                ? false
+                : true;
 
         if (stepIndex < newStepIndex) {
             newStepIndex--;
@@ -333,23 +393,32 @@ class Milling extends React.Component {
         ipcRenderer.once("Jobs::WriteEditsSuccessful", () => {
             this.setState({
                 selectedStepIndex: newStepIndex,
-                selectedStep: ipcRenderer.sendSync("Jobs::GetStep", newStepIndex),
+                selectedStep: ipcRenderer.sendSync(
+                    "Jobs::GetStep",
+                    newStepIndex
+                ),
                 steps: ipcRenderer.sendSync("Jobs::GetSteps"),
-                showPremillingStepPopup: showPremillingStepPopup
+                showPremillingStepPopup: showPremillingStepPopup,
             });
         });
         ipcRenderer.send("Jobs::DeleteOperation", stepIndex);
     }
 
     moveStep(prevStepIndex, newStepIndex) {
-        this.setState({writeInProgress: true});
-        let showPremillingStepPopup = this.state.preEditModeStepIndex === this.state.selectedStepIndex ? false : true;
+        this.setState({ writeInProgress: true });
+        let showPremillingStepPopup =
+            this.state.preEditModeStepIndex === this.state.selectedStepIndex
+                ? false
+                : true;
         ipcRenderer.removeAllListeners("Jobs::WriteEditsSuccessful");
         ipcRenderer.once("Jobs::WriteEditsSuccessful", () => {
             this.setState({
-                selectedStep: ipcRenderer.sendSync("Jobs::GetStep", this.state.selectedStepIndex),
+                selectedStep: ipcRenderer.sendSync(
+                    "Jobs::GetStep",
+                    this.state.selectedStepIndex
+                ),
                 steps: ipcRenderer.sendSync("Jobs::GetSteps"),
-                showPremillingStepPopup: showPremillingStepPopup
+                showPremillingStepPopup: showPremillingStepPopup,
             });
         });
         ipcRenderer.send("Jobs::MoveOperation", prevStepIndex, newStepIndex);
@@ -360,42 +429,50 @@ class Milling extends React.Component {
     }
 
     setEditGCodePath(event) {
-        this.setState({editGCodePath: event.target.value});
+        this.setState({ editGCodePath: event.target.value });
     }
 
     setEditGCode(event) {
-        this.setState({editGCode: event.target.value});
+        this.setState({ editGCode: event.target.value });
     }
 
     showImagePopUpInput() {
-        this.setState({showPopupImageInput: true});
+        this.setState({ showPopupImageInput: true });
     }
 
     setEditImage(event) {
-        this.setState({editImage: event.target.value});
+        this.setState({ editImage: event.target.value });
     }
 
     setEditTitleValue(event) {
-        this.setState({editTitleValue: event.target.value});
+        this.setState({ editTitleValue: event.target.value });
     }
 
     onClickToggleEdit() {
         if (this.state.editMode) {
-            this.setState({showSaveEditsPopup: true});
+            this.setState({ showSaveEditsPopup: true });
         } else {
-            this.setState({editMode: true, preEditModeStepIndex: this.state.selectedStepIndex});
+            this.setState({
+                editMode: true,
+                preEditModeStepIndex: this.state.selectedStepIndex,
+            });
         }
     }
 
     getEditButton() {
         if (this.state.submanifestUsed == undefined) {
             let submanifestUsed = ipcRenderer.sendSync("Jobs::SubmanifestUsed");
-            this.setState({submanifestUsed: submanifestUsed});
+            this.setState({ submanifestUsed: submanifestUsed });
         }
-        
-        if (this.props.settings.enableEditButton && (this.state.millingProgress == -1)) {
+
+        if (
+            this.props.settings.enableEditButton &&
+            this.state.millingProgress == -1
+        ) {
             return (
-                <Button onClick={this.onClickToggleEdit}>{this.getEditButtonText()}</Button>
+                <Button onClick={this.onClickToggleEdit}>
+                    {this.getEditButtonText()}
+                </Button>
             );
         }
     }
@@ -409,13 +486,13 @@ class Milling extends React.Component {
     }
 
     onClickChangeJob() {
-        ipcRenderer.once('File::ResponseGetExistingJobs', (event, jobs) => {
+        ipcRenderer.once("File::ResponseGetExistingJobs", (event, jobs) => {
             this.setState({
                 availableJobs: jobs,
-                showJobSelection: true
+                showJobSelection: true,
             });
         });
-        ipcRenderer.send("File::GetExistingJobs")
+        ipcRenderer.send("File::GetExistingJobs");
     }
 
     showJobSelection() {
@@ -430,10 +507,13 @@ class Milling extends React.Component {
 
         ipcRenderer.removeAllListeners("InvalidCRFile");
         ipcRenderer.on("InvalidCRFile", (event, filename, error) => {
-            this.setState({alertMessage: "File error: " + error, showAlert: true});
+            this.setState({
+                alertMessage: "File error: " + error,
+                showAlert: true,
+            });
         });
 
-        ipcRenderer.send('File::OpenFileDialog');
+        ipcRenderer.send("File::OpenFileDialog");
     }
 
     getJobEditText() {
@@ -446,14 +526,19 @@ class Milling extends React.Component {
 
     onEditJobTextChange(event) {
         if (this.state.selectedStep.Markdown.length > 0) {
-            this.setState({editJobTextValue: event.target.value, editMarkdownValue: event.target.value});
+            this.setState({
+                editJobTextValue: event.target.value,
+                editMarkdownValue: event.target.value,
+            });
         } else {
-            this.setState({editJobTextValue: event.target.value, editPromptValue: event.target.value});
+            this.setState({
+                editJobTextValue: event.target.value,
+                editPromptValue: event.target.value,
+            });
         }
     }
 
     currentEditsPresent() {
-
         // check for gcode edits
         if (this.state.editGCode != this.state.selectedStep.RawGCode) {
             return true;
@@ -476,47 +561,51 @@ class Milling extends React.Component {
         if (this.state.editTitleValue != this.state.selectedStep.Title) {
             return true;
         }
-        
+
         return false;
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (this.state.selectedStep != prevState.selectedStep) {
             this.setState({
-                editTitleValue: this.state.selectedStep.Title, 
+                editTitleValue: this.state.selectedStep.Title,
                 editJobTextValue: this.getJobEditText(),
                 editPromptValue: this.state.selectedStep.Prompt,
                 editMarkdownValue: this.state.selectedStep.Markdown,
                 editImage: this.state.selectedStep.ImagePath,
                 editGCode: this.state.selectedStep.RawGCode,
-                editGCodePath: this.state.selectedStep.GCodePath
+                editGCodePath: this.state.selectedStep.GCodePath,
             });
         }
     }
 
-	componentDidMount() {
-		ipcRenderer.send('CR_SetCurrentPage', "Milling");
-        ipcRenderer.once('Walkthrough::ResponseShouldDisplay', (event) => {
-			window.ShowMillingWalkthrough(app.machine_name);
-			ipcRenderer.send("Walkthrough::SetShowWalkthrough", "Milling", false);
+    componentDidMount() {
+        ipcRenderer.send("CR_SetCurrentPage", "Milling");
+        ipcRenderer.once("Walkthrough::ResponseShouldDisplay", (event) => {
+            window.ShowMillingWalkthrough(app.machine_name);
+            ipcRenderer.send(
+                "Walkthrough::SetShowWalkthrough",
+                "Milling",
+                false
+            );
         });
-		ipcRenderer.send("Walkthrough::ShouldDisplay", "Milling")
+        ipcRenderer.send("Walkthrough::ShouldDisplay", "Milling");
 
         this.setState({
-            editTitleValue: this.state.selectedStep.Title, 
+            editTitleValue: this.state.selectedStep.Title,
             editJobTextValue: this.getJobEditText(),
             editPromptValue: this.state.selectedStep.Prompt,
             editMarkdownValue: this.state.selectedStep.Markdown,
             editImage: this.state.selectedStep.ImagePath,
             editGCode: this.state.selectedStep.RawGCode,
-            editGCodePath: this.state.selectedStep.GCodePath
+            editGCodePath: this.state.selectedStep.GCodePath,
         });
 
         this.getFileNameFromPath(this.state.filePath);
-        document.addEventListener('click', this.interceptClickEvent);
+        document.addEventListener("click", this.interceptClickEvent);
         this.status_loop = true;
         setTimeout(this.progress, 100);
-	}
+    }
 
     progress() {
         const showNext = this.state.showNext;
@@ -526,40 +615,68 @@ class Milling extends React.Component {
             this.setState({
                 showNext: false,
                 millingProgress: -1,
-                selectedStep: selectedStep
+                selectedStep: selectedStep,
             });
             this.showNextStep(this);
         } else if (!this.state.showAlert) {
-            ipcRenderer.once('Jobs::GetProgressResponse', (event, updatedProgress) => {
-                if (updatedProgress.error != null) {
-                    logger.debug("Updating millingProgress from " + this.state.millingProgress + " to -1");
-                    const nextStep = updatedProgress.error.retry_step ? this.state.selectedStepIndex : 0;
-                    this.setState({
-                        millingProgress: -1,
-                        showAlert: true,
-                        alertTitle: updatedProgress.error.title,
-                        alertMessage: updatedProgress.error.description,
-                        selectedStepIndex: nextStep,
-                        selectedStep: ipcRenderer.sendSync("Jobs::GetStep", nextStep),
-                        previousMillingStep: nextStep,
-                        milling: false
-                    });
-                } else if (updatedProgress.milling === true) {
-                    logger.debug("Updating millingProgress from " + this.state.millingProgress + " to " + updatedProgress.progress.percentage);
-                    this.setState({ millingProgress: updatedProgress.progress.percentage });
-                } else if (this.state.milling === true && this.state.millingStartTime.getTime() + 2000 < (new Date()).getTime()) {
-                    logger.debug("Updating millingProgress from " + this.state.millingProgress + " to 100");
-                    this.setState({
-                        millingProgress: 100,
-                        showNext: true,
-                        milling: false
-                    });
-                }
+            ipcRenderer.once(
+                "Jobs::GetProgressResponse",
+                (event, updatedProgress) => {
+                    if (updatedProgress.error != null) {
+                        logger.debug(
+                            "Updating millingProgress from " +
+                                this.state.millingProgress +
+                                " to -1"
+                        );
+                        const nextStep = updatedProgress.error.retry_step
+                            ? this.state.selectedStepIndex
+                            : 0;
+                        this.setState({
+                            millingProgress: -1,
+                            showAlert: true,
+                            alertTitle: updatedProgress.error.title,
+                            alertMessage: updatedProgress.error.description,
+                            selectedStepIndex: nextStep,
+                            selectedStep: ipcRenderer.sendSync(
+                                "Jobs::GetStep",
+                                nextStep
+                            ),
+                            previousMillingStep: nextStep,
+                            milling: false,
+                        });
+                    } else if (updatedProgress.milling === true) {
+                        logger.debug(
+                            "Updating millingProgress from " +
+                                this.state.millingProgress +
+                                " to " +
+                                updatedProgress.progress.percentage
+                        );
+                        this.setState({
+                            millingProgress:
+                                updatedProgress.progress.percentage,
+                        });
+                    } else if (
+                        this.state.milling === true &&
+                        this.state.millingStartTime.getTime() + 2000 <
+                            new Date().getTime()
+                    ) {
+                        logger.debug(
+                            "Updating millingProgress from " +
+                                this.state.millingProgress +
+                                " to 100"
+                        );
+                        this.setState({
+                            millingProgress: 100,
+                            showNext: true,
+                            milling: false,
+                        });
+                    }
 
-                if (this.status_loop === true) {
-                    setTimeout(this.progress, 100);
+                    if (this.status_loop === true) {
+                        setTimeout(this.progress, 100);
+                    }
                 }
-            });
+            );
 
             ipcRenderer.send("Jobs::GetProgress", this.state.selectedStepIndex);
             return;
@@ -568,17 +685,19 @@ class Milling extends React.Component {
         if (this.status_loop === true) {
             setTimeout(this.progress, 100);
         }
-    };
+    }
 
     showNextStep(milling) {
-        let nextStepIndex = (milling.state.selectedStepIndex + 1);
+        let nextStepIndex = milling.state.selectedStepIndex + 1;
         let parsedStepIndex;
 
         if (milling.state.selectedStep.GoToStep) {
-            parsedStepIndex = milling.parseGoTo(milling.state.selectedStep.GoToStep);
+            parsedStepIndex = milling.parseGoTo(
+                milling.state.selectedStep.GoToStep
+            );
             if (parsedStepIndex != -1 && !isNaN(parsedStepIndex)) {
                 nextStepIndex = parsedStepIndex;
-            }        
+            }
         }
         if (nextStepIndex < milling.state.steps.length) {
             milling.setState({
@@ -586,11 +705,14 @@ class Milling extends React.Component {
                 showNext: false,
                 millingProgress: -1,
                 selectedStepIndex: nextStepIndex,
-                selectedStep: ipcRenderer.sendSync("Jobs::GetStep", nextStepIndex)
+                selectedStep: ipcRenderer.sendSync(
+                    "Jobs::GetStep",
+                    nextStepIndex
+                ),
             });
         } else {
             milling.setState({
-                showEndOfJobPopUp: true
+                showEndOfJobPopUp: true,
             });
         }
     }
@@ -598,35 +720,40 @@ class Milling extends React.Component {
     interceptClickEvent(e) {
         var href;
         var target = e.target || e.srcElement;
-        if (target.tagName === 'A') {
-            href = target.getAttribute('href');
-    
+        if (target.tagName === "A") {
+            href = target.getAttribute("href");
+
             //put your logic here...
             if (true) {
-                shell.openExternal(href)
-               //tell the browser not to respond to the link click
-               e.preventDefault();
+                shell.openExternal(href);
+                //tell the browser not to respond to the link click
+                e.preventDefault();
             }
         }
     }
 
     showPrevStep(milling) {
-        const prevStepIndex = (milling.state.selectedStepIndex - 1);
+        const prevStepIndex = milling.state.selectedStepIndex - 1;
         milling.setState({
             showStartMilling: false,
             millingProgress: -1,
             selectedStepIndex: prevStepIndex,
-            selectedStep: ipcRenderer.sendSync("Jobs::GetStep", prevStepIndex)
+            selectedStep: ipcRenderer.sendSync("Jobs::GetStep", prevStepIndex),
         });
     }
 
     skipToNextMillingStep(milling) {
         if (!milling.currentEditsPresent()) {
             let stepIndex;
-            const nextMillingIndex = milling.state.selectedStep.next_milling_step;
-            const nextUnskippableIndex = milling.state.selectedStep.next_unskippable_step;
+            const nextMillingIndex =
+                milling.state.selectedStep.next_milling_step;
+            const nextUnskippableIndex =
+                milling.state.selectedStep.next_unskippable_step;
 
-            if (!nextUnskippableIndex || (nextMillingIndex < nextUnskippableIndex)) {
+            if (
+                !nextUnskippableIndex ||
+                nextMillingIndex < nextUnskippableIndex
+            ) {
                 stepIndex = nextMillingIndex;
             } else {
                 stepIndex = nextUnskippableIndex;
@@ -636,39 +763,43 @@ class Milling extends React.Component {
                 showStartMilling: false,
                 millingProgress: -1,
                 selectedStepIndex: stepIndex,
-                selectedStep: ipcRenderer.sendSync("Jobs::GetStep", stepIndex)
+                selectedStep: ipcRenderer.sendSync("Jobs::GetStep", stepIndex),
             });
         } else {
-            this.setState({showSaveEditsPopup: true});
+            this.setState({ showSaveEditsPopup: true });
         }
     }
 
     getFileNameFromPath(path) {
         if (path) {
             let slashType;
-            if (path.indexOf('\\') === -1) {
-                slashType = '/';
-            }
-            else {
-                slashType = '\\';
+            if (path.indexOf("\\") === -1) {
+                slashType = "/";
+            } else {
+                slashType = "\\";
             }
 
             let reversedPath = path.split("").reverse().join("");
             let cutOffIndex = reversedPath.indexOf(slashType);
             cutOffIndex = reversedPath.length - cutOffIndex;
-            this.setState({fileName: path.substring(cutOffIndex)});
+            this.setState({ fileName: path.substring(cutOffIndex) });
         } else {
-            return
+            return;
         }
     }
 
     handlePopupCancel() {
-        let parsedPopupNoStep = this.parseGoTo(this.state.selectedStep.PopupNoStep);
+        let parsedPopupNoStep = this.parseGoTo(
+            this.state.selectedStep.PopupNoStep
+        );
         this.setState({ showPopupText: false });
         if (parsedPopupNoStep != -1) {
             this.setState({
                 selectedStepIndex: parsedPopupNoStep,
-                selectedStep: ipcRenderer.sendSync("Jobs::GetStep", parsedPopupNoStep)
+                selectedStep: ipcRenderer.sendSync(
+                    "Jobs::GetStep",
+                    parsedPopupNoStep
+                ),
             });
         } else {
             this.showNextStep(this);
@@ -677,7 +808,7 @@ class Milling extends React.Component {
 
     editPopupNoHandler() {
         this.setState({
-            editMode: false, 
+            editMode: false,
             showSaveEditsPopup: false,
             editJobTextValue: this.getJobEditText(),
             editTitleValue: this.state.selectedStep.Title,
@@ -685,7 +816,7 @@ class Milling extends React.Component {
             editMarkdownValue: this.state.selectedStep.Markdown,
             editImage: this.state.selectedStep.ImagePath,
             editGCode: this.state.selectedStep.RawGCode,
-            editGCodePath: this.state.selectedStep.GCodePath
+            editGCodePath: this.state.selectedStep.GCodePath,
         });
     }
 
@@ -698,12 +829,17 @@ class Milling extends React.Component {
     }
 
     handlePopupOkay() {
-        let parsedPopupYesStep = this.parseGoTo(this.state.selectedStep.PopupYesStep);
+        let parsedPopupYesStep = this.parseGoTo(
+            this.state.selectedStep.PopupYesStep
+        );
         this.setState({ showPopupText: false });
         if (parsedPopupYesStep != -1) {
             this.setState({
                 selectedStepIndex: parsedPopupYesStep,
-                selectedStep: ipcRenderer.sendSync("Jobs::GetStep", parsedPopupYesStep)
+                selectedStep: ipcRenderer.sendSync(
+                    "Jobs::GetStep",
+                    parsedPopupYesStep
+                ),
             });
         } else {
             this.showNextStep(this);
@@ -711,7 +847,10 @@ class Milling extends React.Component {
     }
 
     openImageFailAlert() {
-        if (this.state.selectedStep.Error && this.state.selectedStep.Error.length > 0) {
+        if (
+            this.state.selectedStep.Error &&
+            this.state.selectedStep.Error.length > 0
+        ) {
             return true;
         } else {
             return false;
@@ -721,30 +860,49 @@ class Milling extends React.Component {
     closeFailedImageLoad() {
         let selectedStep = this.state.selectedStep;
         selectedStep.Error = "";
-        this.setState({selectedStep: selectedStep});
+        this.setState({ selectedStep: selectedStep });
     }
 
     refreshJobs() {
         ipcRenderer.once("File::ResponseGetExistingJobs", (event, jobs) => {
-            this.setState({availableJobs: jobs});
+            this.setState({ availableJobs: jobs });
         });
         ipcRenderer.send("File::GetExistingJobs");
     }
 
     handleSetWriteStatus(status) {
-        this.setState({writeInProgress: status});
+        this.setState({ writeInProgress: status });
     }
 
     getAddStepButton() {
         if (this.state.editMode) {
             return (
-                <Button color="secondary" disabled={!this.state.editMode} className={this.props.classes.addStep} style={{ marginTop: '-4px' }} onClick={this.handleAddStep.bind(this)}>Add Step</Button>
+                <Button
+                    color="secondary"
+                    disabled={!this.state.editMode}
+                    className={this.props.classes.addStep}
+                    style={{ marginTop: "-4px" }}
+                    onClick={this.handleAddStep.bind(this)}
+                >
+                    Add Step
+                </Button>
             );
         }
     }
 
     printTestItems() {
-        let item = <div style={{border: '2px solid blue', padding: '5px', width: '100%', marginBottom: '2px'}}>test</div>
+        let item = (
+            <div
+                style={{
+                    border: "2px solid blue",
+                    padding: "5px",
+                    width: "100%",
+                    marginBottom: "2px",
+                }}
+            >
+                test
+            </div>
+        );
         let items = [];
 
         for (let x = 0; x < 30; x++) {
@@ -754,15 +912,23 @@ class Milling extends React.Component {
         return items;
     }
 
+    handlePrev(event) {
+        this.showPrevStep(this);
+    }
+
     render() {
         const { classes, status } = this.props;
 
         function getWarning(milling) {
             if (milling.state.selectedStep != null) {
-                if (milling.state.selectedStep.GCode != null && milling.state.millingProgress === -1) {
+                if (
+                    milling.state.selectedStep.GCode != null &&
+                    milling.state.millingProgress === -1
+                ) {
                     return (
-                        <Typography align='center' color='error'>
-                            Warning!<br />
+                        <Typography align="center" color="error">
+                            Warning!
+                            <br />
                             {app.milling.warning_text}
                         </Typography>
                     );
@@ -776,8 +942,14 @@ class Milling extends React.Component {
             if (milling.state.millingProgress >= 0) {
                 return (
                     <React.Fragment>
-                        <Typography variant='h4'>{milling.state.millingProgress}%</Typography>
-                        <LinearProgress variant="determinate" style={{ height: '15px' }} value={milling.state.millingProgress} />
+                        <Typography variant="h4">
+                            {milling.state.millingProgress}%
+                        </Typography>
+                        <LinearProgress
+                            variant="determinate"
+                            style={{ height: "15px" }}
+                            value={milling.state.millingProgress}
+                        />
                     </React.Fragment>
                 );
             }
@@ -786,38 +958,42 @@ class Milling extends React.Component {
         }
 
         function getFeedrateSlider(milling) {
-                return (
-                    <div className={classes.slider}>
-                        <Feedrate selectedStep={milling.state.selectedStepIndex} feedRate={milling.props.feedRate} updateFeedRate={milling.props.updateFeedRate} />
-                    </div>
-                );
-        }
-
-        function handlePrev(event) {
-			this.showPrevStep(this);
+            return (
+                <div className={classes.slider}>
+                    <Feedrate
+                        selectedStep={milling.state.selectedStepIndex}
+                        feedRate={milling.props.feedRate}
+                        updateFeedRate={milling.props.updateFeedRate}
+                    />
+                </div>
+            );
         }
 
         function handleNext(event) {
             if (!this.currentEditsPresent()) {
-                if ((this.state.selectedStep.GCode != null) && !this.state.editMode && status === 2) {
+                if (
+                    this.state.selectedStep.GCode != null &&
+                    !this.state.editMode &&
+                    status === 2
+                ) {
                     this.setState({
-                        showStartMilling: true
+                        showStartMilling: true,
                     });
                 } else if (this.state.selectedStep.PopupText) {
                     this.setState({
-                        showPopupText: true
+                        showPopupText: true,
                     });
                 } else {
                     this.showNextStep(this);
                 }
             } else {
-                this.setState({showSaveEditsPopup: true});
+                this.setState({ showSaveEditsPopup: true });
             }
         }
 
-		function handleSkip(event) {
-			this.skipToNextMillingStep(this);
-		}
+        function handleSkip(event) {
+            this.skipToNextMillingStep(this);
+        }
 
         function handleStop(event) {
             ipcRenderer.send("Jobs::EmergencyStop");
@@ -826,23 +1002,23 @@ class Milling extends React.Component {
                 millingProgress: -1,
                 selectedStepIndex: 0,
                 selectedStep: ipcRenderer.sendSync("Jobs::GetStep", 0),
-				previousMillingStep: -1,
+                previousMillingStep: -1,
                 showAlert: true,
                 alertTitle: "Job aborted",
-                alertMessage: "Job was aborted. Press 'OK' to start program from the very beginning.",
+                alertMessage:
+                    "Job was aborted. Press 'OK' to start program from the very beginning.",
                 milling: false,
-                paused: false
+                paused: false,
             });
         }
 
         function handleFeedPause() {
             if (this.state.paused) {
                 this.setState({ paused: false });
-                ipcRenderer.send('CNC::ExecuteCommand', '~');
-            }
-            else {
+                ipcRenderer.send("CNC::ExecuteCommand", "~");
+            } else {
                 this.setState({ paused: true });
-                ipcRenderer.send('CNC::ExecuteCommand', '!');
+                ipcRenderer.send("CNC::ExecuteCommand", "!");
             }
         }
 
@@ -853,128 +1029,107 @@ class Milling extends React.Component {
                     showStartMilling: false,
                     previousMillingStep: this.state.selectedStepIndex,
                     milling: true,
-                    millingStartTime: new Date()
+                    millingStartTime: new Date(),
                 });
-                ipcRenderer.send("Jobs::StartMilling", this.state.selectedStepIndex);
+                ipcRenderer.send(
+                    "Jobs::StartMilling",
+                    this.state.selectedStepIndex
+                );
             } else {
                 this.setState({ showStartMilling: false });
             }
         }
 
-		function isNextAvailable(component) {
-			return component.state.millingProgress === -1;
-		}
+        function isNextAvailable(component) {
+            return component.state.millingProgress === -1;
+        }
 
-		function isPrevAvailable(component) {
-			if (component.state.millingProgress === -1) {
-				if (component.state.selectedStepIndex === 0) {
-					return false;
-				}
+        function isPrevAvailable(component) {
+            if (component.state.millingProgress === -1) {
+                if (component.state.selectedStepIndex === 0) {
+                    return false;
+                }
 
-				if ((component.state.selectedStepIndex - 1 > component.state.previousMillingStep) || component.state.editMode) {
-					return true;
-				}
-			}
+                if (
+                    component.state.selectedStepIndex - 1 >
+                        component.state.previousMillingStep ||
+                    component.state.editMode
+                ) {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		function isSkipAvailable(component) {
-			return (component.state.selectedStep.next_milling_step != null) && (!component.state.selectedStep.PopupText);
-		}
+        function isSkipAvailable(component) {
+            return (
+                component.state.selectedStep.next_milling_step != null &&
+                !component.state.selectedStep.PopupText
+            );
+        }
 
         function getActionButton(component) {
             if (component.state.millingProgress === -1) {
-                if (app.name === 'CRWrit') {
-                    return (
-                        <IconButton onClick={handleNext.bind(component)}>
-                            <img
-                                style={{ height: '90px' }}
-                                onMouseOver={e => e.currentTarget.src = path.join(__dirname, './static/img/next_milling_button.png')}
-                                onMouseOut={e => e.currentTarget.src = path.join(__dirname, './static/img/next_milling_button.png')}
-                                src={path.join(__dirname, './static/img/next_milling_button.png')}
-                            />
-                        </IconButton>
-                    );
-                } else {
-                    return (
-                        <Button
-                            onClick={handleNext.bind(component)}
-                            color='secondary'
-                            classes={{root: classes.nextPrevButtonRoot}}
-                        >
-                            Next
-                        </Button>
-                    );
-                }
+                return (
+                    <Button
+                        onClick={handleNext.bind(component)}
+                        color="secondary"
+                        classes={{ root: classes.nextPrevButtonRoot }}
+                    >
+                        Next
+                    </Button>
+                );
             } else {
-                if (app.name === 'CRWrit') {
-                    let imagePath = component.state.paused ? './static/img/play_button.png'  : './static/img/pause_button.png';
-                    return (
-                        <>
-                            <IconButton onClick={handleFeedPause.bind(component)}>
-                                <img
-                                    style={{ height: '80px' }}
-                                    src={path.join(__dirname, imagePath)}
-                                />
-                            </IconButton>
-                            <IconButton onClick={handleStop.bind(component)}>
-                                <img
-                                    style={{ height: '80px' }}
-                                    src={path.join(__dirname, './static/img/stop_circle.png')}
-                                />
-                            </IconButton>
-                            <RPMDivergence />
-                        </>
-                    );
-                } else {
-                    return (
-                        <>
-                            <Button
-                                onClick={handleFeedPause.bind(component)}
-                                color='error'
-                                classes={{root: classes.nextPrevButtonRoot}}
-                            >
-                                {component.state.paused ? "RUN" : "PAUSE"}
-                            </Button>
-                            <Button
-                                style={{marginLeft: '4px'}}
-                                onClick={handleStop.bind(component)}
-                                color='error'
-                                classes={{root: classes.nextPrevButtonRoot}}
-                            >
-                                Stop
-                            </Button>
-                        </>
-                    );
-                }
+                return (
+                    <>
+                        <Button
+                            onClick={handleFeedPause.bind(component)}
+                            color="error"
+                            classes={{ root: classes.nextPrevButtonRoot }}
+                        >
+                            {component.state.paused ? "RUN" : "PAUSE"}
+                        </Button>
+                        <Button
+                            style={{ marginLeft: "4px", backgroundColor: "#FF4345" }}
+                            onClick={handleStop.bind(component)}
+                            //color="error"
+                            classes={{ root: classes.nextPrevButtonRoot }}
+                        >
+                            Stop
+                        </Button>
+                    </>
+                );
             }
         }
 
         function onClickBack(component) {
+            document.removeEventListener(
+                "click",
+                component.interceptClickEvent
+            );
 
-            document.removeEventListener('click', component.interceptClickEvent);
-
-            if (component.state.selectedStepIndex === 0 && component.state.millingProgress === -1) {
+            if (
+                component.state.selectedStepIndex === 0 &&
+                component.state.millingProgress === -1
+            ) {
                 component.setState({
-                    goBack: true
+                    goBack: true,
                 });
             } else {
                 component.setState({
                     showAlert: true,
                     alertTitle: "Warning",
-                    alertMessage: "You will lose your progress if you navigate away. Are you sure you want to continue?",
-                    goBack: true
+                    alertMessage:
+                        "You will lose your progress if you navigate away. Are you sure you want to continue?",
+                    goBack: true,
                 });
             }
-
         }
 
         function getJobText(selectedStep) {
             if (selectedStep.Markdown.length > 0) {
-                return (
-                    <ReactMarkdown>{selectedStep.Markdown}</ReactMarkdown>
-                );
+                return <ReactMarkdown>{selectedStep.Markdown}</ReactMarkdown>;
             }
 
             return selectedStep.Prompt;
@@ -987,62 +1142,92 @@ class Milling extends React.Component {
 
             this.status_loop = false;
             ipcRenderer.send("CNC::ExecuteCommand", "|");
-			ipcRenderer.send('CR_SetCurrentPage', "Dashboard");
-            return (<Redirect to='/' />);
+            ipcRenderer.send("CR_SetCurrentPage", "Dashboard");
+            return <Redirect to="/" />;
         }
 
         return (
-			<React.Fragment>
-                <Throbber start={this.state.writeInProgress} setWritingStatus={this.handleSetWriteStatus} />
-                <Alert 
+            <React.Fragment>
+                <Throbber
+                    start={this.state.writeInProgress}
+                    setWritingStatus={this.handleSetWriteStatus}
+                />
+                <Alert
                     open={this.state.showPopupText}
                     message={this.state.selectedStep.PopupText}
                     yesNo={true}
-                    onOk={ this.handlePopupOkay }
-                    onCancel={ this.handlePopupCancel }
+                    onOk={this.handlePopupOkay}
+                    onCancel={this.handlePopupCancel}
                     title={this.state.selectedStep.PopupTitle}
                 />
 
                 <Alert
-                    open={this.state.showAlert && status === 2 && !this.props.showOperationsWindow}
+                    open={
+                        this.state.showAlert &&
+                        status === 2 &&
+                        !this.props.showOperationsWindow
+                    }
                     message={this.state.alertMessage}
                     yesNo={this.state.goBack}
-                    onOk={(event) => { this.setState({ showAlert: false }) }}
-                    onCancel={(event) => { this.setState({ showAlert: false, goBack: false }) }}
+                    onOk={(event) => {
+                        this.setState({ showAlert: false });
+                    }}
+                    onCancel={(event) => {
+                        this.setState({ showAlert: false, goBack: false });
+                    }}
                     title={this.state.alertTitle}
                 />
 
                 <Alert
-                    open={status != 2 && this.props.settings.enableEditButton == false}
+                    open={
+                        status != 2 &&
+                        this.props.settings.enableEditButton == false
+                    }
                     message="Machine was disconnected!"
-                    onOk={(e) => { this.setState({ showAlert: false, goBack: true })}}
-                    onCancel={(e) => { this.setState({ showAlert: false, goBack: true })}}
+                    onOk={(e) => {
+                        this.setState({ showAlert: false, goBack: true });
+                    }}
+                    onCancel={(e) => {
+                        this.setState({ showAlert: false, goBack: true });
+                    }}
                 />
 
                 <Alert
-                    open={ this.state.wcsValueCheckFailedMessage !== '' }
-                    message={ this.state.wcsValueCheckFailedMessage }
+                    open={this.state.wcsValueCheckFailedMessage !== ""}
+                    message={this.state.wcsValueCheckFailedMessage}
                     yesNo={false}
-                    onOk={(event) => { this.setState({ wcsValueCheckFailedMessage: '' }) } }
-                    onCancel={(event) => { this.setState({ wcsValueCheckFailedMessage: '' }) } }
+                    onOk={(event) => {
+                        this.setState({ wcsValueCheckFailedMessage: "" });
+                    }}
+                    onCancel={(event) => {
+                        this.setState({ wcsValueCheckFailedMessage: "" });
+                    }}
                     title="WCS Check Failed"
                 />
 
                 <Alert
-                    open={ !this.state.firmwareMinVersionMet }
+                    open={!this.state.firmwareMinVersionMet}
                     message="This project requires more recent firmware than your current version. Please update your firmware to run this file."
                     yesNo={false}
-                    onOk={(event) => { onClickBack(this) } }
-                    onCancel={(event) => { onClickBack(this) } }
+                    onOk={(event) => {
+                        onClickBack(this);
+                    }}
+                    onCancel={(event) => {
+                        onClickBack(this);
+                    }}
                     title="Minimum Firmware Check Failed"
                 />
 
                 <Alert
-                    open={ !this.state.crwriteMinVersionMet }
+                    open={!this.state.crwriteMinVersionMet}
                     message="This project requires a more recent CRWrite than your current version. Unexpected behavior may occur."
                     yesNo={false}
-                    onOk={(event) => { this.setState({ crwriteMinVersionMet: true }) } }
-                    onCancel={(event) => { this.setState({ crwriteMinVersionMet: true }) } }
+                    onOk={(event) => {
+                        this.setState({ crwriteMinVersionMet: true });
+                    }}
+                    onCancel={(event) => {
+                        this.setState({ crwriteMinVersionMet: true });
+                    }}
                     title="Minimum Software Version Check Failed"
                 />
 
@@ -1057,62 +1242,104 @@ class Milling extends React.Component {
 
                 <Alert
                     open={
-                        this.state.promptClearWCS
-                        && this.state.selectedStepIndex === 0
+                        this.state.promptClearWCS &&
+                        this.state.selectedStepIndex === 0
                     }
                     message="Your machine has stored work coordinates from a previous operation. This may affect your current milling operation.
                     It is advised that you clear these values unless you specifically intend this behavior. Would you like CRWrite to reset the
                     work coordinates for you?"
                     yesNo={true}
                     onOk={(event) => {
-                        ipcRenderer.send('CNC::ClearG54ThroughG58');
-                        this.setState({ promptClearWCS: false })
-                        }
-                    }
-                    onCancel={(event) => { this.setState({ promptClearWCS: false }) }}
+                        ipcRenderer.send("CNC::ClearG54ThroughG58");
+                        this.setState({ promptClearWCS: false });
+                    }}
+                    onCancel={(event) => {
+                        this.setState({ promptClearWCS: false });
+                    }}
                     title="Resetting WCS is Advised"
                 />
-                
+
                 <Alert
                     open={this.state.showPremillingStepPopup}
                     title="Return to Last Executed Step?"
                     message="Would you like to return to the last executed step before edit mode was activated?"
                     yesNo={true}
-                    onOk={() => {this.setState({showPremillingStepPopup: false, selectedStepIndex: this.state.preEditModeStepIndex, selectedStep: ipcRenderer.sendSync("Jobs::GetStep", this.state.preEditModeStepIndex)})}}
-                    onCancel={() => {this.setState({showPremillingStepPopup: false})}}
+                    onOk={() => {
+                        this.setState({
+                            showPremillingStepPopup: false,
+                            selectedStepIndex: this.state.preEditModeStepIndex,
+                            selectedStep: ipcRenderer.sendSync(
+                                "Jobs::GetStep",
+                                this.state.preEditModeStepIndex
+                            ),
+                        });
+                    }}
+                    onCancel={() => {
+                        this.setState({ showPremillingStepPopup: false });
+                    }}
                 />
 
-                <PopUp 
+                <PopUp
                     open={this.state.showEndOfJobPopUp}
                     title="Job Complete"
-                    buttonInfo={
-                        [{name: "EXIT", code: () => {this.setState({showNext: false, goBack: true})}}, 
-                        {name: "LOAD NEW FILE", code: () => {this.pickNewFile(); this.setState({showEndOfJobPopUp: false})}}, 
-                        {name: "RUN NEW JOB", code: () => {this.onClickChangeJob(); this.setState({showEndOfJobPopUp: false})}}
-                        ]
-                    }
+                    buttonInfo={[
+                        {
+                            name: "EXIT",
+                            code: () => {
+                                this.setState({
+                                    showNext: false,
+                                    goBack: true,
+                                });
+                            },
+                        },
+                        {
+                            name: "LOAD NEW FILE",
+                            code: () => {
+                                this.pickNewFile();
+                                this.setState({ showEndOfJobPopUp: false });
+                            },
+                        },
+                        {
+                            name: "RUN NEW JOB",
+                            code: () => {
+                                this.onClickChangeJob();
+                                this.setState({ showEndOfJobPopUp: false });
+                            },
+                        },
+                    ]}
                 />
 
-                <PopUp 
+                <PopUp
                     open={this.state.showSaveEditsPopup}
                     title="Write Changes To File?"
-                    buttonInfo={
-                        [{name: "YES", code: this.handleWriteChangesYes}, 
-                        {name: "NO", code: this.handleWriteChangesNo}, 
-                        {name: "CANCEL", code: () => {this.setState({showSaveEditsPopup: false})}}
-                        ]
-                    }
+                    buttonInfo={[
+                        { name: "YES", code: this.handleWriteChangesYes },
+                        { name: "NO", code: this.handleWriteChangesNo },
+                        {
+                            name: "CANCEL",
+                            code: () => {
+                                this.setState({ showSaveEditsPopup: false });
+                            },
+                        },
+                    ]}
                 />
 
                 <PopUpInput
                     open={this.state.showPopupImageInput}
                     fileType="image"
-                    optionalInput={false} 
-                    value={this.state.editImage} 
-                    setValue={this.setEditImage} 
+                    optionalInput={false}
+                    value={this.state.editImage}
+                    setValue={this.setEditImage}
                     title="Set Image Path"
-                    onOk={() => {this.setState({showPopupImageInput: false})}}
-                    onCancel={() => {this.setState({showPopupImageInput: false, editImage: this.state.selectedStep.ImagePath})}}
+                    onOk={() => {
+                        this.setState({ showPopupImageInput: false });
+                    }}
+                    onCancel={() => {
+                        this.setState({
+                            showPopupImageInput: false,
+                            editImage: this.state.selectedStep.ImagePath,
+                        });
+                    }}
                 />
 
                 <PopUpInput
@@ -1121,159 +1348,312 @@ class Milling extends React.Component {
                     optionalInput={true}
                     value={this.state.editGCodePath}
                     optionalValue={this.state.editGCode}
-                    setValue={this.setEditGCodePath} 
+                    setValue={this.setEditGCodePath}
                     setOptionalValue={this.setEditGCode}
                     title="Edit GCode File"
-                    onOk={() => {this.setState({showPopUpGCodeInput: false})}}
-                    onCancel={() => {this.setState({showPopUpGCodeInput: false, editGCode: this.state.selectedStep.RawGCode})}}
+                    onOk={() => {
+                        this.setState({ showPopUpGCodeInput: false });
+                    }}
+                    onCancel={() => {
+                        this.setState({
+                            showPopUpGCodeInput: false,
+                            editGCode: this.state.selectedStep.RawGCode,
+                        });
+                    }}
                 />
 
-                <JobSelection open={this.showJobSelection()} onClose={this.onCloseJobSelection} jobs={this.state.availableJobs} status={status} refreshJobs={this.refreshJobs} enableEditButton={this.props.settings.enableEditButton} />
+                <JobSelection
+                    open={this.showJobSelection()}
+                    onClose={this.onCloseJobSelection}
+                    jobs={this.state.availableJobs}
+                    status={status}
+                    refreshJobs={this.refreshJobs}
+                    enableEditButton={this.props.settings.enableEditButton}
+                />
 
-                <Grid container direction='column' className={classes.millingStyle}>
-                    <Box p={2} style={{height: '100%'}}>
-                        <Grid item>
-                            <Grid container direction='column'>
-                                <Grid item>
-                                {/* , "Agency FB" */}
-                                    <div style={{ color: '#3EC6CB', fontFamily: ["Public Sans", "sans-serif"], fontSize: '14px', maxHeight: '17px', overflow: 'hidden' }}>
-                                        File: <span style={{ color: '#3EC6CB'}}>{this.state.fileName}</span>
-                                    </div>
-                                </Grid>
-                                <Grid item>
-                                {/* , "Agency FB" */}
-                                    <div style={{ maxHeight: '33.6px', overflow: 'hidden', fontFamily: ["Public Sans", "sans-serif"], fontSize: '18px' }}>
-                                        Job: <span style={{ color: 'black'}}>{this.state.jobName}</span>
-                                    </div>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs>
-                            <Grid container spacing={2} style={{height: '100%'}}>
-                                <Grid item xs={4} id="steps" className={classes.stepsList}>
-                                    {/* <Button color="secondary" style={{ color: 'black', fontFamily: ["Lato", "sans-serif"], fontSize: '14px', textTransform: 'none' }} onClick={(event) => { onClickBack(this) }}>
-                                    <ArrowBackIosRoundedIcon style={{fontSize: 18}} /> Back
-                                    </Button>
-                                    <Button color="secondary" style={{ color: 'black', fontFamily: ["Lato", "sans-serif"], fontSize: '14px', textTransform: 'none'}} onClick={this.onClickChangeJob} >
-                                        Change Job
-                                    </Button> */}
-                                    <ItemPanel title="Project Steps" small contentStyle={{height: '74vh', padding: '8px'}}>
-                                        <Grid container direction='column'>
-                                            <Grid item style={{height: '66vh'}}>
-                                                <StepList
-                                                    steps={this.state.steps} 
-                                                    selectedStep={this.state.selectedStepIndex} 
-                                                    editMode={this.state.editMode}
-                                                    submanifestUsed={this.state.submanifestUsed} 
-                                                    deleteStep={this.handleDeleteStep} 
-                                                    moveStep={this.moveStep}
-                                                />
-                                            </Grid>
-                                            <Grid item>
-                                                <Grid container justify='space-around' alignItems='center' spacing={1} style={{marginTop: '4px'}}>
-                                                    <Grid item style={{height: '33px', width: '33px', padding: '0px'}}>
-                                                        <IconButton onClick={(event) => { onClickBack(this) }} style={{padding: '0px'}}>
-                                                            <img style={{height: '33px', width: '33px', padding: '0px'}} src='./static/img/back_button.png' />
-                                                        </IconButton>
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <Button
-                                                            classes={{root: classes.nextPrevButtonRoot, disabled: classes.nextPrevButtonDisable}}
-                                                            color="secondary" 
-                                                            disabled={!isPrevAvailable(this)} 
-                                                            className={classes.prev} 
-                                                            onClick={handlePrev.bind(this)}
-                                                        >
-                                                            &#60; Prev
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <center>
-                                                            <Typography className={classes.stepNumber}>Step {this.state.selectedStepIndex + 1}/{this.state.steps.length}</Typography>
-                                                        </center>
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <Button
-                                                            classes={{root: classes.nextPrevButtonRoot, disabled: classes.nextPrevButtonDisable}}
-                                                            color="secondary" 
-                                                            disabled={!isNextAvailable(this)} 
-                                                            className={classes.next} 
-                                                            onClick={handleNext.bind(this)}
-                                                        >
-                                                            Next &#62;
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item style={{height: '33px', width: '33px', padding: '0px'}}>
-                                                        <img src='./static/img/next_milling_button.png' />
-                                                    </Grid>
+                <Grid
+                    container
+                    direction="column"
+                    className={classes.millingStyle}
+                >
+                    <Grid item xs>
+                        <Grid container spacing={2}>
+                            <Grid item xs={4} id="steps" style={{ height: "85vh" }}>
+                                <ItemPanel
+                                    title="Project Steps"
+                                    small
+                                    contentStyle={{
+                                        padding: "8px",
+                                        flexGrow: "1",
+                                    }}
+                                    style={{ height: "100%" }}
+                                >
+                                    <Grid
+                                        container
+                                        direction="column"
+                                        style={{ height: "100%" }}
+                                    >
+                                        <Grid item>
+                                            <Grid
+                                                container
+                                                alignItems="center"
+                                                style={{
+                                                    backgroundColor: "black",
+                                                    color: "white",
+                                                    height: "35px",
+                                                    fontFamily: [
+                                                        "Public Sans",
+                                                        "sans-serif",
+                                                    ],
+                                                    fontSize: "14px",
+                                                    overflow: "hidden",
+                                                    marginBottom: "4px",
+                                                    paddingLeft: "8px",
+                                                    boxShadow:
+                                                        "1px 1px 0 0 #000000",
+                                                }}
+                                            >
+                                                <Grid item>
+                                                    File: {this.state.fileName}
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                    </ItemPanel>
-
-                                    {/* {this.getAddStepButton()} */}
-                                    {/* <Button color="secondary" disabled={!isSkipAvailable(this)} className={classes.next} style={{ marginTop: '-4px' }} onClick={handleSkip.bind(this)}>Skip Forward &#62;</Button> */}
-                                </Grid>
-                                <Grid item xs={3} id="middle_section" className={classes.middle}>
-                                    <Grid container direction='column' justify='space-between' spacing={0} style={{height: '100%'}}>
-                                        <StartMilling open={this.state.showStartMilling} onClose={handleCloseStartMilling.bind(this)}/>
                                         <Grid item>
-                                            <div className={classes.instructions}>
-                                                <TransformToInput editMode={this.state.editMode} value={this.state.editTitleValue} setValue={this.setEditTitleValue}>
-                                                    <Typography color="textPrimary" variant="subtitle1" style={{textTransform: 'uppercase'}}><b
-                                                        className="show-line-breaks"> {this.state.selectedStep.Title} </b>
+                                            <Grid
+                                                container
+                                                alignItems="center"
+                                                style={{
+                                                    backgroundColor: "black",
+                                                    color: "white",
+                                                    height: "35px",
+                                                    overflow: "hidden",
+                                                    fontFamily: [
+                                                        "Public Sans",
+                                                        "sans-serif",
+                                                    ],
+                                                    fontSize: "14px",
+                                                    paddingLeft: "8px",
+                                                    boxShadow:
+                                                        "1px 1px 0 0 #000000",
+                                                    marginBottom: "10px",
+                                                }}
+                                            >
+                                                <Grid item>
+                                                    Job: {this.state.jobName}
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item>
+                                            <HorizontalLines />
+                                        </Grid>
+                                        <Grid item style={{ flexGrow: "1" }}>
+                                            <Grid
+                                                container
+                                                direction="column"
+                                                style={{
+                                                    marginTop: "10px",
+                                                    height: "100%",
+                                                }}
+                                            >
+                                                <Grid item style={{height: '55vh'}}>
+                                                    <StepList
+                                                        steps={this.state.steps}
+                                                        selectedStep={
+                                                            this.state
+                                                                .selectedStepIndex
+                                                        }
+                                                        editMode={
+                                                            this.state.editMode
+                                                        }
+                                                        submanifestUsed={
+                                                            this.state
+                                                                .submanifestUsed
+                                                        }
+                                                        deleteStep={
+                                                            this
+                                                                .handleDeleteStep
+                                                        }
+                                                        moveStep={this.moveStep}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item>
+                                            <ActionPanel
+                                                onClickBack={() => {
+                                                    onClickBack(this);
+                                                }}
+                                                isPrevAvailable={() => {
+                                                    isPrevAvailable(this);
+                                                }}
+                                                classes={classes}
+                                                handlePrev={() => {
+                                                    this.handlePrev();
+                                                }}
+                                                this={this}
+                                                isNextAvailable={() => {
+                                                    isNextAvailable(this);
+                                                }}
+                                                handleNext={() => {
+                                                    handleNext.bind(this)();
+                                                }}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                </ItemPanel>
+
+                                {/* {this.getAddStepButton()} */}
+                                {/* <Button color="secondary" disabled={!isSkipAvailable(this)} className={classes.next} style={{ marginTop: '-4px' }} onClick={handleSkip.bind(this)}>Skip Forward &#62;</Button> */}
+                            </Grid>
+                            <Grid item xs={3} id="middle_section">
+                                <Grid
+                                    container
+                                    direction="column"
+                                    justify="space-between"
+                                    spacing={0}
+                                    style={{ height: "100%" }}
+                                >
+                                    <StartMilling
+                                        open={this.state.showStartMilling}
+                                        onClose={handleCloseStartMilling.bind(
+                                            this
+                                        )}
+                                    />
+                                    <Grid item>
+                                        <ItemPanel
+                                            title="Step Description"
+                                            small
+                                            contentStyle={{ padding: "8px" }}
+                                        >
+                                            <div>
+                                                <TransformToInput
+                                                    editMode={
+                                                        this.state.editMode
+                                                    }
+                                                    value={
+                                                        this.state
+                                                            .editTitleValue
+                                                    }
+                                                    setValue={
+                                                        this.setEditTitleValue
+                                                    }
+                                                >
+                                                    <Typography
+                                                        color="textPrimary"
+                                                        variant="subtitle1"
+                                                        style={{
+                                                            textTransform:
+                                                                "uppercase",
+                                                        }}
+                                                    >
+                                                        <b className="show-line-breaks">
+                                                            {" "}
+                                                            {
+                                                                this.state
+                                                                    .selectedStep
+                                                                    .Title
+                                                            }{" "}
+                                                        </b>
                                                     </Typography>
                                                 </TransformToInput>
                                                 {this.getEditButton()}
-                                                <br/>
-                                                <TransformToInput editMode={this.state.editMode} value={this.state.editJobTextValue} setValue={this.onEditJobTextChange} multiline={true} rows={10}>
-                                                    <Typography className="show-line-breaks" color="textPrimary">{getJobText(this.state.selectedStep)}</Typography>
+                                                <br />
+                                                <TransformToInput
+                                                    editMode={
+                                                        this.state.editMode
+                                                    }
+                                                    value={
+                                                        this.state
+                                                            .editJobTextValue
+                                                    }
+                                                    setValue={
+                                                        this.onEditJobTextChange
+                                                    }
+                                                    multiline={true}
+                                                    rows={10}
+                                                >
+                                                    <Typography
+                                                        className="show-line-breaks"
+                                                        color="textPrimary"
+                                                    >
+                                                        {getJobText(
+                                                            this.state
+                                                                .selectedStep
+                                                        )}
+                                                    </Typography>
                                                 </TransformToInput>
                                             </div>
-                                        </Grid>
-                                        <Grid item>
-                                            <Grid container direction='column'>
-                                                <Grid item>
-                                                    <div className={classes.warning}>
-                                                        {getMillingInProgressDisplay(this)}
-                                                    </div>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Grid container justify='space-between' style={{marginTop: '8px'}}>
-                                                        <Grid item>
-                                                            {getWarning(this)}                                                            
-                                                        </Grid>
-                                                        <Grid item>
-                                                            <div className={classes.actions}>
-                                                                {getActionButton(this)}
-                                                            </div>
-                                                        </Grid>
+                                        </ItemPanel>
+                                    </Grid>
+                                    <Grid item>
+                                        <Grid container direction="column">
+                                            <Grid item>
+                                                <div
+                                                    className={classes.warning}
+                                                >
+                                                    {getMillingInProgressDisplay(
+                                                        this
+                                                    )}
+                                                </div>
+                                            </Grid>
+                                            <Grid item>
+                                                <Grid
+                                                    container
+                                                    justify="space-between"
+                                                    style={{ marginTop: "8px" }}
+                                                >
+                                                    <Grid item>
+                                                        {getWarning(this)}
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <div
+                                                            className={
+                                                                classes.actions
+                                                            }
+                                                        >
+                                                            {getActionButton(
+                                                                this
+                                                            )}
+                                                        </div>
                                                     </Grid>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                        {/* <Grid id={'feedrate-slider'} item xs={12} style={{ height: '40px' }}>
+                                    </Grid>
+                                    {/* <Grid id={'feedrate-slider'} item xs={12} style={{ height: '40px' }}>
                                             {getFeedrateSlider(this)}
                                         </Grid> */}
-                                    </Grid>
-                                </Grid>
-                                <Grid item xs={5} id="image" className={classes.right}>
-                                    <ItemPanel title="Machine Output" color="secondary" style={{height: '100%'}} small>
-                                        <ImageRaw selectedStep={this.state.selectedStep} millingInProgress={this.state.millingProgress != -1} editMode={this.state.editMode} onEditImage={this.showImagePopUpInput} onEditGCode={this.showGCodePopUpInput} />
-                                    </ItemPanel>
                                 </Grid>
                             </Grid>
+                            <Grid item xs={5} id="image">
+                                <ItemPanel
+                                    title="Machine Output"
+                                    color="secondary"
+                                    style={{ height: "100%" }}
+                                    small
+                                >
+                                    <ImageRaw
+                                        selectedStep={this.state.selectedStep}
+                                        millingInProgress={
+                                            this.state.millingProgress != -1
+                                        }
+                                        editMode={this.state.editMode}
+                                        onEditImage={this.showImagePopUpInput}
+                                        onEditGCode={this.showGCodePopUpInput}
+                                    />
+                                </ItemPanel>
+                            </Grid>
                         </Grid>
-                    </Box>
+                    </Grid>
                 </Grid>
-			</React.Fragment>
+            </React.Fragment>
         );
     }
 }
 
 Milling.propTypes = {
     classes: PropTypes.object.isRequired,
-    status: PropTypes.number.isRequired
+    status: PropTypes.number.isRequired,
 };
 
 export default withStyles(styles)(Milling);

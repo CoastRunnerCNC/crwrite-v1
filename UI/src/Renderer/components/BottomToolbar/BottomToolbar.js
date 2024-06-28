@@ -12,17 +12,20 @@ import app from 'app';
 
 const styles = theme => ({
     root: {
-        marginBottom: theme.spacing(3),
+        //marginBottom: theme.spacing(3),
         // flexGrow: 1
+        marginBottom: 19
     },
     appBar: {
         top: 'auto',
-        height: 39,
+        height: 44,
         bottom: 0,
         backgroundImage: `url(${app.toolbar.backgroundPhoto})`,
-        backgroundColor: '#75327e',
+        backgroundColor: '#f6f6f6',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        boxShadow: 'none',
+        borderTop: '1px solid black'
     },
     right: {
         float: 'right'
@@ -32,7 +35,7 @@ const styles = theme => ({
         flexDirection: 'row'
     },
     websiteLink: {
-        color: app.toolbar.websiteLink.color
+        color: 'black'
     }
 
 });
@@ -50,7 +53,7 @@ function BottomToolbar(props) {
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <Grid container spacing={1} className={classes.root} alignItems="center">
-                        <Grid className={classes.connectionArea} item xs={4}>
+                        <Grid className={classes.connectionArea} item xs={4} id="status">
                             <Status status={status} />
                             <CNCChooser disabled={milling} />
                         </Grid>

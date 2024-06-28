@@ -82,7 +82,7 @@ function ShowMillingWalkthrough(machine_name) {
             },
             {
                 element: '#image',
-                intro: 'This area displays any images that accompany the step details. You can switch between the image and the raw output.',
+                intro: 'This area displays any images that accompany the step details. The raw output will be shown when milling begins.',
                 position: 'top'
             },
             {

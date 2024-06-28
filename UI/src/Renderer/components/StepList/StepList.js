@@ -14,7 +14,7 @@ const styles = theme => ({
         width: '100%',
         height: '100%',
         overflow: 'auto',
-        backgroundColor: '#F1F2F2',
+        backgroundColor: '#F6F6F6',
         webkitAppearance: 'none',
         mozAppearance: 'none',
         appearance: 'none',
@@ -30,19 +30,18 @@ const styles = theme => ({
         // },
         '&:focus': {
             height: '35px',
-            backgroundColor: '#3EC6CB',
+            backgroundColor: '#dedede',
             border: '0px',
             marginLeft: '0px',
             marginRight: '0px',
             color: 'white',
         },
         height: '35px',
-        backgroundColor: app.milling.steps.items.background,
+        backgroundColor: "#F6F6F6",
         border: "#000000 1px solid",
         marginLeft: '0px',
         marginRight: '0px',
-        marginBottom: '3px',
-        borderRadius: '3px',
+        marginBottom: '0px',
         paddingLeft: '8px'
     },
     itemText: {
@@ -51,9 +50,7 @@ const styles = theme => ({
         opacity: 0.87,
         fontSize: '14px',
         color: app.milling.steps.fontColor /* selected: color: #069076;*/
-
     },
-
     upArrow: {
         marginLeft: '15px',
         marginRight: '15px',
@@ -111,9 +108,9 @@ class StepList extends React.Component {
             selectedDiv = (<div style={{ float: "left", clear: "both" }} ref={(el) => { component.selectedRef = el; }} />);
         }
 
-        var color = app.milling.steps.items.background;
+        var color = "#F6F6F6";
         if (this.props.selectedStep === index) {
-            color = '#3EC6CB';
+            color = '#dedede';
         }
 
         return (
@@ -123,7 +120,7 @@ class StepList extends React.Component {
                 key={index}
                 selected={this.props.selectedStep === index}
                 className={this.props.classes.item}
-                style={{ backgroundColor: color }}
+                style={{ backgroundColor: color, borderRadius: '0px' }}
             >
                 {selectedDiv}
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>

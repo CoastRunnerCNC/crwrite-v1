@@ -12,6 +12,7 @@ import Alert from '../../components/Modals/Alert';
 import app from 'app';
 import packageJSON from '../../../../package.json';
 import ItemPanel from '../../components/ItemPanel/ItemPanel';
+import ProbingWizard from '../../components/Modals/ProbingWizard/ProbingWizard';
 const crwrite = require("crwrite");
 
 const styles = theme => ({
@@ -28,7 +29,7 @@ const styles = theme => ({
         borderBottom: app.dashboard.border,
     },
     dashboardStyle: {
-        backgroundColor: "#F1F2F2",
+        backgroundColor: "#F6F6F6",
         backgroundSize: 'cover',
         overflow: 'hidden',
         width: '100%',
@@ -96,12 +97,13 @@ const styles = theme => ({
         borderColor: 'black', // changing the border color
         borderWidth: '2px', // setting border width
         borderStyle: 'solid', // setting border style
-        boxShadow: "-1px 1px 0px 0px #4A4A4A", // setting shadow
+        boxShadow: "1px 1px 0px 0px black", // setting shadow
         fontFamily: '"Public Sans", sans-serif', // specifying "public sans" font with a fallback to generic sans-serif
         fontWeight: 'bold', // making the text bold
         fontSize: '35px',
+        borderRadius: '0px',
         padding: '0px 25px',
-        backgroundColor: 'white', // setting the background color
+        backgroundColor: '#f6f6f6', // setting the background color
         '&:hover': { // styles for hover state
             backgroundColor: '#D6CDC2', // changing the background color on hover
         }
@@ -110,12 +112,13 @@ const styles = theme => ({
         borderColor: 'black', // changing the border color
         borderWidth: '2px', // setting border width
         borderStyle: 'solid', // setting border style
-        boxShadow: "-1px 1px 0px 0px #4A4A4A", // setting shadow
+        boxShadow: "1px 1px 0px 0px black", // setting shadow
         fontFamily: '"Public Sans", sans-serif', // specifying "public sans" font with a fallback to generic sans-serif
         fontWeight: 'bold', // making the text bold
         fontSize: '20px',
+        borderRadius: '0px',
         padding: '5px 15px',
-        backgroundColor: 'white', // setting the background color
+        backgroundColor: '#f6f6f6', // setting the background color
         '&:hover': { // styles for hover state
             backgroundColor: '#F0F0F0', // changing the background color on hover
         },
@@ -132,6 +135,7 @@ function Dashboard(props) {
     const [alertMessage, setAlertMessage] = React.useState("");
     const [showNewFileAlert, setShowNewFileAlert] = React.useState(false);
     const [enableEditButton, setEnableEditButton] = React.useState(false);
+    const [openProbingWizard, setOpenProbingWizard] = React.useState(false);
 
     ipcRenderer.send('Logs::LogString', 'CRWrite Version: ' + packageJSON.version);
 
@@ -164,9 +168,9 @@ function Dashboard(props) {
     const CoastRunnerImage = () => {
         return (
                 <img style={{
-                        border: '2px solid black',
-                        borderRadius: '4px',
-                        boxShadow: "-3px 3px 0px 0px #4A4A4A",
+                        border: '1px solid black',
+                        borderRadius: '0px',
+                        boxShadow: "2px 2px 0px 0px black",
                         width: '100%',
                         }}
                         src='./static/img/CoastRunner.svg' 
@@ -336,6 +340,7 @@ function Dashboard(props) {
         <section className={classes.dashboardStyle}>
 			<Alert open={alertMessage.length > 0} message={alertMessage} onOk={(event) => { setAlertMessage("") }} onCancel={(e) => { setAlertMessage("")}} />
             <Alert open={showNewFileAlert} message="Would you like to create a new file?" yesNo={true} onOk={handleNewFileYes} onCancel={handleNewFileNo} />
+            <ProbingWizard open={openProbingWizard} setOpenProbingWizard={setOpenProbingWizard} />
             <Menu />
             <JobSelection open={showJobSelection} onClose={onCloseJobSelection} jobs={availableJobs} status={status} refreshJobs={refreshJobs} enableEditButton={enableEditButton} />
 
@@ -354,13 +359,13 @@ function Dashboard(props) {
                                 <ItemPanel title="Quick Actions" color="secondary">
                                     <Grid container direction='column' justify='space-evenly' alignItems='center' style={{height: '200px'}}>
                                         <Grid item>
-                                            <Button classes={{root: classes.smallGreyButton}}>Open Last Job</Button>
+                                            <Button onClick={() => {setOpenProbingWizard(true)}} classes={{root: classes.smallGreyButton}}>Probing Wizard</Button>
                                         </Grid>
                                         <Grid item>
-                                            <Button classes={{root: classes.smallGreyButton}}>Set Home Position</Button>
+                                            <Button disabled={true} classes={{root: classes.smallGreyButton}}>Set Home Position</Button>
                                         </Grid>
                                         <Grid item>
-                                            <Button classes={{root: classes.smallGreyButton}}>Auto Level</Button>
+                                            <Button disabled={true} classes={{root: classes.smallGreyButton}}>Auto Level</Button>
                                         </Grid>
                                     </Grid>
                                 </ItemPanel>
@@ -373,13 +378,13 @@ function Dashboard(props) {
                                 <ItemPanel title="Guided Mode">
                                     <Grid container alignItems="center" justify="space-evenly" style={{height: '120px', width: '100%'}}>
                                         <Grid item>
-                                            <Button onClick={onClickRun} classes={{root: classes.standardButton}}>Open</Button>
+                                            <Button id="run-code" onClick={onClickRun} classes={{root: classes.standardButton}}>Open</Button>
                                         </Grid>
                                         <Grid item>
-                                            <Button onClick={() => { shell.openExternal(app.dashboard.store.url) }}classes={{root: classes.standardButton}}>Store</Button>
+                                            <Button id="store" onClick={() => { shell.openExternal(app.dashboard.store.url) }}classes={{root: classes.standardButton}}>Store</Button>
                                         </Grid>
                                         <Grid item>
-                                            <Button classes={{root: classes.standardButton}}>Help</Button>
+                                            <Button disabled={true} classes={{root: classes.standardButton}}>Help</Button>
                                         </Grid>
                                     </Grid>
                                 </ItemPanel>
@@ -391,7 +396,7 @@ function Dashboard(props) {
                                             <Button style={{marginLeft: '100px'}} onClick={handleManualOpenClick} classes={{root: classes.standardButton}}>Open</Button>
                                         </Grid>
                                         <Grid item>
-                                            <Button style={{marginLeft: '100px'}} classes={{root: classes.standardButton}}>File Editor</Button>
+                                            <Button disabled={true} style={{marginLeft: '100px'}} classes={{root: classes.standardButton}}>File Editor</Button>
                                         </Grid>
                                     </Grid>
                                 </ItemPanel>

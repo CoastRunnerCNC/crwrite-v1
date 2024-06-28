@@ -83,7 +83,7 @@ const PositionPreset = forwardRef(function PositionPreset(props, ref) {
         onOk={() => {setCurrentPosition(); setShowPopup(false)}}
         onCancel={() => {setShowPopup(false)}}
       />
-      <Button variant='contained' color='secondary' onClick={handleClick} onContextMenu={handleRightClick}>{props.children}</Button>
+      <Button variant='contained' onClick={handleClick} onContextMenu={handleRightClick}>{props.children}</Button>
     </>
   )
 });

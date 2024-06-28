@@ -501,12 +501,15 @@ void MillConnection::ReadResponse(const bool blocking)
                 return;
             }
             MILL_LOG("Hardware E-Stop Triggered");
-            m_pState->SetAlarm(ALARM_CODE_ESTOP);
-            throw MillException(MillException::ESTOP_PUSHED);
+            m_pSerialConnection->WriteChar('?');
+            /*m_pState->SetAlarm(ALARM_CODE_ESTOP);
+            throw MillException(MillException::ESTOP_PUSHED);*/
+            //TEMP
         } else if (m_pState->IsTimedOut()) {
             MILL_LOG("Timed out");
-            m_pState->SetAlarm(ALARM_CODE_TIMEOUT);
-            throw MillException(MillException::TIMEOUT);
+            m_pSerialConnection->WriteChar('?');
+            /*m_pState->SetAlarm(ALARM_CODE_TIMEOUT);
+            throw MillException(MillException::TIMEOUT);*/
         } else if (m_pState->ShouldRequestStatus()) {
             //MILL_LOG("Sending ? before timeout");
             m_pSerialConnection->WriteChar('?');

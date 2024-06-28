@@ -92,29 +92,28 @@ class ShuttleSettings extends React.Component {
                 <Grid container justify="center" alignItems="center">
                     <Grid item>{label}</Grid>
                     <Grid item>
-                        <FormControl
-                            className={this.props.classes.formControl}
-                            fullWidth
-                            style={style}
-                            onClick={() => {
-                                if (isSelected) {
-                                    this.setState({ actionToUpdate: "" });
-                                } else {
-                                    this.setState({
-                                        actionToUpdate: command_key,
-                                    });
-                                }
-                            }}
-                        >
-                            <Input
-                                id={`${command_key}-input`}
-                                className="shuttle-settings-input"
-                                inputRef={(input) => input && input.blur()}
-                                value={getCommandKey.call(this, command_key)}
-                                disabled
-                                fullWidth
-                                inputProps={{ style: style }}
-                            />
+                    <FormControl
+                    className={this.props.classes.formControl}
+                    fullWidth
+                    style={style}
+                    onClick={
+                        () => {
+                            if (isSelected) {
+                                this.setState({actionToUpdate: ''})
+                            } else {
+                                this.setState({actionToUpdate: command_key});
+                            }
+                        }
+                    }>
+                    <Input
+                        id={`${command_key}-input`}
+                        className="shuttle-settings-input"
+                        inputRef={input => input && input.blur()}
+                        value={getCommandKey.call(this, command_key)}
+                        disabled
+                        fullWidth
+                        inputProps={{style: style}}
+                    />
                         </FormControl>
                     </Grid>
                 </Grid>
@@ -195,6 +194,130 @@ class ShuttleSettings extends React.Component {
             );
         }
 
+        function display_focus_textbox() {
+            return (
+                <React.Fragment>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'focus_manual_entry', 'Switch to Manual Entry')}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'focus_max_distance', 'Switch to Max Distance')}
+                        </Grid>
+                    </Grid>
+
+                </React.Fragment>
+            );
+        }
+
+        function display_switch_options() {
+            return (
+                <React.Fragment>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'switch_units', 'Switch Units')}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'switch_jog_mode', 'Switch Jog Mode')}
+                        </Grid>
+                    </Grid>
+
+                </React.Fragment>
+            );
+        }
+
+
+        function display_modify_units() {
+            return (
+                <React.Fragment>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'increase_units', 'Increase Units')}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'decrease_units', 'Decrease Units')}
+                        </Grid>
+                    </Grid>
+
+                </React.Fragment>
+            );
+        }
+
+
+        function display_escape_and_home() {
+            return (
+                <React.Fragment>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'escape_textbox', 'Escape Textbox')}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'home_preset', 'Home Preset')}
+                        </Grid>
+                    </Grid>
+
+                </React.Fragment>
+            );
+        }
+
+
+        function display_presets_a() {
+            return (
+                <React.Fragment>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'preset_1', 'Preset 1')}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'preset_2', 'Preset 2')}
+                        </Grid>
+                    </Grid>
+
+                </React.Fragment>
+            );
+        }
+
+
+        function display_presets_b() {
+            return (
+                <React.Fragment>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'preset_3', 'Preset 3')}
+                        </Grid>
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            {getTextField.call(this, 'preset_4', 'Preset 4')}
+                        </Grid>
+                    </Grid>
+
+                </React.Fragment>
+            );
+        }
+
         return (
             <Dialog
                 id="shuttle-dialog"
@@ -214,44 +337,39 @@ class ShuttleSettings extends React.Component {
                         </Grid>
                     </Grid>
                 </DialogTitle>
-                <DialogContent className={"no-scroll"}>
-                    <Typography style={{ margin: "20px" }} align="center">
-                        Click a box, then press a key to set a keybinding.
-                    </Typography>
-                    {/* <Grid container spacing={1} justify="center">
-                        <Grid item xs={6}>
-                            
-                        </Grid>
-                        <Grid item xs={6}>
-                            
-                        </Grid>
-                        <Grid item xs={6}>
-                            
-                        </Grid>
-                    </Grid> */}
-                    <Grid container direction="column">
-                        <Grid item>
-                            <Grid container justify="space-around">
-                                <Grid item xs={6}>
-                                    {displayX.call(this)}
-                                </Grid>
-                                <Grid item xs={6}>
-                                    {displayY.call(this)}
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item>
-                            <Grid
-                                container
-                                direction="column"
-                                alignItems="center"
-                            >
-                                <Grid item>{displayZ.call(this)}</Grid>
-                            </Grid>
-                        </Grid>
+            <DialogContent className={'no-scroll'}>
+            <Typography style={{ margin: '20px' }} align="center">Click a box, then press a key to set a keybinding.</Typography>
+                <Grid container spacing={1} justify='center'>
+                    <Grid item xs={6}>
+                        {displayX.call(this)}
                     </Grid>
-                </DialogContent>
-            </Dialog>
+                    <Grid item xs={6}>
+                        {displayY.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {displayZ.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {display_focus_textbox.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {display_switch_options.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {display_modify_units.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {display_escape_and_home.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {display_presets_a.call(this)}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {display_presets_b.call(this)}
+                    </Grid>
+                </Grid>
+            </DialogContent>
+        </Dialog>
         );
     }
 }

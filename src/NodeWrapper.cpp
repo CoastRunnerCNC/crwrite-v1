@@ -517,6 +517,18 @@ napi_value GetJogKeys(napi_env env, napi_callback_info info)
 	settingsObj.SetString("lower_table", jogKeys.m_lowerTable);
 	settingsObj.SetString("retract", jogKeys.m_retract);
 	settingsObj.SetString("plunge", jogKeys.m_plunge);
+	settingsObj.SetString("focus_manual_entry", jogKeys.m_focus_manual_entry);
+	settingsObj.SetString("focus_max_distance", jogKeys.m_focus_max_distance);
+	settingsObj.SetString("switch_units", jogKeys.m_switch_units);
+	settingsObj.SetString("switch_jog_mode", jogKeys.m_switch_jog_mode);
+	settingsObj.SetString("increase_units", jogKeys.m_increase_units);
+	settingsObj.SetString("decrease_units", jogKeys.m_decrease_units);
+	settingsObj.SetString("escape_textbox", jogKeys.m_escape_textbox);
+	settingsObj.SetString("home_preset", jogKeys.m_home_preset);
+	settingsObj.SetString("preset_1", jogKeys.m_preset_1);
+	settingsObj.SetString("preset_2", jogKeys.m_preset_2);
+	settingsObj.SetString("preset_3", jogKeys.m_preset_3);
+	settingsObj.SetString("preset_4", jogKeys.m_preset_4);
 
 	return settingsObj.napi;
 }
@@ -533,6 +545,18 @@ napi_value SetJogKeys(napi_env env, napi_callback_info info)
 	jogKeys.m_lowerTable = napiObj.GetString("lower_table").Get();
 	jogKeys.m_retract = napiObj.GetString("retract").Get();
 	jogKeys.m_plunge = napiObj.GetString("plunge").Get();
+	jogKeys.m_focus_manual_entry = napiObj.GetString("focus_manual_entry").Get();
+	jogKeys.m_focus_max_distance = napiObj.GetString("focus_max_distance").Get();
+	jogKeys.m_switch_units = napiObj.GetString("switch_units").Get();
+	jogKeys.m_switch_jog_mode = napiObj.GetString("switch_jog_mode").Get();
+	jogKeys.m_increase_units = napiObj.GetString("increase_units").Get();
+	jogKeys.m_decrease_units = napiObj.GetString("decrease_units").Get();
+	jogKeys.m_escape_textbox = napiObj.GetString("escape_textbox").Get();
+	jogKeys.m_home_preset = napiObj.GetString("home_preset").Get();
+	jogKeys.m_preset_1 = napiObj.GetString("preset_1").Get();
+	jogKeys.m_preset_2 = napiObj.GetString("preset_2").Get();
+	jogKeys.m_preset_3 = napiObj.GetString("preset_3").Get();
+	jogKeys.m_preset_4 = napiObj.GetString("preset_4").Get();
 
 	MillDaemon::GetInstance().SetJogKeys(jogKeys);
 

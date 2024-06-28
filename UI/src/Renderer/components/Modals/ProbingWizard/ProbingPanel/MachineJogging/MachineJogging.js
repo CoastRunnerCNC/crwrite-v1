@@ -14,15 +14,15 @@ import {
     Tabs,
     Tab,
 } from "@material-ui/core";
-import Raw from "../../ImageRaw/Raw";
+import Raw from "../../../../ImageRaw/Raw";
 import app from "app";
-import Alert from "../Alert";
+import Alert from "../../../Alert";
 import Slider from "@material-ui/core/Slider";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
-import SVGPath from "../../SVGPath/SVGPath";
+import SVGPath from "../../../../SVGPath/SVGPath";
 import _ from "underscore";
-import "./Operations.scss";
+import "../../../../Modals/Shuttle/Operations.scss";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -35,17 +35,17 @@ import ExecuteIcon from "@material-ui/icons/Autorenew";
 import SelectFileIcon from "@material-ui/icons/Attachment";
 import Tooltip from "@material-ui/core/Tooltip";
 import HelpIcon from "@material-ui/icons/Help";
-import RPMDivergence from "../RPMDivergence/RPMDivergence";
-import ReportLimitCatchError from "./ReportLimitCatchError/ReportLimitCatchError";
-import PositionPreset from "./PositionPreset/PositionPreset";
-import ExportOutput from "./ExportOutput/ExportOutput";
-import DisplayPanel from "./DisplayPanel/DisplayPanel";
-import ShuttleSettings from "./ShuttleSettings";
-import ItemPanel from "../../ItemPanel/ItemPanel";
-import CustomInputLabel from "./CustomInputLabel/CustomInputLabel";
-import StopButton from "../../StopButton/StopButton";
-import PauseButton from "../../PauseButton/PauseButton";
-import Timer from "./Timer/Timer";
+import RPMDivergence from "../../../RPMDivergence/RPMDivergence";
+import ReportLimitCatchError from "../../../Shuttle/ReportLimitCatchError/ReportLimitCatchError";
+import PositionPreset from "../../../Shuttle/PositionPreset/PositionPreset";
+import ExportOutput from "../../../Shuttle/ExportOutput/ExportOutput";
+import DisplayPanel from "../../../Shuttle/DisplayPanel/DisplayPanel";
+import ShuttleSettings from "../../../Shuttle/ShuttleSettings";
+import ItemPanel from "../../../../ItemPanel/ItemPanel";
+import CustomInputLabel from "../../../Shuttle/CustomInputLabel/CustomInputLabel";
+import StopButton from "../../../../StopButton/StopButton";
+import PauseButton from "../../../../PauseButton/PauseButton";
+import Timer from "../../../Shuttle/Timer/Timer";
 
 const path = require("path");
 const DEFAULT_COORDINATE_LIMITS = {
@@ -60,24 +60,27 @@ const DEFAULT_COORDINATE_LIMITS = {
 };
 
 const styles = (theme) => ({
-    slider: {
-        padding: "11px 0px",
-    },
     millImageStyle: {
         width: "265px",
         height: "135px",
         backgroundImage: app.manualOperations.millImage,
     },
+    formControl: {
+        minWidth: 50,
+        variant: "outlined",
+        borderRadius: "4px",
+        border: "1px solid black",
+    },
     yellow: {
-        stroke: "#000000",
-        fill: "#000000",
+        stroke: "#ffff00",
+        fill: "#ffff00",
     },
     orange: {
-        stroke: "#000000",
+        stoke: "#ffa500",
     },
     red: {
-        stroke: "#000000",
-        fill: "#000000",
+        stroke: "#ff0000",
+        fill: "#ff0000",
     },
     jogButton: {
         "&:hover": {
@@ -95,7 +98,6 @@ const CoastRunnerSVG = (props) => {
         <div>
             <svg
                 viewBox="0 31.7412 736 394.1588"
-                style={{ maxHeight: "260px" }}
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
             >
@@ -247,7 +249,7 @@ const CoastRunnerSVG = (props) => {
                         width="26.9047"
                         height="26.9047"
                         rx="2.01706"
-                        fill="#f6f6f6"
+                        fill="#E2D9CE"
                     />{" "}
                     {/*X-Minus*/}
                     <path
@@ -287,7 +289,7 @@ const CoastRunnerSVG = (props) => {
                         width="26.9047"
                         height="26.9047"
                         rx="2.01706"
-                        fill="#f6f6f6"
+                        fill="#E2D9CE"
                     />{" "}
                     {/*X-Plus*/}
                     <path
@@ -321,7 +323,7 @@ const CoastRunnerSVG = (props) => {
                         width="26.9047"
                         height="26.9047"
                         rx="2.01706"
-                        fill="#f6f6f6"
+                        fill="#E2D9CE"
                     />{" "}
                     {/*Y-Minus*/}
                     <path
@@ -361,7 +363,7 @@ const CoastRunnerSVG = (props) => {
                         width="26.9047"
                         height="26.9047"
                         rx="2.01706"
-                        fill="#f6f6f6"
+                        fill="#E2D9CE"
                     />{" "}
                     {/*Y-Plus*/}
                     <path
@@ -554,7 +556,7 @@ const CoastRunnerSVG = (props) => {
                         width="26.9047"
                         height="26.9047"
                         rx="2.01706"
-                        fill="#f6f6f6"
+                        fill="#E2D9CE"
                     />{" "}
                     {/*Z-Plus*/}
                     <path
@@ -594,7 +596,7 @@ const CoastRunnerSVG = (props) => {
                         width="26.9047"
                         height="26.9047"
                         rx="2.01706"
-                        fill="#f6f6f6"
+                        fill="#E2D9CE"
                     />{" "}
                     {/*Z-minus*/}
                     <path
@@ -627,7 +629,7 @@ const RunPauseButton = (props) => {
         width: "80px", // You can adjust this to your preferred size
         height: "80px",
         borderRadius: "50%",
-        backgroundColor: "#f6f6f6",
+        backgroundColor: "#3EC6CB",
         border: "1.65px solid #000000",
         boxShadow: "3px 3px 0px 0px #000000",
         display: "flex",
@@ -650,7 +652,7 @@ const RunPauseButton = (props) => {
     return (
         <IconButton onClick={handleFeedPause}>
             <div style={circleStyle}>
-                <Typography variant="h5" fontWeight={'fontWeightBold'} style={{color: 'black'}}>
+                <Typography variant="h6" color="secondary">
                     {paused ? "Run" : "Pause"}
                 </Typography>
             </div>
@@ -679,7 +681,7 @@ class Operations extends React.Component {
         super(props);
 
         this.state = {
-            open: false,
+            open: true,
             realTimeStatus: {},
             realTimeStatusDisplay: "",
             manualEntry: "",
@@ -702,8 +704,8 @@ class Operations extends React.Component {
             forceShowJoggingTooltip: false,
             forceShowUnitTooltip: false,
             forceShowJoggingTooltipMaxDistance: false,
-            joggingTooltipText: '',
-            focusedInput: '',
+            joggingTooltipText: "",
+            anInputHasFocus: false,
             maxDistanceIsValid: true,
             milling: false,
             millingProgress: -1,
@@ -768,15 +770,9 @@ class Operations extends React.Component {
         this.currentJog = null;
         this.manual_entry_focused = false;
         this.manual_entry_ref = React.createRef();
-        this.max_distance_ref = React.createRef();
         this.unitRef = React.createRef();
         this.wcsRef = React.createRef();
         this.jogModeRef = React.createRef();
-        this.homePresetRef = React.createRef();
-        this.preset1Ref = React.createRef();
-        this.preset2Ref = React.createRef();
-        this.preset3Ref = React.createRef();
-        this.preset4Ref = React.createRef();
         this.commandKeys = {};
         this.eventKeyFrontEndCommandMap = {};
         this.backEndKeyMap = {
@@ -811,12 +807,12 @@ class Operations extends React.Component {
         this.setState({ settings: settings });
     }
 
-    handleInputHasFocus(focusName) {
-        this.setState({focusedInput: focusName});
+    handleInputHasFocus() {
+        this.setState({ anInputHasFocus: true });
     }
 
     handleInputNoLongerHasFocus() {
-        this.setState({focusedInput: ''});
+        this.setState({ anInputHasFocus: false });
     }
 
     updateMovementType(event, command) {
@@ -872,7 +868,35 @@ class Operations extends React.Component {
     }
 
     fetchAsyncData() {
-        this.refreshShuttleKeys();
+        ipcRenderer.once(
+            "CNC::GetShuttleKeysResponse",
+            (event, commandKeys) => {
+                this.commandKeys = commandKeys;
+
+                // populate eventKeyFrontEndCommandMap
+                _.each(
+                    this.commandKeys,
+                    (commandKey, commandValue) =>
+                        (this.eventKeyFrontEndCommandMap[
+                            commandKey.toLowerCase()
+                        ] = commandValue)
+                );
+
+                // this is a test
+                // populate pathIdEventKeyMap
+                this.setState({
+                    pathIdEventKeyMap: {
+                        y_neg_path: this.getCommandKey("gantry_left"),
+                        y_pos_path: this.getCommandKey("gantry_right"),
+                        z_neg_path: this.getCommandKey("plunge"),
+                        z_pos_path: this.getCommandKey("retract"),
+                        x_pos_path: this.getCommandKey("lower_table"),
+                        x_neg_path: this.getCommandKey("raise_table"),
+                    },
+                });
+            }
+        );
+        ipcRenderer.send("CNC::GetShuttleKeys");
 
         ipcRenderer.once("Settings::GetSettingsResponse", (event, settings) => {
             this.setState({ settings: settings });
@@ -1068,7 +1092,6 @@ class Operations extends React.Component {
         setTimeout(() => {
             if (document.activeElement instanceof HTMLElement) {
                 document.activeElement.blur();
-                this.setState({focusedInput: ''});
             }
         }, 0);
     }
@@ -1219,23 +1242,6 @@ class Operations extends React.Component {
         let frontEndCommand =
             this.eventKeyFrontEndCommandMap[sanitizedEventKey];
 
-        //We hard key these but allow the jog commands to be bound to other keys as well
-        //These are hardcoded because now that NumLock is used to quick-jump to max_distance
-        //it causes my preferred keybindings (the number pad) to inadvertently switch between
-        //the bound keys (4, 8, etc.) and the arrow keys. This allows me to keep my preferred keybindings
-        if(eventKey == 'ArrowLeft') {
-          frontEndCommand = 'gantry_left';
-        }
-        else if(eventKey == 'ArrowRight') {
-          frontEndCommand = 'gantry_right';
-        }
-        else if(eventKey == 'ArrowUp') {
-          frontEndCommand = 'raise_table';
-        }
-        else if(eventKey == 'ArrowDown') {
-          frontEndCommand = 'lower_table';
-        }
-
         if (!frontEndCommand) {
             throw new Error(
                 `Cannot determine frontEndCommand from eventKey: ${sanitizedEventKey}`
@@ -1295,128 +1301,51 @@ class Operations extends React.Component {
     }
 
     keydownListener(event) {
-        let eventKey = event.key;
-        //console.log(eventKey);
-
-        if (this.state.focusedInput) {
-          if(
-            eventKey == this.getCommandKey('escape_textbox') ||
-            (
-              this.state.focusedInput == 'max_distance' &&
-              eventKey == 'Enter'
-            )
-          ) {
-            this.focusOnNothing();
+        if (this.state.anInputHasFocus) {
             return;
-          }
-
-          if (this.state.focusedInput == 'manual_entry') {
-              if (eventKey == 'Enter') {
-                  this.state.settings.disableLimitCatch ? this.executeCommand() : this.sendCommand();
-              }
-              else if (eventKey === 'ArrowDown' && this.state.isSeekingHistory) {
-                  let index = this.state.historyIndex + 1;
-                  let command = '';
-                  if (index < this.state.entryHistory.length) {
-                      command = this.state.entryHistory[index];
-                  } else {
-                      index = this.state.entryHistory.length;
-                  }
-                  this.setState({
-                      manualEntry: command,
-                      historyIndex: index,
-                      isSeekingHistory: true
-                  });
-              }
-              else if (eventKey === 'ArrowUp') {
-                  let index = this.state.historyIndex - 1;
-                  if (index < 0) { index = 0; }
-                  this.setState({
-                      manualEntry: this.state.entryHistory[index],
-                      historyIndex: index,
-                      isSeekingHistory: true
-                  });
-              }
-
-              return;
-          }
-
-          return;
         }
-        else if(!this.state.openShuttleSettings) {
-          if(eventKey == this.getCommandKey('escape_textbox')) {
-            //Putting this condition here so that the escape button doesn't fall through and throw an error message
-            return;
-          }
-          else if(eventKey == this.getCommandKey('focus_manual_entry')) {
-            this.manual_entry_ref.current.focus();
-            this.handleInputHasFocus('manual_entry');
-            return;
-          }
-          else if(eventKey == this.getCommandKey('focus_max_distance')) {
-            this.max_distance_ref.current.focus();
-            this.handleInputHasFocus('max_distance');
-            return;
-          }
-          else if(eventKey == this.getCommandKey('switch_units')) {
-            if(this.state.units == 'mm') {
-              this.sendUnitsInputChange('inch');
+
+        let eventKey = event.key;
+
+        if (this.manual_entry_focused) {
+            if (eventKey == "Enter") {
+                this.state.settings.disableLimitCatch
+                    ? this.executeCommand()
+                    : this.sendCommand();
+            } else if (
+                eventKey === "ArrowDown" &&
+                this.state.isSeekingHistory
+            ) {
+                let index = this.state.historyIndex + 1;
+                let command = "";
+                if (index < this.state.entryHistory.length) {
+                    command = this.state.entryHistory[index];
+                } else {
+                    index = this.state.entryHistory.length;
+                }
+                this.setState({
+                    manualEntry: command,
+                    historyIndex: index,
+                    isSeekingHistory: true,
+                });
+            } else if (eventKey === "ArrowUp") {
+                let index = this.state.historyIndex - 1;
+                if (index < 0) {
+                    index = 0;
+                }
+                this.setState({
+                    manualEntry: this.state.entryHistory[index],
+                    historyIndex: index,
+                    isSeekingHistory: true,
+                });
             }
-            else if(this.state.units == 'inch') {
-              this.sendUnitsInputChange('mm');
-            }
+
             return;
-          }
-          else if(eventKey == this.getCommandKey('switch_jog_mode')) {
-            if(this.state.mode == 'Continuous') {
-              this.setState({mode: 'Fixed'});
-            }
-            else if(this.state.mode == 'Fixed') {
-              this.setState({mode: 'Continuous'});
-            }
-            return;
-          }
-          else if(eventKey == this.getCommandKey('increase_units')) {
-            this.setState({fixed_distance: { 
-              value: this.state.fixed_distance.value * 10, 
-              unit: this.state.units 
-            }});
-            return;
-          }
-          else if(eventKey == this.getCommandKey('decrease_units')) {
-            this.setState({fixed_distance: { 
-              value: this.state.fixed_distance.value / 10, 
-              unit: this.state.units 
-            }});
-            return;
-          }
-          else if(eventKey == this.getCommandKey('home_preset')) {
-            this.homePresetRef.current.handleClick();
-            return;
-          }
-          else if(eventKey == this.getCommandKey('preset_1')) {
-            this.preset1Ref.current.handleClick();
-            return;
-          }
-          else if(eventKey == this.getCommandKey('preset_2')) {
-            this.preset2Ref.current.handleClick();
-            return;
-          }
-          else if(eventKey == this.getCommandKey('preset_3')) {
-            this.preset3Ref.current.handleClick();
-            return;
-          }
-          else if(eventKey == this.getCommandKey('preset_4')) {
-            this.preset4Ref.current.handleClick();
-            return;
-          }
         }
 
         try {
-            if(!this.state.openShuttleSettings) {
-              let frontEndCommand = this.getFrontEndCommand(eventKey);
-              this.jogStart(frontEndCommand);
-            }
+            let frontEndCommand = this.getFrontEndCommand(eventKey);
+            this.jogStart(frontEndCommand);
         } catch (e) {
             // do nothing, not all keys have bindings
             console.log(e);
@@ -1526,9 +1455,6 @@ class Operations extends React.Component {
     }
 
     getPathColorClass(coordinate, isMax) {
-        // temporary override
-        return this.props.classes.red;
-
         const units = this.state.units;
         const value = this.get_position(coordinate, units);
 
@@ -1803,7 +1729,7 @@ class Operations extends React.Component {
             });
         }
 
-        function maxDistanceInput(component) {
+        function getJoggingMode(component) {
             let textField = "";
 
             const isFixedMode = component.state.mode === "Fixed";
@@ -1815,10 +1741,9 @@ class Operations extends React.Component {
                     component.state.units
                 );
 
-                return (
+                textField = (
                     <>
-                        <Grid item>Max Distance</Grid>
-                        <Grid item xs>
+                        <Grid item>
                             <Tooltip
                                 open={
                                     component.state
@@ -1842,25 +1767,34 @@ class Operations extends React.Component {
                                     }
                                     style={{ width: "100%" }}
                                 >
-                                <Input
-                                    value={distance}
-                                    onChange={e => {
-                                        handleMaxDistanceChange(component, e);
-                                    }}
-                                    disableUnderline
-                                    inputRef={component.max_distance_ref}
-                                    onFocus={() => component.handleInputHasFocus('max_distance')}
-                                    onBlur={() => component.handleInputNoLongerHasFocus()}
-                                />
+                                    <Input
+                                        value={distance}
+                                        onChange={(e) => {
+                                            handleMaxDistanceChange(
+                                                component,
+                                                e
+                                            );
+                                        }}
+                                        disableUnderline
+                                        onFocus={() =>
+                                            component.handleInputHasFocus()
+                                        }
+                                        onBlur={() =>
+                                            component.handleInputNoLongerHasFocus()
+                                        }
+                                    />
                                 </FormControl>
                             </Tooltip>
+                        </Grid>
+                        <Grid item style={{ alignSelf: "flex-end" }}>
+                            <CustomInputLabel fitContent>
+                                Max Distance
+                            </CustomInputLabel>
                         </Grid>
                     </>
                 );
             }
-        }
 
-        function getJoggingMode(component) {
             return (
                 <React.Fragment>
                     <Grid item xs={12} style={{ minWidth: "80%" }}>
@@ -1938,6 +1872,11 @@ class Operations extends React.Component {
                             </FormControl>
                         </Tooltip>
                     </Grid>
+                    <Grid item xs={7} style={{ minWidth: "80%" }}>
+                        <Grid container direction="column">
+                            {textField}
+                        </Grid>
+                    </Grid>
                 </React.Fragment>
             );
         }
@@ -1988,7 +1927,7 @@ class Operations extends React.Component {
 
         function getUnitsSelect(component) {
             return (
-                <Grid item xs>
+                <Grid item>
                     <Tooltip
                         open={component.state.forceShowUnitTooltip}
                         placement="top-end"
@@ -2404,7 +2343,7 @@ class Operations extends React.Component {
         function getStatusDisplay(component) {
             return (
                 <FormControl
-                    style={{ border: "none", backgroundColor: "#f6f6f6" }}
+                    style={{ border: "none" }}
                     className={component.props.classes.formControl}
                     fullWidth
                 >
@@ -2418,11 +2357,8 @@ class Operations extends React.Component {
                                 textAlign: "center",
                                 fontWeight: "bold",
                                 fontSize: "1.5em",
-                                backgroundColor: "#f6f6f6",
-                                
                             },
                         }}
-                        style={{border: 'none'}}
                         disableUnderline
                         disabled
                     />
@@ -2441,7 +2377,12 @@ class Operations extends React.Component {
                         <Input
                             id="manual-entry-input"
                             inputRef={component.manual_entry_ref}
-                            style={{ color: app.modal.color, height: "32px" }}
+                            style={{
+                                color: app.modal.color,
+                                borderRadius: "4px",
+                                border: "2px",
+                                height: "32px",
+                            }}
                             inputProps={{ style: { color: app.modal.color } }}
                             value={component.state.manualEntry}
                             placeholder="Manual Entry"
@@ -2451,11 +2392,9 @@ class Operations extends React.Component {
                                 });
                             }}
                             onFocus={() => {
-                                component.handleInputHasFocus('manual_entry');
                                 component.manual_entry_focused = true;
                             }}
                             onBlur={() => {
-                                component.handleInputNoLongerHasFocus();
                                 component.manual_entry_focused = false;
                             }}
                             endAdornment={
@@ -2501,704 +2440,75 @@ class Operations extends React.Component {
                     refreshShuttleKeys={this.refreshShuttleKeys}
                 />
                 {getHomingAlertDialog(this)}
-                <Grid container spacing={3}>
-                    <Grid item xs={7}>
-                        <Grid container spacing={2} direction="column">
-                            <Grid item>
-                                <Grid container justify="space-around">
-                                    <Grid item xs={8}>
-                                        <CoastRunnerSVG
-                                            component={this}
-                                            classes={this.props.classes}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Grid container direction="column">
-                                            <Grid item>
-                                                <ItemPanel
-                                                    title="Jog Mode"
-                                                    small
-                                                >
-                                                    <Grid
-                                                        container
-                                                        direction="column"
-                                                        spacing={1}
-                                                        style={{
-                                                            height: "100%",
-                                                            padding: "10px",
-                                                        }}
-                                                    >
-                                                        <Grid item>
-                                                            <Grid
-                                                                container
-                                                                alignItems="center"
-                                                                spacing={1}
-                                                            >
-                                                                {getJoggingMode(
-                                                                    this
-                                                                )}
-                                                            </Grid>
-                                                        </Grid>
-                                                        <Grid item>
-                                                            <Grid
-                                                                container
-                                                                spacing={1}
-                                                            >
-                                                                {maxDistanceInput(
-                                                                    this
-                                                                )}
-                                                            </Grid>
-                                                        </Grid>
-                                                        <Grid item>
-                                                            <Grid
-                                                                container
-                                                                justify="center"
-                                                                spacing={1}
-                                                            >
-                                                                <Grid item>
-                                                                    <Grid
-                                                                        container
-                                                                        spacing={
-                                                                            1
-                                                                        }
-                                                                    >
-                                                                        <Grid
-                                                                            item
-                                                                        >
-                                                                            Units
-                                                                        </Grid>
-                                                                        {getUnitsSelect(
-                                                                            this
-                                                                        )}
-                                                                    </Grid>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <Grid
-                                                                        container
-                                                                        spacing={
-                                                                            1
-                                                                        }
-                                                                    >
-                                                                        <Grid
-                                                                            item
-                                                                            xs
-                                                                        >
-                                                                            WCS
-                                                                        </Grid>
-                                                                        {getWCSSelect(
-                                                                            this
-                                                                        )}
-                                                                    </Grid>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </Grid>
-                                                    </Grid>
-                                                </ItemPanel>
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                style={{ marginTop: "15px" }}
-                                            >
-                                                <Button
-                                                    variant="contained"
-                                                    onClick={
-                                                        this.openShuttleSettings
-                                                    }
-                                                    fullWidth
-                                                >
-                                                    Key Bindings
-                                                </Button>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid item style={{ marginTop: "-10px" }}>
-                                <Grid
-                                    container
-                                    justify="space-between"
-                                    spacing={1}
-                                >
-                                    <Grid item xs={3}>
-                                        <ItemPanel title="Status" small>
-                                            {getStatusDisplay(this)}
-                                        </ItemPanel>
-                                    </Grid>
-                                    <Grid item xs={9}>
-                                        <Grid container alignItems="center">
-                                            <Grid item xs>
-                                                <ItemPanel
-                                                    title="Feedrate"
-                                                    small
-                                                    contentStyle={{
-                                                        paddingLeft: "16px",
-                                                        paddingRight: "16px",
-                                                    }}
-                                                >
-                                                    <Slider
-                                                        className={
-                                                            this.props.classes
-                                                                .slider
-                                                        }
-                                                        value={
-                                                            this.state.feedRate
-                                                        }
-                                                        step={2}
-                                                        min={30}
-                                                        disabled={
-                                                            !this.state.settings
-                                                                .enable_slider
-                                                        }
-                                                        max={
-                                                            this.state.settings
-                                                                .maxFeedRate
-                                                        }
-                                                        aria-labelledby="label"
-                                                        onChange={
-                                                            this
-                                                                .onFeedRateChange
-                                                        }
-                                                        onChangeCommitted={(
-                                                            event,
-                                                            value
-                                                        ) => {
-                                                            this.props.updateFeedRate(
-                                                                value
-                                                            );
-                                                        }}
-                                                    />
-                                                </ItemPanel>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid item>
-                                <Grid container>
-                                    <Grid item xs={9}>
-                                        <Grid
-                                            container
-                                            spacing={1}
-                                            direction="column"
-                                        >
-                                            <Grid item>
-                                                <Grid
-                                                    container
-                                                    spacing={1}
-                                                    style={{ width: "100%" }}
-                                                >
-                                                    <Grid item xs={6}>
-                                                        <ItemPanel
-                                                            title="Machine Coordinates"
-                                                            small
-                                                        >
-                                                            <Grid
-                                                                container
-                                                                justify="space-evenly"
-                                                                alignItems="center"
-                                                                direction="column"
-                                                                style={{
-                                                                    height: "100%",
-                                                                    padding:
-                                                                        "8px",
-                                                                }}
-                                                            >
-                                                                <Grid item>
-                                                                    <Grid
-                                                                        container
-                                                                        alignItems="center"
-                                                                        spacing={
-                                                                            1
-                                                                        }
-                                                                    >
-                                                                        <Grid
-                                                                            item
-                                                                            xs={
-                                                                                2
-                                                                            }
-                                                                        >
-                                                                                X
-                                                                        </Grid>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={
-                                                                                10
-                                                                            }
-                                                                        >
-                                                                            <TextField
-                                                                                disabled
-                                                                                margin="dense"
-                                                                                className={
-                                                                                    this
-                                                                                        .props
-                                                                                        .classes
-                                                                                        .formControl
-                                                                                }
-                                                                                value={this.get_position(
-                                                                                    "x"
-                                                                                )}
-                                                                            />
-                                                                        </Grid>
-                                                                    </Grid>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <Grid
-                                                                        container
-                                                                        alignItems="center"
-                                                                        spacing={
-                                                                            1
-                                                                        }
-                                                                    >
-                                                                        <Grid
-                                                                            item
-                                                                            xs={
-                                                                                2
-                                                                            }
-                                                                        >
-                                                                                Y
-                                                                        </Grid>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={
-                                                                                10
-                                                                            }
-                                                                        >
-                                                                            <TextField
-                                                                                disabled
-                                                                                className={
-                                                                                    this
-                                                                                        .props
-                                                                                        .classes
-                                                                                        .formControl
-                                                                                }
-                                                                                margin="dense"
-                                                                                value={this.get_position(
-                                                                                    "y"
-                                                                                )}
-                                                                            />
-                                                                        </Grid>
-                                                                    </Grid>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <Grid
-                                                                        container
-                                                                        alignItems="center"
-                                                                        spacing={
-                                                                            1
-                                                                        }
-                                                                    >
-                                                                        <Grid
-                                                                            item
-                                                                            xs={
-                                                                                2
-                                                                            }
-                                                                        >
-                                                                                Z
-                                                                        </Grid>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={
-                                                                                10
-                                                                            }
-                                                                        >
-                                                                            <TextField
-                                                                                disabled
-                                                                                margin="dense"
-                                                                                className={
-                                                                                    this
-                                                                                        .props
-                                                                                        .classes
-                                                                                        .formControl
-                                                                                }
-                                                                                value={this.get_position(
-                                                                                    "z"
-                                                                                )}
-                                                                            />
-                                                                        </Grid>
-                                                                    </Grid>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </ItemPanel>
-                                                    </Grid>
-                                                    <Grid item xs={6}>
-                                                        <ItemPanel
-                                                            title="Work Coordinates"
-                                                            small
-                                                        >
-                                                            <Grid
-                                                                container
-                                                                direction="column"
-                                                                justify="space-evenly"
-                                                                alignItems="center"
-                                                                style={{
-                                                                    height: "100%",
-                                                                    padding:
-                                                                        "8px",
-                                                                }}
-                                                            >
-                                                                <Grid item>
-                                                                    <Grid
-                                                                        container
-                                                                        alignItems="center"
-                                                                        spacing={
-                                                                            1
-                                                                        }
-                                                                    >
-                                                                        <Grid
-                                                                            item
-                                                                            xs={
-                                                                                2
-                                                                            }
-                                                                        >
-                                                                            X
-                                                                        </Grid>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={
-                                                                                10
-                                                                            }
-                                                                        >
-                                                                            <TextField
-                                                                                disabled
-                                                                                margin="dense"
-                                                                                className={
-                                                                                    this
-                                                                                        .props
-                                                                                        .classes
-                                                                                        .formControl
-                                                                                }
-                                                                                value={this.get_work_pos(
-                                                                                    "x"
-                                                                                )}
-                                                                            />
-                                                                        </Grid>
-                                                                    </Grid>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <Grid
-                                                                        container
-                                                                        alignItems="center"
-                                                                        spacing={
-                                                                            1
-                                                                        }
-                                                                    >
-                                                                        <Grid
-                                                                            item
-                                                                            xs={
-                                                                                2
-                                                                            }
-                                                                        >
-                                                                            Y
-                                                                        </Grid>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={
-                                                                                10
-                                                                            }
-                                                                        >
-                                                                            <TextField
-                                                                                disabled
-                                                                                margin="dense"
-                                                                                className={
-                                                                                    this
-                                                                                        .props
-                                                                                        .classes
-                                                                                        .formControl
-                                                                                }
-                                                                                value={this.get_work_pos(
-                                                                                    "y"
-                                                                                )}
-                                                                            />
-                                                                        </Grid>
-                                                                    </Grid>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <Grid
-                                                                        container
-                                                                        alignItems="center"
-                                                                        spacing={
-                                                                            1
-                                                                        }
-                                                                    >
-                                                                        <Grid
-                                                                            item
-                                                                            xs={
-                                                                                2
-                                                                            }
-                                                                        >
-                                                                            Z
-                                                                        </Grid>
-                                                                        <Grid
-                                                                            item
-                                                                            xs={
-                                                                                10
-                                                                            }
-                                                                        >
-                                                                            <TextField
-                                                                                disabled
-                                                                                margin="dense"
-                                                                                className={
-                                                                                    this
-                                                                                        .props
-                                                                                        .classes
-                                                                                        .formControl
-                                                                                }
-                                                                                value={this.get_work_pos(
-                                                                                    "z"
-                                                                                )}
-                                                                            />
-                                                                        </Grid>
-                                                                    </Grid>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </ItemPanel>
-                                                    </Grid>
-                                                </Grid>
-                                            </Grid>
-                                            <Grid item>
-                                                <Grid
-                                                    container
-                                                    spacing={1}
-                                                    style={{ width: "100%" }}
-                                                >
-                                                    <Grid item xs={12}>
-                                                        <ItemPanel
-                                                            title="Position Presets"
-                                                            small
-                                                        >
-                                                            <Grid
-                                                                container
-                                                                justify="space-between"
-                                                                style={{
-                                                                    padding:
-                                                                        "10px",
-                                                                }}
-                                                            >
-                                                                <Grid item>
-                                                                    <PositionPreset ref={this.homePresetRef} home editParentState={() => {this.setState({isHome: true})}}>Home</PositionPreset>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <PositionPreset ref={this.preset1Ref} units={this.state.units} getPosition={this.get_position}>1</PositionPreset>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <PositionPreset ref={this.preset2Ref} units={this.state.units} getPosition={this.get_position}>2</PositionPreset>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <PositionPreset ref={this.preset3Ref} units={this.state.units} getPosition={this.get_position}>3</PositionPreset>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <PositionPreset ref={this.preset4Ref} units={this.state.units} getPosition={this.get_position}>4</PositionPreset>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </ItemPanel>
-                                                    </Grid>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <Grid
-                                            container
-                                            alignItems="center"
-                                            direction="column"
-                                            justify="space-evenly"
-                                            style={{ height: "100%" }}
-                                        >
-                                            <Grid
-                                                item
-                                                style={{
-                                                    height: "120px",
-                                                    width: "120px",
-                                                }}
-                                            >
-                                                <RunPauseButton />
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                style={{
-                                                    height: "120px",
-                                                    width: "120px",
-                                                }}
-                                            >
-                                                <IconButton
-                                                    onClick={this.handleEStop}
-                                                >
-                                                    <StopButton />
-                                                </IconButton>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                <Grid container style={{ width: "100%" }}>
+                    <Grid item xs={8}>
+                        <CoastRunnerSVG
+                            component={this}
+                            classes={this.props.classes}
+                        />
                     </Grid>
-                    <Grid item xs={5}>
-                        <Grid
-                            container
-                            direction="column"
-                            spacing={1}
-                            style={{ height: "100%" }}
-                        >
+                    <Grid item xs={4}>
+                        <Grid container direction="column">
                             <Grid item>
-                                <ItemPanel title="Machine Output" small>
+                                <ItemPanel title="Jog Mode" small>
                                     <Grid
                                         container
                                         direction="column"
                                         spacing={1}
                                         style={{
                                             height: "100%",
-                                            padding: "0px 8px 16px 8px",
+                                            padding: "10px",
                                         }}
                                     >
                                         <Grid item>
-                                            <Grid container alignItems="center">
-                                                <Grid item xs={8}>
-                                                    <Tabs
-                                                        value={
-                                                            this.state
-                                                                .currentTab
-                                                        }
-                                                        onChange={(
-                                                            event,
-                                                            newVal
-                                                        ) => {
-                                                            this.setState({
-                                                                currentTab:
-                                                                    newVal,
-                                                            });
-                                                        }}
-                                                        TabIndicatorProps={{
-                                                            style: {
-                                                                background:
-                                                                    "#000000",
-                                                            },
-                                                        }}
-                                                    >
-                                                        <Tab label="Output" />
-                                                        <Tab
-                                                            label="file"
-                                                            disabled={
-                                                                this.state
-                                                                    .rawGCodes
-                                                                    .length > 0
-                                                                    ? false
-                                                                    : true
-                                                            }
-                                                        />
-                                                    </Tabs>
-                                                </Grid>
-                                                <Grid item xs={4}>
-                                                    <Grid
-                                                        container
-                                                        justify="flex-end"
-                                                        alignItems="flex-end"
-                                                        style={{
-                                                            height: "100%",
-                                                        }}
-                                                    >
-                                                        <Grid item>
-                                                            <ExportOutput
-                                                                machineOutput={
-                                                                    this.state
-                                                                        .readWrites
-                                                                }
-                                                            />
-                                                        </Grid>
-                                                    </Grid>
-                                                </Grid>
+                                            <Grid
+                                                container
+                                                style={{
+                                                    alignSelf: "flex-end",
+                                                }}
+                                                direction="column"
+                                                alignItems="center"
+                                                spacing={1}
+                                            >
+                                                {getJoggingMode(this)}
                                             </Grid>
                                         </Grid>
                                         <Grid item>
-                                            <DisplayPanel
-                                                tab={this.state.currentTab}
-                                                rawGCodes={this.state.rawGCodes}
-                                                milling={this.props.milling}
-                                                history={this.state.rawHistory}
-                                                setHistory={this.setRawHistory}
-                                            />
-                                        </Grid>
-                                        <Grid item>
-                                            <Grid container alignItems="center">
-                                                <Grid item xs={1}>
-                                                    <Timer
-                                                        estimatedDuration={624}
-                                                        milling={
-                                                            this.props.milling
-                                                        }
-                                                        elapsedSeconds={
-                                                            this.state
-                                                                .timerElapsedSeconds
-                                                        }
-                                                        incrementElapsedSeconds={
-                                                            this
-                                                                .incrementElapsedSeconds
-                                                        }
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={11}>
-                                                    {this.getMillingInProgressDisplay()}
+                                            <Grid
+                                                container
+                                                justify="center"
+                                                spacing={1}
+                                            >
+                                                <Grid item>
+                                                    <Grid
+                                                        container
+                                                        direction="column"
+                                                    >
+                                                        {getUnitsSelect(this)}
+                                                        <Grid
+                                                            item
+                                                            style={{
+                                                                alignSelf:
+                                                                    "flex-end",
+                                                            }}
+                                                        >
+                                                            <CustomInputLabel
+                                                                fitContent
+                                                            >
+                                                                Units
+                                                            </CustomInputLabel>
+                                                        </Grid>
+                                                    </Grid>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
                                     </Grid>
                                 </ItemPanel>
                             </Grid>
-                            <Grid item>{getManualEntryRow(this)}</Grid>
-                            <Grid item>
-                                <FormControl
-                                    className={this.props.classes.formControl}
-                                    fullWidth
-                                >
-                                    {/* <InputLabel id="g-code-file-input">Run G-code File</InputLabel> */}
-                                    <Input
-                                        id="g-code-file-input"
-                                        style={{
-                                            color: app.modal.color,
-                                            height: "32px",
-                                        }}
-                                        inputProps={{
-                                            style: { color: app.modal.color },
-                                        }}
-                                        value={this.state.gCodeFilePathDisplay}
-                                        placeholder="Run G-code File"
-                                        startAdornment={
-                                            <InputAdornment position="start">
-                                                <IconButton
-                                                    style={{ padding: "0px" }}
-                                                    onClick={
-                                                        this.selectGCodeFile
-                                                    }
-                                                    color="primary"
-                                                >
-                                                    <SelectFileIcon />
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    style={{ padding: "0px" }}
-                                                    onClick={
-                                                        this.uploadGCodeFile
-                                                    }
-                                                    color="primary"
-                                                    disabled={
-                                                        !this.state
-                                                            .gCodeFilePath
-                                                    }
-                                                >
-                                                    <ExecuteIcon />
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                        disableUnderline
-                                        readOnly
-                                    />
-                                </FormControl>
-                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
+
                 <Alert
                     open={this.state.limitWarningOpen}
                     message={

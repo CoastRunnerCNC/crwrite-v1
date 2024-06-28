@@ -12,6 +12,7 @@ import Alert from '../../components/Modals/Alert';
 import app from 'app';
 import packageJSON from '../../../../package.json';
 import ItemPanel from '../../components/ItemPanel/ItemPanel';
+import ProbingWizard from '../../components/Modals/ProbingWizard/ProbingWizard';
 const crwrite = require("crwrite");
 
 const styles = theme => ({
@@ -134,6 +135,7 @@ function Dashboard(props) {
     const [alertMessage, setAlertMessage] = React.useState("");
     const [showNewFileAlert, setShowNewFileAlert] = React.useState(false);
     const [enableEditButton, setEnableEditButton] = React.useState(false);
+    const [openProbingWizard, setOpenProbingWizard] = React.useState(false);
 
     ipcRenderer.send('Logs::LogString', 'CRWrite Version: ' + packageJSON.version);
 
@@ -338,6 +340,7 @@ function Dashboard(props) {
         <section className={classes.dashboardStyle}>
 			<Alert open={alertMessage.length > 0} message={alertMessage} onOk={(event) => { setAlertMessage("") }} onCancel={(e) => { setAlertMessage("")}} />
             <Alert open={showNewFileAlert} message="Would you like to create a new file?" yesNo={true} onOk={handleNewFileYes} onCancel={handleNewFileNo} />
+            <ProbingWizard open={openProbingWizard} setOpenProbingWizard={setOpenProbingWizard} />
             <Menu />
             <JobSelection open={showJobSelection} onClose={onCloseJobSelection} jobs={availableJobs} status={status} refreshJobs={refreshJobs} enableEditButton={enableEditButton} />
 
@@ -356,7 +359,7 @@ function Dashboard(props) {
                                 <ItemPanel title="Quick Actions" color="secondary">
                                     <Grid container direction='column' justify='space-evenly' alignItems='center' style={{height: '200px'}}>
                                         <Grid item>
-                                            <Button disabled={true} classes={{root: classes.smallGreyButton}}>Open Last Job</Button>
+                                            <Button onClick={() => {setOpenProbingWizard(true)}} classes={{root: classes.smallGreyButton}}>Probing Wizard</Button>
                                         </Grid>
                                         <Grid item>
                                             <Button disabled={true} classes={{root: classes.smallGreyButton}}>Set Home Position</Button>

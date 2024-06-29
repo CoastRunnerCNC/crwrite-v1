@@ -10,16 +10,17 @@ const ProbeFeature = (props) => {
 
     return (
         <ItemPanel small title="Probe Feature">
-            <Grid container alignContent="center">
-                <Grid item>
+            <Grid container alignItems="center" style={{padding: '8px'}}>
+                <Grid item xs={4}>
                     <Typography>Probe Feature</Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs>
                     <Select
                         labelId="probe-feature"
                         value={props.featureType}
                         onChange={onFeatureChange}
                         disabled={props.probingActive}
+                        fullWidth
                     >
                         <MenuItem value="surface">Surface (Z Only)</MenuItem>
                         <MenuItem value="circlePocket">

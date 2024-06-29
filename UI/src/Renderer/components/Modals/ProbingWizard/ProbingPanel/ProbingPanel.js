@@ -13,8 +13,9 @@ const ProbingPanel = (props) => {
                 style={{
                     paddingTop: "16px",
                     paddingBottom: "16px",
+                    paddingLeft: '8px',
+                    paddingRight: '8px'
                 }}
-                alignContent="center"
             >
                 <Grid item xs={10} style={{width: '100%'}}>
                     <MachineJogging />

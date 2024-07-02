@@ -13,18 +13,16 @@ const ProbingPanel = (props) => {
                 style={{
                     paddingTop: "16px",
                     paddingBottom: "16px",
-                    paddingLeft: '8px',
-                    paddingRight: '8px'
+                    paddingLeft: "8px",
+                    paddingRight: "8px",
                 }}
             >
-                <Grid item xs={10} style={{width: '100%'}}>
-                    <MachineJogging />
-                </Grid>
-                <Grid item xs={10}>
-                    <Typography>Please use the jogging tool to place the tool in the center of the object. Once in position, click start.</Typography>
-                </Grid>
-                <Grid item xs={10}>
-
+                <MachineJogging />
+                <Grid item>
+                    <Typography>
+                        Please use the jogging tool to place the tool in the
+                        center of the object. Once in position, click start.
+                    </Typography>
                 </Grid>
             </Grid>
         </ItemPanel>

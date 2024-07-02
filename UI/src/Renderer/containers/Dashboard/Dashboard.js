@@ -11,6 +11,7 @@ import Alert from '../../components/Modals/Alert';
 import app from 'app';
 import packageJSON from '../../../../package.json';
 import ItemPanel from '../../components/ItemPanel/ItemPanel';
+import ProbingWizard from '../../components/Modals/ProbingWizard/ProbingWizard';
 const crwrite = require("crwrite");
 import Shuttle from '../../components/Modals/Shuttle';
 
@@ -3344,6 +3345,7 @@ function Dashboard(props) {
     const [alertMessage, setAlertMessage] = React.useState("");
     const [showNewFileAlert, setShowNewFileAlert] = React.useState(false);
     const [enableEditButton, setEnableEditButton] = React.useState(false);
+    const [openProbingWizard, setOpenProbingWizard] = React.useState(false);
 
     ipcRenderer.send('Logs::LogString', 'CRWrite Version: ' + packageJSON.version);
 

@@ -22,8 +22,9 @@ import app from 'app';
 
 const styles = theme => ({
     root: {
-        marginBottom: theme.spacing(3),
+        //marginBottom: theme.spacing(3),
         // flexGrow: 1
+        marginBottom: 19
     },
     appBar: {
         top: 'auto',

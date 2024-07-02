@@ -30,7 +30,7 @@ Cutting Code/
 thumbs.db
 
 # Ignore dll files
-*.dll
+
 
 .idea
 .vscode

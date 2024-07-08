@@ -13,7 +13,7 @@ jobs:
             vcpkg_triplet: x86-windows-static
             cmake_platform_args: '-A Win32'
             cmake_generator: 'VS15Win32'
-          - platform: macos-11
+          - platform: macos-12
             vcpkg_triplet: x64-osx_b
             cmake_platform_args: '-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON'
             cmake_generator: Ninja
@@ -43,6 +43,26 @@ jobs:
       with:
         vcpkgArguments: '--debug --overlay-triplets=${{ github.workspace }}/custom-triplets --triplet ${{ matrix.vcpkg_triplet }} @${{ github.workspace }}/vcpkg.txt'
         vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+    - name: Install pyenv
+      if: matrix.platform != 'windows-2019'
+      run: |
+        brew install pyenv
+        echo 'export PYENV_ROOT="$HOME/.pyenv"' >> $HOME/.bash_profile
+        echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> $HOME/.bash_profile
+        echo 'eval "$(pyenv init --path)"' >> $HOME/.bash_profile
+        source $HOME/.bash_profile
+
+    - name: Install Python 2.7.18 using pyenv
+      if: matrix.platform != 'windows-2019'
+      run: |
+        pyenv install 2.7.18
+        pyenv global 2.7.18
+        ln -s $(pyenv root)/versions/2.7.18/bin/python2 /usr/local/bin/python
+        python --version
+        which python
+    - name: Ensure /usr/local/bin is in PATH
+      if: matrix.platform != 'windows-2019'
+      run: echo 'export PATH="/usr/local/bin:$PATH"' >> $GITHUB_ENV
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -108,7 +128,7 @@ jobs:
     name: Bump version
     needs: build
     #runs-on: ubuntu-18.04
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
     - uses: actions/checkout@v2
     - name: Beta Version

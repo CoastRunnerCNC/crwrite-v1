@@ -107,7 +107,7 @@ const MachineOutputPanel = (props) => {
                         id={"image-raw-display"}
                         item
                         xs={12}
-                        style={{ width: "100%", height: "50vh" }}
+                        style={{ width: "100%", height: "30vh" }}
                     >
                         {getDisplay()}
                         {scrollToBottom()}

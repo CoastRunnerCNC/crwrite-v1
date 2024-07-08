@@ -84,8 +84,8 @@ const ImagePanel = (props) => {
                     <Grid
                         id={"image-raw-display"}
                         item
-                        xs={12}
-                        style={{ width: "100%", height: "50vh" }}
+                        xs={12} 
+                        style={{ width: "100%", height: "30vh" }}
                     >
                         {getDisplay()}
                     </Grid>

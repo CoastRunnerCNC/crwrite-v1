@@ -77,7 +77,13 @@ const RewindArrow = () => {
 
 const ActionPanel = (props) => {
     return (
-        <Grid container style={{ border: "1px solid black", boxShadow: '1px 1px 0 0 #000000' }}>
+        <Grid
+            container
+            style={{
+                border: "1px solid black",
+                boxShadow: "1px 1px 0 0 #000000",
+            }}
+        >
             <Grid item>
                 <Button
                     onClick={(event) => {
@@ -111,8 +117,7 @@ const ActionPanel = (props) => {
             <Grid item xs>
                 <center>
                     <Typography className={props.classes.stepNumber}>
-                        Step {props.selectedStepIndex + 1}/
-                        {props.steps.length}
+                        Step {props.selectedStepIndex + 1}/{props.steps.length}
                     </Typography>
                 </center>
             </Grid>

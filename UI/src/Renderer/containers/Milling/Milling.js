@@ -1001,7 +1001,10 @@ class Milling extends React.Component {
         }
 
         function isNextAvailable(component) {
-            return component.state.millingProgress === -1;
+            console.log("millingProgress: " + component.state.millingProgress);
+            const value = component.state.millingProgress === -1;
+            console.log(value);
+            return value;
         }
 
         function isPrevAvailable(component) {
@@ -1351,7 +1354,7 @@ class Milling extends React.Component {
                                     onClickBack={(event) => {onClickBack(this)}}
                                     isPrevAvailable={() => {isPrevAvailable(this)}}
                                     handlePrev={this.handlePrev}
-                                    isNextAvailable={() => {isNextAvailable(this)}}
+                                    isNextAvailable={() => {return isNextAvailable(this)}}
                                     handleNext={handleNext.bind(this)}
                                     classes={classes}
                                 />

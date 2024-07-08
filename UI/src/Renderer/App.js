@@ -197,7 +197,8 @@ export default class App extends React.Component {
             firmwareAvailable: false,
             feedRate: 100,
             openShuttle: false,
-            shuttleSelectedTab: 0
+            shuttleSelectedTab: 0,
+            openImagePanel: true
         };
 
         this.updateStatus = this.updateStatus.bind(this);
@@ -207,6 +208,7 @@ export default class App extends React.Component {
         this.updateFeedrate = this.updateFeedrate.bind(this);
         this.updateSetting = this.updateSetting.bind(this);
         this.toggleShuttle = this.toggleShuttle.bind(this);
+        this.toggleImagePanel = this.toggleImagePanel.bind(this);
 
         if (!props.data) {
             document.title = app.titlebar.title;
@@ -218,6 +220,10 @@ export default class App extends React.Component {
                 titleHorizontalAlignment: "left"
             });
         }
+    }
+
+    toggleImagePanel() {
+        this.setState({openImagePanel: !this.state.openImagePanel});
     }
 
     updateFeedrate(newFeedRate) {
@@ -411,6 +417,7 @@ export default class App extends React.Component {
                         closeOperationsWindow={this.closeOperationsWindow}
                         setOperationsWindowOpen={this.setOperationsWindowOpen}
                         firmware={this.state.firmware}   
+                        openImagePanel={this.state.openImagePanel}
                     />
                     {console.timeEnd("Routes")}
                     {console.time("BottomToolbar")}
@@ -430,6 +437,7 @@ export default class App extends React.Component {
                         feedRate={this.state.feedRate}
                         updateFeedRate={this.updateFeedrate}
                         updateSetting={this.updateSetting}
+                        toggleImagePanel={this.toggleImagePanel}
                     />
                     {console.timeEnd("BottomToolbar")}
                 </MuiThemeProvider>

@@ -44,55 +44,61 @@ const ImagePanel = (props) => {
     function getDisplay() {
         if (zoom === true) {
             return (
-              <>
-                <Dialog
-                    open={zoom}
-                    aria-labelledby="form-dialog-title"
-                    maxWidth="md"
-                    onClose={() => {
-                        setZoom(false);
-                    }}
-                    fullWidth
-                >
-                    {getImageButton(false)}
-                </Dialog>
-                {getImageButton(true)}
-              </>
+                <>
+                    <Dialog
+                        open={zoom}
+                        aria-labelledby="form-dialog-title"
+                        maxWidth="md"
+                        onClose={() => {
+                            setZoom(false);
+                        }}
+                        fullWidth
+                    >
+                        {getImageButton(false)}
+                    </Dialog>
+                    {getImageButton(true)}
+                </>
             );
         } else {
             return getImageButton(true);
         }
     }
-
-    return (
-        <ItemPanel>
-            <div className={props.classes.root}>
-                <Grid container spacing={0}>
-                    <Grid item xs={3} />
-                    {/* {getButtons(this)} */}
-                    <Grid item xs={3} />
-                </Grid>
-                <Grid
-                    container
-                    style={{
-                        padding: "8px",
-                        paddingTop: "15px",
-                        width: "100%",
-                        height: "100%",
-                    }}
-                >
-                    <Grid
-                        id={"image-raw-display"}
-                        item
-                        xs={12} 
-                        style={{ width: "100%", height: "30vh" }}
-                    >
-                        {getDisplay()}
-                    </Grid>
-                </Grid>
-            </div>
-        </ItemPanel>
-    );
+    
+    if (props.open) {
+        return (
+            <Grid item>
+                <ItemPanel>
+                    <div className={props.classes.root}>
+                        <Grid container spacing={0}>
+                            <Grid item xs={3} />
+                            {/* {getButtons(this)} */}
+                            <Grid item xs={3} />
+                        </Grid>
+                        <Grid
+                            container
+                            style={{
+                                padding: "8px",
+                                paddingTop: "15px",
+                                width: "100%",
+                                height: "100%",
+                            }}
+                        >
+                            <Grid
+                                id={"image-raw-display"}
+                                item
+                                xs={12}
+                                style={{ width: "100%", height: "30vh" }}
+                            >
+                                {getDisplay()}
+                            </Grid>
+                        </Grid>
+                    </div>
+                </ItemPanel>
+            </Grid>
+        );
+    } else {
+        return "";
+    }
 };
 
 export default withStyles(styles)(ImagePanel);

@@ -469,6 +469,9 @@ function BottomToolbar(props) {
                                                                 }
                                                             >
                                                                 <MenuList>
+                                                                    <MenuItem onClick={props.toggleImagePanel}>
+                                                                        Image
+                                                                    </MenuItem>
                                                                     <MenuItem>
                                                                         Terminal
                                                                     </MenuItem>

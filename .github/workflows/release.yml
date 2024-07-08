@@ -13,7 +13,7 @@ jobs:
             vcpkg_triplet: x86-windows-static
             cmake_platform_args: '-A Win32'
             cmake_generator: 'VS15Win32'
-          - platform: macos-11
+          - platform: macos-12
             vcpkg_triplet: x64-osx_b
             cmake_platform_args: '-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON'
             cmake_generator: Ninja
@@ -108,7 +108,7 @@ jobs:
     name: Bump version
     needs: build
     #runs-on: ubuntu-18.04
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
     - uses: actions/checkout@v2
     - name: Beta Version

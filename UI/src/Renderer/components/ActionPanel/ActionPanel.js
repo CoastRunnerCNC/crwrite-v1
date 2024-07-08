@@ -101,7 +101,7 @@ const ActionPanel = (props) => {
                         disabled: props.classes.nextPrevButtonDisable,
                     }}
                     color="secondary"
-                    disabled={!props.isPrevAvailable}
+                    disabled={!props.isPrevAvailable()}
                     className={props.classes.prev}
                     onClick={props.handlePrev}
                 >
@@ -123,7 +123,7 @@ const ActionPanel = (props) => {
                         disabled: props.classes.nextPrevButtonDisable,
                     }}
                     color="secondary"
-                    disabled={!props.isNextAvailable}
+                    disabled={!props.isNextAvailable()}
                     className={props.classes.next}
                     onClick={props.handleNext}
                 >

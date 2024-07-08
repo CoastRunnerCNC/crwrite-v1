@@ -1349,9 +1349,9 @@ class Milling extends React.Component {
                                     handleDeleteStep={this.handleDeleteStep}
                                     moveStep={this.moveStep}
                                     onClickBack={(event) => {onClickBack(this)}}
-                                    isPrevAvailable={() => {this.isPrevAvailable(this)}}
+                                    isPrevAvailable={() => {isPrevAvailable(this)}}
                                     handlePrev={this.handlePrev}
-                                    isNextAvailable={() => {this.isNextAvailable(this)}}
+                                    isNextAvailable={() => {isNextAvailable(this)}}
                                     handleNext={handleNext.bind(this)}
                                     classes={classes}
                                 />

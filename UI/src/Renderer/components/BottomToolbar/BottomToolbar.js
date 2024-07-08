@@ -1,5 +1,13 @@
 import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
+import {
+    Popper,
+    Grow,
+    Paper,
+    ClickAwayListener,
+    MenuList,
+    MenuItem,
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import {
     AppBar,
@@ -240,24 +248,52 @@ function BottomToolbar(props) {
         setOperationsWindowOpen,
     } = props;
 
-    const [openMenu, setOpenMenu] = useState(false);
-    const buttonRef = useRef(null);
+    const [openControlMenu, setOpenControlMenu] = useState(false);
+    const [openConfigMenu, setOpenConfigMenu] = useState(false);
+    const [openSupportMenu, setOpenSupportMenu] = useState(false);
+    const buttonControlRef = useRef(null);
+    const buttonConfigRef = useRef(null);
+    const buttonSupportRef = useRef(null);
 
     function openCNCMillNet() {
         shell.openExternal(app.toolbar.link.url);
     }
 
     const onControlClick = () => {
-        setOpenMenu(!openMenu);
-    }
+        setOpenControlMenu(!openControlMenu);
+    };
+
+    const onConfigClick = () => {
+        setOpenConfigMenu(!openConfigMenu);
+    };
+
+    const onSupportClick = () => {
+        setOpenSupportMenu(!openSupportMenu);
+    };
 
     const closeControlMenu = (event) => {
-            if (buttonRef.contains(event.target)) {
-                return;
-            }
-    
-            setOpenMenu(false);
-    }
+        if (buttonControlRef.current.contains(event.target)) {
+            return;
+        }
+
+        setOpenControlMenu(false);
+    };
+
+    const closeConfigMenu = (event) => {
+        if (buttonConfigRef.current.contains(event.target)) {
+            return;
+        }
+
+        setOpenConfigMenu(false);
+    };
+
+    const closeSupportMenu = (event) => {
+        if (buttonSupportRef.current.contains(event.target)) {
+            return;
+        }
+
+        setOpenSupportMenu(false);
+    };
 
     // return (
     //     <footer className={classes.root}>
@@ -397,17 +433,17 @@ function BottomToolbar(props) {
                                     <Grid container>
                                         <Grid item>
                                             <Button
-                                            onClick={onControlClick}
-                                                buttonRef={(node) => {
-                                                    buttonRef = node;
-                                                }}
+                                                onClick={onControlClick}
+                                                ref={buttonControlRef}
                                             >
                                                 Control
                                             </Button>
 
                                             <Popper
-                                                open={openMenu}
-                                                anchorEl={buttonRef}
+                                                open={openControlMenu}
+                                                anchorEl={
+                                                    buttonControlRef.current
+                                                }
                                                 transition
                                                 disablePortal
                                             >
@@ -426,35 +462,34 @@ function BottomToolbar(props) {
                                                                     : "center bottom",
                                                         }}
                                                     >
-                                                        <Paper
-                                                            className={
-                                                                classes.paper
-                                                            }
-                                                        >
+                                                        <Paper>
                                                             <ClickAwayListener
                                                                 onClickAway={
                                                                     closeControlMenu
                                                                 }
                                                             >
                                                                 <MenuList>
-                                                                    <MenuItem
-                                                                    >
-                                                                        'How to'
-                                                                        Walkthrough
+                                                                    <MenuItem>
+                                                                        Terminal
                                                                     </MenuItem>
                                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
                                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
                                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
-                                                                    <MenuItem
-                                                                        className={
-                                                                            classes.menuItem
-                                                                        }
-                                                                        onClick={onClickShowLogs.bind(
-                                                                            this
-                                                                        )}
-                                                                    >
-                                                                        Show
-                                                                        Logs
+                                                                    <MenuItem>
+                                                                        Jogging
+                                                                    </MenuItem>
+                                                                    <MenuItem>
+                                                                        Home
+                                                                    </MenuItem>
+                                                                    <MenuItem>
+                                                                        Autolevel
+                                                                    </MenuItem>
+                                                                    <MenuItem>
+                                                                        Reset
+                                                                    </MenuItem>
+                                                                    <MenuItem>
+                                                                        Clear
+                                                                        Memory
                                                                     </MenuItem>
                                                                 </MenuList>
                                                             </ClickAwayListener>
@@ -464,10 +499,130 @@ function BottomToolbar(props) {
                                             </Popper>
                                         </Grid>
                                         <Grid item>
-                                            <Button>Config</Button>
+                                            <Button
+                                                onClick={onConfigClick}
+                                                ref={buttonConfigRef}
+                                            >
+                                                Config
+                                            </Button>
+
+                                            <Popper
+                                                open={openConfigMenu}
+                                                anchorEl={
+                                                    buttonConfigRef.current
+                                                }
+                                                transition
+                                                disablePortal
+                                            >
+                                                {({
+                                                    TransitionProps,
+                                                    placement,
+                                                }) => (
+                                                    <Grow
+                                                        {...TransitionProps}
+                                                        id="menu-list-grow"
+                                                        style={{
+                                                            transformOrigin:
+                                                                placement ===
+                                                                "bottom"
+                                                                    ? "center top"
+                                                                    : "center bottom",
+                                                        }}
+                                                    >
+                                                        <Paper>
+                                                            <ClickAwayListener
+                                                                onClickAway={
+                                                                    closeConfigMenu
+                                                                }
+                                                            >
+                                                                <MenuList>
+                                                                    <MenuItem>
+                                                                        DRO
+                                                                    </MenuItem>
+                                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
+                                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
+                                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
+                                                                    <MenuItem>
+                                                                        Units
+                                                                    </MenuItem>
+                                                                    <MenuItem>
+                                                                        Feedrate
+                                                                    </MenuItem>
+                                                                    <MenuItem>
+                                                                        Software
+                                                                    </MenuItem>
+                                                                    <MenuItem>
+                                                                        Firmware
+                                                                    </MenuItem>
+                                                                </MenuList>
+                                                            </ClickAwayListener>
+                                                        </Paper>
+                                                    </Grow>
+                                                )}
+                                            </Popper>
                                         </Grid>
                                         <Grid item>
-                                            <Button>Support</Button>
+                                            <Button
+                                                onClick={onSupportClick}
+                                                ref={buttonSupportRef}
+                                            >
+                                                Support
+                                            </Button>
+
+                                            <Popper
+                                                open={openSupportMenu}
+                                                anchorEl={
+                                                    buttonSupportRef.current
+                                                }
+                                                transition
+                                                disablePortal
+                                            >
+                                                {({
+                                                    TransitionProps,
+                                                    placement,
+                                                }) => (
+                                                    <Grow
+                                                        {...TransitionProps}
+                                                        id="menu-list-grow"
+                                                        style={{
+                                                            transformOrigin:
+                                                                placement ===
+                                                                "bottom"
+                                                                    ? "center top"
+                                                                    : "center bottom",
+                                                        }}
+                                                    >
+                                                        <Paper>
+                                                            <ClickAwayListener
+                                                                onClickAway={
+                                                                    closeSupportMenu
+                                                                }
+                                                            >
+                                                                <MenuList>
+                                                                    <MenuItem>
+                                                                        DRO
+                                                                    </MenuItem>
+                                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
+                                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
+                                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
+                                                                    <MenuItem>
+                                                                        Units
+                                                                    </MenuItem>
+                                                                    <MenuItem>
+                                                                        Feedrate
+                                                                    </MenuItem>
+                                                                    <MenuItem>
+                                                                        Software
+                                                                    </MenuItem>
+                                                                    <MenuItem>
+                                                                        Firmware
+                                                                    </MenuItem>
+                                                                </MenuList>
+                                                            </ClickAwayListener>
+                                                        </Paper>
+                                                    </Grow>
+                                                )}
+                                            </Popper>
                                         </Grid>
                                     </Grid>
                                 </Grid>

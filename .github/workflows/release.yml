@@ -60,6 +60,9 @@ jobs:
         ln -s $(pyenv root)/versions/2.7.18/bin/python2 /usr/local/bin/python
         python --version
         which python
+    - name: Ensure /usr/local/bin is in PATH
+      if: matrix.platform != 'windows-2019'
+      run: echo 'export PATH="/usr/local/bin:$PATH"' >> $GITHUB_ENV
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:

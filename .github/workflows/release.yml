@@ -63,6 +63,9 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 16.x
+    - name: Print PATH Environment Variable
+      if: matrix.platform == 'macos-12'
+      run: echo $PATH
     - name: 'Run CMake'
       uses: lukka/run-cmake@v3.1
       with:

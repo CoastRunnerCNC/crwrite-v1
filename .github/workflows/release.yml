@@ -17,10 +17,6 @@ jobs:
             vcpkg_triplet: x64-osx_b
             cmake_platform_args: '-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON'
             cmake_generator: Ninja
-          #- platform: ubuntu-18.04
-          #  vcpkg_triplet: x64-linux
-          #  cmake_platform_args: ''
-          #  cmake_generator: Ninja
     runs-on: ${{ matrix.platform }}
     if: "!contains(github.event.head_commit.message, 'ci: Bump version')"
     steps:

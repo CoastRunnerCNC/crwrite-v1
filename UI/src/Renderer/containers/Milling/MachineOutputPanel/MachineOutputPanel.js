@@ -27,6 +27,7 @@ const MachineOutputPanel = (props) => {
     const [readWrites, setReadWrites] = useState([]);
     const gcodeEnd = useRef(null);
     const prevProps = useRef();
+    const outputPanelHeight = props.imagePanelOpen ? "30vh" : "75vh";
 
     useEffect(() => {
         prevProps.current = props; // Update prevProps with the current props after every render
@@ -107,7 +108,7 @@ const MachineOutputPanel = (props) => {
                         id={"image-raw-display"}
                         item
                         xs={12}
-                        style={{ width: "100%", height: "30vh" }}
+                        style={{ width: "100%", height: outputPanelHeight }}
                     >
                         {getDisplay()}
                         {scrollToBottom()}

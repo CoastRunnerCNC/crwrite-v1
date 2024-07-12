@@ -1343,7 +1343,7 @@ class Milling extends React.Component {
                                 item
                                 xs={4}
                                 id="steps"
-                                style={{ height: "85vh" }}
+                                style={{ height: "75vh" }}
                             >
                                 <StepsPanel
                                     fileName={this.state.fileName}
@@ -1467,6 +1467,7 @@ class Milling extends React.Component {
                                                 this.state.millingProgress != -1
                                             }
                                             editMode={this.state.editMode}
+                                            imagePanelOpen={this.props.openImagePanel}
                                         />
                                     </Grid>
                                 </Grid>

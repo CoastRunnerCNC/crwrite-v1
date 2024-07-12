@@ -67,7 +67,7 @@ const StepsPanel = (props) => {
                             height: "100%",
                         }}
                     >
-                        <Grid item style={{ height: "55vh" }}>
+                        <Grid item style={{ height: "50vh" }}>
                             <StepList
                                 steps={props.steps}
                                 selectedStep={props.selectedStepIndex}

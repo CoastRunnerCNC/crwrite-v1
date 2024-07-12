@@ -36,10 +36,10 @@ const styles = (theme) => ({
     },
     appBar: {
         top: "auto",
-        height: 80,
+        height: "78px",
         bottom: 0,
         backgroundImage: `url(${app.toolbar.backgroundPhoto})`,
-        backgroundColor: "#f6f6f6",
+        backgroundColor: "black",
         backgroundSize: "cover",
         backgroundPosition: "center",
         boxShadow: "none",
@@ -55,13 +55,38 @@ const styles = (theme) => ({
     websiteLink: {
         color: "black",
     },
+    largeSections: {
+        backgroundColor: "#F6F6F6",
+        height: "66px",
+        paddingLeft: "8px",
+        paddingRight: "8px",
+    },
+    smallSections: {
+        backgroundColor: "#F6F6F6",
+        height: "29px",
+        paddingLeft: "8px",
+        paddingRight: "8px",
+    },
+    machineCoordinates: {
+        width: "100px",
+    },
+    buttons: {
+        height: "20px",
+        fontSize: "12px",
+        border: "1px solid black",
+        boxShadow: "1px 1px 0px 0px black",
+        padding: "0px",
+        borderRadius: "0px",
+    },
+    rowItemSpacing: {
+        marginLeft: '10px'
+    }
 });
 
 const MachineSVG = () => {
     return (
         <svg
-            width="68"
-            height="42"
+            width="65px"
             viewBox="0 0 68 42"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -178,7 +203,7 @@ const GuidedModeSVG = () => {
 const ManualModeSVG = () => {
     return (
         <svg
-            width="40"
+            width="65"
             height="42"
             viewBox="0 0 40 42"
             fill="none"
@@ -217,7 +242,7 @@ const ManualModeSVG = () => {
 const MillingProgress = (milling) => {
     if (true /*milling.state.millingProgress >= 0*/) {
         return (
-            <Grid container>
+            <Grid container alignItems="center">
                 <Grid item xs>
                     <LinearProgress
                         variant="determinate"
@@ -226,7 +251,7 @@ const MillingProgress = (milling) => {
                     />
                 </Grid>
                 <Grid item>
-                    <Typography variant="h4" style={{ color: "black" }}>
+                    <Typography style={{ color: "black", marginLeft: "4px" }}>
                         {0}%
                     </Typography>
                 </Grid>
@@ -251,9 +276,14 @@ function BottomToolbar(props) {
     const [openControlMenu, setOpenControlMenu] = useState(false);
     const [openConfigMenu, setOpenConfigMenu] = useState(false);
     const [openSupportMenu, setOpenSupportMenu] = useState(false);
+    const [units, setUnits] = useState("MM");
     const buttonControlRef = useRef(null);
     const buttonConfigRef = useRef(null);
     const buttonSupportRef = useRef(null);
+
+    const handleUnitsSelect = (event) => {
+        setUnits(event.target.value);
+    };
 
     function openCNCMillNet() {
         shell.openExternal(app.toolbar.link.url);
@@ -328,10 +358,16 @@ function BottomToolbar(props) {
     return (
         <footer className={classes.root}>
             <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                    <Grid container>
+                <Toolbar style={{ height: "100%" }}>
+                    <Grid container alignItems="center">
                         <Grid item>
-                            <Grid container direction="column">
+                            <Grid
+                                container
+                                direction="column"
+                                className={classes.largeSections}
+                                justify="center"
+                                alignItems="center"
+                            >
                                 <Grid item>
                                     <MachineSVG />
                                 </Grid>
@@ -343,68 +379,146 @@ function BottomToolbar(props) {
                         <Grid item>
                             <Grid container direction="column">
                                 <Grid item>
-                                    <Grid container>
+                                    <Grid
+                                        container
+                                        className={classes.smallSections}
+                                        alignItems="center"
+                                        justify="flex-end"
+                                    >
                                         <Grid item>
                                             <Typography
-                                                style={{ color: "black" }}
+                                                style={{ color: "black", fontWeight: 'bold' }}
                                             >
                                                 Mill
                                             </Typography>
                                         </Grid>
-                                        <Grid item>
-                                            <TextField disabled />
+                                        <Grid item className={classes.rowItemSpacing}>
+                                            <TextField
+                                                className={
+                                                    classes.machineCoordinates
+                                                }
+                                                disabled
+                                            />
                                         </Grid>
-                                        <Grid item>
-                                            <TextField disabled />
+                                        <Grid item className={classes.rowItemSpacing}>
+                                            <TextField
+                                                className={
+                                                    classes.machineCoordinates
+                                                }
+                                                disabled
+                                            />
                                         </Grid>
-                                        <Grid item>
-                                            <TextField disabled />
+                                        <Grid item className={classes.rowItemSpacing}>
+                                            <TextField
+                                                className={
+                                                    classes.machineCoordinates
+                                                }
+                                                disabled
+                                            />
                                         </Grid>
-                                        <Grid item>
-                                            <Select></Select>
+                                        <Grid item className={classes.rowItemSpacing}>
+                                            <Select
+                                                value={units}
+                                                onChange={handleUnitsSelect}
+                                                style={{height: "21.5px", fontWeight: 'bold'}}
+                                            >
+                                                <MenuItem value="MM">
+                                                    MM
+                                                </MenuItem>
+                                                <MenuItem value="INCH">
+                                                    INCH
+                                                </MenuItem>
+                                            </Select>
                                         </Grid>
                                     </Grid>
                                 </Grid>
                                 <Grid item>
-                                    <Grid container>
+                                    <Grid
+                                        container
+                                        className={classes.smallSections}
+                                        alignItems="center"
+                                        justify="flex-end"
+                                    >
                                         <Grid item>
                                             <Typography
-                                                style={{ color: "black" }}
+                                                style={{ color: "black", fontWeight: 'bold' }}
                                             >
                                                 Work
                                             </Typography>
                                         </Grid>
-                                        <Grid item>
-                                            <TextField disabled />
+                                        <Grid item className={classes.rowItemSpacing}>
+                                            <TextField
+                                                className={
+                                                    classes.machineCoordinates
+                                                }
+                                                disabled
+                                            />
                                         </Grid>
-                                        <Grid item>
-                                            <TextField disabled />
+                                        <Grid item className={classes.rowItemSpacing}>
+                                            <TextField
+                                                className={
+                                                    classes.machineCoordinates
+                                                }
+                                                disabled
+                                            />
                                         </Grid>
-                                        <Grid item>
-                                            <TextField disabled />
+                                        <Grid item className={classes.rowItemSpacing}>
+                                            <TextField
+                                                className={
+                                                    classes.machineCoordinates
+                                                }
+                                                disabled
+                                            />
                                         </Grid>
-                                        <Grid item>
-                                            <Select></Select>
+                                        <Grid item className={classes.rowItemSpacing}>
+                                            <Select
+                                                value={units}
+                                                onChange={handleUnitsSelect}
+                                                style={{height: "21.5px", fontWeight: 'bold'}}
+                                            >
+                                                <MenuItem value="MM">
+                                                    MM
+                                                </MenuItem>
+                                                <MenuItem value="INCH">
+                                                    INCH
+                                                </MenuItem>
+                                            </Select>
                                         </Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item>
-                            <Grid container direction="column">
+                        <Grid item xs>
+                            <Grid
+                                container
+                                direction="column"
+                                justify="center"
+                                className={classes.largeSections}
+                            >
                                 <Grid item>
                                     <MillingProgress />
                                 </Grid>
                                 <Grid item>
-                                    <Grid container>
+                                    <Grid
+                                        container
+                                        alignItems="center"
+                                        justify="center"
+                                        spacing={1}
+                                    >
                                         <Grid item>
-                                            <Button>RUN</Button>
+                                            <Button className={classes.buttons} style={{ fontWeight: 'bold' }}>
+                                                RUN
+                                            </Button>
                                         </Grid>
                                         <Grid item>
-                                            <Button>PAUSE</Button>
+                                            <Button className={classes.buttons} style={{ fontWeight: 'bold' }}>
+                                                PAUSE
+                                            </Button>
                                         </Grid>
                                         <Grid item>
-                                            <Button>STOP</Button>
+                                            <Button className={classes.buttons} style={{ fontWeight: 'bold' }}>
+                                                STOP
+                                            </Button>
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -413,28 +527,38 @@ function BottomToolbar(props) {
                         <Grid item>
                             <Grid container direction="column">
                                 <Grid item>
-                                    <Slider
-                                    // className={this.props.classes.slider}
-                                    // value={this.state.feedRate}
-                                    // step={2}
-                                    // min={30}
-                                    // disabled={
-                                    //     !this.state.settings.enable_slider
-                                    // }
-                                    // max={this.state.settings.maxFeedRate}
-                                    // aria-labelledby="label"
-                                    // onChange={this.onFeedRateChange}
-                                    // onChangeCommitted={(event, value) => {
-                                    //     this.props.updateFeedRate(value);
-                                    // }}
-                                    />
+                                    <Grid container className={classes.smallSections} direction="column">
+                                        <Grid item>
+                                            <Slider
+                                            // className={this.props.classes.slider}
+                                            // value={this.state.feedRate}
+                                            // step={2}
+                                            // min={30}
+                                            // disabled={
+                                            //     !this.state.settings.enable_slider
+                                            // }
+                                            // max={this.state.settings.maxFeedRate}
+                                            // aria-labelledby="label"
+                                            // onChange={this.onFeedRateChange}
+                                            // onChangeCommitted={(event, value) => {
+                                            //     this.props.updateFeedRate(value);
+                                            // }}
+                                            />
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                                 <Grid item>
-                                    <Grid container>
-                                        <Grid item>
+                                    <Grid
+                                        container
+                                        className={classes.smallSections}
+                                        alignItems="center"
+                                    >
+                                        <Grid item className={classes.rowItemSpacing}>
                                             <Button
+                                                className={classes.buttons}
                                                 onClick={onControlClick}
                                                 ref={buttonControlRef}
+                                                style={{ fontWeight: 'bold' }}
                                             >
                                                 Control
                                             </Button>
@@ -469,7 +593,11 @@ function BottomToolbar(props) {
                                                                 }
                                                             >
                                                                 <MenuList>
-                                                                    <MenuItem onClick={props.toggleImagePanel}>
+                                                                    <MenuItem
+                                                                        onClick={
+                                                                            props.toggleImagePanel
+                                                                        }
+                                                                    >
                                                                         Image
                                                                     </MenuItem>
                                                                     <MenuItem>
@@ -501,10 +629,12 @@ function BottomToolbar(props) {
                                                 )}
                                             </Popper>
                                         </Grid>
-                                        <Grid item>
+                                        <Grid item className={classes.rowItemSpacing}>
                                             <Button
+                                                className={classes.buttons}
                                                 onClick={onConfigClick}
                                                 ref={buttonConfigRef}
+                                                style={{ fontWeight: 'bold' }}
                                             >
                                                 Config
                                             </Button>
@@ -564,10 +694,12 @@ function BottomToolbar(props) {
                                                 )}
                                             </Popper>
                                         </Grid>
-                                        <Grid item>
+                                        <Grid item className={classes.rowItemSpacing}>
                                             <Button
+                                                className={classes.buttons}
                                                 onClick={onSupportClick}
                                                 ref={buttonSupportRef}
+                                                style={{ fontWeight: 'bold' }}
                                             >
                                                 Support
                                             </Button>
@@ -631,8 +763,21 @@ function BottomToolbar(props) {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item>
-                            <ManualModeSVG />
+                        <Grid item className={classes.largeSections}>
+                            <Grid
+                                container
+                                direction="column"
+                                alignItems="center"
+                            >
+                                <Grid item>
+                                    <ManualModeSVG />
+                                </Grid>
+                                <Grid item>
+                                    <Typography style={{ color: "black", fontWeight: 'bold' }}>
+                                        Manual Mode
+                                    </Typography>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Toolbar>

@@ -36,7 +36,7 @@ function Status(props) {
         typography: {
             useNextVariants: true,
             body1: {
-                fontSize: 14
+                fontSize: 10
             }
         }
     });

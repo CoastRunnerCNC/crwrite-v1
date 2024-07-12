@@ -36,14 +36,17 @@ const styles = (theme) => ({
     },
     appBar: {
         top: "auto",
-        height: "78px",
+        // height: "78px",
         bottom: 0,
         backgroundImage: `url(${app.toolbar.backgroundPhoto})`,
         backgroundColor: "black",
         backgroundSize: "cover",
         backgroundPosition: "center",
         boxShadow: "none",
-        borderTop: "1px solid black",
+        borderTop: "1px solid black"
+    },
+    toolBar: {
+        padding: '8px'
     },
     right: {
         float: "right",
@@ -80,6 +83,9 @@ const styles = (theme) => ({
     },
     rowItemSpacing: {
         marginLeft: '10px'
+    },
+    columnItemSpacing: {
+        marginBottom: '8px'
     }
 });
 
@@ -358,8 +364,8 @@ function BottomToolbar(props) {
     return (
         <footer className={classes.root}>
             <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar style={{ height: "100%" }}>
-                    <Grid container alignItems="center">
+                <Toolbar className={classes.toolBar} style={{ height: "100%" }}>
+                    <Grid container alignItems="center" spacing={1}>
                         <Grid item>
                             <Grid
                                 container
@@ -384,6 +390,7 @@ function BottomToolbar(props) {
                                         className={classes.smallSections}
                                         alignItems="center"
                                         justify="flex-end"
+                                        style={{marginBottom: '8px'}}
                                     >
                                         <Grid item>
                                             <Typography
@@ -527,7 +534,7 @@ function BottomToolbar(props) {
                         <Grid item>
                             <Grid container direction="column">
                                 <Grid item>
-                                    <Grid container className={classes.smallSections} direction="column">
+                                    <Grid container className={classes.smallSections} direction="column" style={{marginBottom: '8px'}}>
                                         <Grid item>
                                             <Slider
                                             // className={this.props.classes.slider}
@@ -763,17 +770,18 @@ function BottomToolbar(props) {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item className={classes.largeSections}>
+                        <Grid item>
                             <Grid
                                 container
                                 direction="column"
                                 alignItems="center"
+                                className={classes.largeSections}
                             >
                                 <Grid item>
                                     <ManualModeSVG />
                                 </Grid>
                                 <Grid item>
-                                    <Typography style={{ color: "black", fontWeight: 'bold' }}>
+                                    <Typography style={{ color: "black", fontWeight: 'bold', fontSize: '12px' }}>
                                         Manual Mode
                                     </Typography>
                                 </Grid>

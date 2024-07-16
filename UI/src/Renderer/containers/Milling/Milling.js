@@ -1484,7 +1484,7 @@ class Milling extends React.Component {
                                                     onClickBack(this);
                                                 }}
                                                 isPrevAvailable={() => {
-                                                    isPrevAvailable(this);
+                                                   return isPrevAvailable(this);
                                                 }}
                                                 classes={classes}
                                                 handlePrev={() => {
@@ -1492,7 +1492,7 @@ class Milling extends React.Component {
                                                 }}
                                                 this={this}
                                                 isNextAvailable={() => {
-                                                    isNextAvailable(this);
+                                                   return isNextAvailable(this);
                                                 }}
                                                 handleNext={() => {
                                                     handleNext.bind(this)();

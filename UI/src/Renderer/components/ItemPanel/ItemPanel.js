@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Grid } from "@material-ui/core";
+import { Typography, Grid, Box } from "@material-ui/core";
 import LineBox from "./LineBox/LineBox";
 
 const ItemPanel = (props) => {
@@ -36,33 +36,24 @@ const ItemPanel = (props) => {
     };
 
     return (
-        <Grid className="item-panel" container direction="column" style={{ ...style, ...props.style }}>
-            <Grid className="item-panel-header" item>
-                <Grid
-                    container
-                    alignItems="center"
-                    style={{
-                        backgroundColor: "#F6F6F6",
-                        padding: titleBarPadding,
-                        width: "100%",
-                    }}
-                >
-                    <Grid item>
-                        <Grid
-                            container
-                            alignItems="center"
-                            style={{
-                                backgroundColor: "#F6F6F6",
-                                padding: "3px",
-                                border: "1px solid black",
-                            }}
-                        >
-                            <Grid item>
-                                <MinimizeIcon />
-                            </Grid>
-                        </Grid>
+        <Box
+            style={{
+                ...style,
+                ...props.style,
+                display: "grid",
+                gridTemplateColumns: "1fr",
+                gridTemplateRows: "24px 1fr",
+            }}
+        >
+            <Box>
+                <Grid container alignItems="center">
+                    <Grid
+                        item
+                        style={{ padding: "3px", border: "1px solid black" }}
+                    >
+                        <MinimizeIcon />
                     </Grid>
-                    <Grid item xs style={{padding: '3px', marginRight: '5px'}}>
+                    <Grid item xs>
                         <LineBox />
                     </Grid>
                     <Grid item>
@@ -70,7 +61,11 @@ const ItemPanel = (props) => {
                             component="span"
                             variant={titleSize}
                             style={{
-                                fontFamily: ["ChicagoFLF", "Public Sans", "sans-serif"],
+                                fontFamily: [
+                                    "ChicagoFLF",
+                                    "Public Sans",
+                                    "sans-serif",
+                                ],
                                 fontWeight: "bold",
                             }}
                         >
@@ -78,11 +73,10 @@ const ItemPanel = (props) => {
                         </Typography>
                     </Grid>
                 </Grid>
-            </Grid>
-            <Grid item style={props.contentStyle}>
-                {props.children}
-            </Grid>
-        </Grid>
+            </Box>
+
+            <Box style={props.contentStyle}>{props.children}</Box>
+        </Box>
     );
 };
 

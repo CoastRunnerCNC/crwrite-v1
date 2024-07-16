@@ -12798,7 +12798,7 @@ export default class App extends React.Component {
                         style={{
                             display: "grid",
                             gridTemplateRows: "40px 1fr",
-                            height: "100dvh",
+                            height: "calc(100vh - 30px)",
                         }}
                     >
                         <Box
@@ -12827,9 +12827,13 @@ export default class App extends React.Component {
                         {console.timeEnd("Alert")}
                         {console.time("Routes")}
                         <Box
-                            style={{display: "grid", gridTemplateRows: "1fr 80px", gap: "10px", padding: "10px"}}
+                            style={{
+                                display: "grid",
+                                gridTemplateRows: "1fr 80px",
+                                gap: "10px",
+                                padding: "10px",
+                            }}
                         >
-                            <Box>
                             <Routes
                                 status={this.state.cncMillStatus}
                                 showOperationsWindow={
@@ -12853,7 +12857,6 @@ export default class App extends React.Component {
                                 firmware={this.state.firmware}
                                 openImagePanel={this.state.openImagePanel}
                             />
-                            </Box>
                             {console.timeEnd("Routes")}
                             {console.time("BottomToolbar")}
                             <BottomToolbar

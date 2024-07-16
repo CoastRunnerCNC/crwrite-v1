@@ -367,7 +367,7 @@ function BottomToolbar(props) {
             <Box
                 style={{
                     display: "grid",
-                    gridTemplateColumns: "80px 1fr 1fr 180px 80px",
+                    gridTemplateColumns: "80px 1fr 1fr 280px 80px",
                     gridTemplateRows: "1fr 1fr",
                     gridTemplateAreas:
                         '"status mill progress feedrate mode" "status work progress menus mode"',
@@ -376,223 +376,334 @@ function BottomToolbar(props) {
                     backgroundColor: "black",
                 }}
             >
-                <Box style={{ gridArea: "status" }}>
+                <Box style={{ gridArea: "status", backgroundColor: "white" }}>
                     <MachineSVG />
                     <Status status={status} />
                 </Box>
-                <Typography style={{ color: "black", fontWeight: "bold" }}>
-                    Mill
-                </Typography>
-                <TextField className={classes.machineCoordinates} disabled />
-                <TextField className={classes.machineCoordinates} disabled />
-                <TextField className={classes.machineCoordinates} disabled />
-                <Select
-                    value={units}
-                    onChange={handleUnitsSelect}
-                    style={{ height: "21.5px", fontWeight: "bold" }}
-                >
-                    <MenuItem value="MM">MM</MenuItem>
-                    <MenuItem value="INCH">INCH</MenuItem>
-                </Select>
-                <Typography style={{ color: "black", fontWeight: "bold" }}>
-                    Work
-                </Typography>
-                <TextField className={classes.machineCoordinates} disabled />
-                <TextField className={classes.machineCoordinates} disabled />
-                <TextField className={classes.machineCoordinates} disabled />
-                <Select
-                    value={units}
-                    onChange={handleUnitsSelect}
-                    style={{ height: "21.5px", fontWeight: "bold" }}
-                >
-                    <MenuItem value="MM">MM</MenuItem>
-                    <MenuItem value="INCH">INCH</MenuItem>
-                </Select>
-                <MillingProgress />
-                <Button
-                    className={classes.buttons}
-                    style={{ fontWeight: "bold" }}
-                >
-                    RUN
-                </Button>
-                <Button
-                    className={classes.buttons}
-                    style={{ fontWeight: "bold" }}
-                >
-                    PAUSE
-                </Button>
-                <Button
-                    className={classes.buttons}
-                    style={{ fontWeight: "bold" }}
-                >
-                    STOP
-                </Button>
-                <Slider
-                // className={this.props.classes.slider}
-                // value={this.state.feedRate}
-                // step={2}
-                // min={30}
-                // disabled={
-                //     !this.state.settings.enable_slider
-                // }
-                // max={this.state.settings.maxFeedRate}
-                // aria-labelledby="label"
-                // onChange={this.onFeedRateChange}
-                // onChangeCommitted={(event, value) => {
-                //     this.props.updateFeedRate(value);
-                // }}
-                />
-                <Button
-                    className={classes.buttons}
-                    onClick={onControlClick}
-                    ref={buttonControlRef}
-                    style={{ fontWeight: "bold" }}
-                >
-                    Control
-                </Button>
-
-                <Popper
-                    open={openControlMenu}
-                    anchorEl={buttonControlRef.current}
-                    transition
-                    disablePortal
-                >
-                    {({ TransitionProps, placement }) => (
-                        <Grow
-                            {...TransitionProps}
-                            id="menu-list-grow"
-                            style={{
-                                transformOrigin:
-                                    placement === "bottom"
-                                        ? "center top"
-                                        : "center bottom",
-                            }}
-                        >
-                            <Paper>
-                                <ClickAwayListener
-                                    onClickAway={closeControlMenu}
-                                >
-                                    <MenuList>
-                                        <MenuItem
-                                            onClick={props.toggleImagePanel}
-                                        >
-                                            Image
-                                        </MenuItem>
-                                        <MenuItem>Terminal</MenuItem>
-                                        {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
-                                        {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
-                                        {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
-                                        <MenuItem>Jogging</MenuItem>
-                                        <MenuItem>Home</MenuItem>
-                                        <MenuItem>Autolevel</MenuItem>
-                                        <MenuItem>Reset</MenuItem>
-                                        <MenuItem>Clear Memory</MenuItem>
-                                    </MenuList>
-                                </ClickAwayListener>
-                            </Paper>
-                        </Grow>
-                    )}
-                </Popper>
-                <Button
-                    className={classes.buttons}
-                    onClick={onConfigClick}
-                    ref={buttonConfigRef}
-                    style={{ fontWeight: "bold" }}
-                >
-                    Config
-                </Button>
-
-                <Popper
-                    open={openConfigMenu}
-                    anchorEl={buttonConfigRef.current}
-                    transition
-                    disablePortal
-                >
-                    {({ TransitionProps, placement }) => (
-                        <Grow
-                            {...TransitionProps}
-                            id="menu-list-grow"
-                            style={{
-                                transformOrigin:
-                                    placement === "bottom"
-                                        ? "center top"
-                                        : "center bottom",
-                            }}
-                        >
-                            <Paper>
-                                <ClickAwayListener
-                                    onClickAway={closeConfigMenu}
-                                >
-                                    <MenuList>
-                                        <MenuItem>DRO</MenuItem>
-                                        {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
-                                        {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
-                                        {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
-                                        <MenuItem>Units</MenuItem>
-                                        <MenuItem>Feedrate</MenuItem>
-                                        <MenuItem>Software</MenuItem>
-                                        <MenuItem>Firmware</MenuItem>
-                                    </MenuList>
-                                </ClickAwayListener>
-                            </Paper>
-                        </Grow>
-                    )}
-                </Popper>
-                <Button
-                    className={classes.buttons}
-                    onClick={onSupportClick}
-                    ref={buttonSupportRef}
-                    style={{ fontWeight: "bold" }}
-                >
-                    Support
-                </Button>
-
-                <Popper
-                    open={openSupportMenu}
-                    anchorEl={buttonSupportRef.current}
-                    transition
-                    disablePortal
-                >
-                    {({ TransitionProps, placement }) => (
-                        <Grow
-                            {...TransitionProps}
-                            id="menu-list-grow"
-                            style={{
-                                transformOrigin:
-                                    placement === "bottom"
-                                        ? "center top"
-                                        : "center bottom",
-                            }}
-                        >
-                            <Paper>
-                                <ClickAwayListener
-                                    onClickAway={closeSupportMenu}
-                                >
-                                    <MenuList>
-                                        <MenuItem>DRO</MenuItem>
-                                        {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
-                                        {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
-                                        {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
-                                        <MenuItem>Units</MenuItem>
-                                        <MenuItem>Feedrate</MenuItem>
-                                        <MenuItem>Software</MenuItem>
-                                        <MenuItem>Firmware</MenuItem>
-                                    </MenuList>
-                                </ClickAwayListener>
-                            </Paper>
-                        </Grow>
-                    )}
-                </Popper>
-                <ManualModeSVG />
-                <Typography
+                <Box
                     style={{
-                        color: "black",
-                        fontWeight: "bold",
-                        fontSize: "12px",
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+                        gridArea: "mill",
+                        backgroundColor: "white",
+                        alignItems: "center",
                     }}
                 >
-                    Manual Mode
-                </Typography>
+                    <Box>
+                        <Typography
+                            style={{ color: "black", fontWeight: "bold" }}
+                        >
+                            Mill
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <TextField
+                            className={classes.machineCoordinates}
+                            disabled
+                        />
+                    </Box>
+                    <Box>
+                        <TextField
+                            className={classes.machineCoordinates}
+                            disabled
+                        />
+                    </Box>
+                    <Box>
+                        <TextField
+                            className={classes.machineCoordinates}
+                            disabled
+                        />
+                    </Box>
+                    <Box>
+                        <Select
+                            value={units}
+                            onChange={handleUnitsSelect}
+                            style={{ height: "21.5px", fontWeight: "bold" }}
+                        >
+                            <MenuItem value="MM">MM</MenuItem>
+                            <MenuItem value="INCH">INCH</MenuItem>
+                        </Select>
+                    </Box>
+                </Box>
+                <Box
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+                        gridArea: "work",
+                        backgroundColor: "white",
+                        alignItems: "center",
+                    }}
+                >
+                    <Box>
+                        <Typography
+                            style={{ color: "black", fontWeight: "bold" }}
+                        >
+                            Work
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <TextField
+                            className={classes.machineCoordinates}
+                            disabled
+                        />
+                    </Box>
+                    <Box>
+                        <TextField
+                            className={classes.machineCoordinates}
+                            disabled
+                        />
+                    </Box>
+                    <Box>
+                        <TextField
+                            className={classes.machineCoordinates}
+                            disabled
+                        />
+                    </Box>
+                    <Box>
+                        <Select
+                            value={units}
+                            onChange={handleUnitsSelect}
+                            style={{ height: "21.5px", fontWeight: "bold" }}
+                        >
+                            <MenuItem value="MM">MM</MenuItem>
+                            <MenuItem value="INCH">INCH</MenuItem>
+                        </Select>
+                    </Box>
+                </Box>
+                <Box
+                    style={{
+                        display: "grid",
+                        gridTemplateRows: "1fr 1fr",
+                        gridArea: "progress",
+                        backgroundColor: "white",
+                        alignItems: "center",
+                        justify: "center",
+                    }}
+                >
+                    <Box>
+                        <MillingProgress />
+                    </Box>
+                    <Box style={{ alignSelf: "center", justifySelf: "center" }}>
+                        <Button
+                            className={classes.buttons}
+                            style={{ fontWeight: "bold" }}
+                        >
+                            RUN
+                        </Button>
+                        <Button
+                            className={classes.buttons}
+                            style={{ fontWeight: "bold" }}
+                        >
+                            PAUSE
+                        </Button>
+                        <Button
+                            className={classes.buttons}
+                            style={{ fontWeight: "bold" }}
+                        >
+                            STOP
+                        </Button>
+                    </Box>
+                </Box>
+                <Box style={{ gridArea: "feedrate", backgroundColor: "white" }}>
+                    <Slider
+                    // className={this.props.classes.slider}
+                    // value={this.state.feedRate}
+                    // step={2}
+                    // min={30}
+                    // disabled={
+                    //     !this.state.settings.enable_slider
+                    // }
+                    // max={this.state.settings.maxFeedRate}
+                    // aria-labelledby="label"
+                    // onChange={this.onFeedRateChange}
+                    // onChangeCommitted={(event, value) => {
+                    //     this.props.updateFeedRate(value);
+                    // }}
+                    />
+                </Box>
+                <Box style={{ gridArea: "menus", backgroundColor: "white" }}>
+                    <Grid container justify="center" alignItems="center" style={{height: "100%"}}>
+                        <Grid item>
+                            <Button
+                                className={classes.buttons}
+                                onClick={onControlClick}
+                                ref={buttonControlRef}
+                                style={{ fontWeight: "bold" }}
+                            >
+                                Control
+                            </Button>
+
+                            <Popper
+                                open={openControlMenu}
+                                anchorEl={buttonControlRef.current}
+                                transition
+                                disablePortal
+                            >
+                                {({ TransitionProps, placement }) => (
+                                    <Grow
+                                        {...TransitionProps}
+                                        id="menu-list-grow"
+                                        style={{
+                                            transformOrigin:
+                                                placement === "bottom"
+                                                    ? "center top"
+                                                    : "center bottom",
+                                        }}
+                                    >
+                                        <Paper>
+                                            <ClickAwayListener
+                                                onClickAway={closeControlMenu}
+                                            >
+                                                <MenuList>
+                                                    <MenuItem
+                                                        onClick={
+                                                            props.toggleImagePanel
+                                                        }
+                                                    >
+                                                        Image
+                                                    </MenuItem>
+                                                    <MenuItem>
+                                                        Terminal
+                                                    </MenuItem>
+                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
+                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
+                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
+                                                    <MenuItem>Jogging</MenuItem>
+                                                    <MenuItem>Home</MenuItem>
+                                                    <MenuItem>
+                                                        Autolevel
+                                                    </MenuItem>
+                                                    <MenuItem>Reset</MenuItem>
+                                                    <MenuItem>
+                                                        Clear Memory
+                                                    </MenuItem>
+                                                </MenuList>
+                                            </ClickAwayListener>
+                                        </Paper>
+                                    </Grow>
+                                )}
+                            </Popper>
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                className={classes.buttons}
+                                onClick={onConfigClick}
+                                ref={buttonConfigRef}
+                                style={{ fontWeight: "bold" }}
+                            >
+                                Config
+                            </Button>
+
+                            <Popper
+                                open={openConfigMenu}
+                                anchorEl={buttonConfigRef.current}
+                                transition
+                                disablePortal
+                            >
+                                {({ TransitionProps, placement }) => (
+                                    <Grow
+                                        {...TransitionProps}
+                                        id="menu-list-grow"
+                                        style={{
+                                            transformOrigin:
+                                                placement === "bottom"
+                                                    ? "center top"
+                                                    : "center bottom",
+                                        }}
+                                    >
+                                        <Paper>
+                                            <ClickAwayListener
+                                                onClickAway={closeConfigMenu}
+                                            >
+                                                <MenuList>
+                                                    <MenuItem>DRO</MenuItem>
+                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
+                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
+                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
+                                                    <MenuItem>Units</MenuItem>
+                                                    <MenuItem>
+                                                        Feedrate
+                                                    </MenuItem>
+                                                    <MenuItem>
+                                                        Software
+                                                    </MenuItem>
+                                                    <MenuItem>
+                                                        Firmware
+                                                    </MenuItem>
+                                                </MenuList>
+                                            </ClickAwayListener>
+                                        </Paper>
+                                    </Grow>
+                                )}
+                            </Popper>
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                className={classes.buttons}
+                                onClick={onSupportClick}
+                                ref={buttonSupportRef}
+                                style={{ fontWeight: "bold" }}
+                            >
+                                Support
+                            </Button>
+
+                            <Popper
+                                open={openSupportMenu}
+                                anchorEl={buttonSupportRef.current}
+                                transition
+                                disablePortal
+                            >
+                                {({ TransitionProps, placement }) => (
+                                    <Grow
+                                        {...TransitionProps}
+                                        id="menu-list-grow"
+                                        style={{
+                                            transformOrigin:
+                                                placement === "bottom"
+                                                    ? "center top"
+                                                    : "center bottom",
+                                        }}
+                                    >
+                                        <Paper>
+                                            <ClickAwayListener
+                                                onClickAway={closeSupportMenu}
+                                            >
+                                                <MenuList>
+                                                    <MenuItem>DRO</MenuItem>
+                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
+                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
+                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
+                                                    <MenuItem>Units</MenuItem>
+                                                    <MenuItem>
+                                                        Feedrate
+                                                    </MenuItem>
+                                                    <MenuItem>
+                                                        Software
+                                                    </MenuItem>
+                                                    <MenuItem>
+                                                        Firmware
+                                                    </MenuItem>
+                                                </MenuList>
+                                            </ClickAwayListener>
+                                        </Paper>
+                                    </Grow>
+                                )}
+                            </Popper>
+                        </Grid>
+                    </Grid>
+                </Box>
+                <Box style={{ gridArea: "mode", backgroundColor: "white" }}>
+                    <ManualModeSVG />
+                    <Typography
+                        style={{
+                            color: "black",
+                            fontWeight: "bold",
+                            fontSize: "12px",
+                        }}
+                    >
+                        Manual Mode
+                    </Typography>
+                </Box>
             </Box>
         </>
     );

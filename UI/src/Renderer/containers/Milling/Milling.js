@@ -36,6 +36,7 @@ import StepsPanel from "./StepsPanel/StepsPanel";
 import InstructionsPanel from "./InstructionsPanel/InstructionsPanel";
 import MachineOutputPanel from "./MachineOutputPanel/MachineOutputPanel";
 import ImagePanel from "./ImagePanel/ImagePanel";
+import JoggingPanel from "./JoggingPanel/JoggingPanel";
 
 const styles = (theme) => ({
     millingStyle: {
@@ -1106,7 +1107,7 @@ class Milling extends React.Component {
             ipcRenderer.send("CR_SetCurrentPage", "Dashboard");
             return <Redirect to="/" />;
         }
-        
+
         return (
             <React.Fragment>
                 <Throbber
@@ -1332,126 +1333,100 @@ class Milling extends React.Component {
                     enableEditButton={this.props.settings.enableEditButton}
                 />
 
-                <Grid
-                    container
-                    direction="column"
-                    className={classes.millingStyle}
+                <Box
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr 1fr",
+                        gridTemplateRows: "1fr",
+                    }}
                 >
-                    <Grid item xs>
-                        <Grid container spacing={2}>
-                            <Grid
-                                item
-                                xs={4}
-                                id="steps"
-                                style={{ height: "75vh" }}
-                            >
-                                <StepsPanel
-                                    fileName={this.state.fileName}
-                                    jobName={this.state.jobName}
-                                    steps={this.state.steps}
-                                    selectedStepIndex={
-                                        this.state.selectedStepIndex
-                                    }
-                                    editMode={this.state.editMode}
-                                    submanifestUsed={this.state.submanifestUsed}
-                                    handleDeleteStep={this.handleDeleteStep}
-                                    moveStep={this.moveStep}
-                                    onClickBack={(event) => {
-                                        onClickBack(this);
-                                    }}
-                                    isPrevAvailable={() => {
-                                        isPrevAvailable(this);
-                                    }}
-                                    handlePrev={this.handlePrev}
-                                    isNextAvailable={() => {
-                                        return isNextAvailable(this);
-                                    }}
-                                    handleNext={handleNext.bind(this)}
-                                    classes={classes}
-                                />
+                    <Box>
+                        <StepsPanel
+                            fileName={this.state.fileName}
+                            jobName={this.state.jobName}
+                            steps={this.state.steps}
+                            selectedStepIndex={this.state.selectedStepIndex}
+                            editMode={this.state.editMode}
+                            submanifestUsed={this.state.submanifestUsed}
+                            handleDeleteStep={this.handleDeleteStep}
+                            moveStep={this.moveStep}
+                            onClickBack={(event) => {
+                                onClickBack(this);
+                            }}
+                            isPrevAvailable={() => {
+                                isPrevAvailable(this);
+                            }}
+                            handlePrev={this.handlePrev}
+                            isNextAvailable={() => {
+                                return isNextAvailable(this);
+                            }}
+                            handleNext={handleNext.bind(this)}
+                            classes={classes}
+                        />
 
-                                {/* {this.getAddStepButton()} */}
-                                {/* <Button color="secondary" disabled={!isSkipAvailable(this)} className={classes.next} style={{ marginTop: '-4px' }} onClick={handleSkip.bind(this)}>Skip Forward &#62;</Button> */}
+                        {/* {this.getAddStepButton()} */}
+                        {/* <Button color="secondary" disabled={!isSkipAvailable(this)} className={classes.next} style={{ marginTop: '-4px' }} onClick={handleSkip.bind(this)}>Skip Forward &#62;</Button> */}
+                    </Box>
+                    <Box>
+                        <Grid
+                            container
+                            direction="column"
+                            justify="space-between"
+                            spacing={0}
+                            style={{ height: "100%" }}
+                        >
+                            <StartMilling
+                                open={this.state.showStartMilling}
+                                onClose={handleCloseStartMilling.bind(this)}
+                            />
+                            <Grid item>
+                                <InstructionsPanel
+                                    editMode={this.state.editMode}
+                                    editTitleValue={this.state.editTitleValue}
+                                    setEditTitleValue={this.setEditTitleValue}
+                                    selectedStep={this.state.selectedStep}
+                                    getEditButton={this.getEditButton}
+                                    editJobTextValue={
+                                        this.state.editJobTextValue
+                                    }
+                                    onEditJobTextChange={
+                                        this.onEditJobTextChange
+                                    }
+                                    getJobText={getJobText}
+                                />
                             </Grid>
-                            <Grid item xs={3} id="middle_section">
-                                <Grid
-                                    container
-                                    direction="column"
-                                    justify="space-between"
-                                    spacing={0}
-                                    style={{ height: "100%" }}
-                                >
-                                    <StartMilling
-                                        open={this.state.showStartMilling}
-                                        onClose={handleCloseStartMilling.bind(
-                                            this
-                                        )}
-                                    />
+                            <Grid item>
+                                <Grid container direction="column">
                                     <Grid item>
-                                        <InstructionsPanel
-                                            editMode={this.state.editMode}
-                                            editTitleValue={
-                                                this.state.editTitleValue
-                                            }
-                                            setEditTitleValue={
-                                                this.setEditTitleValue
-                                            }
-                                            selectedStep={
-                                                this.state.selectedStep
-                                            }
-                                            getEditButton={this.getEditButton}
-                                            editJobTextValue={
-                                                this.state.editJobTextValue
-                                            }
-                                            onEditJobTextChange={
-                                                this.onEditJobTextChange
-                                            }
-                                            getJobText={getJobText}
-                                        />
+                                        <div className={classes.warning}>
+                                            {getMillingInProgressDisplay(this)}
+                                        </div>
                                     </Grid>
                                     <Grid item>
-                                        <Grid container direction="column">
+                                        <Grid
+                                            container
+                                            justify="space-between"
+                                            style={{ marginTop: "8px" }}
+                                        >
+                                            <Grid item>{getWarning(this)}</Grid>
                                             <Grid item>
                                                 <div
-                                                    className={classes.warning}
+                                                    className={classes.actions}
                                                 >
-                                                    {getMillingInProgressDisplay(
-                                                        this
-                                                    )}
+                                                    {getActionButton(this)}
                                                 </div>
-                                            </Grid>
-                                            <Grid item>
-                                                <Grid
-                                                    container
-                                                    justify="space-between"
-                                                    style={{ marginTop: "8px" }}
-                                                >
-                                                    <Grid item>
-                                                        {getWarning(this)}
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <div
-                                                            className={
-                                                                classes.actions
-                                                            }
-                                                        >
-                                                            {getActionButton(
-                                                                this
-                                                            )}
-                                                        </div>
-                                                    </Grid>
-                                                </Grid>
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                    {/* <Grid id={'feedrate-slider'} item xs={12} style={{ height: '40px' }}>
-                                            {getFeedrateSlider(this)}
-                                        </Grid> */}
                                 </Grid>
                             </Grid>
-                            <Grid item xs={5} id="image">
-                                <Grid container direction="column" spacing={1}>
-                                    <ImagePanel
+                            {/* <Grid id={'feedrate-slider'} item xs={12} style={{ height: '40px' }}>
+                                            {getFeedrateSlider(this)}
+                                        </Grid> */}
+                        </Grid>
+                    </Box>
+                    <JoggingPanel />
+                    {/* <ImagePanel
                                         selectedStep={this.state.selectedStep}
                                         open={this.props.openImagePanel}
                                     />
@@ -1469,12 +1444,8 @@ class Milling extends React.Component {
                                             editMode={this.state.editMode}
                                             imagePanelOpen={this.props.openImagePanel}
                                         />
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
+                                    </Grid> */}
+                </Box>
             </React.Fragment>
         );
     }

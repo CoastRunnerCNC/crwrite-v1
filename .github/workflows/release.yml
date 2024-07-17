@@ -74,7 +74,7 @@ jobs:
       env: 
         NPM_CONFIG_PREFIX: "~/.npm-global"
     - name: Staging
-      if: "!contains(github.event.head_commit.message, 'RELEASE') && github.repository == 'CoastRunnerCNC/crwrite-v1' && github.event_name == 'push' && github.ref == 'refs/heads/master'"
+      if: "!contains(github.event.head_commit.message, 'RELEASE') && github.repository == 'CoastRunnerCNC/crwrite-v1' && github.event_name == 'push' && github.ref == 'refs/heads/retheme'"
       run: |
         npm run staging
         npm version prerelease --git-tag-version false

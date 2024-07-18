@@ -1,4 +1,10 @@
-import { Grid, Dialog, DialogTitle, DialogContent, Button } from "@material-ui/core";
+import {
+    Grid,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    Button,
+} from "@material-ui/core";
 import React, { useState } from "react";
 import ProbingSettings from "./ProbingSettings/ProbingSettings";
 import ProbeFeature from "./ProbeFeature/ProbeFeature";
@@ -8,6 +14,7 @@ const ProbingWizard = (props) => {
     const [featureType, setFeatureType] = useState("");
     const [locationType, setLocationType] = useState("");
     const [probingActive, setProbingActive] = useState(false);
+    const [startProbing, setStartProbing] = useState(false);
 
     const PictureSVG = () => {
         return (
@@ -21,7 +28,19 @@ const ProbingWizard = (props) => {
     };
 
     const handleStart = () => {
-        setProbingActive(true);
+        if (probingActive === false) {
+            setProbingActive(true);
+        } else {
+            setStartProbing(true);
+        }
+    };
+
+    const handleClose = () => {
+        props.setOpenProbingWizard(false);
+        setProbingActive(false);
+        setStartProbing(false);
+        setFeatureType("");
+        setLocationType("");
     };
 
     return (
@@ -38,9 +57,7 @@ const ProbingWizard = (props) => {
                         <Grid item xs={1} />
                         <Grid item xs={10}></Grid>
                         <Grid item xs={1}>
-                            <Button onClick={() => {props.setOpenProbingWizard()}}>
-                                X
-                            </Button>
+                            <Button onClick={handleClose}>X</Button>
                         </Grid>
                     </Grid>
                 </DialogTitle>
@@ -68,6 +85,7 @@ const ProbingWizard = (props) => {
                                         locationType={locationType}
                                         setLocationType={setLocationType}
                                         probingActive={probingActive}
+                                        startProbing={startProbing}
                                     />
                                 </Grid>
                                 <Grid item>

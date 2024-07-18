@@ -22,6 +22,12 @@ const ProbingPanel = (props) => {
             props.featureType === "rectanglePocket"
         ) {
             return "Please use the jogging tool to jog the tool to the rough center of the pocket. Jog the tool tip to be between 5mm and 10mm from the top of the pocket. Do not jog the tool into the pocket.";
+        } else if (props.featureType === "surface") {
+            return (
+                "Jog the spindle over the surface you wish to probe. Place the tip of the tool between 5mm and 10mm away from the surface."
+            )
+        } else {
+            return ""
         }
     };
 
@@ -38,7 +44,8 @@ const ProbingPanel = (props) => {
                     paddingRight: "8px",
                 }}
             >
-                {/* <ProbingManager
+                <ProbingManager
+                    startProbing={props.startProbing}
                     featureType={props.featureType}
                     toolWidth={props.toolWidth}
                     locationType={props.locationType}
@@ -58,7 +65,7 @@ const ProbingPanel = (props) => {
                     xOffset={props.xOffset}
                     yOffset={props.yOffset}
                     zOffset={props.zOffset}
-                /> */}
+                />
                 <MachineJogging />
                 <Grid item>
                     <Typography>

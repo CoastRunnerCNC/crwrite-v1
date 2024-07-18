@@ -259,7 +259,9 @@ const ProbingSettings = (props) => {
                     <Grid item xs>
                         <TextField
                             value={props.toolWidth}
-                            onChange={(event) => {props.setToolWidth(event.target.value)}}
+                            onChange={(event) => {
+                                props.setToolWidth(event.target.value);
+                            }}
                             fullWidth
                         />
                     </Grid>
@@ -296,62 +298,67 @@ const ProbingSettings = (props) => {
     };
 
     const AxisSelection = () => {
-        if (props.featureType != "surface") {
-            return (
-                <Grid item container alignItems="center">
-                    <Grid item xs={4}>
-                        <Typography>Axis Selection:</Typography>
-                    </Grid>
-                    <Grid item>
-                        <Grid container alignItems="center">
-                            <Grid item>
-                                <Typography>X</Typography>
-                            </Grid>
-                            <Grid item>
-                                <Checkbox
-                                    // checked={axis.checkedX}
-                                    checked={props.xChecked}
-                                    disabled={surfaceFeatureSelected()}
-                                    value="checkedX"
-                                    // onChange={handleCheckboxChange}
-                                    onChange={(event) => {
-                                        props.setXChecked(!props.xChecked);
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <Typography>Y</Typography>
-                            </Grid>
-                            <Grid item>
-                                <Checkbox
-                                    checked={props.yChecked}
-                                    disabled={surfaceFeatureSelected()}
-                                    value="checkedY"
-                                    onChange={(event) => {
-                                        props.setYChecked(!props.yChecked);
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <Typography>Z</Typography>
-                            </Grid>
-                            <Grid item>
-                                <Checkbox
-                                    checked={props.zChecked}
-                                    disabled={surfaceFeatureSelected()}
-                                    value="checkedZ"
-                                    onChange={(event) => {
-                                        props.setZChecked(!props.zChecked);
-                                    }}
-                                />
-                            </Grid>
+        // if (props.featureType != "surface") {
+        return (
+            <Grid item container alignItems="center">
+                <Grid item xs={4}>
+                    <Typography>Axis Selection:</Typography>
+                </Grid>
+                <Grid item>
+                    <Grid container alignItems="center">
+                        {props.featureType != "surface" && (
+                            <>
+                                {" "}
+                                <Grid item>
+                                    <Typography>X</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Checkbox
+                                        // checked={axis.checkedX}
+                                        checked={props.xChecked}
+                                        disabled={surfaceFeatureSelected()}
+                                        value="checkedX"
+                                        // onChange={handleCheckboxChange}
+                                        onChange={(event) => {
+                                            props.setXChecked(!props.xChecked);
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <Typography>Y</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Checkbox
+                                        checked={props.yChecked}
+                                        disabled={surfaceFeatureSelected()}
+                                        value="checkedY"
+                                        onChange={(event) => {
+                                            props.setYChecked(!props.yChecked);
+                                        }}
+                                    />
+                                </Grid>
+                            </>
+                        )}
+
+                        <Grid item>
+                            <Typography>Z</Typography>
+                        </Grid>
+                        <Grid item>
+                            <Checkbox
+                                checked={props.zChecked}
+                                value="checkedZ"
+                                onChange={(event) => {
+                                    props.setZChecked(!props.zChecked);
+                                }}
+                            />
                         </Grid>
                     </Grid>
                 </Grid>
-            );
-        } else {
-            return "";
-        }
+            </Grid>
+        );
+        // } else {
+        //     return "";
+        // }
     };
 
     const AdditionalOffsets = () => {
@@ -392,7 +399,7 @@ const ProbingSettings = (props) => {
                                 <TextField
                                     value={props.yOffset}
                                     onChange={(event) => {
-                                        props.setYOffset(event.target.value)
+                                        props.setYOffset(event.target.value);
                                     }}
                                     className={props.classes.xyzOffset}
                                 />
@@ -417,7 +424,7 @@ const ProbingSettings = (props) => {
                                 <TextField
                                     value={props.zOffset}
                                     onChange={(event) => {
-                                        props.setZOffset(event.target.value)
+                                        props.setZOffset(event.target.value);
                                     }}
                                     className={props.classes.xyzOffset}
                                 />

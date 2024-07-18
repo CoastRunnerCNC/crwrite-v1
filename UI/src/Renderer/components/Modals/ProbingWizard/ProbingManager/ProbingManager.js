@@ -44,7 +44,7 @@ const ProbingManager = (props) => {
             case "probe-y-on-left":
                 return LEFT_EDGE;
             case "probe-y-on-right":
-                return  RIGHT_EDGE;
+                return RIGHT_EDGE;
             case "probe-x-on-top":
                 return TOP_EDGE;
             case "probe-x-on-bottom":
@@ -66,7 +66,7 @@ const ProbingManager = (props) => {
             case "G59":
                 return 6;
         }
-    }
+    };
 
     const RECT_PROTRUSION = 1;
     const CIRCLE_PROTRUSION = 2;
@@ -115,7 +115,11 @@ const ProbingManager = (props) => {
     let probe_feature = convertNames(props.featureType);
     let probe_location = convertNames(props.locationType);
     let corner = convertNames(props.probeCorner);
-    let axes = ["X"];
+    let axes = [
+        props.xChecked ? "X" : null,
+        props.yChecked ? "Y" : null,
+        props.zChecked ? "Z" : null,
+    ];
     let midpoint_x_y = convertNames(props.probeYSide);
     let midpoint_y_x = convertNames(props.probeXSide);
     let pocket_z = null;
@@ -137,8 +141,6 @@ const ProbingManager = (props) => {
     let yToClear = null;
     let travelDirection = null;
 
-
-
     const sendGCodeLine = (line) => {
         ipcRenderer.send("CNC::ExecuteCommand", line);
     };
@@ -152,7 +154,6 @@ const ProbingManager = (props) => {
     }
 
     function main() {
-        // Skipping get_input function as per the user's request
 
         let output = "";
 
@@ -203,7 +204,10 @@ const ProbingManager = (props) => {
             if (yToClear < 0) yToClear = 0;
         } else if (probe_feature === RECT_PROTRUSION) {
             ipcRenderer.send("Logs::LogString", "width: " + width);
-            ipcRenderer.send("Logs::LogString", "tool_diameter: " + tool_diameter);
+            ipcRenderer.send(
+                "Logs::LogString",
+                "tool_diameter: " + tool_diameter
+            );
             xToClear = width / 2 + 2 * tool_diameter;
             yToClear = length / 2 + 2 * tool_diameter;
             if (xToClear < 0) xToClear = tool_diameter;
@@ -243,11 +247,179 @@ const ProbingManager = (props) => {
 
         if (axes.includes("X") && probe_location !== MIDPOINT_Y) {
             //"(PROBE X)";
+            ipcRenderer.send("Logs::LogString", "axes x");
             sendGCodeLine("M4 S1500");
 
             if (
                 [MIDPOINT_X, MIDPOINT_Y, MIDPOINT_X_Y].includes(probe_location)
             ) {
+                let wcs_to_use = wcs;
+
+                if (
+                    !(
+                        probe_location === MIDPOINT_Y &&
+                        midpoint_y_x === BOTTOM_EDGE
+                    )
+                ) {
+                    // "(Move to X top)\n";
+                    ipcRenderer.send("Logs::LogString", "move to x top");
+                    sendGCodeLine(`G91 G0 X${xToClear}`);
+                    sendGCodeLine("G91 G0 Z-10");
+                    sendGCodeLine(`G38.2 G91 X${-20 * travelDirection} F20`);
+                    sendGCodeLine(
+                        `G10 L20 P${wcs_to_use} X${
+                            (tool_diameter / 2) * travelDirection
+                        }`
+                    );
+                    sendGCodeLine(`G91 G0 X${1 * travelDirection}`);
+                    sendGCodeLine("$HZ");
+                    sendGCodeLine("G90 G59 G0 X0Y0");
+                    sendGCodeLine("G90 G59 G0 Z0");
+                    wcs_to_use = wcs_addl;
+                }
+
+                if (
+                    !(
+                        probe_location === MIDPOINT_Y &&
+                        midpoint_y_x === TOP_EDGE
+                    )
+                ) {
+                    // "(Move to X bottom)\n";
+                    ipcRenderer.send("Logs::LogString", "move to x bottom");
+                    sendGCodeLine(`G91 G0 X${xToClear * -1}`);
+                    sendGCodeLine("G91 G0 Z-10\n");
+                    sendGCodeLine(`G38.2 G91 X${20 * travelDirection} F20`);
+                    sendGCodeLine(
+                        `G10 L20 P${wcs_to_use} X${
+                            -1 * (tool_diameter / 2) * travelDirection
+                        }`
+                    );
+                    sendGCodeLine(`G91 G0 X${-1 * travelDirection}`);
+                    sendGCodeLine("$HZ");
+                    sendGCodeLine("G90 G59 G0 X0Y0");
+                    sendGCodeLine("G90 G59 G0 Z0");
+                }
+
+                if ([MIDPOINT_X, MIDPOINT_X_Y].includes(probe_location)) {
+                    sendGCodeLine("G4 P1");
+                    sendGCodeLine(
+                        `M102 ${get_wcs_from_offset(
+                            wcs
+                        )}X ((${get_wcs_from_offset(
+                            wcs
+                        )}X+${get_wcs_from_offset(wcs_addl)}X) / 2)`
+                    );
+                    sendGCodeLine("G4 P1");
+                }
+            } else if (probe_location === CORNER) {
+                // "(Move to corner)\n";
+                sendGCodeLine(`G91 G0 X${xToClear * cornerXSign}\n`);
+                sendGCodeLine("G91 G0 Z-10\n");
+                sendGCodeLine(
+                    `G38.2 G91 X${
+                        20 * cornerXSign * -1 * travelDirection
+                    } F20\n`
+                );
+                sendGCodeLine(
+                    `G10 L20 P${wcs} X${
+                        (tool_diameter / 2) * cornerXSign * travelDirection
+                    }\n`
+                );
+                sendGCodeLine(`G91 G0 X${1 * travelDirection * cornerXSign}\n`);
+                sendGCodeLine("$HZ\n");
+                sendGCodeLine("G90 G59 G0 X0Y0\n");
+                sendGCodeLine("G90 G59 G0 Z0\n\n");
+            }
+        }
+
+        if (axes.includes("Y")) {
+            // "(PROBE Y)\n\n";
+            ipcRenderer.send("Logs::LogString", "axes y");
+            sendGCodeLine("M4 S1500\n\n");
+
+            if (
+                [MIDPOINT_X, MIDPOINT_Y, MIDPOINT_X_Y].includes(probe_location)
+            ) {
+                let wcs_to_use = wcs;
+
+                if (
+                    !(
+                        probe_location === MIDPOINT_X &&
+                        midpoint_x_y === LEFT_EDGE
+                    )
+                ) {
+                    // "(Move to Y right)\n";
+                    ipcRenderer.send("Logs::LogString", "move to y right");
+                    sendGCodeLine(`G91 G0 Y${yToClear}`);
+                    sendGCodeLine("G91 G0 Z-10");
+                    sendGCodeLine(`G38.2 G91 Y${-20 * travelDirection} F20`);
+                    sendGCodeLine(
+                        `G10 L20 P${wcs_to_use} Y${
+                            (tool_diameter / 2) * travelDirection
+                        }`
+                    );
+                    sendGCodeLine(`G91 G0 Y${1 * travelDirection}`);
+                    sendGCodeLine("$HZ");
+                    sendGCodeLine("G90 G59 G0 X0Y0");
+                    sendGCodeLine("G90 G59 G0 Z0");
+                    wcs_to_use = wcs_addl;
+                }
+
+                if (
+                    !(
+                        probe_location === MIDPOINT_X &&
+                        midpoint_x_y === RIGHT_EDGE
+                    )
+                ) {
+                    // "(Move to Y left)\n";
+                    ipcRenderer.send("Logs::LogString", "move to y left");
+                    sendGCodeLine(`G91 G0 Y${yToClear * -1}`);
+                    sendGCodeLine("G91 G0 Z-10");
+                    sendGCodeLine(`G38.2 G91 Y${20 * travelDirection} F20`);
+                    sendGCodeLine(
+                        `G10 L20 P${wcs_to_use} Y${
+                            -1 * (tool_diameter / 2) * travelDirection
+                        }`
+                    );
+                    sendGCodeLine(`G91 G0 Y${-1 * travelDirection}`);
+                    sendGCodeLine("$HZ");
+                    sendGCodeLine("G90 G59 G0 X0Y0");
+                    sendGCodeLine("G90 G59 G0 Z0\n");
+                }
+
+                if ([MIDPOINT_Y, MIDPOINT_X_Y].includes(probe_location)) {
+                    sendGCodeLine("G4 P1");
+                    sendGCodeLine(
+                        `M102 ${get_wcs_from_offset(
+                            wcs
+                        )}Y ((${get_wcs_from_offset(
+                            wcs
+                        )}Y+${get_wcs_from_offset(wcs_addl)}Y) / 2)`
+                    );
+                    sendGCodeLine("G4 P1");
+                }
+            } else if (probe_location === CORNER) {
+                // "(Move to corner)\n";
+                sendGCodeLine(`G91 G0 Y${yToClear * cornerYSign}`);
+                sendGCodeLine("G91 G0 Z-10");
+                sendGCodeLine(
+                    `G38.2 G91 Y${20 * cornerYSign * -1 * travelDirection} F20`
+                );
+                sendGCodeLine(
+                    `G10 L20 P${wcs} Y${
+                        (tool_diameter / 2) * cornerYSign * travelDirection
+                    }`
+                );
+                sendGCodeLine(`G91 G0 Y${cornerYSign * travelDirection}`);
+                sendGCodeLine("$HZ");
+                sendGCodeLine("G90 G59 G0 X0Y0");
+                sendGCodeLine("G90 G59 G0 Z0");
+            }
+
+            if (axes.includes("X") && probe_location === MIDPOINT_Y) {
+                // "(PROBE X)\n\n";
+                sendGCodeLine("M4 S1500");
+
                 let wcs_to_use = wcs;
 
                 if (
@@ -280,155 +452,13 @@ const ProbingManager = (props) => {
                 ) {
                     // "(Move to X bottom)\n";
                     sendGCodeLine(`G91 G0 X${xToClear * -1}`);
-                    sendGCodeLine("G91 G0 Z-10\n");
-                    sendGCodeLine(`G38.2 G91 X${20 * travelDirection} F20`);
-                    sendGCodeLine(`G10 L20 P${wcs_to_use} X${
-                        -1 * (tool_diameter / 2) * travelDirection
-                    }`);
-                    sendGCodeLine(`G91 G0 X${-1 * travelDirection}`);
-                    sendGCodeLine("$HZ");
-                    sendGCodeLine("G90 G59 G0 X0Y0");
-                    sendGCodeLine("G90 G59 G0 Z0");
-                }
-
-                if ([MIDPOINT_X, MIDPOINT_X_Y].includes(probe_location)) {
-                    sendGCodeLine("G4 P1");
-                    sendGCodeLine`M102 ${get_wcs_from_offset(
-                        wcs
-                    )}X ((${get_wcs_from_offset(wcs)}X+${get_wcs_from_offset(
-                        wcs_addl
-                    )}X) / 2)\n`;
-                    sendGCodeLine("G4 P1");
-                }
-            } else if (probe_location === CORNER) {
-                // "(Move to corner)\n";
-                sendGCodeLine(`G91 G0 X${xToClear * cornerXSign}\n`);
-                sendGCodeLine("G91 G0 Z-10\n");
-                sendGCodeLine(`G38.2 G91 X${
-                    20 * cornerXSign * -1 * travelDirection
-                } F20\n`);
-                sendGCodeLine(`G10 L20 P${wcs} X${
-                    (tool_diameter / 2) * cornerXSign * travelDirection
-                }\n`);
-                sendGCodeLine(`G91 G0 X${1 * travelDirection * cornerXSign}\n`);
-                sendGCodeLine("$HZ\n");
-                sendGCodeLine("G90 G59 G0 X0Y0\n");
-                sendGCodeLine("G90 G59 G0 Z0\n\n");
-            }
-        }
-
-        if (axes.includes("Y")) {
-            // "(PROBE Y)\n\n";
-            sendGCodeLine("M4 S1500\n\n");
-
-            if (
-                [MIDPOINT_X, MIDPOINT_Y, MIDPOINT_X_Y].includes(probe_location)
-            ) {
-                let wcs_to_use = wcs;
-
-                if (
-                    !(
-                        probe_location === MIDPOINT_X &&
-                        midpoint_x_y === LEFT_EDGE
-                    )
-                ) {
-                    // "(Move to Y right)\n";
-                    sendGCodeLine(`G91 G0 Y${yToClear}`);
-                    sendGCodeLine("G91 G0 Z-10");
-                    sendGCodeLine(`G38.2 G91 Y${-20 * travelDirection} F20`);
-                    sendGCodeLine(`G10 L20 P${wcs_to_use} Y${
-                        (tool_diameter / 2) * travelDirection
-                    }`);
-                    sendGCodeLine(`G91 G0 Y${1 * travelDirection}`);
-                    sendGCodeLine("$HZ");
-                    sendGCodeLine("G90 G59 G0 X0Y0");
-                    sendGCodeLine("G90 G59 G0 Z0");
-                    wcs_to_use = wcs_addl;
-                }
-
-                if (
-                    !(
-                        probe_location === MIDPOINT_X &&
-                        midpoint_x_y === RIGHT_EDGE
-                    )
-                ) {
-                    // "(Move to Y left)\n";
-                    sendGCodeLine(`G91 G0 Y${yToClear * -1}`);
-                    sendGCodeLine("G91 G0 Z-10");
-                    sendGCodeLine(`G38.2 G91 Y${20 * travelDirection} F20`);
-                    output += `G10 L20 P${wcs_to_use} Y${
-                        -1 * (tool_diameter / 2) * travelDirection
-                    }\n`;
-                    sendGCodeLine(`G91 G0 Y${-1 * travelDirection}`);
-                    sendGCodeLine("$HZ");
-                    sendGCodeLine("G90 G59 G0 X0Y0");
-                    sendGCodeLine("G90 G59 G0 Z0\n");
-                }
-
-                if ([MIDPOINT_Y, MIDPOINT_X_Y].includes(probe_location)) {
-                    sendGCodeLine("G4 P1");
-                    sendGCodeLine(`M102 ${get_wcs_from_offset(
-                        wcs
-                    )}Y ((${get_wcs_from_offset(wcs)}Y+${get_wcs_from_offset(
-                        wcs_addl
-                    )}Y) / 2)`);
-                    sendGCodeLine("G4 P1");
-                }
-            } else if (probe_location === CORNER) {
-                // "(Move to corner)\n";
-                sendGCodeLine(`G91 G0 Y${yToClear * cornerYSign}`);
-                sendGCodeLine("G91 G0 Z-10");
-                sendGCodeLine(`G38.2 G91 Y${
-                    20 * cornerYSign * -1 * travelDirection
-                } F20`);
-                sendGCodeLine(`G10 L20 P${wcs} Y${
-                    (tool_diameter / 2) * cornerYSign * travelDirection
-                }`);
-                sendGCodeLine(`G91 G0 Y${cornerYSign * travelDirection}`);
-                sendGCodeLine("$HZ");
-                sendGCodeLine("G90 G59 G0 X0Y0");
-                sendGCodeLine("G90 G59 G0 Z0");
-            }
-
-            if (axes.includes("X") && probe_location === MIDPOINT_Y) {
-                // "(PROBE X)\n\n";
-                sendGCodeLine("M4 S1500");
-
-                let wcs_to_use = wcs;
-
-                if (
-                    !(
-                        probe_location === MIDPOINT_Y &&
-                        midpoint_y_x === BOTTOM_EDGE
-                    )
-                ) {
-                    // "(Move to X top)\n";
-                    sendGCodeLine(`G91 G0 X${xToClear}`);
-                    sendGCodeLine("G91 G0 Z-10");
-                    sendGCodeLine(`G38.2 G91 X${-20 * travelDirection} F20`);
-                    sendGCodeLine(`G10 L20 P${wcs_to_use} X${
-                        (tool_diameter / 2) * travelDirection
-                    }`);
-                    sendGCodeLine(`G91 G0 X${1 * travelDirection}`);
-                    sendGCodeLine("$HZ");
-                    sendGCodeLine("G90 G59 G0 X0Y0");
-                    sendGCodeLine("G90 G59 G0 Z0");
-                    wcs_to_use = wcs_addl;
-                }
-
-                if (
-                    !(
-                        probe_location === MIDPOINT_Y &&
-                        midpoint_y_x === TOP_EDGE
-                    )
-                ) {
-                    // "(Move to X bottom)\n";
-                    sendGCodeLine(`G91 G0 X${xToClear * -1}`);
                     sendGCodeLine("G91 G0 Z-10");
                     sendGCodeLine(`G38.2 G91 X${20 * travelDirection} F20`);
-                    sendGCodeLine(`G10 L20 P${wcs_to_use} X${
-                        -1 * (tool_diameter / 2) * travelDirection
-                    }`);
+                    sendGCodeLine(
+                        `G10 L20 P${wcs_to_use} X${
+                            -1 * (tool_diameter / 2) * travelDirection
+                        }`
+                    );
                     sendGCodeLine(`G91 G0 X${-1 * travelDirection}`);
                     sendGCodeLine("$HZ");
                     sendGCodeLine("G90 G59 G0 X0Y0");
@@ -446,7 +476,7 @@ const ProbingManager = (props) => {
                     // "(Move to X midpoint)\n";
                     sendGCodeLine(`${get_wcs_from_offset(wcs)} G0 G90 X0`);
                     if (axes.includes("Y")) {
-                        // "(Move to Y zero)";
+                        // "(Move to Y zero)"
                         sendGCodeLine(`${get_wcs_from_offset(wcs)} G0 G90 Y0`);
                     }
                 } else if (probe_location === MIDPOINT_Y) {
@@ -463,36 +493,45 @@ const ProbingManager = (props) => {
                 [RECT_POCKET, CIRCLE_POCKET].includes(probe_feature) &&
                 pocket_z === POCKET_TOP
             ) {
-                sendGCodeLine(`G0 G91 X${diameter / 2 + tool_diameter} Y${
-                    diameter / 2 + tool_diameter
-                }`);
+                sendGCodeLine(
+                    `G0 G91 X${diameter / 2 + tool_diameter} Y${
+                        diameter / 2 + tool_diameter
+                    }`
+                );
             }
 
             sendGCodeLine("G38.2 G91 Z-20 F20");
             sendGCodeLine(`G10 L20 P${wcs} Z0`);
 
             if (x_offset) {
-                sendGCodeLine(`M102 ${get_wcs_from_offset(
-                    wcs
-                )}X ${get_wcs_from_offset(wcs)}X+${x_offset}`);
+                sendGCodeLine(
+                    `M102 ${get_wcs_from_offset(wcs)}X ${get_wcs_from_offset(
+                        wcs
+                    )}X+${x_offset}`
+                );
             }
             if (y_offset) {
-                sendGCodeLine(`M102 ${get_wcs_from_offset(
-                    wcs
-                )}Y ${get_wcs_from_offset(wcs)}Y+${y_offset}`);
+                sendGCodeLine(
+                    `M102 ${get_wcs_from_offset(wcs)}Y ${get_wcs_from_offset(
+                        wcs
+                    )}Y+${y_offset}`
+                );
             }
             if (z_offset) {
-                sendGCodeLine(`M102 ${get_wcs_from_offset(
-                    wcs
-                )}Z ${get_wcs_from_offset(wcs)}Z+${z_offset}`);
+                sendGCodeLine(
+                    `M102 ${get_wcs_from_offset(wcs)}Z ${get_wcs_from_offset(
+                        wcs
+                    )}Z+${z_offset}`
+                );
             }
         }
-
+        sendGCodeLine("$H");
 
         console.log("PRINTING");
     }
-
-    main();
+    if (props.startProbing) {
+        main();
+    }
 
     return "";
 };

@@ -90,6 +90,7 @@ const RightPanel = (props) => {
                 xOffset={xOffset}
                 yOffset={yOffset}
                 zOffset={zOffset}
+                startProbing={props.startProbing}
             />
         );
     }

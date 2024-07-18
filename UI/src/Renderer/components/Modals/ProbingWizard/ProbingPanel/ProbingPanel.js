@@ -54,6 +54,9 @@ const ProbingPanel = (props) => {
                     featureDiameter={featureDiameter}
                     featureLength={featureLength}
                     featureWidth={featureWidth}
+                    xOffset={xOffset}
+                    yOffset={yOffset}
+                    zOffset={zOffset}
                 />
                 <MachineJogging />
                 <Grid item>

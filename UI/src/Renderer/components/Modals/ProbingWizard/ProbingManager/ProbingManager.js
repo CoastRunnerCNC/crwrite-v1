@@ -53,7 +53,18 @@ const ProbingManager = (props) => {
                 return ELECTRICAL;
             case "manual":
                 return MANUAL;
-
+            case "G54":
+                return 1;
+            case "G55":
+                return 2;
+            case "G56":
+                return 3;
+            case "G57":
+                return 4;
+            case "G58":
+                return 5;
+            case "G59":
+                return 6;
         }
     }
 
@@ -110,15 +121,15 @@ const ProbingManager = (props) => {
     let pocket_z = null;
     let probe_type = convertNames(props.probingType);
     let tool_diameter = parseFloat(props.toolWidth);
-    let wcs = null;
-    let wcs_addl = null;
+    let wcs = convertNames(props.wcs);
+    let wcs_addl = wcs < 6 ? wcs + 1 : 1;
     let width = parseFloat(props.featureWidth);
     let length = parseFloat(props.featureLength);
     let diameter = parseFloat(props.featureDiameter);
     let height = null;
-    let x_offset = null;
-    let y_offset = null;
-    let z_offset = null;
+    let x_offset = parseFloat(props.xOffset);
+    let y_offset = parseFloat(props.yOffset);
+    let z_offset = parseFloat(props.zOffset);
 
     let cornerXSign = null;
     let cornerYSign = null;

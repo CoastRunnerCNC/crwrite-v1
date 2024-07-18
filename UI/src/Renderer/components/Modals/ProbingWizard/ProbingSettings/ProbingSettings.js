@@ -365,6 +365,10 @@ const ProbingSettings = (props) => {
                             </Grid>
                             <Grid item>
                                 <TextField
+                                    value={props.xOffset}
+                                    onChange={(event) => {
+                                        props.setXOffset(event.target.value);
+                                    }}
                                     className={props.classes.xyzOffset}
                                 />
                             </Grid>
@@ -386,6 +390,10 @@ const ProbingSettings = (props) => {
                             </Grid>
                             <Grid item>
                                 <TextField
+                                    value={props.yOffset}
+                                    onChange={(event) => {
+                                        props.setYOffset(event.target.value)
+                                    }}
                                     className={props.classes.xyzOffset}
                                 />
                             </Grid>
@@ -407,6 +415,10 @@ const ProbingSettings = (props) => {
                             </Grid>
                             <Grid item>
                                 <TextField
+                                    value={props.zOffset}
+                                    onChange={(event) => {
+                                        props.setZOffset(event.target.value)
+                                    }}
                                     className={props.classes.xyzOffset}
                                 />
                             </Grid>

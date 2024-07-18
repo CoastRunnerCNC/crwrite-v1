@@ -18,6 +18,9 @@ const RightPanel = (props) => {
     const [featureDiameter, setFeatureDiameter] = useState("");
     const [featureLength, setFeatureLength] = useState("");
     const [featureWidth, setFeatureWidth] = useState("");
+    const [xOffset, setXOffset] = useState();
+    const [yOffset, setYOffset] = useState();
+    const [zOffset, setZOffset] = useState();
 
     if (!props.probingActive) {
         return (
@@ -53,6 +56,13 @@ const RightPanel = (props) => {
                 setFeatureLength={setFeatureLength}
                 featureWidth={featureWidth}
                 setFeatureWidth={featureWidth}
+                xOffset={xOffset}
+                setXOffset={setXOffset}
+                yOffset={yOffset}
+                setYOffset={setYOffset}
+                zOffset={zOffset}
+                setZOffset={setZOffset}
+
             />
         );
     } else {
@@ -74,6 +84,9 @@ const RightPanel = (props) => {
                 featureDiameter={featureDiameter}
                 featureLength={featureLength}
                 featureWidth={featureWidth}
+                xOffset={xOffset}
+                yOffset={yOffset}
+                zOffset={zOffset}
             />
         );
     }

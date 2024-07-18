@@ -32,6 +32,9 @@ const ProbeFeature = (props) => {
                         <MenuItem value="circleProtrusion">
                             Circle Protrusion
                         </MenuItem>
+                        <MenuItem value="rectangleProtrusion">
+                            Rectangle Protrusion
+                        </MenuItem>
                     </Select>
                 </Grid>
             </Grid>

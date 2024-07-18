@@ -12,11 +12,21 @@ const FeatureSizes = (props) => {
                 <Grid container>
                     <Grid item xs={6}>
                         <Typography>Width</Typography>
-                        <TextField />
+                        <TextField
+                            value={props.featureWidth}
+                            onChange={(event) => {
+                                props.setFeatureWidth(event.target.value);
+                            }}
+                        />
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography>Height</Typography>
-                        <TextField />
+                        <Typography>Length</Typography>
+                        <TextField
+                            value={props.featureLength}
+                            onChange={(event) => {
+                                props.setFeatureLength(event.target.value);
+                            }}
+                        />
                     </Grid>
                 </Grid>
             );
@@ -52,13 +62,18 @@ const FeatureSizes = (props) => {
                         <Typography>Diameter</Typography>
                     </Grid>
                     <Grid item style={{ marginLeft: "8px" }}>
-                        <TextField className={props.classes.xyzTextField} />
+                        <TextField
+                            className={props.classes.xyzTextField}
+                            value={featureDiameter}
+                            onChange={(event) => {
+                                props.setFeatureDiameter(event.target.value);
+                            }}
+                        />
                     </Grid>
                 </>
             );
         }
-    }
-    else {
+    } else {
         return "";
     }
 };

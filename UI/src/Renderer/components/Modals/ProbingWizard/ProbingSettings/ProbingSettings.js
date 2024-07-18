@@ -18,36 +18,20 @@ const styles = {
 };
 
 const ProbingSettings = (props) => {
-    const [probingType, setProbingType] = useState("");
-    const [toolUnits, setToolUnits] = useState("");
-    const [wcs, setWcs] = useState("");
-    const [axis, setAxis] = useState({
-        checkedX: false,
-        checkedY: false,
-        checkedZ: false,
-    });
-    const [xChecked, setXChecked] = useState(false);
-    const [yChecked, setYChecked] = useState(false);
-    const [zChecked, setZChecked] = useState(false);
-    const [probeXSide, setProbeXSide] = useState("");
-    const [probeYSide, setProbeYSide] = useState("");
-    const [probeCorner, setProbeCorner] = useState("");
-    const [probeZ, setProbeZ] = useState();
-
     const onChangeProbeWhere = (event) => {
         props.setLocationType(event.target.value);
     };
 
     const onChangeProbingType = (event) => {
-        setProbingType(event.target.value);
+        props.setProbingType(event.target.value);
     };
 
     const onChangeToolUnits = (event) => {
-        setToolUnits(event.target.value);
+        props.setToolUnits(event.target.value);
     };
 
     const onChangeWcs = (event) => {
-        setWcs(event.target.value);
+        props.setWcs(event.target.value);
     };
 
     const surfaceFeatureSelected = () => {
@@ -100,7 +84,7 @@ const ProbingSettings = (props) => {
 
     const LocationDetails = () => {
         if (props.featureTypeType != "surface") {
-            if (props.locationType === "midpoint-x" && yChecked) {
+            if (props.locationType === "midpoint-x" && props.yChecked) {
                 return (
                     <Grid container item>
                         <Grid item xs={4}>
@@ -110,10 +94,10 @@ const ProbingSettings = (props) => {
                             <Select
                                 disabled={surfaceFeatureSelected()}
                                 onChange={(event) => {
-                                    setProbeYSide(event.target.value);
+                                    props.setProbeYSide(event.target.value);
                                 }}
                                 fullWidth
-                                value={probeYSide}
+                                value={props.probeYSide}
                             >
                                 <MenuItem value="probe-y-on-left">
                                     Probe Y on Left
@@ -125,7 +109,7 @@ const ProbingSettings = (props) => {
                         </Grid>
                     </Grid>
                 );
-            } else if (props.locationType === "midpoint-y" && xChecked) {
+            } else if (props.locationType === "midpoint-y" && props.xChecked) {
                 return (
                     <Grid container item>
                         <Grid item xs={4}>
@@ -135,10 +119,10 @@ const ProbingSettings = (props) => {
                             <Select
                                 disabled={surfaceFeatureSelected()}
                                 onChange={(event) => {
-                                    setProbeXSide(event.target.value);
+                                    props.setProbeXSide(event.target.value);
                                 }}
                                 fullWidth
-                                value={probeXSide}
+                                value={props.probeXSide}
                             >
                                 <MenuItem value="probe-x-on-top">
                                     Probe X on Top
@@ -160,10 +144,10 @@ const ProbingSettings = (props) => {
                             <Select
                                 disabled={surfaceFeatureSelected()}
                                 onChange={(event) => {
-                                    setProbeCorner(event.target.value);
+                                    props.setProbeCorner(event.target.value);
                                 }}
                                 fullWidth
-                                value={probeCorner}
+                                value={props.probeCorner}
                             >
                                 <MenuItem value="top-left">
                                     Probe top left corner
@@ -191,7 +175,9 @@ const ProbingSettings = (props) => {
         console.log(props.featureType);
         console.log(props.featureType === "circlePocket");
         if (
-            (props.featureType === "rectanglePocket" || props.featureType === "circlePocket") && zChecked
+            (props.featureType === "rectanglePocket" ||
+                props.featureType === "circlePocket") &&
+            props.zChecked
         ) {
             return (
                 <Grid container item>
@@ -202,10 +188,10 @@ const ProbingSettings = (props) => {
                         <Select
                             disabled={surfaceFeatureSelected()}
                             onChange={(event) => {
-                                setProbeZ(event.target.value);
+                                props.setProbeZ(event.target.value);
                             }}
                             fullWidth
-                            value={probeZ}
+                            value={props.probeZ}
                         >
                             <MenuItem value="top">
                                 Probe Z top of pocket
@@ -230,7 +216,7 @@ const ProbingSettings = (props) => {
                 </Grid>
                 <Grid item xs>
                     <Select
-                        value={probingType}
+                        value={props.probingType}
                         onChange={onChangeProbingType}
                         fullWidth
                     >
@@ -251,7 +237,7 @@ const ProbingSettings = (props) => {
                 <Grid item xs>
                     <Select
                         labelId="toolUnits"
-                        value={toolUnits}
+                        value={props.toolUnits}
                         onChange={onChangeToolUnits}
                         fullWidth
                     >
@@ -271,7 +257,11 @@ const ProbingSettings = (props) => {
                         <Typography>Tool Width</Typography>
                     </Grid>
                     <Grid item xs>
-                        <TextField fullWidth />
+                        <TextField
+                            value={props.toolWidth}
+                            onChange={(event) => {props.setToolWidth(event.target.value)}}
+                            fullWidth
+                        />
                     </Grid>
                 </Grid>
             );
@@ -289,7 +279,7 @@ const ProbingSettings = (props) => {
                 <Grid item xs>
                     <Select
                         labelId="target-wcs"
-                        value={wcs}
+                        value={props.wcs}
                         onChange={onChangeWcs}
                         fullWidth
                     >
@@ -320,12 +310,12 @@ const ProbingSettings = (props) => {
                             <Grid item>
                                 <Checkbox
                                     // checked={axis.checkedX}
-                                    checked={xChecked}
+                                    checked={props.xChecked}
                                     disabled={surfaceFeatureSelected()}
                                     value="checkedX"
                                     // onChange={handleCheckboxChange}
                                     onChange={(event) => {
-                                        setXChecked(!xChecked);
+                                        props.setXChecked(!props.xChecked);
                                     }}
                                 />
                             </Grid>
@@ -334,11 +324,11 @@ const ProbingSettings = (props) => {
                             </Grid>
                             <Grid item>
                                 <Checkbox
-                                    checked={yChecked}
+                                    checked={props.yChecked}
                                     disabled={surfaceFeatureSelected()}
                                     value="checkedY"
                                     onChange={(event) => {
-                                        setYChecked(!yChecked);
+                                        props.setYChecked(!props.yChecked);
                                     }}
                                 />
                             </Grid>
@@ -347,11 +337,11 @@ const ProbingSettings = (props) => {
                             </Grid>
                             <Grid item>
                                 <Checkbox
-                                    checked={zChecked}
+                                    checked={props.zChecked}
                                     disabled={surfaceFeatureSelected()}
                                     value="checkedZ"
                                     onChange={(event) => {
-                                        setZChecked(!zChecked);
+                                        props.setZChecked(!props.zChecked);
                                     }}
                                 />
                             </Grid>
@@ -466,6 +456,12 @@ const ProbingSettings = (props) => {
                     <Grid item container>
                         <FeatureSizes
                             featureType={props.featureType}
+                            featureDiameter={props.featureDiameter}
+                            setFeatureDiameter={props.setFeatureDiameter}
+                            featureWidth={props.featureWidth}
+                            setFeatureWidth={props.setFeatureWidth}
+                            featureLength={props.featureLength}
+                            setFeatureLength={props.setFeatureLength}
                             shape={getShape()}
                         />
                     </Grid>

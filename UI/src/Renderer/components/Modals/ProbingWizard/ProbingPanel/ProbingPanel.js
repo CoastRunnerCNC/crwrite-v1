@@ -38,8 +38,9 @@ const ProbingPanel = (props) => {
                     paddingRight: "8px",
                 }}
             >
-                <ProbingManager
+                {/* <ProbingManager
                     featureType={props.featureType}
+                    toolWidth={props.toolWidth}
                     locationType={props.locationType}
                     probingType={props.probingType}
                     toolUnits={props.toolUnits}
@@ -51,13 +52,13 @@ const ProbingPanel = (props) => {
                     probeYSide={props.probeYSide}
                     probeCorner={props.probeCorner}
                     probeZ={props.probeZ}
-                    featureDiameter={featureDiameter}
-                    featureLength={featureLength}
-                    featureWidth={featureWidth}
-                    xOffset={xOffset}
-                    yOffset={yOffset}
-                    zOffset={zOffset}
-                />
+                    featureDiameter={props.featureDiameter}
+                    featureLength={props.featureLength}
+                    featureWidth={props.featureWidth}
+                    xOffset={props.xOffset}
+                    yOffset={props.yOffset}
+                    zOffset={props.zOffset}
+                /> */}
                 <MachineJogging />
                 <Grid item>
                     <Typography>

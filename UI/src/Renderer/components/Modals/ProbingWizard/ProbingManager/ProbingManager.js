@@ -171,6 +171,8 @@ const ProbingManager = (props) => {
         if (probe_location === CORNER) {
             xToClear = 2 * tool_diameter;
             yToClear = 2 * tool_diameter;
+            ipcRenderer.send("Logs::LogString", "xToClear: " + xToClear);
+            ipcRenderer.send("Logs::LogString", "ytoClear: " + yToClear);
             switch (corner) {
                 case TOP_LEFT:
                     cornerXSign = 1;
@@ -200,6 +202,8 @@ const ProbingManager = (props) => {
             if (xToClear < 0) xToClear = 0;
             if (yToClear < 0) yToClear = 0;
         } else if (probe_feature === RECT_PROTRUSION) {
+            ipcRenderer.send("Logs::LogString", "width: " + width);
+            ipcRenderer.send("Logs::LogString", "tool_diameter: " + tool_diameter);
             xToClear = width / 2 + 2 * tool_diameter;
             yToClear = length / 2 + 2 * tool_diameter;
             if (xToClear < 0) xToClear = tool_diameter;
@@ -210,7 +214,8 @@ const ProbingManager = (props) => {
             if (xToClear < 0) xToClear = tool_diameter;
             if (yToClear < 0) yToClear = tool_diameter;
         }
-
+        ipcRenderer.send("Logs::LogString", "xToClear: " + xToClear);
+        ipcRenderer.send("Logs::LogString", "ytoClear: " + yToClear);
         if ([RECT_POCKET, CIRCLE_POCKET].includes(probe_feature)) {
             travelDirection = -1;
         } else if (

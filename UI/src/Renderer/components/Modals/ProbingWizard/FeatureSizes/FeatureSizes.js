@@ -64,7 +64,7 @@ const FeatureSizes = (props) => {
                     <Grid item style={{ marginLeft: "8px" }}>
                         <TextField
                             className={props.classes.xyzTextField}
-                            value={featureDiameter}
+                            value={props.featureDiameter}
                             onChange={(event) => {
                                 props.setFeatureDiameter(event.target.value);
                             }}

@@ -29,7 +29,7 @@ const ProbingWizard = (props) => {
             <Dialog
                 open={props.open}
                 PaperProps={{
-                    style: { minWidth: "800px", minHeight: "550px" },
+                    style: { width: "800px", minHeight: "550px" },
                 }}
                 maxWidth="xl"
             >

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ProbingSettings from "../ProbingSettings/ProbingSettings";
 import ProbingPanel from "../ProbingPanel/ProbingPanel";
+import { ipcRenderer } from "electron";
 
 const RightPanel = (props) => {
 
@@ -21,6 +22,8 @@ const RightPanel = (props) => {
     const [xOffset, setXOffset] = useState();
     const [yOffset, setYOffset] = useState();
     const [zOffset, setZOffset] = useState();
+
+    ipcRenderer.send("Logs::LogString", "toolWidth: " + toolWidth);
 
     if (!props.probingActive) {
         return (
@@ -55,7 +58,7 @@ const RightPanel = (props) => {
                 featureLength={featureLength}
                 setFeatureLength={setFeatureLength}
                 featureWidth={featureWidth}
-                setFeatureWidth={featureWidth}
+                setFeatureWidth={setFeatureWidth}
                 xOffset={xOffset}
                 setXOffset={setXOffset}
                 yOffset={yOffset}

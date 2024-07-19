@@ -15,6 +15,23 @@ const ProbingWizard = (props) => {
     const [locationType, setLocationType] = useState("");
     const [probingActive, setProbingActive] = useState(false);
     const [startProbing, setStartProbing] = useState(false);
+    const [probingType, setProbingType] = useState("");
+    const [toolWidth, setToolWidth] = useState("");
+    const [toolUnits, setToolUnits] = useState("");
+    const [wcs, setWcs] = useState("");
+    const [xChecked, setXChecked] = useState(false);
+    const [yChecked, setYChecked] = useState(false);
+    const [zChecked, setZChecked] = useState(false);
+    const [probeXSide, setProbeXSide] = useState("");
+    const [probeYSide, setProbeYSide] = useState("");
+    const [probeCorner, setProbeCorner] = useState("");
+    const [probeZ, setProbeZ] = useState("");
+    const [featureDiameter, setFeatureDiameter] = useState("");
+    const [featureLength, setFeatureLength] = useState("");
+    const [featureWidth, setFeatureWidth] = useState("");
+    const [xOffset, setXOffset] = useState();
+    const [yOffset, setYOffset] = useState();
+    const [zOffset, setZOffset] = useState();
 
     const PictureSVG = () => {
         return (
@@ -41,6 +58,167 @@ const ProbingWizard = (props) => {
         setStartProbing(false);
         setFeatureType("");
         setLocationType("");
+    };
+
+    const fieldsFilled = () => {
+        if (
+            !(
+                probingType != "" &&
+                toolUnits != "" &&
+                wcs != "" &&
+                (xChecked || yChecked || zChecked)
+            )
+        ) {
+            return false;
+        }
+
+        if (featureType === "surface") {
+            if (!zChecked) {
+                return false;
+            }
+        } else if (featureType === "rectanglePocket") {
+            if (
+                toolWidth === "" ||
+                featureLength === "" ||
+                featureWidth === ""
+            ) {
+                return false;
+            }
+            if (locationType === "midpoint-x") {
+                if (yChecked) {
+                    if (probeYSide === "") {
+                        return false;
+                    }
+                }
+                if (zChecked) {
+                    if (probeZ === "") {
+                        return false;
+                    }
+                }
+            } else if (locationType === "midpoint-y") {
+                if (xChecked) {
+                    if (probeXSide === "") {
+                        return false;
+                    }
+                }
+                if (zChecked) {
+                    if (probeZ === "") {
+                        return false;
+                    }
+                }
+            } else if (locationType === "corner") {
+                if (zChecked) {
+                    if (probeZ === "") {
+                        return false;
+                    }
+                }
+                if (probeCorner === "") {
+                    return false;
+                }
+            } else if (locationType === "midpoint-x-y") {
+                if (zChecked) {
+                    if (probeZ === "") {
+                        return false;
+                    }
+                }
+            } else {
+                return false;
+            }
+        } else if (featureType === "rectangleProtrusion") {
+            if (
+                toolWidth === "" ||
+                featureLength === "" ||
+                featureWidth === ""
+            ) {
+                return false;
+            }
+            if (locationType === "midpoint-x") {
+                if (yChecked) {
+                    if (probeYSide === "") {
+                        return false;
+                    }
+                }
+            } else if (locationType === "midpoint-y") {
+                if (xChecked) {
+                    if (probeXSide === "") {
+                        return false;
+                    }
+                }
+            } else if (locationType === "corner") {
+                if (probeCorner === "") {
+                    return false;
+                }
+            } else if (locationType === "midpoint-x-y") {
+
+            } else {
+                return false;
+            }
+        } else if (featureType === "circlePocket") {
+            if (
+                toolWidth === "" ||
+                featureDiameter === ""
+            ) {
+                return false;
+            }
+            if (locationType === "midpoint-x") {
+                if (yChecked) {
+                    if (probeYSide === "") {
+                        return false;
+                    }
+                }
+                if (zChecked) {
+                    if (probeZ === "") {
+                        return false;
+                    }
+                }
+            } else if (locationType === "midpoint-y") {
+                if (xChecked) {
+                    if (probeXSide === "") {
+                        return false;
+                    }
+                }
+                if (zChecked) {
+                    if (probeZ === "") {
+                        return false;
+                    }
+                }
+            } else if (locationType === "midpoint-x-y") {
+                if (zChecked) {
+                    if (probeZ === "") {
+                        return false;
+                    }
+                }
+            } else {
+                return false;
+            }
+        } else if (featureType === "circleProtrusion") {
+            if (
+                toolWidth === "" ||
+                featureDiameter === ""
+            ) {
+                return false;
+            }
+            if (locationType === "midpoint-x") {
+                if (yChecked) {
+                    if (probeYSide === "") {
+                        return false;
+                    }
+                }
+            } else if (locationType === "midpoint-y") {
+                if (xChecked) {
+                    if (probeXSide === "") {
+                        return false;
+                    }
+                }
+            } else if (locationType === "midpoint-x-y") {
+
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+        return true;
     };
 
     return (
@@ -86,12 +264,47 @@ const ProbingWizard = (props) => {
                                         setLocationType={setLocationType}
                                         probingActive={probingActive}
                                         startProbing={startProbing}
+                                        probingType={probingType}
+                                        setProbingType={setProbingType}
+                                        toolWidth={toolWidth}
+                                        setToolWidth={setToolWidth}
+                                        toolUnits={toolUnits}
+                                        setToolUnits={setToolUnits}
+                                        wcs={wcs}
+                                        setWcs={setWcs}
+                                        xChecked={xChecked}
+                                        setXChecked={setXChecked}
+                                        yChecked={yChecked}
+                                        setYChecked={setYChecked}
+                                        zChecked={zChecked}
+                                        setZChecked={setZChecked}
+                                        probeXSide={probeXSide}
+                                        setProbeXSide={setProbeXSide}
+                                        probeYSide={probeYSide}
+                                        setProbeYSide={setProbeYSide}
+                                        probeCorner={probeCorner}
+                                        setProbeCorner={setProbeCorner}
+                                        probeZ={probeZ}
+                                        setProbeZ={setProbeZ}
+                                        featureDiameter={featureDiameter}
+                                        setFeatureDiameter={setFeatureDiameter}
+                                        featureLength={featureLength}
+                                        setFeatureLength={setFeatureLength}
+                                        featureWidth={featureWidth}
+                                        setFeatureWidth={setFeatureWidth}
+                                        xOffset={xOffset}
+                                        setXOffset={setXOffset}
+                                        yOffset={yOffset}
+                                        setYOffset={setYOffset}
+                                        zOffset={zOffset}
+                                        setZOffset={setZOffset}
                                     />
                                 </Grid>
                                 <Grid item>
                                     <Button
                                         onClick={handleStart}
                                         fullWidth
+                                        disabled={!fieldsFilled()}
                                         style={{
                                             border: "1px solid black",
                                             backgroundColor: "#f6f6f6",

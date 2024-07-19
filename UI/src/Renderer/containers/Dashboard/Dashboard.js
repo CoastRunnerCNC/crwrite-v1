@@ -366,7 +366,7 @@ function Dashboard(props) {
                                 <ItemPanel title="Quick Actions" color="secondary">
                                     <Grid container direction='column' justify='space-evenly' alignItems='center' style={{height: '200px'}}>
                                         <Grid item>
-                                            <Button onClick={() => {setOpenProbingWizard(true)}} classes={{root: classes.smallGreyButton}}>Probing Wizard</Button>
+                                            <Button disabled={status != 2} onClick={() => {setOpenProbingWizard(true)}} classes={{root: classes.smallGreyButton}}>Probing Wizard</Button>
                                         </Grid>
                                         <Grid item>
                                             <Button disabled={true} classes={{root: classes.smallGreyButton}}>Set Home Position</Button>
@@ -385,7 +385,7 @@ function Dashboard(props) {
                                 <ItemPanel title="Guided Mode">
                                     <Grid container alignItems="center" justify="space-evenly" style={{height: '120px', width: '100%'}}>
                                         <Grid item>
-                                            <Button id="run-code" onClick={onClickRun} classes={{root: classes.standardButton}}>Open</Button>
+                                            <Button disabled={status != 2} id="run-code" onClick={onClickRun} classes={{root: classes.standardButton}}>Open</Button>
                                         </Grid>
                                         <Grid item>
                                             <Button id="store" onClick={() => { shell.openExternal(app.dashboard.store.url) }}classes={{root: classes.standardButton}}>Store</Button>
@@ -400,7 +400,7 @@ function Dashboard(props) {
                                 <ItemPanel title="Manual Mode">
                                     <Grid container alignItems='center' style={{height: '120px', width: '100%'}}>
                                         <Grid item>
-                                            <Button style={{marginLeft: '100px'}} onClick={handleManualOpenClick} classes={{root: classes.standardButton}}>Open</Button>
+                                            <Button disabled={status != 2} style={{marginLeft: '100px'}} onClick={handleManualOpenClick} classes={{root: classes.standardButton}}>Open</Button>
                                         </Grid>
                                         <Grid item>
                                             <Button disabled={true} style={{marginLeft: '100px'}} classes={{root: classes.standardButton}}>File Editor</Button>

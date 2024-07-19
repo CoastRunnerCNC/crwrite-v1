@@ -44,8 +44,8 @@ const PositionPreset = forwardRef(function PositionPreset(props, ref) {
     } else {
       if (position) {
         ipcRenderer.send("CNC::ExecuteCommand", `$HZ`);
-        ipcRenderer.send("CNC::ExecuteCommand", `G53 X${position.x[props.units]} Y${position.y[props.units]}`);
-        ipcRenderer.send("CNC::ExecuteCommand", `G53 Z${position.z[props.units]}`);
+        ipcRenderer.send("CNC::ExecuteCommand", `G53 G0 X${position.x[props.units]} Y${position.y[props.units]}`);
+        ipcRenderer.send("CNC::ExecuteCommand", `G53 G0 Z${position.z[props.units]}`);
       } else {
         // throw set position popup
         setShowPopup(true);

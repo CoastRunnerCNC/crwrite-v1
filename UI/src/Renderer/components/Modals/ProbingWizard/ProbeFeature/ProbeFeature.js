@@ -23,10 +23,10 @@ const ProbeFeature = (props) => {
                         fullWidth
                     >
                         <MenuItem value="surface">Surface (Z Only)</MenuItem>
-                        <MenuItem value="circlePocket">
+                        <MenuItem disabled value="circlePocket">
                             Circle Pocket / Bore
                         </MenuItem>
-                        <MenuItem value="rectanglePocket">
+                        <MenuItem disabled value="rectanglePocket">
                             Rectangle Pocket
                         </MenuItem>
                         <MenuItem value="circleProtrusion">

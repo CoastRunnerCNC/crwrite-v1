@@ -5,7 +5,7 @@ import {
     DialogContent,
     Button,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProbingSettings from "./ProbingSettings/ProbingSettings";
 import ProbeFeature from "./ProbeFeature/ProbeFeature";
 import RightPanel from "./RightPanel/RightPanel";
@@ -17,7 +17,7 @@ const ProbingWizard = (props) => {
     const [startProbing, setStartProbing] = useState(false);
     const [probingType, setProbingType] = useState("");
     const [toolWidth, setToolWidth] = useState("");
-    const [toolUnits, setToolUnits] = useState("");
+    const [toolUnits, setToolUnits] = useState("MM");
     const [wcs, setWcs] = useState("");
     const [xChecked, setXChecked] = useState(false);
     const [yChecked, setYChecked] = useState(false);
@@ -33,6 +33,18 @@ const ProbingWizard = (props) => {
     const [yOffset, setYOffset] = useState();
     const [zOffset, setZOffset] = useState();
 
+    useEffect(() => {
+        if (probingActive) {
+            console.log('Probing Active state has changed to true.');
+        }
+    }, [probingActive]);
+
+    useEffect(() => {
+        if (startProbing) {
+            console.log('Start Probing state has changed to true.');
+        }
+    }, [startProbing]);
+
     const PictureSVG = () => {
         return (
             <img
@@ -45,6 +57,7 @@ const ProbingWizard = (props) => {
     };
 
     const handleStart = () => {
+        console.log("handleStart - probingActive: " + probingActive);
         if (probingActive === false) {
             setProbingActive(true);
         } else {
@@ -52,13 +65,38 @@ const ProbingWizard = (props) => {
         }
     };
 
-    const handleClose = () => {
-        props.setOpenProbingWizard(false);
-        setProbingActive(false);
-        setStartProbing(false);
+    const resetState = () => {
         setFeatureType("");
         setLocationType("");
+        setProbingActive(false);
+        setStartProbing(false);
+        setProbingType("");
+        setToolWidth("");
+        setWcs("");
+        setXChecked(false);
+        setYChecked(false);
+        setZChecked(false);
+        setProbeXSide("");
+        setProbeYSide("");
+        setProbeCorner("");
+        setProbeZ("");
+        setFeatureDiameter("");
+        setFeatureLength("");
+        setFeatureWidth("");
+        setXOffset("");
+        setYOffset("");
+        setZOffset("");
+    }
+
+    const handleClose = () => {
+        props.setOpenProbingWizard(false);
+        resetState();
     };
+
+    const handleCloseSuccess = () => {
+        props.setOpenProbingSuccess(true);
+        resetState();
+    }
 
     const fieldsFilled = () => {
         if (
@@ -298,6 +336,7 @@ const ProbingWizard = (props) => {
                                         setYOffset={setYOffset}
                                         zOffset={zOffset}
                                         setZOffset={setZOffset}
+                                        handleCloseSuccess={handleCloseSuccess}
                                     />
                                 </Grid>
                                 <Grid item>
@@ -313,7 +352,7 @@ const ProbingWizard = (props) => {
                                                 "1px 1px 0px 0px #000000",
                                         }}
                                     >
-                                        Start
+                                        {probingActive ? "RUN" : "CONTINUE"}
                                     </Button>
                                 </Grid>
                             </Grid>

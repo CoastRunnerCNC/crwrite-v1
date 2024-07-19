@@ -531,6 +531,8 @@ const ProbingManager = (props) => {
     }
     if (props.startProbing) {
         main();
+        props.handleCloseSuccess();
+
     }
 
     return "";

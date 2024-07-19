@@ -221,7 +221,7 @@ const ProbingSettings = (props) => {
                         fullWidth
                     >
                         <MenuItem value="electrical">Electrical</MenuItem>
-                        <MenuItem value="manual">Manual</MenuItem>
+                        <MenuItem disabled value="manual">Manual</MenuItem>
                     </Select>
                 </Grid>
             </Grid>
@@ -468,7 +468,7 @@ const ProbingSettings = (props) => {
                     <LocationDetails />
                     <AdditionalLocationDetails />
                     <ProbingType />
-                    <UnitsSelect />
+                    {/* <UnitsSelect /> */}
                     <ToolWidth />
                     <TargetWCS />
                     <AdditionalOffsets />

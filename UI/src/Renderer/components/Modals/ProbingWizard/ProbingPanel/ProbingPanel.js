@@ -65,6 +65,7 @@ const ProbingPanel = (props) => {
                     xOffset={props.xOffset}
                     yOffset={props.yOffset}
                     zOffset={props.zOffset}
+                    handleCloseSuccess={props.handleCloseSuccess}
                 />
                 <MachineJogging />
                 <Grid item>

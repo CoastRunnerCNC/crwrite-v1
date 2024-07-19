@@ -136,6 +136,7 @@ function Dashboard(props) {
     const [showNewFileAlert, setShowNewFileAlert] = React.useState(false);
     const [enableEditButton, setEnableEditButton] = React.useState(false);
     const [openProbingWizard, setOpenProbingWizard] = React.useState(false);
+    const [openProbingSuccess, setOpenProbingSuccess] = React.useState(false);
 
     ipcRenderer.send('Logs::LogString', 'CRWrite Version: ' + packageJSON.version);
 
@@ -304,6 +305,11 @@ function Dashboard(props) {
         props.toggleShuttle();
     }
 
+    function handleProbingPopupOk() {
+        setOpenProbingSuccess(false);
+        setOpenProbingWizard(false);
+    }
+
     setTimeout(function() {
         ipcRenderer.once('ResponseGetPassedInFilePath', (event, filePath) => {
             if (filePath != null) {
@@ -340,7 +346,8 @@ function Dashboard(props) {
         <section className={classes.dashboardStyle}>
 			<Alert open={alertMessage.length > 0} message={alertMessage} onOk={(event) => { setAlertMessage("") }} onCancel={(e) => { setAlertMessage("")}} />
             <Alert open={showNewFileAlert} message="Would you like to create a new file?" yesNo={true} onOk={handleNewFileYes} onCancel={handleNewFileNo} />
-            <ProbingWizard open={openProbingWizard} setOpenProbingWizard={setOpenProbingWizard} />
+            <Alert open={openProbingSuccess} message="Probing process complete." yesNo={false} onOk={handleProbingPopupOk} />
+            <ProbingWizard open={openProbingWizard} setOpenProbingWizard={setOpenProbingWizard} setOpenProbingSuccess={setOpenProbingSuccess} />
             <Menu />
             <JobSelection open={showJobSelection} onClose={onCloseJobSelection} jobs={availableJobs} status={status} refreshJobs={refreshJobs} enableEditButton={enableEditButton} />
 

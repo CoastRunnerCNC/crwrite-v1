@@ -74,6 +74,7 @@ const RightPanel = (props) => {
                 yOffset={props.yOffset}
                 zOffset={props.zOffset}
                 startProbing={props.startProbing}
+                handleCloseSuccess={props.handleCloseSuccess}
             />
         );
     }

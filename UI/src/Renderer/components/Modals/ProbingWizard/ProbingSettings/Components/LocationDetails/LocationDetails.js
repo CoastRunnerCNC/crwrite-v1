@@ -1,4 +1,17 @@
+import React from "react";
+import { Grid, MenuItem, Select, Typography, withStyles } from "@material-ui/core";
+
+const styles = {
+    xyzTextField: { width: "100px" },
+    xyzOffset: { width: "80px" },
+    xyzLabelMargin: { marginRight: "8px" },
+};
+
 const LocationDetails = (props) => {
+    console.log("featureType: " + props.featureType);
+    console.log("yChecked: " + props.yChecked);
+    console.log("xChecked: " + props.xChecked);
+    console.log("locationType: " + props.locationType);
     if (props.featureType != "surface") {
         if (props.locationType === "midpoint-x" && props.yChecked) {
             return (
@@ -82,4 +95,9 @@ const LocationDetails = (props) => {
             return "";
         }
     }
+    else {
+        return ""
+    }
 };
+
+export default withStyles(styles)(LocationDetails);

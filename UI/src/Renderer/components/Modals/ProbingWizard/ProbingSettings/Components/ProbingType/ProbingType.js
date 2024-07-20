@@ -1,3 +1,13 @@
+import React from "react";
+import { Grid, MenuItem, Select, Typography, withStyles } from "@material-ui/core";
+
+
+const styles = {
+    xyzTextField: { width: "100px" },
+    xyzOffset: { width: "80px" },
+    xyzLabelMargin: { marginRight: "8px" },
+};
+
 const ProbingType = (props) => {
     const onChangeProbingType = (event) => {
         props.setProbingType(event.target.value);
@@ -22,3 +32,5 @@ const ProbingType = (props) => {
         </Grid>
     );
 };
+
+export default withStyles(styles)(ProbingType);

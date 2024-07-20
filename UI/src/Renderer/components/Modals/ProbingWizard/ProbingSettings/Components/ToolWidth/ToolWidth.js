@@ -1,3 +1,13 @@
+import React from "react";
+import { Grid, TextField, Typography, withStyles } from "@material-ui/core";
+
+
+const styles = {
+    xyzTextField: { width: "100px" },
+    xyzOffset: { width: "80px" },
+    xyzLabelMargin: { marginRight: "8px" },
+};
+
 const ToolWidth = (props) => {
     if (props.featureType != "surface") {
         return (
@@ -20,3 +30,5 @@ const ToolWidth = (props) => {
         return "";
     }
 };
+
+export default withStyles(styles)(ToolWidth);

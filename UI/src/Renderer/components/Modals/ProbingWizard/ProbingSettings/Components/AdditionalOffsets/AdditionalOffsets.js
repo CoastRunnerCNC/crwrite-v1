@@ -1,3 +1,12 @@
+import React from "react";
+import { Grid, TextField, Typography, withStyles } from "@material-ui/core";
+
+const styles = {
+    xyzTextField: { width: "100px" },
+    xyzOffset: { width: "80px" },
+    xyzLabelMargin: { marginRight: "8px" },
+};
+
 const AdditionalOffsets = (props) => {
     return (
         <Grid item>
@@ -69,3 +78,5 @@ const AdditionalOffsets = (props) => {
         </Grid>
     );
 };
+
+export default withStyles(styles)(AdditionalOffsets);

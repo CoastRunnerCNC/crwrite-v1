@@ -1,16 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import ItemPanel from "../../../ItemPanel/ItemPanel";
 import {
     Grid,
     Select,
     MenuItem,
-    TextField,
-    Checkbox,
     Typography,
     withStyles,
 } from "@material-ui/core";
 import FeatureSizes from "../FeatureSizes/FeatureSizes";
-import { YouTube } from "@material-ui/icons";
+import ProbeWhere from "./Components/ProbeWhere/ProbeWhere";
+import AxisSelection from "./Components/AxisSelection/AxisSelection";
+import LocationDetails from "./Components/LocationDetails/LocationDetails";
+import AdditionalLocationDetails from "./Components/AdditionalLocationDetails/AdditionalLocationDetails";
+import ProbingType from "./Components/ProbingType/ProbingType";
+import ToolWidth from "./Components/ToolWidth/ToolWidth";
+import TargetWCS from "./Components/TargetWCS/TargetWCS";
+import AdditionalOffsets from "./Components/AdditionalOffsets/AdditionalOffsets";
 
 const styles = {
     xyzTextField: { width: "100px" },
@@ -98,12 +103,15 @@ const ProbingSettings = (props) => {
                     />
                     <LocationDetails
                         featureType={props.featureType}
+                        locationType={props.locationType}
                         probeXSide={props.probeXSide}
                         setProbeXSide={props.setProbeXSide}
                         probeYSide={props.probeYSide}
                         setProbeYSide={props.setProbeYSide}
                         probeCorner={props.probeCorner}
                         setProbeCorner={props.setProbeCorner}
+                        yChecked={props.yChecked}
+                        xChecked={props.xChecked}
                     />
                     <AdditionalLocationDetails
                         featureType={props.featureType}

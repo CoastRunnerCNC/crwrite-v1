@@ -1,3 +1,12 @@
+import React from "react";
+import { Checkbox, Grid, Typography, withStyles } from "@material-ui/core";
+
+const styles = {
+    xyzTextField: { width: "100px" },
+    xyzOffset: { width: "80px" },
+    xyzLabelMargin: { marginRight: "8px" },
+};
+
 const AxisSelection = (props) => {
     // if (props.featureType != "surface") {
     return (
@@ -54,3 +63,5 @@ const AxisSelection = (props) => {
         </Grid>
     );
 };
+
+export default withStyles(styles)(AxisSelection);

@@ -10,6 +10,7 @@ import {
     withStyles,
 } from "@material-ui/core";
 import FeatureSizes from "../FeatureSizes/FeatureSizes";
+import { YouTube } from "@material-ui/icons";
 
 const styles = {
     xyzTextField: { width: "100px" },
@@ -17,11 +18,28 @@ const styles = {
     xyzLabelMargin: { marginRight: "8px" },
 };
 
-const ProbingSettings = (props) => {
-    const onChangeProbeWhere = (event) => {
-        props.setLocationType(event.target.value);
-    };
+const UnitsSelect = (props) => {
+    return (
+        <Grid container item>
+            <Grid item xs={4}>
+                <Typography>Units</Typography>
+            </Grid>
+            <Grid item xs>
+                <Select
+                    labelId="toolUnits"
+                    value={props.toolUnits}
+                    onChange={onChangeToolUnits}
+                    fullWidth
+                >
+                    <MenuItem value="mm">MM</MenuItem>
+                    <MenuItem value="inches">Inches</MenuItem>
+                </Select>
+            </Grid>
+        </Grid>
+    );
+};
 
+const ProbingSettings = (props) => {
     const onChangeProbingType = (event) => {
         props.setProbingType(event.target.value);
     };
@@ -49,406 +67,6 @@ const ProbingSettings = (props) => {
         }
     };
 
-    const ProbeWhere = () => {
-        if (props.featureType != "surface") {
-            return (
-                <Grid container item>
-                    <Grid item xs={4}>
-                        <Typography>Probe Where</Typography>
-                    </Grid>
-                    <Grid item xs>
-                        <Select
-                            labelId="probeWhere"
-                            value={props.locationType}
-                            onChange={onChangeProbeWhere}
-                            disabled={surfaceFeatureSelected()}
-                            fullWidth
-                        >
-                            {getShape() != "circle" && (
-                                <MenuItem value="corner">Corner</MenuItem>
-                            )}
-
-                            <MenuItem value="midpoint-x">Midpoint X</MenuItem>
-                            <MenuItem value="midpoint-y">Midpoint Y</MenuItem>
-                            <MenuItem value="midpoint-x-y">
-                                Midpoint X&Y
-                            </MenuItem>
-                        </Select>
-                    </Grid>
-                </Grid>
-            );
-        } else {
-            return "";
-        }
-    };
-
-    const LocationDetails = () => {
-        if (props.featureTypeType != "surface") {
-            if (props.locationType === "midpoint-x" && props.yChecked) {
-                return (
-                    <Grid container item>
-                        <Grid item xs={4}>
-                            <Typography>Location Details</Typography>
-                        </Grid>
-                        <Grid item xs>
-                            <Select
-                                disabled={surfaceFeatureSelected()}
-                                onChange={(event) => {
-                                    props.setProbeYSide(event.target.value);
-                                }}
-                                fullWidth
-                                value={props.probeYSide}
-                            >
-                                <MenuItem value="probe-y-on-left">
-                                    Probe Y on Left
-                                </MenuItem>
-                                <MenuItem value="probe-y-on-right">
-                                    Probe Y on Right
-                                </MenuItem>
-                            </Select>
-                        </Grid>
-                    </Grid>
-                );
-            } else if (props.locationType === "midpoint-y" && props.xChecked) {
-                return (
-                    <Grid container item>
-                        <Grid item xs={4}>
-                            <Typography>Location Details</Typography>
-                        </Grid>
-                        <Grid item xs>
-                            <Select
-                                disabled={surfaceFeatureSelected()}
-                                onChange={(event) => {
-                                    props.setProbeXSide(event.target.value);
-                                }}
-                                fullWidth
-                                value={props.probeXSide}
-                            >
-                                <MenuItem value="probe-x-on-top">
-                                    Probe X on Top
-                                </MenuItem>
-                                <MenuItem value="probe-x-on-bottom">
-                                    Probe X on Bottom
-                                </MenuItem>
-                            </Select>
-                        </Grid>
-                    </Grid>
-                );
-            } else if (props.locationType === "corner") {
-                return (
-                    <Grid container item>
-                        <Grid item xs={4}>
-                            <Typography>Location Details</Typography>
-                        </Grid>
-                        <Grid item xs>
-                            <Select
-                                disabled={surfaceFeatureSelected()}
-                                onChange={(event) => {
-                                    props.setProbeCorner(event.target.value);
-                                }}
-                                fullWidth
-                                value={props.probeCorner}
-                            >
-                                <MenuItem value="top-left">
-                                    Probe top left corner
-                                </MenuItem>
-                                <MenuItem value="top-right">
-                                    Probe top right corner
-                                </MenuItem>
-                                <MenuItem value="bottom-left">
-                                    Probe bottom left corner
-                                </MenuItem>
-                                <MenuItem value="bottom-right">
-                                    Probe bottom right corner
-                                </MenuItem>
-                            </Select>
-                        </Grid>
-                    </Grid>
-                );
-            } else {
-                return "";
-            }
-        }
-    };
-
-    const AdditionalLocationDetails = () => {
-        console.log(props.featureType);
-        console.log(props.featureType === "circlePocket");
-        if (
-            (props.featureType === "rectanglePocket" ||
-                props.featureType === "circlePocket") &&
-            props.zChecked
-        ) {
-            return (
-                <Grid container item>
-                    <Grid item xs={4}>
-                        <Typography>Location Details</Typography>
-                    </Grid>
-                    <Grid item xs>
-                        <Select
-                            disabled={surfaceFeatureSelected()}
-                            onChange={(event) => {
-                                props.setProbeZ(event.target.value);
-                            }}
-                            fullWidth
-                            value={props.probeZ}
-                        >
-                            <MenuItem value="top">
-                                Probe Z top of pocket
-                            </MenuItem>
-                            <MenuItem value="bottom">
-                                Probe z bottom of pocket
-                            </MenuItem>
-                        </Select>
-                    </Grid>
-                </Grid>
-            );
-        } else {
-            return "";
-        }
-    };
-
-    const ProbingType = () => {
-        return (
-            <Grid container item>
-                <Grid item xs={4}>
-                    <Typography>Probing Type</Typography>
-                </Grid>
-                <Grid item xs>
-                    <Select
-                        value={props.probingType}
-                        onChange={onChangeProbingType}
-                        fullWidth
-                    >
-                        <MenuItem value="electrical">Electrical</MenuItem>
-                        <MenuItem disabled value="manual">Manual</MenuItem>
-                    </Select>
-                </Grid>
-            </Grid>
-        );
-    };
-
-    const UnitsSelect = () => {
-        return (
-            <Grid container item>
-                <Grid item xs={4}>
-                    <Typography>Units</Typography>
-                </Grid>
-                <Grid item xs>
-                    <Select
-                        labelId="toolUnits"
-                        value={props.toolUnits}
-                        onChange={onChangeToolUnits}
-                        fullWidth
-                    >
-                        <MenuItem value="mm">MM</MenuItem>
-                        <MenuItem value="inches">Inches</MenuItem>
-                    </Select>
-                </Grid>
-            </Grid>
-        );
-    };
-
-    const ToolWidth = () => {
-        if (props.featureType != "surface") {
-            return (
-                <Grid container item>
-                    <Grid item xs={4}>
-                        <Typography>Tool Width</Typography>
-                    </Grid>
-                    <Grid item xs>
-                        <TextField
-                            value={props.toolWidth}
-                            onChange={(event) => {
-                                props.setToolWidth(event.target.value);
-                            }}
-                            fullWidth
-                        />
-                    </Grid>
-                </Grid>
-            );
-        } else {
-            return "";
-        }
-    };
-
-    const TargetWCS = () => {
-        return (
-            <Grid container item>
-                <Grid item xs={4}>
-                    <Typography>Target WCS</Typography>
-                </Grid>
-                <Grid item xs>
-                    <Select
-                        labelId="target-wcs"
-                        value={props.wcs}
-                        onChange={onChangeWcs}
-                        fullWidth
-                    >
-                        <MenuItem value="G54">G54</MenuItem>
-                        <MenuItem value="G55">G55</MenuItem>
-                        <MenuItem value="G56">G56</MenuItem>
-                        <MenuItem value="G57">G57</MenuItem>
-                        <MenuItem value="G58">G58</MenuItem>
-                        <MenuItem value="G59">G59</MenuItem>
-                    </Select>
-                </Grid>
-            </Grid>
-        );
-    };
-
-    const AxisSelection = () => {
-        // if (props.featureType != "surface") {
-        return (
-            <Grid item container alignItems="center">
-                <Grid item xs={4}>
-                    <Typography>Axis Selection:</Typography>
-                </Grid>
-                <Grid item>
-                    <Grid container alignItems="center">
-                        {props.featureType != "surface" && (
-                            <>
-                                {" "}
-                                <Grid item>
-                                    <Typography>X</Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Checkbox
-                                        // checked={axis.checkedX}
-                                        checked={props.xChecked}
-                                        disabled={surfaceFeatureSelected()}
-                                        value="checkedX"
-                                        // onChange={handleCheckboxChange}
-                                        onChange={(event) => {
-                                            props.setXChecked(!props.xChecked);
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item>
-                                    <Typography>Y</Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Checkbox
-                                        checked={props.yChecked}
-                                        disabled={surfaceFeatureSelected()}
-                                        value="checkedY"
-                                        onChange={(event) => {
-                                            props.setYChecked(!props.yChecked);
-                                        }}
-                                    />
-                                </Grid>
-                            </>
-                        )}
-
-                        <Grid item>
-                            <Typography>Z</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Checkbox
-                                checked={props.zChecked}
-                                value="checkedZ"
-                                onChange={(event) => {
-                                    props.setZChecked(!props.zChecked);
-                                }}
-                            />
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-        );
-        // } else {
-        //     return "";
-        // }
-    };
-
-    const AdditionalOffsets = () => {
-        const XOffset = () => {
-            if (props.featureType != "surface") {
-                return (
-                    <Grid item>
-                        <Grid container>
-                            <Grid item className={props.classes.xyzLabelMargin}>
-                                <Typography>X</Typography>
-                            </Grid>
-                            <Grid item>
-                                <TextField
-                                    value={props.xOffset}
-                                    onChange={(event) => {
-                                        props.setXOffset(event.target.value);
-                                    }}
-                                    className={props.classes.xyzOffset}
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                );
-            } else {
-                return "";
-            }
-        };
-
-        const YOffset = () => {
-            if (props.featureType != "surface") {
-                return (
-                    <Grid item>
-                        <Grid container>
-                            <Grid item className={props.classes.xyzLabelMargin}>
-                                <Typography>Y</Typography>
-                            </Grid>
-                            <Grid item>
-                                <TextField
-                                    value={props.yOffset}
-                                    onChange={(event) => {
-                                        props.setYOffset(event.target.value);
-                                    }}
-                                    className={props.classes.xyzOffset}
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                );
-            } else {
-                return "";
-            }
-        };
-
-        const ZOffset = () => {
-            if (true) {
-                return (
-                    <Grid item>
-                        <Grid container>
-                            <Grid item className={props.classes.xyzLabelMargin}>
-                                <Typography>Z</Typography>
-                            </Grid>
-                            <Grid item>
-                                <TextField
-                                    value={props.zOffset}
-                                    onChange={(event) => {
-                                        props.setZOffset(event.target.value);
-                                    }}
-                                    className={props.classes.xyzOffset}
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                );
-            } else {
-                return "";
-            }
-        };
-
-        return (
-            <Grid item>
-                <Typography>Additional Offset:</Typography>
-                <Grid container justify="space-between">
-                    <XOffset />
-                    <YOffset />
-                    <ZOffset />
-                </Grid>
-            </Grid>
-        );
-    };
-
     if (!props.probingActive) {
         return (
             <ItemPanel small title="Settings">
@@ -463,15 +81,55 @@ const ProbingSettings = (props) => {
                         paddingRight: "8px",
                     }}
                 >
-                    <ProbeWhere />
-                    <AxisSelection />
-                    <LocationDetails />
-                    <AdditionalLocationDetails />
-                    <ProbingType />
+                    <ProbeWhere
+                        featureType={props.featureType}
+                        locationType={props.locationType}
+                        setLocationType={props.setLocationType}
+                        getShape={getShape}
+                    />
+                    <AxisSelection
+                        featureType={props.featureType}
+                        xChecked={props.xChecked}
+                        yChecked={props.yChecked}
+                        zChecked={props.zChecked}
+                        setXChecked={props.setXChecked}
+                        setYChecked={props.setYChecked}
+                        setZChecked={props.setZChecked}
+                    />
+                    <LocationDetails
+                        featureType={props.featureType}
+                        probeXSide={props.probeXSide}
+                        setProbeXSide={props.setProbeXSide}
+                        probeYSide={props.probeYSide}
+                        setProbeYSide={props.setProbeYSide}
+                        probeCorner={props.probeCorner}
+                        setProbeCorner={props.setProbeCorner}
+                    />
+                    <AdditionalLocationDetails
+                        featureType={props.featureType}
+                        probeZ={props.probeZ}
+                        setProbeZ={props.setProbeZ}
+                    />
+                    <ProbingType
+                        probingType={props.probingType}
+                        setProbingType={props.setProbingType}
+                    />
                     {/* <UnitsSelect /> */}
-                    <ToolWidth />
-                    <TargetWCS />
-                    <AdditionalOffsets />
+                    <ToolWidth
+                        featureType={props.featureType}
+                        toolWidth={props.toolWidth}
+                        setToolWidth={props.setToolWidth}
+                    />
+                    <TargetWCS wcs={props.wcs} setWcs={props.setWcs} />
+                    <AdditionalOffsets
+                        featureType={props.featureType}
+                        xOffset={props.xOffset}
+                        yOffset={props.yOffset}
+                        zOffset={props.zOffset}
+                        setXOffset={props.setXOffset}
+                        setYOffset={props.setYOffset}
+                        setZOffset={props.setZOffset}
+                    />
                     <Grid item container>
                         <FeatureSizes
                             featureType={props.featureType}

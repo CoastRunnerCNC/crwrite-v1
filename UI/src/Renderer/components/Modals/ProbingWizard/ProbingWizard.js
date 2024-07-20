@@ -33,17 +33,12 @@ const ProbingWizard = (props) => {
     const [yOffset, setYOffset] = useState();
     const [zOffset, setZOffset] = useState();
 
+    // This needs to be change to watch for machine status change away from connected. Maybe put this in dashboard instead
     useEffect(() => {
-        if (probingActive) {
-            console.log('Probing Active state has changed to true.');
+        if (props.open === false) {
+            handleClose();
         }
-    }, [probingActive]);
-
-    useEffect(() => {
-        if (startProbing) {
-            console.log('Start Probing state has changed to true.');
-        }
-    }, [startProbing]);
+    }, [props.open]);
 
     const PictureSVG = () => {
         return (
@@ -86,7 +81,7 @@ const ProbingWizard = (props) => {
         setXOffset("");
         setYOffset("");
         setZOffset("");
-    }
+    };
 
     const handleClose = () => {
         props.setOpenProbingWizard(false);
@@ -96,7 +91,7 @@ const ProbingWizard = (props) => {
     const handleCloseSuccess = () => {
         props.setOpenProbingSuccess(true);
         resetState();
-    }
+    };
 
     const fieldsFilled = () => {
         if (
@@ -187,15 +182,11 @@ const ProbingWizard = (props) => {
                     return false;
                 }
             } else if (locationType === "midpoint-x-y") {
-
             } else {
                 return false;
             }
         } else if (featureType === "circlePocket") {
-            if (
-                toolWidth === "" ||
-                featureDiameter === ""
-            ) {
+            if (toolWidth === "" || featureDiameter === "") {
                 return false;
             }
             if (locationType === "midpoint-x") {
@@ -230,10 +221,7 @@ const ProbingWizard = (props) => {
                 return false;
             }
         } else if (featureType === "circleProtrusion") {
-            if (
-                toolWidth === "" ||
-                featureDiameter === ""
-            ) {
+            if (toolWidth === "" || featureDiameter === "") {
                 return false;
             }
             if (locationType === "midpoint-x") {
@@ -249,7 +237,6 @@ const ProbingWizard = (props) => {
                     }
                 }
             } else if (locationType === "midpoint-x-y") {
-
             } else {
                 return false;
             }

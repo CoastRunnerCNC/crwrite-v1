@@ -9,7 +9,7 @@ const FeatureSizes = (props) => {
     if (props.featureType != "surface") {
         if (props.shape === "square") {
             return (
-                <Grid container>
+                <Grid container spacing={2}>
                     <Grid item xs={6}>
                         <Typography>Width</Typography>
                         <TextField

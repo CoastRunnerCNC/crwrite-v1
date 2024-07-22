@@ -309,6 +309,7 @@ const ProbingManager = (props) => {
                             wcs
                         )}X+${get_wcs_from_offset(wcs_addl)}X) / 2)`
                     );
+                    sendGCodeLine(`M102 G59X ${get_wcs_from_offset(wcs)}X`);
                     sendGCodeLine("G4 P1");
                 }
             } else if (probe_location === CORNER) {
@@ -396,6 +397,7 @@ const ProbingManager = (props) => {
                             wcs
                         )}Y+${get_wcs_from_offset(wcs_addl)}Y) / 2)`
                     );
+                    sendGCodeLine(`M102 G59Y ${get_wcs_from_offset(wcs)}Y`);
                     sendGCodeLine("G4 P1");
                 }
             } else if (probe_location === CORNER) {

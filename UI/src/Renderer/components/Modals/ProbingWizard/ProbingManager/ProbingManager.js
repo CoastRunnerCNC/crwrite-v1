@@ -314,7 +314,10 @@ const ProbingManager = (props) => {
                 }
             } else if (probe_location === CORNER) {
                 // "(Move to corner)\n";
-                sendGCodeLine(`G91 G0 X${xToClear * cornerXSign}\n`);
+                sendGCodeLine(`G91 G0 X${xToClear * cornerXSign * travelDirection}\n`);
+                if (probe_feature === RECT_POCKET) {
+                    sendGCodeLine(`G91 G0 Y${yToClear * cornerYSign * travelDirection}`);
+                }
                 sendGCodeLine("G91 G0 Z-10\n");
                 sendGCodeLine(
                     `G38.2 G91 X${
@@ -402,7 +405,10 @@ const ProbingManager = (props) => {
                 }
             } else if (probe_location === CORNER) {
                 // "(Move to corner)\n";
-                sendGCodeLine(`G91 G0 Y${yToClear * cornerYSign}`);
+                sendGCodeLine(`G91 G0 Y${yToClear * cornerYSign * travelDirection}`);
+                if (probe_feature === RECT_POCKET) {
+                    sendGCodeLine(`G91 G0 Y${xToClear * cornerXSign * travelDirection}`);
+                }
                 sendGCodeLine("G91 G0 Z-10");
                 sendGCodeLine(
                     `G38.2 G91 Y${20 * cornerYSign * -1 * travelDirection} F20`
@@ -496,8 +502,8 @@ const ProbingManager = (props) => {
                 pocket_z === POCKET_TOP
             ) {
                 sendGCodeLine(
-                    `G0 G91 X${diameter / 2 + tool_diameter} Y${
-                        diameter / 2 + tool_diameter
+                    `G0 G91 X${diameter / 2} Y${
+                        diameter / 2
                     }`
                 );
             }

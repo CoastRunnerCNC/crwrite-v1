@@ -94,6 +94,7 @@ const ProbingSettings = (props) => {
                     />
                     <AxisSelection
                         featureType={props.featureType}
+                        locationType={props.locationType}
                         xChecked={props.xChecked}
                         yChecked={props.yChecked}
                         zChecked={props.zChecked}

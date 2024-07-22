@@ -525,6 +525,7 @@ const ProbingManager = (props) => {
                 );
             }
         }
+        sendGCodeLine("M5 S0");
         sendGCodeLine("$H");
 
         console.log("PRINTING");

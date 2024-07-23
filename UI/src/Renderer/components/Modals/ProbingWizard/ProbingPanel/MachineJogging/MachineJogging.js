@@ -1746,49 +1746,32 @@ class Operations extends React.Component {
                             <Typography>Max Distance</Typography>
                         </Grid>
                         <Grid item xs={3}>
-                            <Tooltip
-                                open={
-                                    component.state
-                                        .forceShowJoggingTooltipMaxDistance
-                                }
-                                placement="top-end"
-                                title={
-                                    component.state
-                                        .joggingTooltipMaxDistanceText
+                            <FormControl
+                                className={component.props.classes.formControl}
+                                error={!component.state.maxDistanceIsValid}
+                                onMouseLeave={(ignored) =>
+                                    component.setState({
+                                        forceShowJoggingTooltipMaxDistance: false,
+                                    })
                                 }
                             >
-                                <FormControl
-                                    className={
-                                        component.props.classes.formControl
+                                <Input
+                                    value={distance}
+                                    onChange={(e) => {
+                                        handleMaxDistanceChange(component, e);
+                                    }}
+                                    disableUnderline
+                                    onFocus={() =>
+                                        component.handleInputHasFocus()
                                     }
-                                    error={!component.state.maxDistanceIsValid}
-                                    onMouseLeave={(ignored) =>
-                                        component.setState({
-                                            forceShowJoggingTooltipMaxDistance: false,
-                                        })
+                                    onBlur={() =>
+                                        component.handleInputNoLongerHasFocus()
                                     }
-                                >
-                                    <Input
-                                        value={distance}
-                                        onChange={(e) => {
-                                            handleMaxDistanceChange(
-                                                component,
-                                                e
-                                            );
-                                        }}
-                                        disableUnderline
-                                        onFocus={() =>
-                                            component.handleInputHasFocus()
-                                        }
-                                        onBlur={() =>
-                                            component.handleInputNoLongerHasFocus()
-                                        }
-                                    />
-                                </FormControl>
-                            </Tooltip>
+                                />
+                            </FormControl>
                         </Grid>
                         <Grid item>
-                        <Typography>Units</Typography>
+                            <Typography>Units</Typography>
                         </Grid>
                         <Grid item>{getUnitsSelect(component)}</Grid>
                     </>
@@ -1798,82 +1781,78 @@ class Operations extends React.Component {
             return (
                 <React.Fragment>
                     <Grid item>
-                        <Tooltip
-                            open={component.state.forceShowJoggingTooltip}
-                            placement="top-end"
-                            title={component.state.joggingTooltipText}
+                        <FormControl
+                            className={component.props.classes.formControl}
+                            fullWidth
+                            onMouseLeave={(ignored) =>
+                                component.setState({
+                                    forceShowJoggingTooltip: false,
+                                })
+                            }
                         >
-                            <FormControl
-                                className={component.props.classes.formControl}
+                            <Select
+                                id="jog-mode-select"
+                                labelId="jog-mode-select-label"
+                                ref={component.jogModeRef}
                                 fullWidth
-                                onMouseLeave={(ignored) =>
+                                disableUnderline
+                                value={component.state.mode}
+                                onChange={component.onModeChange}
+                                onBlurCapture={(ignored) =>
                                     component.setState({
                                         forceShowJoggingTooltip: false,
                                     })
                                 }
                             >
-                                <Select
-                                    id="jog-mode-select"
-                                    labelId="jog-mode-select-label"
-                                    ref={component.jogModeRef}
-                                    fullWidth
-                                    disableUnderline
-                                    value={component.state.mode}
-                                    onChange={component.onModeChange}
-                                    onBlurCapture={(ignored) =>
+                                <MenuItem
+                                    value="Continuous"
+                                    onMouseEnter={(ignored) =>
+                                        component.setState({
+                                            forceShowJoggingTooltip: true,
+                                            joggingTooltipText:
+                                                "In this mode, CR will move until the arrow click/keystroke ends, or until the axis reaches its end-of-travel.",
+                                        })
+                                    }
+                                    onMouseLeave={(ignored) =>
                                         component.setState({
                                             forceShowJoggingTooltip: false,
                                         })
                                     }
+                                    onClick={(ignored) => {
+                                        component.jogModeRef.current.blur();
+                                        component.focusOnNothing();
+                                    }}
                                 >
-                                    <MenuItem
-                                        value="Continuous"
-                                        onMouseEnter={(ignored) =>
-                                            component.setState({
-                                                forceShowJoggingTooltip: true,
-                                                joggingTooltipText:
-                                                    "In this mode, CR will move until the arrow click/keystroke ends, or until the axis reaches its end-of-travel.",
-                                            })
-                                        }
-                                        onMouseLeave={(ignored) =>
-                                            component.setState({
-                                                forceShowJoggingTooltip: false,
-                                            })
-                                        }
-                                        onClick={(ignored) => {
-                                            component.jogModeRef.current.blur();
-                                            component.focusOnNothing();
-                                        }}
-                                    >
-                                        Continuous Motion
-                                    </MenuItem>
-                                    <MenuItem
-                                        value="Fixed"
-                                        onMouseEnter={(ignored) =>
-                                            component.setState({
-                                                forceShowJoggingTooltip: true,
-                                                joggingTooltipText:
-                                                    "In this mode, CR will move up to the maximum specified distance per activation (arrow click, keystroke). Motion stops immediately if the keystroke/click ends prior to hitting the maximum specified distance.",
-                                            })
-                                        }
-                                        onMouseLeave={(ignored) =>
-                                            component.setState({
-                                                forceShowJoggingTooltip: false,
-                                            })
-                                        }
-                                        onClick={(ignored) => {
-                                            component.jogModeRef.current.blur();
-                                            component.focusOnNothing();
-                                        }}
-                                    >
-                                        Limited (per click)
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Tooltip>
+                                    Continuous Motion
+                                </MenuItem>
+                                <MenuItem
+                                    value="Fixed"
+                                    onMouseEnter={(ignored) =>
+                                        component.setState({
+                                            forceShowJoggingTooltip: true,
+                                            joggingTooltipText:
+                                                "In this mode, CR will move up to the maximum specified distance per activation (arrow click, keystroke). Motion stops immediately if the keystroke/click ends prior to hitting the maximum specified distance.",
+                                        })
+                                    }
+                                    onMouseLeave={(ignored) =>
+                                        component.setState({
+                                            forceShowJoggingTooltip: false,
+                                        })
+                                    }
+                                    onClick={(ignored) => {
+                                        component.jogModeRef.current.blur();
+                                        component.focusOnNothing();
+                                    }}
+                                >
+                                    Limited (per click)
+                                </MenuItem>
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item>
-                        <Grid container spacing={1}>{textField}</Grid>
+                        <Grid container spacing={1}>
+                            {textField}
+                        </Grid>
                     </Grid>
                 </React.Fragment>
             );

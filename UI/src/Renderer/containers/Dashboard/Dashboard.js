@@ -242,6 +242,7 @@ function Dashboard(props) {
     const [showNewFileAlert, setShowNewFileAlert] = React.useState(false);
     const [enableEditButton, setEnableEditButton] = React.useState(false);
     const [openProbingWizard, setOpenProbingWizard] = React.useState(false);
+    const [openProbingSuccess, setOpenProbingSuccess] = React.useState(false);
 
     ipcRenderer.send('Logs::LogString', 'CRWrite Version: ' + packageJSON.version);
 
@@ -270,6 +271,11 @@ function Dashboard(props) {
         ipcRenderer.send('Jobs::GetJobsFromPath', path);
 
     });
+
+    ipcRenderer.removeAllListeners("CNC::ProbingWizardComplete");
+    ipcRenderer.on("CNC::ProbingWizardComplete", (event) => {
+        setOpenProbingSuccess(true);
+    })
 
     const CoastRunnerImage = () => {
         return (
@@ -352,6 +358,11 @@ function Dashboard(props) {
 
     function handleManualOpenClick() {
         props.toggleShuttle();
+    }
+
+    function handleProbingPopupOk() {
+        setOpenProbingSuccess(false);
+        setOpenProbingWizard(false);
     }
 
     setTimeout(function() {
@@ -450,18 +461,19 @@ function Dashboard(props) {
         //             </Grid>
         //         </Grid>
 
-        //     <SupportCenter open={openCustomerSupport} onClose={() => { setOpenCustomerSupport(false) }} />
-        // </section>
+
         
-
+        
         //
         //
         //
         //
         //
-
+        
 <div style={{flexGrow: 1}}>
     <Alert open={alertMessage.length > 0} message={alertMessage} onOk={(event) => { setAlertMessage("") }} onCancel={(e) => { setAlertMessage("")}} />
+    <Alert open={openProbingSuccess} message="Probing successfull." yesNo={false} onOk={handleProbingPopupOk} />
+    <ProbingWizard open={openProbingWizard} setOpenProbingWizard={setOpenProbingWizard} setOpenProbingSuccess={setOpenProbingSuccess} />
     <Alert open={showNewFileAlert} message="Would you like to create a new file?" yesNo={true} onOk={handleNewFileYes} onCancel={handleNewFileNo} />
     <Menu />
     <JobSelection open={showJobSelection} onClose={onCloseJobSelection} jobs={availableJobs} status={status} refreshJobs={refreshJobs} enableEditButton={enableEditButton} />
@@ -483,6 +495,7 @@ function Dashboard(props) {
                         <Shuttle openShuttle={props.openShuttle} shuttleSelectedTab={props.shuttleSelectedTab} toggleShuttle={props.toggleShuttle} milling={props.milling} status={props.status} firmware={props.firmware} closeOperationsWindow={props.closeOperationsWindow} setOperationsWindowOpen={props.setOperationsWindowOpen} feedRate={props.feedRate} updateFeedRate={props.updateFeedRate} />
                         <FileCreater onClick={() => {}} />
                         <Projects onClick={() => {}} />
+
                         </Grid>
                     </Grid>
                 </Grid>

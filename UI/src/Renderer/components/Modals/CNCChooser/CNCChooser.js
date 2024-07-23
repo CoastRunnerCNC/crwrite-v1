@@ -15,8 +15,6 @@ const styles = theme => ({
     select: {
         marginTop: theme.spacing(-1),
         marginBottom: theme.spacing(1),
-        color: app.button.save.color,
-        backgroundColor: app.button.save.backgroundColor
     },
     cncList: {
         width: "100%",

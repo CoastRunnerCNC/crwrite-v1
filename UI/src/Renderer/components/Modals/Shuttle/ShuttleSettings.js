@@ -85,7 +85,7 @@ class ShuttleSettings extends React.Component {
             const isSelected = this.state.actionToUpdate === command_key;
 
             if (isSelected) {
-                style.backgroundColor = app.colors.secondary;
+                style.backgroundColor = "#c4c0c0";
             }
 
             return (

@@ -141,8 +141,8 @@ const ProbingManager = (props) => {
     let yToClear = null;
     let travelDirection = null;
 
-    const sendGCodeLine = (line) => {
-        ipcRenderer.send("CNC::ExecuteCommand", line);
+    const sendGCodeLine = (line, finalLine = false) => {
+        ipcRenderer.send("CNC::ExecuteCommand", line, finalLine);
     };
 
     function get_wcs_from_offset(offset) {
@@ -534,7 +534,7 @@ const ProbingManager = (props) => {
             }
         }
         sendGCodeLine("M5 S0");
-        sendGCodeLine("$H");
+        sendGCodeLine("$H", true);
 
         console.log("PRINTING");
     }

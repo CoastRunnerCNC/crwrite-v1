@@ -37,8 +37,11 @@ class CNCMillAPI {
             jogging = false;
         });
 
-        electron.ipcMain.on('CNC::ExecuteCommand', function (event, command) {
+        electron.ipcMain.on('CNC::ExecuteCommand', function (event, command, finalCommand) {
             crwrite.ExecuteCommand(command);
+            if (finalCommand) {
+                event.reply("CNC::ProbingWizardComplete");
+            }
         });
 
         electron.ipcMain.on('CNC::ExecuteRealtime', function (event, command) {

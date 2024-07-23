@@ -38,6 +38,9 @@ const ProbingWizard = (props) => {
         if (props.open === false) {
             handleClose();
         }
+        else {
+            resetState();
+        }
     }, [props.open]);
 
     const PictureSVG = () => {
@@ -89,7 +92,6 @@ const ProbingWizard = (props) => {
     };
 
     const handleCloseSuccess = () => {
-        props.setOpenProbingSuccess(true);
         resetState();
     };
 

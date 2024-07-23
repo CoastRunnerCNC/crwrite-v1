@@ -166,6 +166,11 @@ function Dashboard(props) {
 
     });
 
+    ipcRenderer.removeAllListeners("CNC::ProbingWizardComplete");
+    ipcRenderer.on("CNC::ProbingWizardComplete", (event) => {
+        setOpenProbingSuccess(true);
+    })
+
     const CoastRunnerImage = () => {
         return (
                 <img style={{
@@ -346,7 +351,7 @@ function Dashboard(props) {
         <section className={classes.dashboardStyle}>
 			<Alert open={alertMessage.length > 0} message={alertMessage} onOk={(event) => { setAlertMessage("") }} onCancel={(e) => { setAlertMessage("")}} />
             <Alert open={showNewFileAlert} message="Would you like to create a new file?" yesNo={true} onOk={handleNewFileYes} onCancel={handleNewFileNo} />
-            <Alert open={openProbingSuccess} message="Probing in progress. Please wait for probing to complete before clicking OK." yesNo={false} onOk={handleProbingPopupOk} />
+            <Alert open={openProbingSuccess} message="Probing successfull." yesNo={false} onOk={handleProbingPopupOk} />
             <ProbingWizard open={openProbingWizard} setOpenProbingWizard={setOpenProbingWizard} setOpenProbingSuccess={setOpenProbingSuccess} />
             <Menu />
             <JobSelection open={showJobSelection} onClose={onCloseJobSelection} jobs={availableJobs} status={status} refreshJobs={refreshJobs} enableEditButton={enableEditButton} />

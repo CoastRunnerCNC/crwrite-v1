@@ -1338,6 +1338,7 @@ class Milling extends React.Component {
                         display: "grid",
                         gridTemplateColumns: "1fr 1fr 1fr",
                         gridTemplateRows: "1fr",
+                        gap: "12px",
                     }}
                 >
                     <Box>
@@ -1425,26 +1426,25 @@ class Milling extends React.Component {
                                         </Grid> */}
                         </Grid>
                     </Box>
-                    <JoggingPanel />
-                    {/* <ImagePanel
-                                        selectedStep={this.state.selectedStep}
-                                        open={this.props.openImagePanel}
-                                    />
-                                    <Grid item>
-                                        <MachineOutputPanel
-                                            onEditGCode={
-                                                this.showGCodePopUpInput
-                                            }
-                                            selectedStep={
-                                                this.state.selectedStep
-                                            }
-                                            millingInProgress={
-                                                this.state.millingProgress != -1
-                                            }
-                                            editMode={this.state.editMode}
-                                            imagePanelOpen={this.props.openImagePanel}
-                                        />
-                                    </Grid> */}
+                    <Box style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr",
+                        gridTemplateRows: this.props.openImagePanel ? "1fr 1fr" : "1fr",
+                        gap: "8px"
+                    }}>
+                        {/* <JoggingPanel /> */}
+                        <ImagePanel
+                            selectedStep={this.state.selectedStep}
+                            open={this.props.openImagePanel}
+                        />
+                        <MachineOutputPanel
+                            onEditGCode={this.showGCodePopUpInput}
+                            selectedStep={this.state.selectedStep}
+                            millingInProgress={this.state.millingProgress != -1}
+                            editMode={this.state.editMode}
+                            imagePanelOpen={this.props.openImagePanel}
+                        />
+                    </Box>
                 </Box>
             </React.Fragment>
         );

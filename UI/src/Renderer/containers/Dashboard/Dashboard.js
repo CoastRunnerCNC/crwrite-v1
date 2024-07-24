@@ -392,10 +392,17 @@ function Dashboard(props) {
         }
     }, [settings && settings.enableEditButton]);
 
+    useEffect(() => {
+        if (status != 2) {
+            setOpenProbingWizard(false);
+        }
+    }, [status]);
+    
     if (navigateToMilling) {
         ipcRenderer.removeAllListeners("CRFileDoubleClick");
         return (<Redirect to='/milling' />);
     }
+
 
     return (
         // <section className={classes.dashboardStyle}>
@@ -493,7 +500,7 @@ function Dashboard(props) {
 
                         <GuidedModeSVG onClick={onClickRun} />
                         <Shuttle openShuttle={props.openShuttle} shuttleSelectedTab={props.shuttleSelectedTab} toggleShuttle={props.toggleShuttle} milling={props.milling} status={props.status} firmware={props.firmware} closeOperationsWindow={props.closeOperationsWindow} setOperationsWindowOpen={props.setOperationsWindowOpen} feedRate={props.feedRate} updateFeedRate={props.updateFeedRate} />
-                        <FileCreater onClick={() => {}} />
+                        <FileCreater onClick={() => {setOpenProbingWizard(true)}} />
                         <Projects onClick={() => {}} />
 
                         </Grid>

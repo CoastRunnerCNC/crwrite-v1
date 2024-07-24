@@ -53,8 +53,11 @@ const MachineOutputPanel = (props) => {
         }
 
         return () => {
-          ipcRenderer.removeAllListeners("Jobs::ReadWrites", updateReadWrites);
-      };
+            ipcRenderer.removeAllListeners(
+                "Jobs::ReadWrites",
+                updateReadWrites
+            );
+        };
     };
 
     function getDisplay() {
@@ -89,32 +92,8 @@ const MachineOutputPanel = (props) => {
             style={{ height: "100%" }}
             small
         >
-            <div className={props.classes.root}>
-                <Grid container spacing={0}>
-                    <Grid item xs={3} />
-                    {/* {getButtons(this)} */}
-                    <Grid item xs={3} />
-                </Grid>
-                <Grid
-                    container
-                    style={{
-                        padding: "8px",
-                        paddingTop: "15px",
-                        width: "100%",
-                        height: "100%",
-                    }}
-                >
-                    <Grid
-                        id={"image-raw-display"}
-                        item
-                        xs={12}
-                        style={{ width: "100%", height: outputPanelHeight }}
-                    >
-                        {getDisplay()}
-                        {scrollToBottom()}
-                    </Grid>
-                </Grid>
-            </div>
+            {getDisplay()}
+            {scrollToBottom()}
         </ItemPanel>
     );
 };

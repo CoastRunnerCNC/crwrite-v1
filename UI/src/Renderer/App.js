@@ -12742,9 +12742,9 @@ export default class App extends React.Component {
             this.setState({ settings: settings });
         });
         ipcRenderer.send("Settings::GetSettings");
-        this.interval = setInterval(() => {
-            ipcRenderer.send("CNC::GetStatus");
-        }, 1000);
+        // this.interval = setInterval(() => {
+        //     ipcRenderer.send("CNC::GetStatus");
+        // }, 1000);
 
         ipcRenderer.removeAllListeners("CR_UpdateRealtimeStatus");
         ipcRenderer.on("CR_UpdateRealtimeStatus", this.updateRealtimeStatus);

@@ -75,7 +75,16 @@ const ItemPanel = (props) => {
                 </Grid>
             </Box>
 
-            <Box style={props.contentStyle}>{props.children}</Box>
+            <Box
+                style={{
+                    ...props.contentStyle,
+                    display: "grid",
+                    gridTemplateColumns: "1fr",
+                    gridTemplateRows: "1fr",
+                }}
+            >
+                {props.children}
+            </Box>
         </Box>
     );
 };

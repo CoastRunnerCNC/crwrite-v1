@@ -24,20 +24,20 @@ const ImagePanel = (props) => {
 
     function getImageButton(zoom) {
         return (
-            <Button
-                className={"image-button"}
-                style={{ width: "100%", height: "100%", padding: "0px" }}
+            // <Button
+            //     style={{padding: "0px" }}
+
+            // >
+            <img
+                key={Date.now()}
+                style={{ maxHeight: "100%", justifySelf: "center" }}
+                src={`data:image/jpeg;base64,${props.selectedStep.Image}`}
+                alt={""}
                 onClick={() => {
                     setZoom(zoom);
                 }}
-            >
-                <img
-                    key={Date.now()}
-                    style={{ maxWidth: "100%", maxHeight: "100%" }}
-                    src={`data:image/jpeg;base64,${props.selectedStep.Image}`}
-                    alt={""}
-                />
-            </Button>
+            />
+            // </Button>
         );
     }
 
@@ -63,38 +63,12 @@ const ImagePanel = (props) => {
             return getImageButton(true);
         }
     }
-    
+
     if (props.open) {
         return (
-            <Grid item>
-                <ItemPanel>
-                    <div className={props.classes.root}>
-                        <Grid container spacing={0}>
-                            <Grid item xs={3} />
-                            {/* {getButtons(this)} */}
-                            <Grid item xs={3} />
-                        </Grid>
-                        <Grid
-                            container
-                            style={{
-                                padding: "8px",
-                                paddingTop: "15px",
-                                width: "100%",
-                                height: "100%",
-                            }}
-                        >
-                            <Grid
-                                id={"image-raw-display"}
-                                item
-                                xs={12}
-                                style={{ width: "100%", height: "30vh" }}
-                            >
-                                {getDisplay()}
-                            </Grid>
-                        </Grid>
-                    </div>
-                </ItemPanel>
-            </Grid>
+            <ItemPanel title="Image" small>
+                {getDisplay()}
+            </ItemPanel>
         );
     } else {
         return "";

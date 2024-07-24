@@ -332,6 +332,17 @@ function BottomToolbar(props) {
         setOpenSupportMenu(false);
     };
 
+    const convertByUnits = (value) => {
+        if (units === "MM") {
+            return value;
+        }
+        else if (units == "INCH") {
+            
+            let inches = value / 25.4;
+            return  inches.toFixed(3);
+        }
+    }
+
     // return (
     //     <footer className={classes.root}>
     //         <AppBar position="fixed" className={classes.appBar}>
@@ -400,18 +411,21 @@ function BottomToolbar(props) {
                         <TextField
                             className={classes.machineCoordinates}
                             disabled
+                            value={convertByUnits(props.machineX)}
                         />
                     </Box>
                     <Box>
                         <TextField
                             className={classes.machineCoordinates}
                             disabled
+                            value={convertByUnits(props.machineY)}
                         />
                     </Box>
                     <Box>
                         <TextField
                             className={classes.machineCoordinates}
                             disabled
+                            value={convertByUnits(props.machineZ)}
                         />
                     </Box>
                     <Box>
@@ -445,18 +459,21 @@ function BottomToolbar(props) {
                         <TextField
                             className={classes.machineCoordinates}
                             disabled
+                            value={convertByUnits(props.workX)}
                         />
                     </Box>
                     <Box>
                         <TextField
                             className={classes.machineCoordinates}
                             disabled
+                            value={convertByUnits(props.workY)}
                         />
                     </Box>
                     <Box>
                         <TextField
                             className={classes.machineCoordinates}
                             disabled
+                            value={convertByUnits(props.workZ)}
                         />
                     </Box>
                     <Box>

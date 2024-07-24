@@ -12546,6 +12546,8 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            realTimeStatus: {},
+            units: "mm",
             cncMillStatus: 0,
             millingInProgress: false,
             firmware: null,
@@ -12567,6 +12569,10 @@ export default class App extends React.Component {
         this.updateSetting = this.updateSetting.bind(this);
         this.toggleShuttle = this.toggleShuttle.bind(this);
         this.toggleImagePanel = this.toggleImagePanel.bind(this);
+        this.get_work_pos = this.get_work_pos.bind(this);
+        this.getFixedValue = this.getFixedValue.bind(this);
+        this.get_position = this.get_position.bind(this);
+        this.updateRealtimeStatus = this.updateRealtimeStatus.bind(this);
 
         if (!props.data) {
             document.title = app.titlebar.title;
@@ -12640,6 +12646,74 @@ export default class App extends React.Component {
         ipcRenderer.send("Firmware::GetAvailableFirmwareUpdates");
     }
 
+    get_work_pos(axis, realTimeStatusObj = this.state.realTimeStatus) {
+        if (
+            realTimeStatusObj &&
+            realTimeStatusObj.work_coordinates
+        ) {
+            const value =
+                realTimeStatusObj.work_coordinates.work_pos[axis];
+                console.log(value[this.state.units].toFixed(this.getFixedValue()))
+            return value[this.state.units].toFixed(this.getFixedValue());
+        }
+
+        return "";
+    }
+
+    getFixedValue() {
+        return this.state.units === "mm" ? 3 : 4;
+    }
+
+    get_position(axis, realTimeStatusObj = this.state.realTimeStatus) {
+        if (
+            realTimeStatusObj &&
+            realTimeStatusObj.machine_pos
+        ) {
+            const value = realTimeStatusObj.machine_pos[axis];
+            console.log(value[this.state.units].toFixed(this.getFixedValue()));
+            return value[this.state.units].toFixed(this.getFixedValue());
+        }
+
+        return "";
+    }
+
+    updateRealtimeStatus(event, status) {
+        if (
+            !this.firstRealTimeStatusReceived &&
+            this.state.realTimeStatus &&
+            this.state.realTimeStatus.state
+        ) {
+            this.firstRealTimeStatusReceived = true;
+        }
+
+        try {
+            const parsed = JSON.parse(status);
+            if (parsed.error == null) {
+                // console.log(JSON.stringify(parsed));
+                let status = parsed.status;
+                let wcs = "G54";
+                if (status.work_coordinates != null) {
+                    wcs = status.work_coordinates.wcs;
+                }
+
+                this.setState({
+                    realTimeStatus: status,
+                    WCS: wcs,
+                    units: status.parserUnits,
+                    movementType: status.movementType,
+                    machineX: this.get_position("x", status),
+                    machineY: this.get_position("y", status),
+                    machineZ: this.get_position("z", status),
+                    workX: this.get_work_pos("x", status),
+                    workY: this.get_work_pos("y", status),
+                    workZ: this.get_work_pos("z", status)                   
+                });
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     componentDidMount() {
         ipcRenderer.send(
             "Logs::LogString",
@@ -12668,6 +12742,12 @@ export default class App extends React.Component {
             this.setState({ settings: settings });
         });
         ipcRenderer.send("Settings::GetSettings");
+        this.interval = setInterval(() => {
+            ipcRenderer.send("CNC::GetStatus");
+        }, 1000);
+
+        ipcRenderer.removeAllListeners("CR_UpdateRealtimeStatus");
+        ipcRenderer.on("CR_UpdateRealtimeStatus", this.updateRealtimeStatus);
         this.checkFirmwareUpdates(0);
     }
 
@@ -12726,6 +12806,7 @@ export default class App extends React.Component {
 
     componentWillUnmount() {
         ipcRenderer.removeAllListeners("CR_UpdateCRStatus");
+        ipcRenderer.removeAllListeners("CR_UpdateRealtimeStatus");
     }
 
     updateStatus(event, newConnectionStatus, newMillingStatus) {
@@ -12886,6 +12967,15 @@ export default class App extends React.Component {
                                 updateFeedRate={this.updateFeedrate}
                                 updateSetting={this.updateSetting}
                                 toggleImagePanel={this.toggleImagePanel}
+                                getPosition={this.get_position}
+                                getWorkPos={this.get_work_pos}
+                                realTimeStatus={this.state.realTimeStatus}
+                                machineX={this.state.machineX}
+                                machineY={this.state.machineY}
+                                machineZ={this.state.machineZ}
+                                workX={this.state.workX}
+                                workY={this.state.workY}
+                                workZ={this.state.workZ}
                             />
                             {console.timeEnd("BottomToolbar")}
                         </Box>

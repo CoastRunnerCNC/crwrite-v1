@@ -8,7 +8,7 @@ import app from 'app';
 const styles = theme => ({
     root: {
         width: '100%',
-        height: 'calc(100% - 0px)',
+        height: '100%',
     },
     list: {
         width: '100%',
@@ -163,37 +163,7 @@ class StepList extends React.Component {
 
         const { classes, steps, selectedStep } = this.props;
 
-        function getListItem(step, index, component) {
-            var selectedDiv = null;
-            if (selectedStep === index) {
-                selectedDiv = (<div style={{ float: "left", clear: "both" }} ref={(el) => { component.selectedRef = el; }} />);
-            }
-            let selectedStepTextColor = classes.itemText;
-            var color = app.milling.steps.items.background;
-            if (selectedStep === index) {
-                color = app.milling.steps.items.selected;
-                selectedStepTextColor = classes.itemTextSelected;
-            }
-
-            return (
-                <ListItem
-                    button
-                    disableGutters
-                    key={index}
-                    selected={selectedStep === index}
-                    className={classes.item}
-                    style={{ backgroundColor: color }}
-                >
-                    <ListItemText disableTypography>
-                        {selectedDiv}
-                        <Typography noWrap className={selectedStepTextColor}>{step.Title}</Typography>
-                    </ListItemText>
-                </ListItem>
-            );
-        }
-
         return (
-            <div className={this.props.classes.root}>
                 <List component="nav" className={this.props.classes.list}>
                     {
                         this.props.steps.map((step, index) => {
@@ -203,8 +173,6 @@ class StepList extends React.Component {
                         })
                     }
                 </List>
-                {/*<Typography className={classes.stepNumber} align="right">Step {selectedStep + 1}/{steps.length}</Typography>*/}
-            </div>
         );
     }
 };

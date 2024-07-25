@@ -1341,7 +1341,13 @@ class Milling extends React.Component {
                         gap: "12px",
                     }}
                 >
-                    <Box>
+                    <Box
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr",
+                            gridTemplateRows: "1fr"
+                        }}
+                    >
                         <StepsPanel
                             fileName={this.state.fileName}
                             jobName={this.state.jobName}

@@ -174,6 +174,8 @@ class Milling extends React.Component {
         this.getAddStepButton = this.getAddStepButton.bind(this);
         this.handlePopupOkay = this.handlePopupOkay.bind(this);
         this.parseGoTo = this.parseGoTo.bind(this);
+        this.handleEmergencyStopResponse =
+            this.handleEmergencyStopResponse.bind(this);
         ipcRenderer.removeAllListeners("CRFileDoubleClick");
         ipcRenderer.on("CRFileDoubleClick", (event, path) => {
             ipcRenderer.send("File::DoubleClickSetFilePath", path);
@@ -549,6 +551,12 @@ class Milling extends React.Component {
         });
         ipcRenderer.send("Walkthrough::ShouldDisplay", "Milling");
 
+        ipcRenderer.removeAllListeners("Jobs::EmergencyStopResponse");
+        ipcRenderer.on(
+            "Jobs::EmergencyStopResponse",
+            this.handleEmergencyStopResponse
+        );
+
         this.setState({
             editTitleValue: this.state.selectedStep.Title,
             editJobTextValue: this.getJobEditText(),
@@ -874,6 +882,22 @@ class Milling extends React.Component {
         this.showPrevStep(this);
     }
 
+    handleEmergencyStopResponse() {
+        console.log("EStop response fired!");
+        this.setState({
+            millingProgress: -1,
+            selectedStepIndex: 0,
+            selectedStep: ipcRenderer.sendSync("Jobs::GetStep", 0),
+            previousMillingStep: -1,
+            showAlert: true,
+            alertTitle: "Job aborted",
+            alertMessage:
+                "Job was aborted. Press 'OK' to start program from the very beginning.",
+            milling: false,
+            paused: false,
+        });
+    }
+
     render() {
         const { classes, status } = this.props;
 
@@ -950,24 +974,12 @@ class Milling extends React.Component {
         }
 
         function handleSkip(event) {
+            console.log("handleSkip fired!");
             this.skipToNextMillingStep(this);
         }
 
         function handleStop(event) {
             ipcRenderer.send("Jobs::EmergencyStop");
-
-            this.setState({
-                millingProgress: -1,
-                selectedStepIndex: 0,
-                selectedStep: ipcRenderer.sendSync("Jobs::GetStep", 0),
-                previousMillingStep: -1,
-                showAlert: true,
-                alertTitle: "Job aborted",
-                alertMessage:
-                    "Job was aborted. Press 'OK' to start program from the very beginning.",
-                milling: false,
-                paused: false,
-            });
         }
 
         function handleFeedPause() {
@@ -1022,10 +1034,11 @@ class Milling extends React.Component {
         }
 
         function isSkipAvailable(component) {
-            return (
+            let result =
                 component.state.selectedStep.next_milling_step != null &&
-                !component.state.selectedStep.PopupText
-            );
+                !component.state.selectedStep.PopupText;
+                console.log("isSkipAvailable: " + result);
+            return result;
         }
 
         function getActionButton(component) {
@@ -1345,7 +1358,7 @@ class Milling extends React.Component {
                         style={{
                             display: "grid",
                             gridTemplateColumns: "1fr",
-                            gridTemplateRows: "1fr"
+                            gridTemplateRows: "1fr",
                         }}
                     >
                         <StepsPanel
@@ -1368,6 +1381,10 @@ class Milling extends React.Component {
                                 return isNextAvailable(this);
                             }}
                             handleNext={handleNext.bind(this)}
+                            handleSkip={() => {this.skipToNextMillingStep(this)}}
+                            isSkipAvailable={() => {
+                                 return isSkipAvailable(this);
+                            }}
                             classes={classes}
                         />
 
@@ -1432,12 +1449,16 @@ class Milling extends React.Component {
                                         </Grid> */}
                         </Grid>
                     </Box>
-                    <Box style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr",
-                        gridTemplateRows: this.props.openImagePanel ? "1fr 1fr" : "1fr",
-                        gap: "8px"
-                    }}>
+                    <Box
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr",
+                            gridTemplateRows: this.props.openImagePanel
+                                ? "1fr 1fr"
+                                : "1fr",
+                            gap: "8px",
+                        }}
+                    >
                         {/* <JoggingPanel /> */}
                         <ImagePanel
                             selectedStep={this.state.selectedStep}

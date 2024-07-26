@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import {
     Popper,
@@ -8,6 +8,7 @@ import {
     MenuList,
     MenuItem,
     Box,
+    Tooltip,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import {
@@ -21,13 +22,14 @@ import {
     LinearProgress,
     Slider,
 } from "@material-ui/core";
-import { shell } from "electron";
+import { ipcRenderer, shell } from "electron";
 import Status from "../Status";
 import Settings from "../Modals/Settings";
 import CNCChooser from "../Modals/CNCChooser";
 import Support from "../Support";
 import Shuttle from "../Modals/Shuttle";
 import app from "app";
+import Feedrate from "../Feedrate";
 
 const styles = (theme) => ({
     root: {
@@ -284,9 +286,18 @@ function BottomToolbar(props) {
     const [openConfigMenu, setOpenConfigMenu] = useState(false);
     const [openSupportMenu, setOpenSupportMenu] = useState(false);
     const [units, setUnits] = useState("MM");
+    const [settings, setSettings] = useState({});
+    const [openSettings, setOpenSettings] = useState(false);
     const buttonControlRef = useRef(null);
     const buttonConfigRef = useRef(null);
     const buttonSupportRef = useRef(null);
+    const [feedRate, setFeedRate] = useState(props.feedRate);
+
+    useEffect(() => {
+        if (props.feedRate != feedRate) {
+            setFeedRate(props.feedRate);
+        }
+    }, [props.feedRate]);
 
     const handleUnitsSelect = (event) => {
         setUnits(event.target.value);
@@ -308,24 +319,30 @@ function BottomToolbar(props) {
         setOpenSupportMenu(!openSupportMenu);
     };
 
-    const closeControlMenu = (event) => {
-        if (buttonControlRef.current.contains(event.target)) {
+    const closeControlMenu = (event, force = false) => {
+        if (
+            buttonControlRef.current.contains(event.target) &&
+            force === false
+        ) {
             return;
         }
 
         setOpenControlMenu(false);
     };
 
-    const closeConfigMenu = (event) => {
-        if (buttonConfigRef.current.contains(event.target)) {
+    const closeConfigMenu = (event, force = false) => {
+        if (buttonConfigRef.current.contains(event.target) && force === false) {
             return;
         }
 
         setOpenConfigMenu(false);
     };
 
-    const closeSupportMenu = (event) => {
-        if (buttonSupportRef.current.contains(event.target)) {
+    const closeSupportMenu = (event, force = false) => {
+        if (
+            buttonSupportRef.current.contains(event.target) &&
+            force === false
+        ) {
             return;
         }
 
@@ -335,12 +352,59 @@ function BottomToolbar(props) {
     const convertByUnits = (value) => {
         if (units === "MM") {
             return value;
-        }
-        else if (units == "INCH") {
-            
+        } else if (units == "INCH") {
             let inches = value / 25.4;
-            return  inches.toFixed(3);
+            return inches.toFixed(3);
         }
+    };
+
+    const sendMachineCommand = (command) => {};
+
+    const handleRun = () => {
+        ipcRenderer.send("CNC::ExecuteCommand", "~");
+    };
+
+    const handlePause = () => {
+        ipcRenderer.send("CNC::ExecuteCommand", "!");
+    };
+
+    const handleStop = () => {
+        ipcRenderer.send("Jobs::EmergencyStop");
+    };
+
+    const handleClickHome = () => {
+        ipcRenderer.send("CNC::ExecuteCommand", "$H");
+        closeControlMenu({}, true);
+    };
+
+    const handleClickAutolevel = () => {
+        ipcRenderer.send("CNC::ExecuteCommand", "$X");
+        ipcRenderer.send("CNC::ExecuteCommand", "$L");
+        ipcRenderer.send("CNC::ExecuteCommand", "$HX");
+        closeControlMenu();
+    };
+
+    const handleClickClearMemory = () => {
+        ipcRenderer.send("CNC::ExecuteCommand", "$X");
+        ipcRenderer.send("CNC::ExecuteCommand", "$RST=#");
+        closeControlMenu({}, true);
+    };
+
+    const handleClickReset = () => {
+        ipcRenderer.send("CNC::ExecuteCommand", "$X");
+        ipcRenderer.send("CNC::ExecuteCommand", "$RST=*");
+
+        closeControlMenu({}, true);
+    };
+
+    const onClickSoftware = () => {
+        if (!milling) {
+            ipcRenderer.once('Settings::GetSettingsResponse', (event, settings) => {
+                setSettings(settings);
+                setOpenSettings(true);
+            });
+            ipcRenderer.send("Settings::GetSettings");
+		}
     }
 
     // return (
@@ -358,7 +422,6 @@ function BottomToolbar(props) {
     //                                 {app.toolbar.link.display}
     //                             </Button>
     //                             <Shuttle openShuttle={props.openShuttle} shuttleSelectedTab={props.shuttleSelectedTab} toggleShuttle={props.toggleShuttle} milling={milling} status={status} firmware={firmware} closeOperationsWindow={closeOperationsWindow} setOperationsWindowOpen={setOperationsWindowOpen} feedRate={props.feedRate} updateFeedRate={props.updateFeedRate} />
-    //                             <Settings disabled={milling} firmware={firmware} firmwareAvailable={props.firmwareAvailable} checkFirmwareUpdates={props.checkFirmwareUpdates} updateMachineStatus={props.updateMachineStatus} updateSetting={props.updateSetting} />
     //                             <Support disabled={milling} set_walkthrough_showing={set_walkthrough_showing} firmware={firmware} />
     //                         </div>
     //                     </Grid>
@@ -375,6 +438,17 @@ function BottomToolbar(props) {
 
     return (
         <>
+            <Settings
+                open={openSettings}
+                settings={settings}
+                setOpen={setOpenSettings}
+                disabled={milling}
+                firmware={firmware}
+                firmwareAvailable={props.firmwareAvailable}
+                checkFirmwareUpdates={props.checkFirmwareUpdates}
+                updateMachineStatus={props.updateMachineStatus}
+                updateSetting={props.updateSetting}
+            />
             <Box
                 style={{
                     display: "grid",
@@ -504,18 +578,21 @@ function BottomToolbar(props) {
                         <Button
                             className={classes.buttons}
                             style={{ fontWeight: "bold" }}
+                            onClick={handleRun}
                         >
                             RUN
                         </Button>
                         <Button
                             className={classes.buttons}
                             style={{ fontWeight: "bold" }}
+                            onClick={handlePause}
                         >
                             PAUSE
                         </Button>
                         <Button
                             className={classes.buttons}
                             style={{ fontWeight: "bold" }}
+                            onClick={handleStop}
                         >
                             STOP
                         </Button>
@@ -523,23 +600,30 @@ function BottomToolbar(props) {
                 </Box>
                 <Box style={{ gridArea: "feedrate", backgroundColor: "white" }}>
                     <Slider
-                    // className={this.props.classes.slider}
-                    // value={this.state.feedRate}
-                    // step={2}
-                    // min={30}
-                    // disabled={
-                    //     !this.state.settings.enable_slider
-                    // }
-                    // max={this.state.settings.maxFeedRate}
-                    // aria-labelledby="label"
-                    // onChange={this.onFeedRateChange}
-                    // onChangeCommitted={(event, value) => {
-                    //     this.props.updateFeedRate(value);
-                    // }}
+                        value={feedRate}
+                        step={2}
+                        min={30}
+                        disabled={
+                            props.settings && !props.settings.enable_slider
+                        }
+                        max={props.settings && props.settings.maxFeedRate}
+                        aria-labelledby="label"
+                        onChange={(event, value) => {
+                            console.log(value);
+                            setFeedRate(value);
+                        }}
+                        onChangeCommitted={(event, value) => {
+                            props.updateFeedRate(value);
+                        }}
                     />
                 </Box>
                 <Box style={{ gridArea: "menus", backgroundColor: "white" }}>
-                    <Grid container justify="center" alignItems="center" style={{height: "100%"}}>
+                    <Grid
+                        container
+                        justify="center"
+                        alignItems="center"
+                        style={{ height: "100%" }}
+                    >
                         <Grid item>
                             <Button
                                 className={classes.buttons}
@@ -586,12 +670,32 @@ function BottomToolbar(props) {
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
                                                     <MenuItem>Jogging</MenuItem>
-                                                    <MenuItem>Home</MenuItem>
-                                                    <MenuItem>
+                                                    <MenuItem
+                                                        onClick={
+                                                            handleClickHome
+                                                        }
+                                                    >
+                                                        Home
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        onClick={
+                                                            handleClickAutolevel
+                                                        }
+                                                    >
                                                         Autolevel
                                                     </MenuItem>
-                                                    <MenuItem>Reset</MenuItem>
-                                                    <MenuItem>
+                                                    <MenuItem
+                                                        onClick={
+                                                            handleClickReset
+                                                        }
+                                                    >
+                                                        Reset
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        onClick={
+                                                            handleClickClearMemory
+                                                        }
+                                                    >
                                                         Clear Memory
                                                     </MenuItem>
                                                 </MenuList>
@@ -641,9 +745,25 @@ function BottomToolbar(props) {
                                                     <MenuItem>
                                                         Feedrate
                                                     </MenuItem>
-                                                    <MenuItem>
-                                                        Software
-                                                    </MenuItem>
+                                                    <Tooltip
+                                                        disableHoverListener={
+                                                            !milling
+                                                        }
+                                                        disableFocusListener={
+                                                            true
+                                                        }
+                                                        disableTouchListener={
+                                                            true
+                                                        }
+                                                        title="Disabled while machine is running"
+                                                    >
+                                                        <MenuItem
+                                                            onClick={onClickSoftware}
+                                                        >
+                                                            Software
+                                                        </MenuItem>
+                                                    </Tooltip>
+
                                                     <MenuItem>
                                                         Firmware
                                                     </MenuItem>

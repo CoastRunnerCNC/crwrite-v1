@@ -76,6 +76,7 @@ const RewindArrow = () => {
 };
 
 const ActionPanel = (props) => {
+    const disableSkip = !props.isSkipAvailable();
     return (
         <Grid
             container
@@ -142,6 +143,8 @@ const ActionPanel = (props) => {
                         disabled: props.classes.nextPrevButtonDisable,
                     }}
                     className={props.classes.next}
+                    disabled={disableSkip}
+                    onClick={props.handleSkip}
                 >
                     <FastForwardArrow />
                 </Button>

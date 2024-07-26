@@ -167,7 +167,7 @@ class StepList extends React.Component {
                 <List component="nav" className={this.props.classes.list}>
                     {
                         this.props.steps.map((step, index) => {
-                            if (true) {
+                            if (true && index < 10) {
                             return this.getListItem(step, index, this);
                             }
                         })

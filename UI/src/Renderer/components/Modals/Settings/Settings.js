@@ -75,29 +75,16 @@ const styles = theme => ({
 });
 
 function Settings(props) {
-    const { classes, disabled, firmware } = props;
-    const [open, setOpen] = React.useState(false);
+    const { classes, disabled, firmware, settings } = props;
     const [selectedTab, setSelectedTab] = React.useState(0);
-    const [settings, setSettings] = React.useState(null);
-
-    
-    function handleClickOpen() {
-		if (!disabled) {
-            ipcRenderer.once('Settings::GetSettingsResponse', (event, settings) => {
-                setSettings(settings);
-                setOpen(true);
-            });
-            ipcRenderer.send("Settings::GetSettings");
-		}
-    }
 
     function handleClose() {
         setSelectedTab(0);
-        setOpen(false);
+        props.setOpen(false);
     }
 
     function displaySelectedWindow() {
-        if (open === true) {
+        if (props.open === true) {
             if (selectedTab === 0) {
                 return (<Operation settings={settings} closeDialog={handleClose} updateSetting={props.updateSetting} />);
             } else if (selectedTab === 1) {
@@ -171,33 +158,8 @@ function Settings(props) {
 
     return (
         <React.Fragment>
-            <Tooltip
-                disableHoverListener={!disabled}
-                disableFocusListener={true}
-                disableTouchListener={true}
-                title="Disabled while machine is running"
-            >
-                <span>
-                    <Badge color="error" variant="dot" invisible={!props.firmwareAvailable} >
-                        <Button
-                            variant="extended"
-                            aria-label="Settings"
-                            disabled={disabled}
-                            onClick={handleClickOpen}
-                            className={classes.settingsButton}
-                            size="small"
-                            id="settings"
-                            style={{border: '1px solid black', backgroundColor: '#f6f6f6', borderRadius: '0px', minHeight: '34px', boxShadow: "1px 1px 0px 0px #000000"}}
-                        >
-                            <img src={path.join(__dirname, app.image.cog)} className={classes.settingsCog} />
-                            <img src={path.join(__dirname, app.image.settingsButton)} className={classes.settingsText}/>
-                        </Button>
-                    </Badge>
-                </span>
-            </Tooltip>
-
             <Dialog
-                open={open}
+                open={props.open}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
                 maxWidth="sm"

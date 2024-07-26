@@ -28,19 +28,19 @@ const StepsPanel = (props) => {
                     <HorizontalLines />
                 </Box>
                 <Box style={{ overflow: "auto" }}>
-                    {/* <StepList
+                    <StepList
                         steps={props.steps}
                         selectedStep={props.selectedStepIndex}
                         editMode={props.editMode}
                         submanifestUsed={props.submanifestUsed}
                         deleteStep={props.handleDeleteStep}
                         moveStep={props.moveStep}
-                    /> */}
-                    {list.map((step) => {
+                    />
+                    {/* {list.map((step) => {
                         if (true) {
                             return step
                         }
-                    })}
+                    })} */}
                 </Box>
                 <Box>
                     <ActionPanel
@@ -63,6 +63,8 @@ const StepsPanel = (props) => {
                         handleNext={() => {
                             props.handleNext();
                         }}
+                        handleSkip={props.handleSkip}
+                        isSkipAvailable={props.isSkipAvailable}
                     />
                 </Box>
             </Box>

@@ -112,7 +112,8 @@ class JobsAPI {
 
         electron.ipcMain.on('Jobs::EmergencyStop', function (event, stepIndex) {
             console.log("Estop fired");
-            event.returnValue = crwrite.EmergencyStop();
+            crwrite.EmergencyStop();
+            event.reply("Jobs::EmergencyStopResponse");
         });
     }
 }

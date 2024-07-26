@@ -12871,7 +12871,6 @@ export default class App extends React.Component {
                 "window-title"
             )[0].style.marginLeft = "55px";
         }
-        console.log(this.state.open);
         return (
             <React.Fragment>
                 <MuiThemeProvider theme={theme}>
@@ -12976,6 +12975,7 @@ export default class App extends React.Component {
                                 workX={this.state.workX}
                                 workY={this.state.workY}
                                 workZ={this.state.workZ}
+                                settings={this.state.settings}
                             />
                             {console.timeEnd("BottomToolbar")}
                         </Box>

@@ -84,18 +84,21 @@ const MachineOutputPanel = (props) => {
             });
         }
     }
-
-    return (
-        <ItemPanel
-            title="Machine Output"
-            color="secondary"
-            style={{ height: "100%" }}
-            small
-        >
-            {getDisplay()}
-            {scrollToBottom()}
-        </ItemPanel>
-    );
+    if (props.open) {
+        return (
+            <ItemPanel
+                title="Machine Output"
+                color="secondary"
+                style={{ height: "100%" }}
+                small
+            >
+                {getDisplay()}
+                {scrollToBottom()}
+            </ItemPanel>
+        );
+    } else {
+        return ""
+    }
 };
 
 export default withStyles(styles)(MachineOutputPanel);

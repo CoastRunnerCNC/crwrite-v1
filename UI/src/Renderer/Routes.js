@@ -20,8 +20,10 @@ function Routes(props) {
         closeOperationsWindow,
         setOperationsWindowOpen,
         openImagePanel,
+        openJoggingPanel,
         openProbingWizard,
-        setOpenProbingWizard
+        setOpenProbingWizard,
+        openMachineOutputPanel
     } = props;
 
     return (
@@ -64,6 +66,8 @@ function Routes(props) {
                                 updateFeedRate={updateFeedRate}
                                 settings={settings}
                                 openImagePanel={openImagePanel}
+                                openJoggingPanel={openJoggingPanel}
+                                openMachineOutputPanel={openMachineOutputPanel}
                             />
                         )}
                     />

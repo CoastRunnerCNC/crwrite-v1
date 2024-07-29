@@ -12558,8 +12558,10 @@ export default class App extends React.Component {
             feedRate: 100,
             openShuttle: false,
             shuttleSelectedTab: 0,
-            openImagePanel: true,
-            openProbingWizard: false
+            openImagePanel: false,
+            openJoggingPanel: true,
+            openProbingWizard: false,
+            openMachineOutputPanel: false,
         };
 
         this.updateStatus = this.updateStatus.bind(this);
@@ -12570,6 +12572,8 @@ export default class App extends React.Component {
         this.updateSetting = this.updateSetting.bind(this);
         this.toggleShuttle = this.toggleShuttle.bind(this);
         this.toggleImagePanel = this.toggleImagePanel.bind(this);
+        this.toggleJoggingPanel = this.toggleJoggingPanel.bind(this);
+        this.toggleMachineOutputPanel = this.toggleMachineOutputPanel.bind(this)
 
         if (!props.data) {
             document.title = app.titlebar.title;
@@ -12585,6 +12589,14 @@ export default class App extends React.Component {
 
     toggleImagePanel() {
         this.setState({ openImagePanel: !this.state.openImagePanel });
+    }
+
+    toggleJoggingPanel() {
+        this.setState({openJoggingPanel: !this.state.openJoggingPanel});
+    }
+
+    toggleMachineOutputPanel() {
+        this.setState({openMachineOutputPanel: !this.state.openMachineOutputPanel})
     }
 
     updateFeedrate(newFeedRate) {
@@ -12860,6 +12872,8 @@ export default class App extends React.Component {
                                 }
                                 firmware={this.state.firmware}
                                 openImagePanel={this.state.openImagePanel}
+                                openJoggingPanel={this.state.openJoggingPanel}
+                                openMachineOutputPanel={this.state.openMachineOutputPanel}
                                 openProbingWizard={this.state.openProbingWizard}
                                 setOpenProbingWizard={(value) => {this.setState({openProbingWizard: value})}}
 
@@ -12894,6 +12908,8 @@ export default class App extends React.Component {
                                 updateFeedRate={this.updateFeedrate}
                                 updateSetting={this.updateSetting}
                                 toggleImagePanel={this.toggleImagePanel}
+                                toggleJoggingPanel={this.toggleJoggingPanel}
+                                toggleMachineOutputPanel={this.toggleMachineOutputPanel}
                                 settings={this.state.settings}
                             />
                             {/* {console.timeEnd("BottomToolbar")} */}

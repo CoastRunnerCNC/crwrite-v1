@@ -793,13 +793,13 @@ function BottomToolbar(props) {
                                                     >
                                                         Image
                                                     </MenuItem>
-                                                    <MenuItem>
+                                                    <MenuItem onClick={props.toggleMachineOutputPanel}>
                                                         Terminal
                                                     </MenuItem>
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
-                                                    <MenuItem>Jogging</MenuItem>
+                                                    <MenuItem onClick={props.toggleJoggingPanel}>Jogging</MenuItem>
                                                     <MenuItem
                                                         onClick={
                                                             handleClickProbingWizard

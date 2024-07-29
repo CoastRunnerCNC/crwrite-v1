@@ -1116,7 +1116,7 @@ class Milling extends React.Component {
             ipcRenderer.send("CR_SetCurrentPage", "Dashboard");
             return <Redirect to="/" />;
         }
-
+        console.log("openMachineOutputPanel: " + this.props.openMachineOutputPanel);
         return (
             <React.Fragment>
                 <Throbber
@@ -1457,7 +1457,7 @@ class Milling extends React.Component {
                             gap: "8px",
                         }}
                     >
-                        {/* <JoggingPanel /> */}
+                        <JoggingPanel open={this.props.openJoggingPanel} />
                         <ImagePanel
                             selectedStep={this.state.selectedStep}
                             open={this.props.openImagePanel}
@@ -1468,6 +1468,7 @@ class Milling extends React.Component {
                             millingInProgress={this.state.millingProgress != -1}
                             editMode={this.state.editMode}
                             imagePanelOpen={this.props.openImagePanel}
+                            open={this.props.openMachineOutputPanel}
                         />
                     </Box>
                 </Box>

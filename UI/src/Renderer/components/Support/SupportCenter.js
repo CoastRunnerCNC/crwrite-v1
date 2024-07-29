@@ -146,7 +146,6 @@ function SupportCenter(props) {
                 </DialogTitle>
                 <DialogContent>
                     <div>
-                        {SupportCenterTabs()}
                         <section id="dialog-content-section">
                             {displaySelectedWindow()}
                         </section>

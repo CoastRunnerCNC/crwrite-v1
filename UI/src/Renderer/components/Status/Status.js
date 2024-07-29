@@ -24,6 +24,8 @@ const styles = theme => ({
 function Status(props) {
     const { classes, status } = props;
 
+    let style = status === 2 ? {fontWeight: "bold", fontSize: "10px"} : {fontWeight: "bold", fontSize: "8px"};
+
 
     const statusTheme = createMuiTheme({
         palette: {
@@ -72,7 +74,7 @@ function Status(props) {
             <MuiThemeProvider theme={statusTheme}>
                 <div className={classes.statusSection}>
                     {/* <StatusIcon color={getColor()} style={{ width: "18px" }} /> */}
-                    <Typography variant="body1" color={getColor()}>
+                    <Typography variant="body1" style={style}>
                             <span className={classes.statusText}>
                                 {getStatusText()}
                             </span>

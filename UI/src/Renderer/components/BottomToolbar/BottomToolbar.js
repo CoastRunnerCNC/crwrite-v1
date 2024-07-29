@@ -30,6 +30,8 @@ import Support from "../Support";
 import Shuttle from "../Modals/Shuttle";
 import app from "app";
 import Feedrate from "../Feedrate";
+import ViewLogs from "../Modals/ViewLogs";
+import SupportCenter from "../Support/SupportCenter";
 
 const styles = (theme) => ({
     root: {
@@ -248,7 +250,7 @@ const ManualModeSVG = () => {
     );
 };
 
-const MillingProgress = (milling) => {
+const MillingProgress = (props) => {
     if (true /*milling.state.millingProgress >= 0*/) {
         return (
             <Grid container alignItems="center">
@@ -256,12 +258,11 @@ const MillingProgress = (milling) => {
                     <LinearProgress
                         variant="determinate"
                         style={{ height: "15px" }}
-                        value={0}
+                        value={props.progress}
                     />
                 </Grid>
                 <Grid item>
                     <Typography style={{ color: "black", marginLeft: "4px" }}>
-                        {0}%
                     </Typography>
                 </Grid>
             </Grid>
@@ -285,13 +286,18 @@ function BottomToolbar(props) {
     const [openControlMenu, setOpenControlMenu] = useState(false);
     const [openConfigMenu, setOpenConfigMenu] = useState(false);
     const [openSupportMenu, setOpenSupportMenu] = useState(false);
-    const [units, setUnits] = useState("MM");
+    const [units, setUnits] = useState("mm");
     const [settings, setSettings] = useState({});
     const [openSettings, setOpenSettings] = useState(false);
+    const [openSupportCenter, setOpenSupportCenter] = useState(false);
+    const [realTimeStatus, setRealTimeStatus] = useState({});
+    const [feedRate, setFeedRate] = useState(props.feedRate);
+    const [openViewLogs, setOpenViewLogs] = useState(false);
+    const [millingProgress, setMillingProgress] = useState(-1);
     const buttonControlRef = useRef(null);
     const buttonConfigRef = useRef(null);
     const buttonSupportRef = useRef(null);
-    const [feedRate, setFeedRate] = useState(props.feedRate);
+    const progressIntervalRef = useRef(null);
 
     useEffect(() => {
         if (props.feedRate != feedRate) {
@@ -300,7 +306,11 @@ function BottomToolbar(props) {
     }, [props.feedRate]);
 
     const handleUnitsSelect = (event) => {
-        setUnits(event.target.value);
+        console.log(event.target.value);
+        ipcRenderer.send(
+            "CNC::ExecuteCommand",
+            event.target.value === "mm" ? "G21" : "G20"
+        );
     };
 
     function openCNCMillNet() {
@@ -350,9 +360,9 @@ function BottomToolbar(props) {
     };
 
     const convertByUnits = (value) => {
-        if (units === "MM") {
+        if (units === "mm") {
             return value;
-        } else if (units == "INCH") {
+        } else if (units == "inch") {
             let inches = value / 25.4;
             return inches.toFixed(3);
         }
@@ -370,6 +380,16 @@ function BottomToolbar(props) {
 
     const handleStop = () => {
         ipcRenderer.send("Jobs::EmergencyStop");
+    };
+
+    const handleClickImage = () => {
+        props.toggleImagePanel();
+        closeControlMenu({}, true);
+    };
+
+    const handleClickProbingWizard = () => {
+        props.setOpenProbingWizard(true);
+        closeControlMenu({}, true);
     };
 
     const handleClickHome = () => {
@@ -399,45 +419,120 @@ function BottomToolbar(props) {
 
     const onClickSoftware = () => {
         if (!milling) {
-            ipcRenderer.once('Settings::GetSettingsResponse', (event, settings) => {
-                setSettings(settings);
-                setOpenSettings(true);
-            });
+            ipcRenderer.once(
+                "Settings::GetSettingsResponse",
+                (event, settings) => {
+                    closeConfigMenu({}, true);
+                    setSettings(settings);
+                    setOpenSettings(true);
+                }
+            );
             ipcRenderer.send("Settings::GetSettings");
-		}
-    }
+        }
+    };
 
-    // return (
-    //     <footer className={classes.root}>
-    //         <AppBar position="fixed" className={classes.appBar}>
-    //             <Toolbar>
-    //                 <Grid container spacing={1} className={classes.root} alignItems="center">
-    //                     <Grid className={classes.connectionArea} item xs={4} id="status">
-    //                         <Status status={status} />
-    //                         <CNCChooser disabled={milling} />
-    //                     </Grid>
-    //                     <Grid item xs={8}>
-    //                         <div className={classes.right}>
-    //                             <Button className={classes.websiteLink} onClick={openCNCMillNet}>
-    //                                 {app.toolbar.link.display}
-    //                             </Button>
-    //                             <Shuttle openShuttle={props.openShuttle} shuttleSelectedTab={props.shuttleSelectedTab} toggleShuttle={props.toggleShuttle} milling={milling} status={status} firmware={firmware} closeOperationsWindow={closeOperationsWindow} setOperationsWindowOpen={setOperationsWindowOpen} feedRate={props.feedRate} updateFeedRate={props.updateFeedRate} />
-    //                             <Support disabled={milling} set_walkthrough_showing={set_walkthrough_showing} firmware={firmware} />
-    //                         </div>
-    //                     </Grid>
-    //                 </Grid>
-    //             </Toolbar>
-    //         </AppBar>
-    //     </footer>
-    // );
+    const getFixedValue = () => {
+        return units === "mm" ? 3 : 4;
+    };
 
-    //
-    //
-    //
-    //
+    const get_position = (axis, realTimeStatusObj = realTimeStatus) => {
+        if (realTimeStatusObj && realTimeStatusObj.machine_pos) {
+            const value = realTimeStatusObj.machine_pos[axis];
+            // console.log(value[units].toFixed(getFixedValue()));
+            return value[units].toFixed(getFixedValue());
+        }
+
+        return "";
+    };
+
+    const get_work_pos = (axis, realTimeStatusObj = realTimeStatus) => {
+        if (realTimeStatusObj && realTimeStatusObj.work_coordinates) {
+            const value = realTimeStatusObj.work_coordinates.work_pos[axis];
+            // console.log(value[units].toFixed(getFixedValue()));
+            return value[units].toFixed(getFixedValue());
+        }
+
+        return "";
+    };
+
+    const updateRealtimeStatus = (event, status) => {
+        try {
+            const parsed = JSON.parse(status);
+            if (parsed.error == null) {
+                let status = parsed.status;
+
+                setRealTimeStatus(status);
+                setUnits(status.parserUnits);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    const handleProgressResponse = (event, updatedProgress) => {
+        console.log(JSON.stringify(updatedProgress));
+        try {
+            setMillingProgress(updatedProgress.progress.percentage);
+
+        } catch (e) {console.error("handleProgressResponse exception caught")}
+    };
+
+    useEffect(() => {
+        // Set up the interval to send messages
+        const interval = setInterval(() => {
+            ipcRenderer.send("CNC::GetStatus");
+        }, 500);
+
+        // Set up the event listener
+        ipcRenderer.removeListener("CR_UpdateRealtimeStatus", updateRealtimeStatus);
+        ipcRenderer.on("CR_UpdateRealtimeStatus", updateRealtimeStatus);
+
+        ipcRenderer.removeListener("Jobs::GetProgressResponse", handleProgressResponse);
+        ipcRenderer.on("Jobs::GetProgressResponse", handleProgressResponse);
+
+        const checkForMillingInterval = setInterval(() => {
+            if (realTimeStatus && realTimeStatus.state === "milling") {
+                if (!progressIntervalRef.current) {
+                    progressIntervalRef.current = setInterval(() => {
+                        ipcRenderer.send("Jobs::GetProgress");
+                    }, 500);
+                }
+            } else {
+                if (progressIntervalRef.current) {
+                    clearInterval(progressIntervalRef.current);
+                    progressIntervalRef.current = null;
+                    setMillingProgress(-1);
+                }
+            }
+        }, 2000);
+        // Clean up the interval and the event listener on component unmount
+        return () => {
+            clearInterval(interval);
+            clearInterval(checkForMillingInterval);
+            if (progressIntervalRef.current) {
+                clearInterval(progressIntervalRef.current);
+            }
+            ipcRenderer.removeAllListeners("CR_UpdateRealtimeStatus");
+            ipcRenderer.removeAllListeners("Jobs::GetProgressResponse");
+        };
+    }, []);
 
     return (
         <>
+            <SupportCenter
+                open={openSupportCenter}
+                onClose={() => {
+                    setOpenSupportCenter(false);
+                }}
+            />
+
+            <ViewLogs
+                open={openViewLogs}
+                onClose={() => {
+                    setOpenViewLogs(false);
+                }}
+            />
+
             <Settings
                 open={openSettings}
                 settings={settings}
@@ -461,9 +556,21 @@ function BottomToolbar(props) {
                     backgroundColor: "black",
                 }}
             >
-                <Box style={{ gridArea: "status", backgroundColor: "white" }}>
-                    <MachineSVG />
-                    <Status status={status} />
+                <Box
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr",
+                        gridTemplateRows: "2fr 1fr",
+                        gridArea: "status",
+                        backgroundColor: "white",
+                    }}
+                >
+                    <Box style={{ justifySelf: "center", alignSelf: "center" }}>
+                        <MachineSVG />
+                    </Box>
+                    <Box style={{ justifySelf: "center", alignSelf: "center" }}>
+                        <Status status={status} />
+                    </Box>
                 </Box>
                 <Box
                     style={{
@@ -472,9 +579,10 @@ function BottomToolbar(props) {
                         gridArea: "mill",
                         backgroundColor: "white",
                         alignItems: "center",
+                        gap: "6px",
                     }}
                 >
-                    <Box>
+                    <Box style={{ justifySelf: "end" }}>
                         <Typography
                             style={{ color: "black", fontWeight: "bold" }}
                         >
@@ -485,21 +593,27 @@ function BottomToolbar(props) {
                         <TextField
                             className={classes.machineCoordinates}
                             disabled
-                            value={convertByUnits(props.machineX)}
+                            value={convertByUnits(
+                                get_position("x", realTimeStatus)
+                            )}
                         />
                     </Box>
                     <Box>
                         <TextField
                             className={classes.machineCoordinates}
                             disabled
-                            value={convertByUnits(props.machineY)}
+                            value={convertByUnits(
+                                get_position("y", realTimeStatus)
+                            )}
                         />
                     </Box>
                     <Box>
                         <TextField
                             className={classes.machineCoordinates}
                             disabled
-                            value={convertByUnits(props.machineZ)}
+                            value={convertByUnits(
+                                get_position("z", realTimeStatus)
+                            )}
                         />
                     </Box>
                     <Box>
@@ -508,8 +622,8 @@ function BottomToolbar(props) {
                             onChange={handleUnitsSelect}
                             style={{ height: "21.5px", fontWeight: "bold" }}
                         >
-                            <MenuItem value="MM">MM</MenuItem>
-                            <MenuItem value="INCH">INCH</MenuItem>
+                            <MenuItem value="mm">MM</MenuItem>
+                            <MenuItem value="inch">INCH</MenuItem>
                         </Select>
                     </Box>
                 </Box>
@@ -520,9 +634,10 @@ function BottomToolbar(props) {
                         gridArea: "work",
                         backgroundColor: "white",
                         alignItems: "center",
+                        gap: "6px",
                     }}
                 >
-                    <Box>
+                    <Box style={{ justifySelf: "end" }}>
                         <Typography
                             style={{ color: "black", fontWeight: "bold" }}
                         >
@@ -533,21 +648,27 @@ function BottomToolbar(props) {
                         <TextField
                             className={classes.machineCoordinates}
                             disabled
-                            value={convertByUnits(props.workX)}
+                            value={convertByUnits(
+                                get_work_pos("x", realTimeStatus)
+                            )}
                         />
                     </Box>
                     <Box>
                         <TextField
                             className={classes.machineCoordinates}
                             disabled
-                            value={convertByUnits(props.workY)}
+                            value={convertByUnits(
+                                get_work_pos("y", realTimeStatus)
+                            )}
                         />
                     </Box>
                     <Box>
                         <TextField
                             className={classes.machineCoordinates}
                             disabled
-                            value={convertByUnits(props.workZ)}
+                            value={convertByUnits(
+                                get_work_pos("z", realTimeStatus)
+                            )}
                         />
                     </Box>
                     <Box>
@@ -556,8 +677,8 @@ function BottomToolbar(props) {
                             onChange={handleUnitsSelect}
                             style={{ height: "21.5px", fontWeight: "bold" }}
                         >
-                            <MenuItem value="MM">MM</MenuItem>
-                            <MenuItem value="INCH">INCH</MenuItem>
+                            <MenuItem value="mm">MM</MenuItem>
+                            <MenuItem value="inch">INCH</MenuItem>
                         </Select>
                     </Box>
                 </Box>
@@ -569,10 +690,11 @@ function BottomToolbar(props) {
                         backgroundColor: "white",
                         alignItems: "center",
                         justify: "center",
+                        padding: "6px",
                     }}
                 >
                     <Box>
-                        <MillingProgress />
+                        <MillingProgress progress={millingProgress} />
                     </Box>
                     <Box style={{ alignSelf: "center", justifySelf: "center" }}>
                         <Button
@@ -598,7 +720,14 @@ function BottomToolbar(props) {
                         </Button>
                     </Box>
                 </Box>
-                <Box style={{ gridArea: "feedrate", backgroundColor: "white" }}>
+                <Box
+                    style={{
+                        gridArea: "feedrate",
+                        backgroundColor: "white",
+                        paddingLeft: "6px",
+                        paddingRight: "6px",
+                    }}
+                >
                     <Slider
                         value={feedRate}
                         step={2}
@@ -658,7 +787,7 @@ function BottomToolbar(props) {
                                                 <MenuList>
                                                     <MenuItem
                                                         onClick={
-                                                            props.toggleImagePanel
+                                                            handleClickImage
                                                         }
                                                     >
                                                         Image
@@ -670,6 +799,13 @@ function BottomToolbar(props) {
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
                                                     <MenuItem>Jogging</MenuItem>
+                                                    <MenuItem
+                                                        onClick={
+                                                            handleClickProbingWizard
+                                                        }
+                                                    >
+                                                        Probing Wizard
+                                                    </MenuItem>
                                                     <MenuItem
                                                         onClick={
                                                             handleClickHome
@@ -737,14 +873,9 @@ function BottomToolbar(props) {
                                                 onClickAway={closeConfigMenu}
                                             >
                                                 <MenuList>
-                                                    <MenuItem>DRO</MenuItem>
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
-                                                    <MenuItem>Units</MenuItem>
-                                                    <MenuItem>
-                                                        Feedrate
-                                                    </MenuItem>
                                                     <Tooltip
                                                         disableHoverListener={
                                                             !milling
@@ -758,15 +889,13 @@ function BottomToolbar(props) {
                                                         title="Disabled while machine is running"
                                                     >
                                                         <MenuItem
-                                                            onClick={onClickSoftware}
+                                                            onClick={
+                                                                onClickSoftware
+                                                            }
                                                         >
-                                                            Software
+                                                            Settings
                                                         </MenuItem>
                                                     </Tooltip>
-
-                                                    <MenuItem>
-                                                        Firmware
-                                                    </MenuItem>
                                                 </MenuList>
                                             </ClickAwayListener>
                                         </Paper>
@@ -806,19 +935,37 @@ function BottomToolbar(props) {
                                                 onClickAway={closeSupportMenu}
                                             >
                                                 <MenuList>
-                                                    <MenuItem>DRO</MenuItem>
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
-                                                    <MenuItem>Units</MenuItem>
-                                                    <MenuItem>
-                                                        Feedrate
+                                                    <MenuItem
+                                                        onClick={() => {
+                                                            setOpenViewLogs(
+                                                                true
+                                                            );
+                                                            closeSupportMenu(
+                                                                {},
+                                                                true
+                                                            );
+                                                        }}
+                                                    >
+                                                        Logs
                                                     </MenuItem>
-                                                    <MenuItem>
-                                                        Software
+                                                    <MenuItem
+                                                        onClick={() => {
+                                                            setOpenSupportCenter(
+                                                                true
+                                                            );
+                                                            closeSupportMenu(
+                                                                {},
+                                                                true
+                                                            );
+                                                        }}
+                                                    >
+                                                        Contact
                                                     </MenuItem>
-                                                    <MenuItem>
-                                                        Firmware
+                                                    <MenuItem disabled={true}>
+                                                        Manual
                                                     </MenuItem>
                                                 </MenuList>
                                             </ClickAwayListener>
@@ -829,17 +976,29 @@ function BottomToolbar(props) {
                         </Grid>
                     </Grid>
                 </Box>
-                <Box style={{ gridArea: "mode", backgroundColor: "white" }}>
-                    <ManualModeSVG />
-                    <Typography
-                        style={{
-                            color: "black",
-                            fontWeight: "bold",
-                            fontSize: "12px",
-                        }}
-                    >
-                        Manual Mode
-                    </Typography>
+                <Box
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr",
+                        gridTemplateRows: "3fr 1f1",
+                        gridArea: "mode",
+                        backgroundColor: "white",
+                    }}
+                >
+                    <Box style={{ justifySelf: "center", alignSelf: "center" }}>
+                        <ManualModeSVG />
+                    </Box>
+                    <Box style={{ justifySelf: "center" }}>
+                        <Typography
+                            style={{
+                                color: "black",
+                                fontWeight: "bold",
+                                fontSize: "12px",
+                            }}
+                        >
+                            Manual Mode
+                        </Typography>
+                    </Box>
                 </Box>
             </Box>
         </>

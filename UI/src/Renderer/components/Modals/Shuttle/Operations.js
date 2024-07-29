@@ -719,9 +719,9 @@ class Operations extends React.Component {
         };
 
         this.progress = this.progress.bind(this);
-        this.getMillingInProgressDisplay =
-            this.getMillingInProgressDisplay.bind(this);
-        this.getMillingProgress = this.getMillingProgress.bind(this);
+        // this.getMillingInProgressDisplay =
+            // this.getMillingInProgressDisplay.bind(this);
+        // this.getMillingProgress = this.getMillingProgress.bind(this);
         this.updateRealtimeStatus = this.updateRealtimeStatus.bind(this);
         this.executeCommand = this.executeCommand.bind(this);
         this.uploadGCodeFile = this.uploadGCodeFile.bind(this);
@@ -897,47 +897,47 @@ class Operations extends React.Component {
         setTimeout(this.progress, 100);
     }
 
-    getMillingProgress() {
-        while (this.props.open) {
-            ipcRenderer.send("Jobs::GetProgress", 0);
-            ipcRenderer.once(
-                "Jobs::GetProgressResponse",
-                (event, updatedProgress) => {
-                    if (updatedProgress.milling) {
-                        this.setState({
-                            millingProgress:
-                                updatedProgress.progress.percentage,
-                        });
-                        this.props.setMilling(true);
-                    } else {
-                        this.props.setMilling(false);
-                    }
-                }
-            );
-            setTimeout(this.getMillingProgress, 100);
-            return;
-        }
-    }
+    // getMillingProgress() {
+    //     while (this.props.open) {
+    //         ipcRenderer.send("Jobs::GetProgress", 0);
+    //         ipcRenderer.once(
+    //             "Jobs::GetProgressResponse",
+    //             (event, updatedProgress) => {
+    //                 if (updatedProgress.milling) {
+    //                     this.setState({
+    //                         millingProgress:
+    //                             updatedProgress.progress.percentage,
+    //                     });
+    //                     this.props.setMilling(true);
+    //                 } else {
+    //                     this.props.setMilling(false);
+    //                 }
+    //             }
+    //         );
+    //         setTimeout(this.getMillingProgress, 100);
+    //         return;
+    //     }
+    // }
 
-    getMillingInProgressDisplay() {
-        if (this.props.milling) {
-            return (
-                <React.Fragment>
-                    <Typography display="inline" variant="h4" color="primary">
-                        {this.state.millingProgress}%
-                    </Typography>
-                    <RPMDivergence indicatorHeight="30px" />
-                    <LinearProgress
-                        variant="determinate"
-                        color="primary"
-                        style={{ height: "5px" }}
-                        value={this.state.millingProgress}
-                    />
-                </React.Fragment>
-            );
-        }
-        return;
-    }
+    // getMillingInProgressDisplay() {
+    //     if (this.props.milling) {
+    //         return (
+    //             <React.Fragment>
+    //                 <Typography display="inline" variant="h4" color="primary">
+    //                     {this.state.millingProgress}%
+    //                 </Typography>
+    //                 <RPMDivergence indicatorHeight="30px" />
+    //                 <LinearProgress
+    //                     variant="determinate"
+    //                     color="primary"
+    //                     style={{ height: "5px" }}
+    //                     value={this.state.millingProgress}
+    //                 />
+    //             </React.Fragment>
+    //         );
+    //     }
+    //     return;
+    // }
 
     closeShuttleSettings() {
         this.setState({ openShuttleSettings: false });
@@ -977,7 +977,7 @@ class Operations extends React.Component {
         ipcRenderer.on("CR_UpdateRealtimeStatus", this.updateRealtimeStatus);
         ipcRenderer.send("CNC::SetManualEntryMode", true);
 
-        this.getMillingProgress();
+        // this.getMillingProgress();
         // ipcRenderer.removeListener("Jobs::ReadWrites", this.updateMovementType);
         // ipcRenderer.on("Jobs::ReadWrites", this.updateMovementType);
         this.setState({ feedRate2: this.state.feedRate });
@@ -3216,7 +3216,7 @@ class Operations extends React.Component {
                                                     />
                                                 </Grid>
                                                 <Grid item xs={11}>
-                                                    {this.getMillingInProgressDisplay()}
+                                                    {/* {this.getMillingInProgressDisplay()} */}
                                                 </Grid>
                                             </Grid>
                                         </Grid>

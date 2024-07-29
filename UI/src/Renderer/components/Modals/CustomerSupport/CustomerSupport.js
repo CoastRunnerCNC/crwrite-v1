@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
-import {ipcRenderer} from 'electron';
+import React from "react";
+import PropTypes from "prop-types";
+import withStyles from "@material-ui/core/styles/withStyles";
+import { ipcRenderer } from "electron";
 import {
     Button,
     Checkbox,
@@ -13,46 +13,43 @@ import {
     FormControlLabel,
     Grid,
     TextField,
-    Typography
-} from '@material-ui/core';
+    Typography,
+} from "@material-ui/core";
 import Input from "@material-ui/core/Input";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Backdrop from "@material-ui/core/Backdrop";
-import app from 'app';
+import app from "app";
 
-const styles = theme => ({
+const styles = (theme) => ({
     cancel: {
         marginTop: theme.spacing(-1),
         marginBottom: theme.spacing(1),
-        marginRight: '4px',
+        marginRight: "4px",
         backgroundColor: app.button.cancel.backgroundColor,
-        color: app.button.cancel.color
+        color: app.button.cancel.color,
     },
     send: {
         marginTop: theme.spacing(-1),
         marginBottom: theme.spacing(1),
-        marginLeft: '4px',
-        backgroundColor: app.button.save.backgroundColor,
-        color: app.button.save.color
+        marginLeft: "4px",
+        color: app.button.save.color,
     },
     emailText: {
-        width: '100%',
+        width: "100%",
         height: 30,
         marginTop: 0,
-        backgroundColor: app.colors.form,
-        border: app.formControl.border
+        border: app.formControl.border,
+        backgroundColor: "#f6f6f6"
     },
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
-        color: '#fff',
+        color: "#fff",
     },
-    textField: {
-
-    }
+    textField: {backgroundColor: "#f6f6f6"},
 });
 
 function CustomerSupport(props) {
-    const {classes, open, onClose} = props;
+    const { classes, open, onClose } = props;
     const [submitted, setSubmitted] = React.useState(false);
     const [errors, setErrors] = React.useState(new Array());
     const [name, setName] = React.useState("");
@@ -79,7 +76,7 @@ function CustomerSupport(props) {
         if (engravingError) {
             tempDescription = "REGARDING ENGRAVING ERROR: " + description;
         }
-        ipcRenderer.once('Support::SendRequestResponse', (event, error) => {
+        ipcRenderer.once("Support::SendRequestResponse", (event, error) => {
             setSending(false);
 
             if (!error) {
@@ -89,48 +86,50 @@ function CustomerSupport(props) {
 
                 if (error.hasOwnProperty("details")) {
                     errorsArray.push(error.details);
-                }
-
-                else if (error.hasOwnProperty("name")) {
+                } else if (error.hasOwnProperty("name")) {
                     errorsArray.push("NAME: " + error.name);
-                }
-
-                else if (error.hasOwnProperty("email")) {
+                } else if (error.hasOwnProperty("email")) {
                     errorsArray.push("EMAIL: " + error.email);
-                }
-
-                else if (error.hasOwnProperty("description")) {
+                } else if (error.hasOwnProperty("description")) {
                     errorsArray.push("DESCRIPTION: " + error.description);
-                }
-
-                else if (errorsArray.length === 0) {
+                } else if (errorsArray.length === 0) {
                     errorsArray.push("Unable to send. Server may be down.");
                 }
 
                 setErrors(errorsArray);
             }
         });
-        ipcRenderer.send("Support::SendRequest", name, email, tempDescription, includeLogs);
+        ipcRenderer.send(
+            "Support::SendRequest",
+            name,
+            email,
+            tempDescription,
+            includeLogs
+        );
     }
 
     return (
         <React.Fragment>
             <>
-                <DialogContent style={{overflowX: 'hidden'}}>
+                <DialogContent style={{ overflowX: "hidden" }}>
+                    {errors.map((error, index) => {
+                        return (
+                            <Typography variant="body1" color="error">
+                                {error}
+                            </Typography>
+                        );
+                    })}
 
-                    {
-                        errors.map((error, index) => {
-                            return (
-                                <Typography variant="body1" color="error">{error}</Typography>
-                            );
-                        })
-                    }
-
-                    <br/>
+                    <br />
                     <Grid container spacing={0} justify="center">
                         <Grid item xs={3}>
-                            <Typography variant="body1" display="inline" style={{lineHeight: '30px'}}>Your
-                                name:</Typography>
+                            <Typography
+                                variant="body1"
+                                display="inline"
+                                style={{ lineHeight: "30px", backgroundColor: "#f6f6f6" }}
+                            >
+                                Your name:
+                            </Typography>
                         </Grid>
                         <Grid item xs={9}>
                             <Input
@@ -138,15 +137,20 @@ function CustomerSupport(props) {
                                 variant="filled"
                                 disableUnderline
                                 className={classes.emailText}
-                                onChange={e => setName(e.currentTarget.value)}
+                                onChange={(e) => setName(e.currentTarget.value)}
                             />
                         </Grid>
                     </Grid>
-                    <br/>
+                    <br />
                     <Grid container spacing={0} justify="center">
                         <Grid item xs={3}>
-                            <Typography variant="body1" display="inline" style={{lineHeight: '30px'}}>Your e-mail
-                                address:</Typography>
+                            <Typography
+                                variant="body1"
+                                display="inline"
+                                style={{ lineHeight: "30px" }}
+                            >
+                                Your e-mail address:
+                            </Typography>
                         </Grid>
                         <Grid item xs={9}>
                             <Input
@@ -154,7 +158,9 @@ function CustomerSupport(props) {
                                 variant="filled"
                                 disableUnderline
                                 className={classes.emailText}
-                                onChange={e => setEmail(e.currentTarget.value)}
+                                onChange={(e) =>
+                                    setEmail(e.currentTarget.value)
+                                }
                             />
                         </Grid>
                     </Grid>
@@ -166,16 +172,16 @@ function CustomerSupport(props) {
                         rows={4}
                         fullWidth
                         multiline={true}
-                        onChange={e => setDescription(e.currentTarget.value)}
+                        onChange={(e) => setDescription(e.currentTarget.value)}
                     />
 
-                    <br/>
+                    <br />
                     <FormControlLabel
                         control={
                             <Checkbox
                                 checked={includeLogs}
-                                onChange={e => {
-                                    setIncludeLogs(e.currentTarget.checked)
+                                onChange={(e) => {
+                                    setIncludeLogs(e.currentTarget.checked);
                                 }}
                             />
                         }
@@ -185,16 +191,16 @@ function CustomerSupport(props) {
                         control={
                             <Checkbox
                                 checked={engravingError}
-                                onChange={e => {
-                                    setEngravingError(e.currentTarget.checked)
+                                onChange={(e) => {
+                                    setEngravingError(e.currentTarget.checked);
                                 }}
                             />
                         }
                         label="Check if issue is related to engraving."
                     />
-                    <br/>
+                    <br />
                     <Backdrop className={classes.backdrop} open={sending}>
-                        <CircularProgress color="inherit"/>
+                        <CircularProgress color="inherit" />
                     </Backdrop>
                 </DialogContent>
                 <DialogActions>
@@ -236,7 +242,11 @@ function CustomerSupport(props) {
                 </DialogContent>
                 <DialogActions>
                     <center>
-                        <Button onClick={handleClose} color="secondary" autoFocus>
+                        <Button
+                            onClick={handleClose}
+                            color="secondary"
+                            autoFocus
+                        >
                             OK
                         </Button>
                     </center>

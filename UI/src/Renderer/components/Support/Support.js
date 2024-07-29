@@ -162,27 +162,6 @@ class Support extends React.Component {
 
         return (
             <React.Fragment>
-                <Tooltip
-                    disableHoverListener={!disabled}
-                    disableFocusListener={true}
-                    disableTouchListener={true}
-                    title="Disabled while machine is running"
-                >
-                    <span>
-                        <Button
-                            aria-label="Support"
-                            onClick={this.handleToggleMenu}
-                            className={classes.supportButton}
-				            disabled={disabled}
-                            size="small"
-                            buttonRef={node => { this.anchor = node }}
-					        id="support"
-                        >
-                            <img src={path.join(__dirname, app.image.supportButton)} className={classes.supportImg} />
-                        </Button>
-                    </span>
-                </Tooltip>
-
                 <Popper open={this.state.openMenu} anchorEl={this.anchor} transition disablePortal>
                     {({ TransitionProps, placement }) => (
                         <Grow
@@ -205,7 +184,6 @@ class Support extends React.Component {
                     )}
                 </Popper>
 
-                <SupportCenter open={this.state.openDialog} onClose={this.handleCloseDialog} />
                 <ViewLogs open={this.state.openLogViewer} onClose={this.handleCloseLogViewer} />
             </React.Fragment>
         );

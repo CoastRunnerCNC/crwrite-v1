@@ -241,7 +241,6 @@ function Dashboard(props) {
     const [alertMessage, setAlertMessage] = React.useState("");
     const [showNewFileAlert, setShowNewFileAlert] = React.useState(false);
     const [enableEditButton, setEnableEditButton] = React.useState(false);
-    const [openProbingWizard, setOpenProbingWizard] = React.useState(false);
     const [openProbingSuccess, setOpenProbingSuccess] = React.useState(false);
 
     ipcRenderer.send('Logs::LogString', 'CRWrite Version: ' + packageJSON.version);
@@ -362,7 +361,7 @@ function Dashboard(props) {
 
     function handleProbingPopupOk() {
         setOpenProbingSuccess(false);
-        setOpenProbingWizard(false);
+        props.setOpenProbingWizard(false);
     }
 
     setTimeout(function() {
@@ -394,7 +393,7 @@ function Dashboard(props) {
 
     useEffect(() => {
         if (status != 2) {
-            setOpenProbingWizard(false);
+            props.setOpenProbingWizard(false);
         }
     }, [status]);
     
@@ -480,7 +479,7 @@ function Dashboard(props) {
 <div style={{flexGrow: 1}}>
     <Alert open={alertMessage.length > 0} message={alertMessage} onOk={(event) => { setAlertMessage("") }} onCancel={(e) => { setAlertMessage("")}} />
     <Alert open={openProbingSuccess} message="Probing successfull." yesNo={false} onOk={handleProbingPopupOk} />
-    <ProbingWizard open={openProbingWizard} setOpenProbingWizard={setOpenProbingWizard} setOpenProbingSuccess={setOpenProbingSuccess} />
+    <ProbingWizard open={props.openProbingWizard} setOpenProbingWizard={props.setOpenProbingWizard} setOpenProbingSuccess={setOpenProbingSuccess} />
     <Alert open={showNewFileAlert} message="Would you like to create a new file?" yesNo={true} onOk={handleNewFileYes} onCancel={handleNewFileNo} />
     <Menu />
     <JobSelection open={showJobSelection} onClose={onCloseJobSelection} jobs={availableJobs} status={status} refreshJobs={refreshJobs} enableEditButton={enableEditButton} />
@@ -500,7 +499,7 @@ function Dashboard(props) {
 
                         <GuidedModeSVG onClick={onClickRun} />
                         <Shuttle openShuttle={props.openShuttle} shuttleSelectedTab={props.shuttleSelectedTab} toggleShuttle={props.toggleShuttle} milling={props.milling} status={props.status} firmware={props.firmware} closeOperationsWindow={props.closeOperationsWindow} setOperationsWindowOpen={props.setOperationsWindowOpen} feedRate={props.feedRate} updateFeedRate={props.updateFeedRate} />
-                        <FileCreater onClick={() => {setOpenProbingWizard(true)}} />
+                        <FileCreater onClick={() => {props.setOpenProbingWizard(true)}} />
                         <Projects onClick={() => {}} />
 
                         </Grid>

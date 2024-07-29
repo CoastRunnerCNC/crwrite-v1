@@ -883,7 +883,6 @@ class Milling extends React.Component {
     }
 
     handleEmergencyStopResponse() {
-        console.log("EStop response fired!");
         this.setState({
             millingProgress: -1,
             selectedStepIndex: 0,
@@ -974,7 +973,6 @@ class Milling extends React.Component {
         }
 
         function handleSkip(event) {
-            console.log("handleSkip fired!");
             this.skipToNextMillingStep(this);
         }
 
@@ -1037,7 +1035,6 @@ class Milling extends React.Component {
             let result =
                 component.state.selectedStep.next_milling_step != null &&
                 !component.state.selectedStep.PopupText;
-                console.log("isSkipAvailable: " + result);
             return result;
         }
 
@@ -1423,7 +1420,7 @@ class Milling extends React.Component {
                                 <Grid container direction="column">
                                     <Grid item>
                                         <div className={classes.warning}>
-                                            {getMillingInProgressDisplay(this)}
+                                            {/*getMillingInProgressDisplay(this) */}
                                         </div>
                                     </Grid>
                                     <Grid item>
@@ -1437,7 +1434,7 @@ class Milling extends React.Component {
                                                 <div
                                                     className={classes.actions}
                                                 >
-                                                    {getActionButton(this)}
+                                                    {/* {getActionButton(this)} */}
                                                 </div>
                                             </Grid>
                                         </Grid>

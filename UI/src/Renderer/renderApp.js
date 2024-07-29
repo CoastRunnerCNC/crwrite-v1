@@ -1,6 +1,6 @@
 import {version} from '../../package.json';
 const crwrite = require("crwrite");
-console.time("renderApp");
+// console.time("renderApp");
 
 // window.onerror = function(message, source, lineno, colno, error) {
 //     let errorDetails = `Error: ${message}\n` + `Source: ${source}\n` + `Line: ${lineno}\n` + `Column: ${colno}\n` + `Error object: ${JSON.stringify(error)}`;
@@ -27,10 +27,10 @@ import env from 'env';
         <App />
     </AppContainer>, document.getElementById('App'));
     }
-console.time("render()");
+// console.time("render()");
     render();
-console.timeEnd("render()")
+// console.timeEnd("render()")
 // if (module.hot) {
 //     module.hot.accept(render);
 // }
-console.timeEnd("renderApp");
+// console.timeEnd("renderApp");

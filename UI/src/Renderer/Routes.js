@@ -19,7 +19,9 @@ function Routes(props) {
         shuttleSelectedTab,
         closeOperationsWindow,
         setOperationsWindowOpen,
-        openImagePanel
+        openImagePanel,
+        openProbingWizard,
+        setOpenProbingWizard
     } = props;
 
     return (
@@ -45,6 +47,8 @@ function Routes(props) {
                                     setOperationsWindowOpen
                                 }
                                 updateFeedRate={updateFeedRate}
+                                openProbingWizard={openProbingWizard}
+                                setOpenProbingWizard={setOpenProbingWizard}
                             />
                         )}
                     />

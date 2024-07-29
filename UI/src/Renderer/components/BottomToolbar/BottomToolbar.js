@@ -470,11 +470,12 @@ function BottomToolbar(props) {
     };
 
     const handleProgressResponse = (event, updatedProgress) => {
-        console.log(JSON.stringify(updatedProgress));
         try {
             setMillingProgress(updatedProgress.progress.percentage);
 
-        } catch (e) {console.error("handleProgressResponse exception caught")}
+        } catch (e) {
+        //    console.error("handleProgressResponse exception caught")
+        }
     };
 
     useEffect(() => {

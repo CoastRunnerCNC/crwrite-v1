@@ -1018,7 +1018,6 @@ class Milling extends React.Component {
                 if (component.state.selectedStepIndex === 0) {
                     return false;
                 }
-
                 if (
                     component.state.selectedStepIndex - 1 >
                         component.state.previousMillingStep ||
@@ -1371,16 +1370,18 @@ class Milling extends React.Component {
                                 onClickBack(this);
                             }}
                             isPrevAvailable={() => {
-                                isPrevAvailable(this);
+                                return isPrevAvailable(this);
                             }}
                             handlePrev={this.handlePrev}
                             isNextAvailable={() => {
                                 return isNextAvailable(this);
                             }}
                             handleNext={handleNext.bind(this)}
-                            handleSkip={() => {this.skipToNextMillingStep(this)}}
+                            handleSkip={() => {
+                                this.skipToNextMillingStep(this);
+                            }}
                             isSkipAvailable={() => {
-                                 return isSkipAvailable(this);
+                                return isSkipAvailable(this);
                             }}
                             classes={classes}
                         />

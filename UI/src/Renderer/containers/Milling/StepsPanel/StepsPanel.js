@@ -49,9 +49,7 @@ const StepsPanel = (props) => {
                         onClickBack={(event) => {
                             props.onClickBack();
                         }}
-                        isPrevAvailable={() => {
-                            props.isPrevAvailable();
-                        }}
+                        isPrevAvailable={props.isPrevAvailable}
                         classes={props.classes}
                         handlePrev={() => {
                             props.handlePrev();

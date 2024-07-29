@@ -76,6 +76,11 @@ const RewindArrow = () => {
 };
 
 const ActionPanel = (props) => {
+
+    const prevNotAvailable = () => {
+        return !props.isPrevAvailable();
+    }
+
     const disableSkip = !props.isSkipAvailable();
     return (
         <Grid
@@ -108,7 +113,7 @@ const ActionPanel = (props) => {
                         disabled: props.classes.nextPrevButtonDisable,
                     }}
                     color="secondary"
-                    disabled={!props.isPrevAvailable()}
+                    disabled={prevNotAvailable()}
                     className={props.classes.prev}
                     onClick={props.handlePrev}
                 >

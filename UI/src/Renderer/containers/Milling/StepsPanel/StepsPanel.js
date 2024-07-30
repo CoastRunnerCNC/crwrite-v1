@@ -12,12 +12,13 @@ const StepsPanel = (props) => {
     }
 
     return (
-        <ItemPanel title="Project Steps" small>
+        <ItemPanel title="Project Steps" scrollContent small>
             <Box
                 style={{
                     display: "grid",
                     gridTemplateRows: "74px 20px 1fr 26px",
                     gridTemplateColumns: "1fr",
+                    overflowY: "auto"
                 }}
             >
                 <Box>
@@ -27,7 +28,7 @@ const StepsPanel = (props) => {
                 <Box>
                     <HorizontalLines />
                 </Box>
-                <Box style={{ overflow: "auto" }}>
+                <Box style={{ overflowY: "auto" }}>
                     <StepList
                         steps={props.steps}
                         selectedStep={props.selectedStepIndex}

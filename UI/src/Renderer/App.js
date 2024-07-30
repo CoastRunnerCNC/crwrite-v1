@@ -12558,10 +12558,10 @@ export default class App extends React.Component {
             feedRate: 100,
             openShuttle: false,
             shuttleSelectedTab: 0,
-            openImagePanel: false,
-            openJoggingPanel: true,
+            openImagePanel: true,
+            openJoggingPanel: false,
             openProbingWizard: false,
-            openMachineOutputPanel: false,
+            openMachineOutputPanel: true,
         };
 
         this.updateStatus = this.updateStatus.bind(this);
@@ -12848,6 +12848,7 @@ export default class App extends React.Component {
                                 gridTemplateRows: "1fr 80px",
                                 gap: "10px",
                                 padding: "10px",
+                                overflowY: "auto"
                             }}
                         >
                             <Routes

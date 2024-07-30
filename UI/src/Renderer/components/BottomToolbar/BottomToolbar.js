@@ -471,6 +471,7 @@ function BottomToolbar(props) {
 
     const handleProgressResponse = (event, updatedProgress) => {
         try {
+            console.log("updating milling progress");
             setMillingProgress(updatedProgress.progress.percentage);
 
         } catch (e) {
@@ -492,6 +493,15 @@ function BottomToolbar(props) {
         ipcRenderer.on("Jobs::GetProgressResponse", handleProgressResponse);
 
         const checkForMillingInterval = setInterval(() => {
+            
+            try {
+                
+                console.log("state: " + realTimeStatus.state);
+            }
+            catch (e) {
+                
+            }
+
             if (realTimeStatus && realTimeStatus.state === "milling") {
                 if (!progressIntervalRef.current) {
                     progressIntervalRef.current = setInterval(() => {
@@ -502,6 +512,7 @@ function BottomToolbar(props) {
                 if (progressIntervalRef.current) {
                     clearInterval(progressIntervalRef.current);
                     progressIntervalRef.current = null;
+                    console.log("reseting milling progress");
                     setMillingProgress(-1);
                 }
             }

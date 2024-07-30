@@ -43,6 +43,8 @@ const ItemPanel = (props) => {
                 display: "grid",
                 gridTemplateColumns: "1fr",
                 gridTemplateRows: "24px 1fr",
+                overflowY: props.scrollContent ? "auto" : "visible"
+
             }}
         >
             <Box>
@@ -81,6 +83,8 @@ const ItemPanel = (props) => {
                     display: "grid",
                     gridTemplateColumns: "1fr",
                     gridTemplateRows: "1fr",
+                    overflowY: props.scrollContent ? "auto" : "visible",
+                    overflowX: "hidden"
                 }}
             >
                 {props.children}

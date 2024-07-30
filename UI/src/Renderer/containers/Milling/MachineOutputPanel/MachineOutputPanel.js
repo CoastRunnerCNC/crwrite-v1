@@ -14,12 +14,12 @@ const styles = (theme) => ({
     },
     gcodes: {
         width: "100%",
-        height: "calc(100% - 50px)",
-        overflow: "auto",
+        height: "100%",
         backgroundColor: app.milling.gcodes.background,
         position: "relative",
         border: app.milling.gcodes.border,
         color: app.milling.gcodes.color,
+        overflowY: "auto"
     },
 });
 
@@ -89,7 +89,7 @@ const MachineOutputPanel = (props) => {
             <ItemPanel
                 title="Machine Output"
                 color="secondary"
-                style={{ height: "100%" }}
+                scrollContent
                 small
             >
                 {getDisplay()}

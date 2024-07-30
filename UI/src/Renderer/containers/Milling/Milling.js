@@ -42,7 +42,7 @@ const styles = (theme) => ({
     millingStyle: {
         backgroundColor: "#F6F6F6",
         backgroundSize: "cover",
-        overflow: "hidden",
+        overflowY: "hidden",
         width: "100%",
         height: "calc(100% - 44px)",
         position: "fixed",
@@ -59,7 +59,7 @@ const styles = (theme) => ({
         // verticalAlign: 'middle',
 
         // backgroundColor: "#F1F2F2",
-        // overflow: 'hidden',
+        // overflow-y: 'hidden',
         // height: '100%',//height: 'calc(100% - 93px)',
         // position: 'fixed',
 
@@ -1116,7 +1116,6 @@ class Milling extends React.Component {
             ipcRenderer.send("CR_SetCurrentPage", "Dashboard");
             return <Redirect to="/" />;
         }
-        console.log("openMachineOutputPanel: " + this.props.openMachineOutputPanel);
         return (
             <React.Fragment>
                 <Throbber
@@ -1348,6 +1347,8 @@ class Milling extends React.Component {
                         gridTemplateColumns: "1fr 1fr 1fr",
                         gridTemplateRows: "1fr",
                         gap: "12px",
+                    overflowY: "auto"
+                        
                     }}
                 >
                     <Box
@@ -1355,6 +1356,7 @@ class Milling extends React.Component {
                             display: "grid",
                             gridTemplateColumns: "1fr",
                             gridTemplateRows: "1fr",
+                            overflowY: "auto"
                         }}
                     >
                         <StepsPanel
@@ -1455,6 +1457,8 @@ class Milling extends React.Component {
                                 ? "1fr 1fr"
                                 : "1fr",
                             gap: "8px",
+                            overflowY: "auto"
+
                         }}
                     >
                         <JoggingPanel open={this.props.openJoggingPanel} />

@@ -529,6 +529,7 @@ function BottomToolbar(props) {
         };
     }, []);
 
+    console.log("navigateToMilling: " + props.navigateToMilling);
     return (
         <>
             <SupportCenter
@@ -815,6 +816,7 @@ function BottomToolbar(props) {
                                                         onClick={
                                                             handleClickProbingWizard
                                                         }
+                                                        disabled={props.navigateToMilling}
                                                     >
                                                         Probing Wizard
                                                     </MenuItem>

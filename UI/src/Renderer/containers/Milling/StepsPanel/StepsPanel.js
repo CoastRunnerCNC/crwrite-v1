@@ -21,9 +21,19 @@ const StepsPanel = (props) => {
                     overflowY: "auto"
                 }}
             >
-                <Box>
-                    <Box>{props.fileName}</Box>
-                    <Box>{props.jobName}</Box>
+                <Box style={{display: "grid", gridTemplateRows: "1fr 1fr", gap: "4px"}}>
+                    <Box style={{display: "grid", backgroundColor: "black", color: "white", paddingLeft: "8px"}}>
+                        <Box style={{alignSelf: "center"}}>
+                            
+                        {props.fileName}
+                        </Box>
+                    </Box>
+                    <Box style={{display: "grid", backgroundColor: "black", color: "white", paddingLeft: "8px"}}>
+                        <Box style={{alignSelf: "center"}}>
+                        {props.jobName}
+
+                        </Box>
+                    </Box>
                 </Box>
                 <Box>
                     <HorizontalLines />

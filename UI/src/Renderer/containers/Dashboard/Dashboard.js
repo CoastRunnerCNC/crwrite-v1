@@ -236,7 +236,6 @@ function Dashboard(props) {
     const { classes, status, settings } = props;
     const [availableJobs, setAvailableJobs] = React.useState(new Array());
     const [showJobSelection, setShowJobSelection] = React.useState(false);
-    const [navigateToMilling, setNavigateToMilling] = React.useState(false);
     const [openCustomerSupport, setOpenCustomerSupport] = React.useState(false);
     const [alertMessage, setAlertMessage] = React.useState("");
     const [showNewFileAlert, setShowNewFileAlert] = React.useState(false);
@@ -254,7 +253,7 @@ function Dashboard(props) {
 
         ipcRenderer.removeAllListeners("Jobs::JobSelected");
         ipcRenderer.on("Jobs::JobSelected", (event) => {
-            setNavigateToMilling(true);
+            props.setNavigateToMilling(true);
         });
         
         ipcRenderer.send('File::DoubleClickSetFilePath', path);
@@ -292,7 +291,7 @@ function Dashboard(props) {
     function showFilePicker() {
         ipcRenderer.removeAllListeners("Jobs::JobSelected");
         ipcRenderer.on("Jobs::JobSelected", (event) => {
-            setNavigateToMilling(true);
+            props.setNavigateToMilling(true);
         });
 
         ipcRenderer.removeAllListeners("ShowJobSelection");
@@ -335,7 +334,7 @@ function Dashboard(props) {
     function handleNewFileYes() {
         ipcRenderer.removeAllListeners("Jobs::JobSelected");
         ipcRenderer.on("Jobs::JobSelected", (event) => {
-            setNavigateToMilling(true);
+            props.setNavigateToMilling(true);
         });
 
         ipcRenderer.removeAllListeners("ShowJobSelection");
@@ -374,7 +373,7 @@ function Dashboard(props) {
             if (jobs != null) {
                 ipcRenderer.removeAllListeners("Jobs::JobSelected");
                 ipcRenderer.on("Jobs::JobSelected", (event) => {
-                    setNavigateToMilling(true);
+                    props.setNavigateToMilling(true);
                 });
                 setAvailableJobs(jobs);
                 setShowJobSelection(true);
@@ -397,7 +396,7 @@ function Dashboard(props) {
         }
     }, [status]);
     
-    if (navigateToMilling) {
+    if (props.navigateToMilling) {
         ipcRenderer.removeAllListeners("CRFileDoubleClick");
         return (<Redirect to='/milling' />);
     }

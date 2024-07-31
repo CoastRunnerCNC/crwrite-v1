@@ -8,6 +8,7 @@ import Milling from "./containers/Milling";
 function Routes(props) {
     const {
         status,
+        navigateToMilling,
         showOperationsWindow,
         firmware,
         feedRate,
@@ -23,7 +24,8 @@ function Routes(props) {
         openJoggingPanel,
         openProbingWizard,
         setOpenProbingWizard,
-        openMachineOutputPanel
+        openMachineOutputPanel,
+        setNavigateToMilling
     } = props;
 
     return (
@@ -51,6 +53,8 @@ function Routes(props) {
                                 updateFeedRate={updateFeedRate}
                                 openProbingWizard={openProbingWizard}
                                 setOpenProbingWizard={setOpenProbingWizard}
+                                navigateToMilling={navigateToMilling}
+                                setNavigateToMilling={setNavigateToMilling}
                             />
                         )}
                     />
@@ -68,6 +72,7 @@ function Routes(props) {
                                 openImagePanel={openImagePanel}
                                 openJoggingPanel={openJoggingPanel}
                                 openMachineOutputPanel={openMachineOutputPanel}
+                                setNavigateToMilling={setNavigateToMilling}
                             />
                         )}
                     />

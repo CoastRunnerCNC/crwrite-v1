@@ -12562,6 +12562,7 @@ export default class App extends React.Component {
             openJoggingPanel: false,
             openProbingWizard: false,
             openMachineOutputPanel: true,
+            navigateToMilling: false
         };
 
         this.updateStatus = this.updateStatus.bind(this);
@@ -12574,6 +12575,7 @@ export default class App extends React.Component {
         this.toggleImagePanel = this.toggleImagePanel.bind(this);
         this.toggleJoggingPanel = this.toggleJoggingPanel.bind(this);
         this.toggleMachineOutputPanel = this.toggleMachineOutputPanel.bind(this)
+        this.setNavigateToMilling = this.setNavigateToMilling.bind(this);
 
         if (!props.data) {
             document.title = app.titlebar.title;
@@ -12790,6 +12792,10 @@ export default class App extends React.Component {
         this.checkFirmwareUpdates(9);
     }
 
+    setNavigateToMilling(value) {
+        this.setState({navigateToMilling: value});
+    }
+
     render() {
         if (os.platform != "darwin") {
             document.getElementsByClassName("window-appicon")[0].style.width =
@@ -12853,6 +12859,8 @@ export default class App extends React.Component {
                         >
                             <Routes
                                 status={this.state.cncMillStatus}
+                                navigateToMilling={this.state.navigateToMilling}
+                                setNavigateToMilling={this.setNavigateToMilling}
                                 showOperationsWindow={
                                     this.state.showOperationsWindow
                                 }
@@ -12912,6 +12920,7 @@ export default class App extends React.Component {
                                 toggleJoggingPanel={this.toggleJoggingPanel}
                                 toggleMachineOutputPanel={this.toggleMachineOutputPanel}
                                 settings={this.state.settings}
+                                navigateToMilling={this.state.navigateToMilling}
                             />
                             {/* {console.timeEnd("BottomToolbar")} */}
                         </Box>

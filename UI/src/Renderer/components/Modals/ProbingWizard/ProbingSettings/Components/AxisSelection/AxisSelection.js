@@ -21,8 +21,27 @@ const AxisSelection = (props) => {
             props.setXChecked(true);
             props.setYChecked(true);
             props.setZChecked(false);
-        }
+        } 
     }, [props.locationType]);
+
+    useEffect(() => {
+        if (props.featureType === "surface") {
+            console.log("surface fired!");
+            props.setXChecked(false);
+            props.setYChecked(false);
+            props.setZChecked(true);
+        } else if (props.featureType === "circleProtrusion") {
+            props.setXChecked(false);
+            props.setYChecked(false);
+            props.setZChecked(false);
+        }
+         else if (props.featureType === "rectangleProtrusion") {
+            props.setXChecked(false);
+            props.setYChecked(false);
+            props.setZChecked(false);
+        }
+    }, [props.featureType]);
+
     // if (props.featureType != "surface") {
     return (
         <Grid item container alignItems="center">

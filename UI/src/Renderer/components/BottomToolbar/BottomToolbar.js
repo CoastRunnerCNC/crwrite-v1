@@ -811,7 +811,7 @@ function BottomToolbar(props) {
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
-                                                    <MenuItem onClick={props.toggleJoggingPanel}>Jogging</MenuItem>
+                                                    {/* <MenuItem onClick={props.toggleJoggingPanel}>Jogging</MenuItem> */}
                                                     <MenuItem
                                                         onClick={
                                                             handleClickProbingWizard

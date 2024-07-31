@@ -18,6 +18,8 @@ const RightPanel = (props) => {
                 setProbingType={props.setProbingType}
                 toolWidth={props.toolWidth}
                 setToolWidth={props.setToolWidth}
+                customToolWidth={props.customToolWidth}
+                setCustomToolWidth={props.setCustomToolWidth}
                 toolUnits={props.toolUnits}
                 setToolUnits={props.setToolUnits}
                 wcs={props.wcs}
@@ -58,6 +60,7 @@ const RightPanel = (props) => {
                 locationType={props.locationType}
                 probingType={props.probingType}
                 toolWidth={props.toolWidth}
+                customToolWidth={props.customToolWidth}
                 toolUnits={props.toolUnits}
                 wcs={props.wcs}
                 xChecked={props.xChecked}

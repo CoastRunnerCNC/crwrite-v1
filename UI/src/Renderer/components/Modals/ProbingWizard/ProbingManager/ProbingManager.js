@@ -171,6 +171,8 @@ const ProbingManager = (props) => {
 
         if (probe_location === CORNER) {
             xToClear = 2 * tool_diameter;
+            console.log("toolDiameter: " + tool_diameter);
+            console.log("xToClear: " + xToClear);
             yToClear = 2 * tool_diameter;
             ipcRenderer.send("Logs::LogString", "xToClear: " + xToClear);
             ipcRenderer.send("Logs::LogString", "ytoClear: " + yToClear);

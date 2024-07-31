@@ -30,7 +30,7 @@ const ProbingPanel = (props) => {
             return ""
         }
     };
-
+    console.log("customToolWidth: " + props.customToolWidth);
     return (
         <ItemPanel small title="Settings">
             <Grid
@@ -47,7 +47,7 @@ const ProbingPanel = (props) => {
                 <ProbingManager
                     startProbing={props.startProbing}
                     featureType={props.featureType}
-                    toolWidth={props.toolWidth}
+                    toolWidth={props.customToolWidth ? props.customToolWidth : props.toolWidth}
                     locationType={props.locationType}
                     probingType={props.probingType}
                     toolUnits={props.toolUnits}

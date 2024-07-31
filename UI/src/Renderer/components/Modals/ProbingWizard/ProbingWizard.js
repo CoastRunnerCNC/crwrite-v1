@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import ProbingSettings from "./ProbingSettings/ProbingSettings";
 import ProbeFeature from "./ProbeFeature/ProbeFeature";
 import RightPanel from "./RightPanel/RightPanel";
+import Alert from "../Alert";
 
 const ProbingWizard = (props) => {
     const [featureType, setFeatureType] = useState("");
@@ -18,6 +19,7 @@ const ProbingWizard = (props) => {
     const [probingType, setProbingType] = useState("");
     const [toolWidth, setToolWidth] = useState("");
     const [toolUnits, setToolUnits] = useState("MM");
+    const [customToolWidth, setCustomToolWidth] = useState("");
     const [wcs, setWcs] = useState("");
     const [xChecked, setXChecked] = useState(false);
     const [yChecked, setYChecked] = useState(false);
@@ -32,13 +34,13 @@ const ProbingWizard = (props) => {
     const [xOffset, setXOffset] = useState();
     const [yOffset, setYOffset] = useState();
     const [zOffset, setZOffset] = useState();
+    const [showProbeStart, setShowProbeStart] = useState(false);
 
     // This needs to be change to watch for machine status change away from connected. Maybe put this in dashboard instead
     useEffect(() => {
         if (props.open === false) {
             handleClose();
-        }
-        else {
+        } else {
             resetState();
         }
     }, [props.open]);
@@ -59,7 +61,9 @@ const ProbingWizard = (props) => {
         if (probingActive === false) {
             setProbingActive(true);
         } else {
+            console.log("closing alert");
             setStartProbing(true);
+            setShowProbeStart(false);
         }
     };
 
@@ -114,6 +118,7 @@ const ProbingWizard = (props) => {
         } else if (featureType === "rectanglePocket") {
             if (
                 toolWidth === "" ||
+                (toolWidth === "other" && customToolWidth === "") ||
                 featureLength === "" ||
                 featureWidth === ""
             ) {
@@ -162,6 +167,7 @@ const ProbingWizard = (props) => {
         } else if (featureType === "rectangleProtrusion") {
             if (
                 toolWidth === "" ||
+                (toolWidth === "other" && customToolWidth === "") ||
                 featureLength === "" ||
                 featureWidth === ""
             ) {
@@ -223,7 +229,11 @@ const ProbingWizard = (props) => {
                 return false;
             }
         } else if (featureType === "circleProtrusion") {
-            if (toolWidth === "" || featureDiameter === "") {
+            if (toolWidth === "" ||
+                (toolWidth === "other" && customToolWidth === "") || 
+                featureDiameter === ""
+                
+            ) {
                 return false;
             }
             if (locationType === "midpoint-x") {
@@ -248,8 +258,27 @@ const ProbingWizard = (props) => {
         return true;
     };
 
+    const openProbeAlert = () => {
+        if (probingActive) {
+            setShowProbeStart(true);
+        } else {
+            setProbingActive(true);
+        }
+    };
+
+    const handleCancelAlert = () => {
+        setShowProbeStart(false);
+    };
+
     return (
         <React.Fragment>
+            <Alert
+                open={showProbeStart}
+                message="Start probing?"
+                yesNo={true}
+                onOk={handleStart}
+                onCancel={handleCancelAlert}
+            />
             <Dialog
                 open={props.open}
                 PaperProps={{
@@ -295,6 +324,8 @@ const ProbingWizard = (props) => {
                                         setProbingType={setProbingType}
                                         toolWidth={toolWidth}
                                         setToolWidth={setToolWidth}
+                                        customToolWidth={customToolWidth}
+                                        setCustomToolWidth={setCustomToolWidth}
                                         toolUnits={toolUnits}
                                         setToolUnits={setToolUnits}
                                         wcs={wcs}
@@ -330,7 +361,7 @@ const ProbingWizard = (props) => {
                                 </Grid>
                                 <Grid item>
                                     <Button
-                                        onClick={handleStart}
+                                        onClick={openProbeAlert}
                                         fullWidth
                                         disabled={!fieldsFilled()}
                                         style={{

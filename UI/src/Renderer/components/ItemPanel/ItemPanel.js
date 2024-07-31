@@ -42,23 +42,23 @@ const ItemPanel = (props) => {
                 ...props.style,
                 display: "grid",
                 gridTemplateColumns: "1fr",
-                gridTemplateRows: "24px 1fr",
+                gridTemplateRows: "32px 1fr",
                 overflowY: props.scrollContent ? "auto" : "visible"
 
             }}
         >
             <Box>
-                <Grid container alignItems="center">
+                <Grid container alignItems="center" style={{height: "100%"}}>
                     <Grid
                         item
-                        style={{ padding: "3px", border: "1px solid black" }}
+                        style={{ padding: "3px", marginLeft: "6px", border: "1px solid black" }}
                     >
                         <MinimizeIcon />
                     </Grid>
-                    <Grid item xs>
+                    <Grid item xs style={{marginLeft: "4px"}}>
                         <LineBox />
                     </Grid>
-                    <Grid item>
+                    <Grid item style={{marginLeft: "4px", marginRight: "4px"}}>
                         <Typography
                             component="span"
                             variant={titleSize}
@@ -84,7 +84,7 @@ const ItemPanel = (props) => {
                     gridTemplateColumns: "1fr",
                     gridTemplateRows: "1fr",
                     overflowY: props.scrollContent ? "auto" : "visible",
-                    overflowX: "hidden"
+                    overflowX: props.scrollContent ? "hidden" : "visible"
                 }}
             >
                 {props.children}

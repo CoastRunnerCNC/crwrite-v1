@@ -23,7 +23,7 @@ const ProbingType = (props) => {
                     onChange={onChangeProbingType}
                     fullWidth
                 >
-                    <MenuItem value="electrical">Electrical</MenuItem>
+                    <MenuItem value="electrical">Conductive</MenuItem>
                     <MenuItem disabled value="manual">
                         Manual
                     </MenuItem>

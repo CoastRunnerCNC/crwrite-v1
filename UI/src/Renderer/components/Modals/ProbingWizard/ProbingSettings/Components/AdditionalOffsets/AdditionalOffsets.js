@@ -25,6 +25,7 @@ const AdditionalOffsets = (props) => {
                                 <Grid item>
                                     <TextField
                                         value={props.xOffset}
+                                        placeholder="MM"
                                         onChange={(event) => {
                                             props.setXOffset(
                                                 event.target.value
@@ -46,6 +47,7 @@ const AdditionalOffsets = (props) => {
                                 <Grid item>
                                     <TextField
                                         value={props.yOffset}
+                                        placeholder="MM"
                                         onChange={(event) => {
                                             props.setYOffset(
                                                 event.target.value
@@ -66,6 +68,7 @@ const AdditionalOffsets = (props) => {
                         <Grid item>
                             <TextField
                                 value={props.zOffset}
+                                placeholder="MM"
                                 onChange={(event) => {
                                     props.setZOffset(event.target.value);
                                 }}

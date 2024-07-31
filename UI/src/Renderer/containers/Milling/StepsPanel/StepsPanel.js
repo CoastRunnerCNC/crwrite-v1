@@ -18,7 +18,8 @@ const StepsPanel = (props) => {
                     display: "grid",
                     gridTemplateRows: "74px 20px 1fr 26px",
                     gridTemplateColumns: "1fr",
-                    overflowY: "auto"
+                    overflowY: "auto",
+                    gap: "7px"
                 }}
             >
                 <Box style={{display: "grid", gridTemplateRows: "1fr 1fr", gap: "4px"}}>

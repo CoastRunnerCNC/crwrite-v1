@@ -128,6 +128,8 @@ const ProbingSettings = (props) => {
                         featureType={props.featureType}
                         toolWidth={props.toolWidth}
                         setToolWidth={props.setToolWidth}
+                        customToolWidth={props.customtoolWidth}
+                        setCustomToolWidth={props.setCustomToolWidth}
                     />
                     <TargetWCS wcs={props.wcs} setWcs={props.setWcs} />
                     <AdditionalOffsets

@@ -14,6 +14,7 @@ const FeatureSizes = (props) => {
                         <Typography>Width</Typography>
                         <TextField
                             value={props.featureWidth}
+                            placeholder="MM"
                             onChange={(event) => {
                                 props.setFeatureWidth(event.target.value);
                             }}
@@ -23,6 +24,7 @@ const FeatureSizes = (props) => {
                         <Typography>Length</Typography>
                         <TextField
                             value={props.featureLength}
+                            placeholder="MM"
                             onChange={(event) => {
                                 props.setFeatureLength(event.target.value);
                             }}
@@ -65,6 +67,7 @@ const FeatureSizes = (props) => {
                         <TextField
                             className={props.classes.xyzTextField}
                             value={props.featureDiameter}
+                            placeholder="MM"
                             onChange={(event) => {
                                 props.setFeatureDiameter(event.target.value);
                             }}

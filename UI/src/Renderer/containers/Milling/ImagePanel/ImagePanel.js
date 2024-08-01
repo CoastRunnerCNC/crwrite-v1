@@ -30,7 +30,7 @@ const ImagePanel = (props) => {
             // >
             <img
                 key={Date.now()}
-                style={{ maxHeight: "100%", justifySelf: "center" }}
+                style={{ maxHeight: "100%", maxWidth: "100%", justifySelf: "center" }}
                 src={`data:image/jpeg;base64,${props.selectedStep.Image}`}
                 alt={""}
                 onClick={() => {

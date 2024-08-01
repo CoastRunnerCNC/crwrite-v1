@@ -25,7 +25,7 @@ function ShowDashboardWalkthrough(machine_name, callback) {
             },
             {
                 element: '#store',
-                intro: `Purchase new jigs, lowers and tooling from the ${machine_name} Store.`,
+                intro: `Purchase fixtures, tooling and more from the ${machine_name} Store.`,
                 position: 'top'
             },
             {

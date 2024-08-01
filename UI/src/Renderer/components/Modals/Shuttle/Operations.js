@@ -13,6 +13,7 @@ import {
     LinearProgress,
     Tabs,
     Tab,
+    Box,
 } from "@material-ui/core";
 import Raw from "../../ImageRaw/Raw";
 import app from "app";
@@ -2502,6 +2503,9 @@ class Operations extends React.Component {
                     refreshShuttleKeys={this.refreshShuttleKeys}
                 />
                 {getHomingAlertDialog(this)}
+
+                {/* <Box style={{display: "grid", gridTemplateColumns: , gridTemplateRows: }} */}
+
                 <Grid container spacing={3}>
                     <Grid item xs={7}>
                         <Grid container spacing={2} direction="column">
@@ -2523,7 +2527,6 @@ class Operations extends React.Component {
                                                     <Grid
                                                         container
                                                         direction="column"
-                                                        spacing={1}
                                                         style={{
                                                             height: "100%",
                                                             padding: "10px",
@@ -2533,14 +2536,13 @@ class Operations extends React.Component {
                                                             <Grid
                                                                 container
                                                                 alignItems="center"
-                                                                spacing={1}
                                                             >
                                                                 {getJoggingMode(
                                                                     this
                                                                 )}
                                                             </Grid>
                                                         </Grid>
-                                                        <Grid item>
+                                                        <Grid item style={{marginTop: '8px'}}>
                                                             <Grid
                                                                 container
                                                                 spacing={1}
@@ -2550,7 +2552,7 @@ class Operations extends React.Component {
                                                                 )}
                                                             </Grid>
                                                         </Grid>
-                                                        <Grid item>
+                                                        <Grid item style={{marginTop: '8px'}}>
                                                             <Grid
                                                                 container
                                                                 justify="center"
@@ -2559,9 +2561,7 @@ class Operations extends React.Component {
                                                                 <Grid item>
                                                                     <Grid
                                                                         container
-                                                                        spacing={
-                                                                            1
-                                                                        }
+                                                                        spacing={1}
                                                                     >
                                                                         <Grid
                                                                             item
@@ -2576,9 +2576,7 @@ class Operations extends React.Component {
                                                                 <Grid item>
                                                                     <Grid
                                                                         container
-                                                                        spacing={
-                                                                            1
-                                                                        }
+                                                                        spacing={1}
                                                                     >
                                                                         <Grid
                                                                             item

@@ -3124,7 +3124,6 @@ class Operations extends React.Component {
                                         direction="column"
                                         spacing={1}
                                         style={{
-                                            height: "100%",
                                             padding: "0px 8px 16px 8px",
                                         }}
                                     >
@@ -3195,7 +3194,7 @@ class Operations extends React.Component {
                                                 setHistory={this.setRawHistory}
                                             />
                                         </Grid>
-                                        <Grid item>
+                                    {/* <Grid item>
                                             <Grid container alignItems="center">
                                                 <Grid item xs={1}>
                                                     <Timer
@@ -3214,10 +3213,10 @@ class Operations extends React.Component {
                                                     />
                                                 </Grid>
                                                 <Grid item xs={11}>
-                                                    {/* {this.getMillingInProgressDisplay()} */}
+                                                    {this.getMillingInProgressDisplay()}
                                                 </Grid>
                                             </Grid>
-                                        </Grid>
+                                        </Grid> */}
                                     </Grid>
                                 </ItemPanel>
                             </Grid>

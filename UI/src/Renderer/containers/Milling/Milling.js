@@ -1458,7 +1458,7 @@ class Milling extends React.Component {
                                 ? "1fr 1fr"
                                 : "1fr",
                             gap: "8px",
-                            overflowY: "auto"
+                            overflow: "hidden auto"
 
                         }}
                     >

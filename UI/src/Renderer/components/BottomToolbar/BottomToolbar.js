@@ -262,8 +262,9 @@ const MillingProgress = (props) => {
                     />
                 </Grid>
                 <Grid item>
-                    <Typography style={{ color: "black", marginLeft: "4px" }}>
-                    </Typography>
+                    <Typography
+                        style={{ color: "black", marginLeft: "4px" }}
+                    ></Typography>
                 </Grid>
             </Grid>
         );
@@ -457,10 +458,14 @@ function BottomToolbar(props) {
 
     const updateRealtimeStatus = (event, status) => {
         try {
+            // console.log(status);
+            // console.log(JSON.stringify(status));
             const parsed = JSON.parse(status);
+            console.log(parsed);
+            console.log("parsed.error: " + parsed.error);
             if (parsed.error == null) {
                 let status = parsed.status;
-
+                console.log("state: " + JSON.stringify(status.state));
                 setRealTimeStatus(status);
                 setUnits(status.parserUnits);
             }
@@ -469,13 +474,38 @@ function BottomToolbar(props) {
         }
     };
 
+    const test = {
+        buffer: { free_planner_blocks: 14, free_rx_bytes: 128 },
+        limits: null,
+        line: 0,
+        machine_pos: {
+            x: { inch: 0, mm: 0 },
+            y: { inch: 0, mm: 0 },
+            z: { inch: 0, mm: 0 },
+        },
+        movementType: "absolute",
+        parserUnits: "mm",
+        raw: "<Alarm|M:0.000,0.000,0.000|B:14,128|L:0|0000>",
+        state: "Alarm",
+        substate: -1,
+        work_coordinates: {
+            wcs: "G54",
+            work_pos: {
+                x: { inch: 0, mm: 0 },
+                y: { inch: 0, mm: 0 },
+                z: { inch: 0, mm: 0 },
+            },
+        },
+    };
+
     const handleProgressResponse = (event, updatedProgress) => {
         try {
             console.log("updating milling progress");
+            console.log(JSON.stringify(updatedProgress));
+            console.log("updatedProgress error: " + updatedProgress.error.description);
             setMillingProgress(updatedProgress.progress.percentage);
-
         } catch (e) {
-        //    console.error("handleProgressResponse exception caught")
+            //    console.error("handleProgressResponse exception caught")
         }
     };
 
@@ -486,21 +516,23 @@ function BottomToolbar(props) {
         }, 500);
 
         // Set up the event listener
-        ipcRenderer.removeListener("CR_UpdateRealtimeStatus", updateRealtimeStatus);
+        ipcRenderer.removeListener(
+            "CR_UpdateRealtimeStatus",
+            updateRealtimeStatus
+        );
         ipcRenderer.on("CR_UpdateRealtimeStatus", updateRealtimeStatus);
 
-        ipcRenderer.removeListener("Jobs::GetProgressResponse", handleProgressResponse);
+        ipcRenderer.removeListener(
+            "Jobs::GetProgressResponse",
+            handleProgressResponse
+        );
         ipcRenderer.on("Jobs::GetProgressResponse", handleProgressResponse);
 
         const checkForMillingInterval = setInterval(() => {
-            
             try {
-                
-                console.log("state: " + realTimeStatus.state);
-            }
-            catch (e) {
-                
-            }
+                console.log("state: " + JSON.stringify(realTimeStatus));
+                console.log("state: " + realTimeStatus);
+            } catch (e) {}
 
             if (realTimeStatus && realTimeStatus.state === "milling") {
                 if (!progressIntervalRef.current) {
@@ -529,7 +561,6 @@ function BottomToolbar(props) {
         };
     }, []);
 
-    console.log("navigateToMilling: " + props.navigateToMilling);
     return (
         <>
             <SupportCenter
@@ -805,7 +836,11 @@ function BottomToolbar(props) {
                                                     >
                                                         Image
                                                     </MenuItem>
-                                                    <MenuItem onClick={props.toggleMachineOutputPanel}>
+                                                    <MenuItem
+                                                        onClick={
+                                                            props.toggleMachineOutputPanel
+                                                        }
+                                                    >
                                                         Terminal
                                                     </MenuItem>
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
@@ -816,7 +851,9 @@ function BottomToolbar(props) {
                                                         onClick={
                                                             handleClickProbingWizard
                                                         }
-                                                        disabled={props.navigateToMilling}
+                                                        disabled={
+                                                            props.navigateToMilling
+                                                        }
                                                     >
                                                         Probing Wizard
                                                     </MenuItem>

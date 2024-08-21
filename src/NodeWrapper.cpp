@@ -419,6 +419,14 @@ napi_value RunManualGCodeFile(napi_env env, napi_callback_info info)
 	return NapiBool::Create(env, millingStarted).napi;
 }
 
+napi_value RunManualGCodeString(napi_env env, napi_callback_info info)
+{
+	std::vector<NapiValue> args = NapiArgs::GetArgs(env, info);
+	std::string gcodeString = args[0].ToString().Get();
+	const bool millingStarted = MillDaemon::GetInstance().RunManualGCodeString(gcodeString);
+	return NapiBool::Create(env, millingStarted).napi;
+}
+
 napi_value GetManualGCodeFileLines(napi_env env, napi_callback_info info) 
 {
 	std::vector<NapiValue> args = NapiArgs::GetArgs(env, info);
@@ -928,6 +936,7 @@ napi_value Init(napi_env env, napi_value exports)
 		DECLARE_NAPI_METHOD("GetStep", GetStep),
 		DECLARE_NAPI_METHOD("StartMilling", StartMilling),
 		DECLARE_NAPI_METHOD("RunManualGCodeFile", RunManualGCodeFile),
+		DECLARE_NAPI_METHOD("RunManualGCodeString", RunManualGCodeString),
 		DECLARE_NAPI_METHOD("GetManualGCodeFileLines", GetManualGCodeFileLines),
 		DECLARE_NAPI_METHOD("GetMillingStatus", GetMillingStatus),
 		DECLARE_NAPI_METHOD("EmergencyStop", EmergencyStop),

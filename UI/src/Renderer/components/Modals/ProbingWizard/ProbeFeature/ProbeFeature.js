@@ -5,6 +5,7 @@ import CustomInputLabel from "../../Shuttle/CustomInputLabel/CustomInputLabel";
 
 const ProbeFeature = (props) => {
     const onFeatureChange = (event) => {
+        props.resetState();
         props.setFeatureType(event.target.value);
     };
 

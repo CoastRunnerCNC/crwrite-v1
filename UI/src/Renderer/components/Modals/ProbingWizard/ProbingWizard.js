@@ -10,6 +10,7 @@ import ProbingSettings from "./ProbingSettings/ProbingSettings";
 import ProbeFeature from "./ProbeFeature/ProbeFeature";
 import RightPanel from "./RightPanel/RightPanel";
 import Alert from "../Alert";
+import AnimationPlayer from "./AnimationPlayer/AnimationPlayer";
 
 const ProbingWizard = (props) => {
     const [featureType, setFeatureType] = useState("");
@@ -270,6 +271,112 @@ const ProbingWizard = (props) => {
         setShowProbeStart(false);
     };
 
+    const createAnimationObject = (fileName, speed = 1.0, repeat = 1) => {
+        return {src: `./static/img/CR Animations/${fileName}.webm`, speed: speed, repeat: repeat}
+    }
+
+    const getAnimations = () => {
+        let animationArray = [];
+        // Take feature type, locationType, x y z checked, probe x y side, probeCorner, probeZ
+        if (featureType === "surface") {
+            return animationArray.push({src: "./static/img/CR Animations/Protrusion.webm", speed: 1.0, repeat: 1})
+        }
+        else if (featureType === "circleProtrusion") {
+            switch (locationType) {
+                case "midpoint-x":
+                    animationArray.push(createAnimationObject("Tap Top - Circle(Out)"));
+                    animationArray.push(createAnimationObject("tap bottom of circle (outside)"));
+                    switch (probeYSide) {
+                        case "probe-y-on-left":
+                            animationArray.push(createAnimationObject("Tap Left Square (Out)"));
+                            break;
+                        case "probe-y-on-right":
+                            animationArray.push(createAnimationObject("Tap Right - Square (Out)"));
+                            break;
+                    }
+                    break;
+                case "midpoint-y":
+                    animationArray.push(createAnimationObject("Tap Right Circle(out)"));
+                    animationArray.push(createAnimationObject("tap left of circle (outside)"));
+                    switch (probeXSide) {
+                        case "probe-x-on-top":
+                            animationArray.push(createAnimationObject("Tap Top - Square (Out)"));
+                            break;
+                        case "probe-x-on-bottom":
+                            animationArray.push(createAnimationObject("Tap Bottom - Square (Out)"));
+                            break;
+                    }
+                    break;
+                case "midpoint-x-y":
+                    animationArray.push(createAnimationObject("Tap Top - Circle(Out)"));
+                    animationArray.push(createAnimationObject("tap bottom of circle (outside)"));
+                    animationArray.push(createAnimationObject("Tap Right Circle(out)"));
+                    animationArray.push(createAnimationObject("tap left of circle (outside)"));
+                    break;
+            }
+        }
+        else if (featureType === "rectangleProtrusion") {
+            switch (locationType) {
+                case "midpoint-x":
+                    animationArray.push(createAnimationObject("Tap Top - Square (Out)"));
+                    animationArray.push(createAnimationObject("Tap Bottom - Square (Out)"));
+                    switch (probeYSide) {
+                        case "probe-y-on-left":
+                            animationArray.push(createAnimationObject("Tap Left Square (Out)"));
+                            break;
+                        case "probe-y-on-right":
+                            animationArray.push(createAnimationObject("Tap Right - Square (Out)"));
+                            break;
+                    }
+                    break;
+                case "midpoint-y":
+                    animationArray.push(createAnimationObject("Tap Left Square (Out)"));
+                    animationArray.push(createAnimationObject("Tap Right - Square (Out)"));
+                    switch (probeXSide) {
+                        case "probe-x-on-top":
+                            animationArray.push(createAnimationObject("Tap Top - Square (Out)"));
+                            break;
+                        case "probe-x-on-bottom":
+                            animationArray.push(createAnimationObject("Tap Bottom - Square (Out)"));
+                            break;
+                    }
+                    break;
+                case "midpoint-x-y":
+                    animationArray.push(createAnimationObject("Tap Top - Square (Out)"));
+                    animationArray.push(createAnimationObject("Tap Bottom - Square (Out)"));
+                    animationArray.push(createAnimationObject("Tap Left Square (Out)"));
+                    animationArray.push(createAnimationObject("Tap Right - Square (Out)"));
+                    break;
+            }
+        }
+
+        switch (probeCorner) {
+            case "top-left":
+                animationArray.push(createAnimationObject("Corner 4"));
+                animationArray.push(createAnimationObject("Corner 5"));
+                break;
+            case "top-right":
+                animationArray.push(createAnimationObject("Corner 6"));
+                animationArray.push(createAnimationObject("Corner 7"));
+                break;
+            case "bottom-left":
+                animationArray.push(createAnimationObject("Corner 2"));
+                animationArray.push(createAnimationObject("Corner 3"));
+                break;
+            case "bottom-right":
+                animationArray.push(createAnimationObject("Corner 1"));
+                animationArray.push(createAnimationObject("Corner 8"));
+                break;
+        }
+        // return array of animation objects
+    }
+
+    const animations = [
+        {src: "./static/img/CR Animations/Corner 3.webm", speed: 1.0, repeat: 1},
+        {src: "./static/img/CR Animations/Corner 2.webm", speed: 1.0, repeat: 2},
+        {src: "./static/img/CR Animations/Corner 1.Webm", speed: 1.0, repeat: 3}
+    ];
+
     return (
         <React.Fragment>
             <Alert
@@ -304,10 +411,12 @@ const ProbingWizard = (props) => {
                                         featureType={featureType}
                                         setFeatureType={setFeatureType}
                                         probingActive={probingActive}
+                                        resetState={resetState}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <PictureSVG />
+                                    {/* <PictureSVG /> */}
+                                    <AnimationPlayer animations={animations} />
                                 </Grid>
                             </Grid>
                         </Grid>

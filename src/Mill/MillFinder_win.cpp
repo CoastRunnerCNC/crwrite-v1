@@ -27,7 +27,7 @@ public:
 	HDEVINFO devInfo;
 };
 
-#define USE_MOCK_GRBL
+//#define USE_MOCK_GRBL
 
 #ifdef USE_MOCK_GRBL
 

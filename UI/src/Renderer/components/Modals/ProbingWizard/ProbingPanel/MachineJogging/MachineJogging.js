@@ -996,7 +996,7 @@ class Operations extends React.Component {
             ipcRenderer.send("CNC::GetStatus");
         }, 200);
 
-        ipcRenderer.removeAllListeners("CR_UpdateRealtimeStatus");
+        ipcRenderer.removeListener("CR_UpdateRealtimeStatus", this.updateRealtimeStatus);
         ipcRenderer.on("CR_UpdateRealtimeStatus", this.updateRealtimeStatus);
         ipcRenderer.send("CNC::SetManualEntryMode", true);
 
@@ -1013,7 +1013,7 @@ class Operations extends React.Component {
         this.stopTimer();
         window.removeEventListener("keydown", this.keydownListener, true);
         window.removeEventListener("keyup", this.keyupListener, true);
-        ipcRenderer.removeAllListeners("CR_UpdateRealtimeStatus");
+        ipcRenderer.removeListener("CR_UpdateRealtimeStatus", this.updateRealtimeStatus);
         ipcRenderer.send("CNC::SetManualEntryMode", false);
     }
 

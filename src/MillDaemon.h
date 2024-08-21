@@ -189,6 +189,7 @@ public:
 
 	bool StartMilling(const int stepIndex);
 	bool RunManualGCodeFile(const std::string& filePath);
+	bool RunManualGCodeString(const std::string& lines);
 	std::vector<std::string> GetManualGCodeFileLines(const std::string& filePath);
 
 	// Gets the status of the milling for the given step. 0-100 indicates the percentage completed. -1 indicates a failure during upload.

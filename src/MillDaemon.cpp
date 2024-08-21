@@ -887,6 +887,15 @@ bool MillDaemon::RunManualGCodeFile(const string& filePath)
 	return m_pMillingManager->RunAsyncGCodeBatch(machine, codeFile.DestructivelyExtractFile());
 }
 
+bool MillDaemon::RunManualGCodeString(const string& lines)
+{
+	if (m_pMillingManager->InProgress()) { return false; }
+	MillDisplayManager::Clear();
+	auto codeFile = GCodeFile{StringToLineSegments(lines)};
+	auto machine = m_pConnector->GetNoLockConnection();
+	return m_pMillingManager->RunAsyncGCodeBatch(machine, codeFile.DestructivelyExtractFile());
+}
+
 std::vector<std::string> MillDaemon::GetManualGCodeFileLines(const std::string& filePath)
 {
 	return FilePathToLineSegments(filePath);

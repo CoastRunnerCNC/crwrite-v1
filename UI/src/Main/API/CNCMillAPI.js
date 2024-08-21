@@ -98,6 +98,17 @@ class CNCMillAPI {
             );
         });
 
+        electron.ipcMain.on('CNC::UploadGCodeString', function (event, gCodeString) {
+            APIUtility.handleAsyncApiResponse(
+                event,
+                'CNC::UploadGCodeFile',
+                () => {
+                    console.log(gCodeString);
+                    crwrite.RunManualGCodeString(gCodeString)
+                }
+            );
+        });
+
         electron.ipcMain.on('CNC::HasNonzeroWCS', function (event) {
             event.returnValue = crwrite.HasNonzeroWCS();
         });

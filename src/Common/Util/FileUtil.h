@@ -19,4 +19,5 @@ public:
 };
 
 std::vector<std::string> FilePathToLineSegments(const std::string& filePath);
+std::vector<std::string> StringToLineSegments(const std::string& commands);
 GCodeFile FilePathToGCode(const std::string& filePath);

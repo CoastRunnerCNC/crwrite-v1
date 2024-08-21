@@ -72,6 +72,13 @@ const ProbingSettings = (props) => {
         }
     };
 
+    const resetDetails = () => {
+        props.setProbeXSide("");
+        props.setProbeYSide("");
+        props.setProbeCorner("");
+        props.setProbeZ("");
+    }
+
     if (!props.probingActive) {
         return (
             <ItemPanel small title="Settings">
@@ -91,6 +98,7 @@ const ProbingSettings = (props) => {
                         locationType={props.locationType}
                         setLocationType={props.setLocationType}
                         getShape={getShape}
+                        resetDetails={resetDetails}
                     />
                     <AxisSelection
                         featureType={props.featureType}

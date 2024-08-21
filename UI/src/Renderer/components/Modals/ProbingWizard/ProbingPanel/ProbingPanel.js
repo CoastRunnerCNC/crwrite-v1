@@ -6,29 +6,40 @@ import ProbingManager from "../ProbingManager/ProbingManager";
 
 const ProbingPanel = (props) => {
     const GetInstructionText = () => {
+        let instructionText = `Please jog the tool to the starting position. Starting position is: `;
+
         if (
             (props.featureType === "rectangleProtrusion" ||
                 props.featureType === "circleProtrusion") &&
             props.locationType != "corner"
         ) {
-            return "Please use the jogging tool to jog the tool to the rough center of the protrusion. Jog the tool tip to be between 5mm and 10mm from the surface.";
+            instructionText += `above the protrusion, centered in both X and Y`;
         } else if (
-            props.featureType === "rectangleProtrusion" &&
+            (props.featureType === "rectangleProtrusion" || props.featureType === "rectanglePocket") &&
             props.locationType === "corner"
         ) {
-            return "Please use the jogging tool to jog the tool to the tip of the corner. Jog the tool tip to be between 5mm and 10mm from the surface.";
+            instructionText += `directly above the tip of the corner`;
         } else if (
             props.featureType === "circlePocket" ||
             props.featureType === "rectanglePocket"
         ) {
-            return "Please use the jogging tool to jog the tool to the rough center of the pocket. Jog the tool tip to be between 5mm and 10mm from the top of the pocket. Do not jog the tool into the pocket.";
+            instructionText += `above the pocket, centered in both X and Y`;
         } else if (props.featureType === "surface") {
-            return (
-                "Jog the spindle over the surface you wish to probe. Place the tip of the tool between 5mm and 10mm away from the surface."
+            instructionText += (
+                `anywhere over the surface you wish to probe\n\n\n`
             )
         } else {
-            return ""
+            instructionText += ``
         }
+        instructionText += `Notes:
+        Tool should be within (tool length * 1.5, round up) mm of the desired starting position in both X and Y. Starting too far outside this position may cause a crash.`
+        if (props.featureType != "circlePocket" && props.featureType != "rectanglePocket") {
+            instructionText += `Please place tool roughly 7mm to 12mm above surface. Too close may cause crashes; too far away may cause probe to fail.`
+        }
+        else if (props.featureType === "circlePocket" || props.featureType === "rectanglePocket") {
+            instructionText += `Please place tool roughly 7mm to 12mm above pocket. Too far away may cause probe to fail. **Do not jog tool into pocket.**`
+        }
+        return instructionText;
     };
     console.log("customToolWidth: " + props.customToolWidth);
     return (

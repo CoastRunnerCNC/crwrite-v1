@@ -9,6 +9,7 @@ const styles = {
 
 const ProbeWhere = (props) => {
     const onChangeProbeWhere = (event) => {
+        props.resetDetails();
         props.setLocationType(event.target.value);
     };
 

@@ -17,11 +17,14 @@ const AxisSelection = (props) => {
             props.setYChecked(true);
             props.setXChecked(false);
             props.setZChecked(false);
-        } else if (props.locationType === "midpoint-x-y" || props.locationType === "corner") {
+        } else if (
+            props.locationType === "midpoint-x-y" ||
+            props.locationType === "corner"
+        ) {
             props.setXChecked(true);
             props.setYChecked(true);
             props.setZChecked(false);
-        } 
+        }
     }, [props.locationType]);
 
     useEffect(() => {
@@ -34,8 +37,7 @@ const AxisSelection = (props) => {
             props.setXChecked(false);
             props.setYChecked(false);
             props.setZChecked(false);
-        }
-         else if (props.featureType === "rectangleProtrusion") {
+        } else if (props.featureType === "rectangleProtrusion") {
             props.setXChecked(false);
             props.setYChecked(false);
             props.setZChecked(false);
@@ -63,7 +65,9 @@ const AxisSelection = (props) => {
                                         if (
                                             props.locationType !=
                                                 "midpoint-x" &&
-                                            props.locationType != "midpoint-x-y"
+                                            props.locationType !=
+                                                "midpoint-x-y" &&
+                                            props.locationType != "corner"
                                         ) {
                                             props.setXChecked(!props.xChecked);
                                         }
@@ -81,7 +85,9 @@ const AxisSelection = (props) => {
                                         if (
                                             props.locationType !=
                                                 "midpoint-y" &&
-                                            props.locationType != "midpoint-x-y"
+                                            props.locationType !=
+                                                "midpoint-x-y" &&
+                                            props.locationType != "corner"
                                         ) {
                                             props.setYChecked(!props.yChecked);
                                         }

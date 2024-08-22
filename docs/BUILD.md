@@ -1,7 +1,7 @@
 # NEW BUILD INSTRUCTIONS
 1. Setup Dependencies
-	* Install Node & npm (https://nodejs.org/en/blog/release/v10.11.0/)
-    * NOTE: make sure you are using the 32 bit version! nvm use 10.11.0 32
+	* Install Node & npm (https://nodejs.org/en/blog/release/v16.20.2/)
+    * NOTE: make sure you are using the 32 bit version! nvm use 16.20.2 32
 	* Install C++ 17 Compatible Compiler
 	* Install CMake (Included by default with VS if using Developer Tools Command Prompt)
 2. Configure vcpkg

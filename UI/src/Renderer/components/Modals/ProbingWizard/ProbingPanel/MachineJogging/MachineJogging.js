@@ -722,8 +722,6 @@ class Operations extends React.Component {
         this.progress = this.progress.bind(this);
         this.getMillingInProgressDisplay =
             this.getMillingInProgressDisplay.bind(this);
-        this.getMillingProgress = this.getMillingProgress.bind(this);
-        this.updateRealtimeStatus = this.updateRealtimeStatus.bind(this);
         this.executeCommand = this.executeCommand.bind(this);
         this.uploadGCodeFile = this.uploadGCodeFile.bind(this);
         this.closeShuttleSettings = this.closeShuttleSettings.bind(this);
@@ -920,27 +918,6 @@ class Operations extends React.Component {
         setTimeout(this.progress, 100);
     }
 
-    getMillingProgress() {
-        while (this.props.open) {
-            ipcRenderer.send("Jobs::GetProgress", 0);
-            ipcRenderer.once(
-                "Jobs::GetProgressResponse",
-                (event, updatedProgress) => {
-                    if (updatedProgress.milling) {
-                        this.setState({
-                            millingProgress:
-                                updatedProgress.progress.percentage,
-                        });
-                        this.props.setMilling(true);
-                    } else {
-                        this.props.setMilling(false);
-                    }
-                }
-            );
-            setTimeout(this.getMillingProgress, 100);
-            return;
-        }
-    }
 
     getMillingInProgressDisplay() {
         if (this.props.milling) {
@@ -992,15 +969,9 @@ class Operations extends React.Component {
         window.addEventListener("keydown", this.keydownListener, true);
         window.addEventListener("keyup", this.keyupListener, true);
 
-        this.interval = setInterval(() => {
-            ipcRenderer.send("CNC::GetStatus");
-        }, 200);
 
-        ipcRenderer.removeListener("CR_UpdateRealtimeStatus", this.updateRealtimeStatus);
-        ipcRenderer.on("CR_UpdateRealtimeStatus", this.updateRealtimeStatus);
         ipcRenderer.send("CNC::SetManualEntryMode", true);
 
-        this.getMillingProgress();
         // ipcRenderer.removeListener("Jobs::ReadWrites", this.updateMovementType);
         // ipcRenderer.on("Jobs::ReadWrites", this.updateMovementType);
         this.setState({ feedRate2: this.state.feedRate });
@@ -1013,7 +984,6 @@ class Operations extends React.Component {
         this.stopTimer();
         window.removeEventListener("keydown", this.keydownListener, true);
         window.removeEventListener("keyup", this.keyupListener, true);
-        ipcRenderer.removeListener("CR_UpdateRealtimeStatus", this.updateRealtimeStatus);
         ipcRenderer.send("CNC::SetManualEntryMode", false);
     }
 
@@ -1049,42 +1019,6 @@ class Operations extends React.Component {
         }
 
         return sanitizedValue.toFixed(isMM ? 3 : 4);
-    }
-
-    updateRealtimeStatus(event, status) {
-        if (
-            !this.firstRealTimeStatusReceived &&
-            this.state.realTimeStatus &&
-            this.state.realTimeStatus.state
-        ) {
-            this.firstRealTimeStatusReceived = true;
-
-            if (this.state.realTimeStatus.state.toLowerCase() == "alarm") {
-                this.setState({ homingAlertDialogOpen: true });
-            }
-        }
-
-        try {
-            const parsed = JSON.parse(status);
-            if (parsed.error == null) {
-                // console.log(JSON.stringify(parsed));
-                let status = parsed.status;
-                let wcs = this.state.WCS;
-                if (status.work_coordinates != null) {
-                    wcs = status.work_coordinates.wcs;
-                }
-
-                this.setState({
-                    realTimeStatus: status,
-                    realTimeStatusDisplay: this.getStatusDisplay(status),
-                    WCS: wcs,
-                    units: status.parserUnits,
-                    movementType: status.movementType,
-                });
-            }
-        } catch (e) {
-            console.log(e);
-        }
     }
 
     focusOnNothing() {

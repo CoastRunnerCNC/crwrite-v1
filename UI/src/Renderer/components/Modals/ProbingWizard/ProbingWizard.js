@@ -4,6 +4,7 @@ import {
     DialogTitle,
     DialogContent,
     Button,
+    Box,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import ProbingSettings from "./ProbingSettings/ProbingSettings";
@@ -467,95 +468,96 @@ const ProbingWizard = (props) => {
                     </Grid>
                 </DialogTitle>
                 <DialogContent>
-                    <Grid container spacing={2}>
-                        <Grid item xs={6}>
-                            <Grid container direction="column" spacing={2}>
-                                <Grid item>
-                                    <ProbeFeature
-                                        featureType={featureType}
-                                        setFeatureType={setFeatureType}
-                                        probingActive={probingActive}
-                                        resetState={resetState}
+                    <Box
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 1fr",
+                            gridTemplateRows: "1fr",
+                        }}
+                    >
+                        <Box>
+                            <Box>
+                                <ProbeFeature
+                                    featureType={featureType}
+                                    setFeatureType={setFeatureType}
+                                    probingActive={probingActive}
+                                    resetState={resetState}
+                                />
+                            </Box>
+                            <Box>
+                                {!probingActive ? (
+                                    <PictureSVG />
+                                ) : (
+                                    <AnimationPlayer
+                                        animations={getAnimations()}
                                     />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    {!probingActive ? (
-                                        <PictureSVG />
-                                    ) : (
-                                        <AnimationPlayer
-                                            animations={getAnimations()}
-                                        />
-                                    )}
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Grid container direction="column" spacing={1}>
-                                <Grid item>
-                                    <RightPanel
-                                        featureType={featureType}
-                                        locationType={locationType}
-                                        setLocationType={setLocationType}
-                                        probingActive={probingActive}
-                                        startProbing={startProbing}
-                                        probingType={probingType}
-                                        setProbingType={setProbingType}
-                                        toolWidth={toolWidth}
-                                        setToolWidth={setToolWidth}
-                                        customToolWidth={customToolWidth}
-                                        setCustomToolWidth={setCustomToolWidth}
-                                        toolUnits={toolUnits}
-                                        setToolUnits={setToolUnits}
-                                        wcs={wcs}
-                                        setWcs={setWcs}
-                                        xChecked={xChecked}
-                                        setXChecked={setXChecked}
-                                        yChecked={yChecked}
-                                        setYChecked={setYChecked}
-                                        zChecked={zChecked}
-                                        setZChecked={setZChecked}
-                                        probeXSide={probeXSide}
-                                        setProbeXSide={setProbeXSide}
-                                        probeYSide={probeYSide}
-                                        setProbeYSide={setProbeYSide}
-                                        probeCorner={probeCorner}
-                                        setProbeCorner={setProbeCorner}
-                                        probeZ={probeZ}
-                                        setProbeZ={setProbeZ}
-                                        featureDiameter={featureDiameter}
-                                        setFeatureDiameter={setFeatureDiameter}
-                                        featureLength={featureLength}
-                                        setFeatureLength={setFeatureLength}
-                                        featureWidth={featureWidth}
-                                        setFeatureWidth={setFeatureWidth}
-                                        xOffset={xOffset}
-                                        setXOffset={setXOffset}
-                                        yOffset={yOffset}
-                                        setYOffset={setYOffset}
-                                        zOffset={zOffset}
-                                        setZOffset={setZOffset}
-                                        handleCloseSuccess={handleCloseSuccess}
-                                    />
-                                </Grid>
-                                <Grid item>
-                                    <Button
-                                        onClick={openProbeAlert}
-                                        fullWidth
-                                        disabled={!fieldsFilled()}
-                                        style={{
-                                            border: "1px solid black",
-                                            backgroundColor: "#f6f6f6",
-                                            borderRadius: "0px",
-                                            boxShadow:
-                                                "1px 1px 0px 0px #000000",
-                                        }}
-                                    >
-                                        {probingActive ? "RUN" : "CONTINUE"}
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
+                                )}
+                            </Box>
+                        </Box>
+                        <Box>
+                            <Box>
+                                <RightPanel
+                                    featureType={featureType}
+                                    locationType={locationType}
+                                    setLocationType={setLocationType}
+                                    probingActive={probingActive}
+                                    startProbing={startProbing}
+                                    probingType={probingType}
+                                    setProbingType={setProbingType}
+                                    toolWidth={toolWidth}
+                                    setToolWidth={setToolWidth}
+                                    customToolWidth={customToolWidth}
+                                    setCustomToolWidth={setCustomToolWidth}
+                                    toolUnits={toolUnits}
+                                    setToolUnits={setToolUnits}
+                                    wcs={wcs}
+                                    setWcs={setWcs}
+                                    xChecked={xChecked}
+                                    setXChecked={setXChecked}
+                                    yChecked={yChecked}
+                                    setYChecked={setYChecked}
+                                    zChecked={zChecked}
+                                    setZChecked={setZChecked}
+                                    probeXSide={probeXSide}
+                                    setProbeXSide={setProbeXSide}
+                                    probeYSide={probeYSide}
+                                    setProbeYSide={setProbeYSide}
+                                    probeCorner={probeCorner}
+                                    setProbeCorner={setProbeCorner}
+                                    probeZ={probeZ}
+                                    setProbeZ={setProbeZ}
+                                    featureDiameter={featureDiameter}
+                                    setFeatureDiameter={setFeatureDiameter}
+                                    featureLength={featureLength}
+                                    setFeatureLength={setFeatureLength}
+                                    featureWidth={featureWidth}
+                                    setFeatureWidth={setFeatureWidth}
+                                    xOffset={xOffset}
+                                    setXOffset={setXOffset}
+                                    yOffset={yOffset}
+                                    setYOffset={setYOffset}
+                                    zOffset={zOffset}
+                                    setZOffset={setZOffset}
+                                    handleCloseSuccess={handleCloseSuccess}
+                                />
+                            </Box>
+                            <Box>
+                                <Button
+                                    onClick={openProbeAlert}
+                                    fullWidth
+                                    disabled={!fieldsFilled()}
+                                    style={{
+                                        border: "1px solid black",
+                                        backgroundColor: "#f6f6f6",
+                                        borderRadius: "0px",
+                                        boxShadow: "1px 1px 0px 0px #000000",
+                                    }}
+                                >
+                                    {probingActive ? "RUN" : "CONTINUE"}
+                                </Button>
+                            </Box>
+                        </Box>
+                    </Box>
                 </DialogContent>
             </Dialog>
         </React.Fragment>

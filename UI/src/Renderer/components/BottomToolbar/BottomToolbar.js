@@ -32,6 +32,7 @@ import app from "app";
 import Feedrate from "../Feedrate";
 import ViewLogs from "../Modals/ViewLogs";
 import SupportCenter from "../Support/SupportCenter";
+import Alert from "../Modals/Alert";
 
 const styles = (theme) => ({
     root: {
@@ -295,6 +296,9 @@ function BottomToolbar(props) {
     const [feedRate, setFeedRate] = useState(props.feedRate);
     const [openViewLogs, setOpenViewLogs] = useState(false);
     const [millingProgress, setMillingProgress] = useState(-1);
+    const [showError, setShowError] = useState(false);
+    const [errorTitle, setErrorTitle] = useState("");
+    const [errorText, setErrorText] = useState("");
     const buttonControlRef = useRef(null);
     const buttonConfigRef = useRef(null);
     const buttonSupportRef = useRef(null);
@@ -500,12 +504,23 @@ function BottomToolbar(props) {
 
     const handleProgressResponse = (event, updatedProgress) => {
         try {
+            if (updatedProgress.error != null) {
+                setShowError(true);
+                setErrorTitle(updatedProgress.error.title);
+                setErrorText(updatedProgress.error.description);
+            }
             console.log("updating milling progress");
             console.log(JSON.stringify(updatedProgress));
-            console.log("updatedProgress error: " + updatedProgress.error.description);
-            setMillingProgress(updatedProgress.progress.percentage);
+
+            if (updatedProgress.milling === false) {
+                setMillingProgress(-1);
+            }
+            else {
+
+                setMillingProgress(updatedProgress.progress.percentage);
+            }
         } catch (e) {
-            //    console.error("handleProgressResponse exception caught")
+               console.error("handleProgressResponse exception caught")
         }
     };
 
@@ -534,20 +549,20 @@ function BottomToolbar(props) {
                 console.log("state: " + realTimeStatus);
             } catch (e) {}
 
-            if (realTimeStatus && realTimeStatus.state === "milling") {
+           // if (realTimeStatus && realTimeStatus.state === "milling") {
                 if (!progressIntervalRef.current) {
                     progressIntervalRef.current = setInterval(() => {
                         ipcRenderer.send("Jobs::GetProgress");
                     }, 500);
                 }
-            } else {
-                if (progressIntervalRef.current) {
-                    clearInterval(progressIntervalRef.current);
-                    progressIntervalRef.current = null;
-                    console.log("reseting milling progress");
-                    setMillingProgress(-1);
-                }
-            }
+            // } else {
+            //     if (progressIntervalRef.current) {
+            //         clearInterval(progressIntervalRef.current);
+            //         progressIntervalRef.current = null;
+            //         console.log("reseting milling progress");
+            //         setMillingProgress(-1);
+            //     }
+            // }
         }, 2000);
         // Clean up the interval and the event listener on component unmount
         return () => {
@@ -563,6 +578,20 @@ function BottomToolbar(props) {
 
     return (
         <>
+                <Alert
+                    open={
+                        showError && !props.navigateToMilling
+                    }
+                    message={errorText}
+                    yesNo={false}
+                    onOk={(event) => {
+                        setShowError(false);
+                    }}
+                    onCancel={(event) => {
+                        setShowError(false);
+                    }}
+                    title={errorTitle}
+                />
             <SupportCenter
                 open={openSupportCenter}
                 onClose={() => {

@@ -59,12 +59,12 @@ const ToolWidth = (props) => {
                                 }
                         }}
                     >
-                        <MenuItem value="0.25">1/4</MenuItem>
-                        <MenuItem value="0.1875">3/16</MenuItem>
-                        <MenuItem value="0.15625">5/32</MenuItem>
-                        <MenuItem value="0.125">1/8</MenuItem>
-                        <MenuItem value="0.09375">3/32</MenuItem>
-                        <MenuItem value="0.0625">1/16</MenuItem>
+                        <MenuItem value="6.35">1/4</MenuItem>
+                        <MenuItem value="4.7625">3/16</MenuItem>
+                        <MenuItem value="3.96875">5/32</MenuItem>
+                        <MenuItem value="3.175">1/8</MenuItem>
+                        <MenuItem value="2.38125">3/32</MenuItem>
+                        <MenuItem value="1.5875">1/16</MenuItem>
                         <MenuItem value="3">3MM</MenuItem>
                         <MenuItem value="4">4MM</MenuItem>
                         <MenuItem value="5">5MM</MenuItem>

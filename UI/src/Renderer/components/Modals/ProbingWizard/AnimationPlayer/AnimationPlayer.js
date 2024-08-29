@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withStyles } from "@material-ui/core";
+import zIndex from "@material-ui/core/styles/zIndex";
 
 const styles = (theme) => ({
     container: {
@@ -7,16 +8,21 @@ const styles = (theme) => ({
         width: "100%",
         height: "100%",
     },
-    video: {
-        gridArea: "1 / 1 / 2 / 2",
-    },
     secondVideoPlayer: {
-        zIndex: 1,
         gridArea: "1 / 1 / 2 / 2",
+        transition: "opacity 1s ease-in-out",
     },
     firstVideoPlayer: {
-        zIndex: 2,
         gridArea: "1 / 1 / 2 / 2",
+        transition: "opacity 1s ease-in-out",
+    },
+    hidden: {
+        zIndex: 1,
+        opacity: 0,
+    },
+    visible: {
+        zIndex: 2,
+        opacity: 1,
     },
 });
 
@@ -37,7 +43,6 @@ const AnimationPlayer = (props) => {
         let nextAnimation;
 
         const handleVideoEnd = () => {
-
             if (animationIndexRef.current + 1 === animations.length) {
                 animationIndexRef.current = 0;
             } else {
@@ -55,26 +60,48 @@ const AnimationPlayer = (props) => {
             activeVideo.removeEventListener("ended", handleVideoEnd);
 
             // when video ends, set activeVideo to other videoElement
-            activeVideo = activeVideo === videoElement ? videoElement2 : videoElement;
-            inactiveVideo = activeVideo === videoElement ? videoElement2 : videoElement;
-            
+            activeVideo =
+                activeVideo === videoElement ? videoElement2 : videoElement;
+            inactiveVideo =
+                activeVideo === videoElement ? videoElement2 : videoElement;
+
             // attach new listener to active video
             activeVideo.addEventListener("ended", handleVideoEnd);
-            
+
             // setup all video props
             activeVideo.src = currentAnimation.src;
             activeVideo.playbackRate = currentAnimation.speed;
-            
-            // move inactive video to active video index plus 1 unless activeVideo is at end of array
-            inactiveVideo.src = nextAnimation.src;
-            inactiveVideo.playbackRate = nextAnimation.speed;
-
 
             // start transition
+            setTimeout(() => {
+                activeVideo.classList.remove(props.classes.hidden);
+                activeVideo.classList.add(props.classes.visible);
 
-            
-            // play active video
-            activeVideo.play();
+                inactiveVideo.classList.remove(props.classes.visible);
+                inactiveVideo.classList.add(props.classes.hidden);
+
+                // Listen for the transition to complete on the active video
+                const handleTransitionEnd = () => {
+                    // move inactive video to active video index plus 1 unless activeVideo is at end of array
+                    inactiveVideo.src = nextAnimation.src;
+                    inactiveVideo.playbackRate = nextAnimation.speed;
+
+                    // play active video
+                    activeVideo.play();
+
+                    // Remove the transitionend listener after it completes
+                    activeVideo.removeEventListener(
+                        "transitionend",
+                        handleTransitionEnd
+                    );
+                };
+
+                // Attach the transitionend event listener
+                activeVideo.addEventListener(
+                    "transitionend",
+                    handleTransitionEnd
+                );
+            }, 3000); // Adjust timing as needed
         };
 
         activeVideo.addEventListener("ended", handleVideoEnd);
@@ -151,13 +178,13 @@ const AnimationPlayer = (props) => {
         <>
             <div className={props.classes.container}>
                 <video
-                    className={props.classes.firstVideoPlayer}
+                    className={`${props.classes.firstVideoPlayer} ${props.classes.visible}`}
                     style={{ maxWidth: "100%" }}
                     ref={videoRef}
                     muted
                 />
                 <video
-                    className={props.classes.secondVideoPlayer}
+                    className={`${props.classes.secondVideoPlayer} ${props.classes.hidden}`}
                     style={{ maxWidth: "100%" }}
                     ref={videoRef2}
                     muted

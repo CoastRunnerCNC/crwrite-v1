@@ -5,9 +5,6 @@ import { ipcRenderer } from "electron";
 
 const RightPanel = (props) => {
 
-
-
-
     if (!props.probingActive) {
         return (
             <ProbingSettings

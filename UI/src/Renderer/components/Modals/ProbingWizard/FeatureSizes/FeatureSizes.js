@@ -11,7 +11,7 @@ const FeatureSizes = (props) => {
             return (
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
-                        <Typography>Width</Typography>
+                        <Typography>Width (X)</Typography>
                         <TextField
                             value={props.featureWidth}
                             placeholder="MM"
@@ -21,7 +21,7 @@ const FeatureSizes = (props) => {
                         />
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography>Length</Typography>
+                        <Typography>Height (Y)</Typography>
                         <TextField
                             value={props.featureLength}
                             placeholder="MM"
@@ -34,28 +34,6 @@ const FeatureSizes = (props) => {
             );
         } else if (props.shape === "circle") {
             return (
-                // <Grid container>
-                //     <Grid item>
-                //         <Grid container>
-                //             <Grid item>
-                //                 <Typography>Diameter</Typography>
-                //             </Grid>
-                //             <Grid item>
-                //                 <TextField className={props.classes.xyzTextField} />
-                //             </Grid>
-                //         </Grid>
-                //     </Grid>
-                //     <Grid item>
-                //         <Grid container>
-                //             <Grid item>
-                //                 <Typography>Height</Typography>
-                //             </Grid>
-                //             <Grid item>
-                //                 <TextField className={props.classes.xyzTextField} />
-                //             </Grid>
-                //         </Grid>
-                //     </Grid>
-                // </Grid>
                 <>
                     <Grid item style={{ marginRight: "16px" }}>
                         <Typography>Feature Sizes:</Typography>

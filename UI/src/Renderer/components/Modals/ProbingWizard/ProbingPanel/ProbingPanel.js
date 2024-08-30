@@ -13,31 +13,30 @@ const ProbingPanel = (props) => {
                 props.featureType === "circleProtrusion") &&
             props.locationType != "corner"
         ) {
-            instructionText += `above the protrusion, centered in both X and Y`;
+            instructionText += `above the protrusion, centered in both X and Y. `;
         } else if (
             (props.featureType === "rectangleProtrusion" || props.featureType === "rectanglePocket") &&
             props.locationType === "corner"
         ) {
-            instructionText += `directly above the tip of the corner`;
+            instructionText += `directly above the tip of the corner. `;
         } else if (
             props.featureType === "circlePocket" ||
             props.featureType === "rectanglePocket"
         ) {
-            instructionText += `above the pocket, centered in both X and Y`;
+            instructionText += `above the pocket, centered in both X and Y. `;
         } else if (props.featureType === "surface") {
             instructionText += (
-                `anywhere over the surface you wish to probe\n\n\n`
+                `anywhere over the surface you wish to probe. `
             )
         } else {
             instructionText += ``
         }
-        instructionText += `Notes:
-        Tool should be within (tool length * 1.5, round up) mm of the desired starting position in both X and Y. Starting too far outside this position may cause a crash.`
+        instructionText += `Notes: Tool should be within (tool length * 1.5, round up) mm of the desired starting position in both X and Y. Starting too far outside this position may cause a crash.`
         if (props.featureType != "circlePocket" && props.featureType != "rectanglePocket") {
-            instructionText += `Please place tool roughly 7mm to 12mm above surface. Too close may cause crashes; too far away may cause probe to fail.`
+            instructionText += ` Please place tool roughly 7mm to 12mm above surface. Too close may cause crashes; too far away may cause probe to fail.`
         }
         else if (props.featureType === "circlePocket" || props.featureType === "rectanglePocket") {
-            instructionText += `Please place tool roughly 7mm to 12mm above pocket. Too far away may cause probe to fail. **Do not jog tool into pocket.**`
+            instructionText += ` Please place tool roughly 7mm to 12mm above pocket. Too far away may cause probe to fail. **Do not jog tool into pocket.**`
         }
         return instructionText;
     };

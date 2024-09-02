@@ -438,6 +438,7 @@ const ProbingWizard = (props) => {
                 animationArray.push(createAnimationObject("Corner 8"));
                 break;
         }
+
         // return array of animation objects
         return animationArray;
     };
@@ -485,13 +486,14 @@ const ProbingWizard = (props) => {
                                 />
                             </Box>
                             <Box>
-                                {!probingActive ? (
-                                    <PictureSVG />
-                                ) : (
-                                    <AnimationPlayer
-                                        animations={getAnimations()}
-                                    />
-                                )}
+                                <AnimationPlayer
+                                    animations={getAnimations()}
+                                    featureType={featureType}
+                                    locationType={locationType}
+                                    probeXSide={probeXSide}
+                                    probeYSide={probeYSide}
+                                    probeCorner={probeCorner}
+                                />
                             </Box>
                         </Box>
                         <Box>

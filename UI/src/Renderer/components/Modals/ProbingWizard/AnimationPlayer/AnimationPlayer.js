@@ -28,13 +28,17 @@ const styles = (theme) => ({
 
 const AnimationPlayer = (props) => {
     const animations = props.animations;
-
+    const timerRef = useRef(null);
     const videoRef = useRef(null);
     const videoRef2 = useRef(null);
     const animationIndexRef = useRef(0);
     const repeatCountRef = useRef(0);
 
     useEffect(() => {
+        console.log(" ");
+        if (props.animations.length === 0) {
+            return;
+        }
         const videoElement = videoRef.current;
         const videoElement2 = videoRef2.current;
         let activeVideo = videoElement;
@@ -42,7 +46,29 @@ const AnimationPlayer = (props) => {
         let currentAnimation = animations[animationIndexRef.current];
         let nextAnimation;
 
+        console.log("activeVideo: " + activeVideo);
+        console.log("inactiveVideo: " + inactiveVideo);
+
+
+        const handleTransitionEnd = () => {
+            console.log("handleTransitionEnd started");
+            // move inactive video to active video index plus 1 unless activeVideo is at end of array
+            inactiveVideo.src = nextAnimation.src;
+            inactiveVideo.playbackRate = nextAnimation.speed;
+
+            // play active video
+            activeVideo.play();
+
+            // Remove the transitionend listener after it completes
+            activeVideo.removeEventListener(
+                "transitionend",
+                handleTransitionEnd
+            );
+            console.log("handleTransitionEnd done");
+        };
+
         const handleVideoEnd = () => {
+            console.log("handleVideoEnd started");
             if (animationIndexRef.current + 1 === animations.length) {
                 animationIndexRef.current = 0;
             } else {
@@ -73,7 +99,12 @@ const AnimationPlayer = (props) => {
             activeVideo.playbackRate = currentAnimation.speed;
 
             // start transition
-            setTimeout(() => {
+            timerRef.current = setTimeout(() => {
+                activeVideo.addEventListener(
+                    "transitionend",
+                    handleTransitionEnd
+                );
+
                 activeVideo.classList.remove(props.classes.hidden);
                 activeVideo.classList.add(props.classes.visible);
 
@@ -81,27 +112,11 @@ const AnimationPlayer = (props) => {
                 inactiveVideo.classList.add(props.classes.hidden);
 
                 // Listen for the transition to complete on the active video
-                const handleTransitionEnd = () => {
-                    // move inactive video to active video index plus 1 unless activeVideo is at end of array
-                    inactiveVideo.src = nextAnimation.src;
-                    inactiveVideo.playbackRate = nextAnimation.speed;
-
-                    // play active video
-                    activeVideo.play();
-
-                    // Remove the transitionend listener after it completes
-                    activeVideo.removeEventListener(
-                        "transitionend",
-                        handleTransitionEnd
-                    );
-                };
 
                 // Attach the transitionend event listener
-                activeVideo.addEventListener(
-                    "transitionend",
-                    handleTransitionEnd
-                );
+                console.log("setTimeout done");
             }, 3000); // Adjust timing as needed
+            console.log("handleVideoEnd done");
         };
 
         activeVideo.addEventListener("ended", handleVideoEnd);
@@ -110,88 +125,62 @@ const AnimationPlayer = (props) => {
 
         activeVideo.play();
 
+        console.log("useEffect done, no cleanup");
         return () => {
+            clearTimeout(timerRef.current);
+            videoElement.pause();
+            videoElement2.pause();
             videoElement.removeEventListener("ended", handleVideoEnd);
             videoElement2.removeEventListener("ended", handleVideoEnd);
+            videoElement.removeEventListener(
+                "transitionend",
+                handleTransitionEnd
+            );
+            videoElement2.removeEventListener(
+                "transitionend",
+                handleTransitionEnd
+            );
+            videoElement.classList.remove(props.classes.hidden);
+            videoElement.classList.add(props.classes.visible);
+            videoElement2.classList.remove(props.classes.visible);
+            videoElement2.classList.add(props.classes.hidden);
+            console.log("cleanup done");
+            videoElement.src = "";
+            videoElement2.src = "";
+            videoElement.load();
+            videoElement2.load();
+            animationIndexRef.current = 0;
         };
+    }, [
+        props.featureType,
+        props.locationType,
+        props.probeXSide,
+        props.probeYSide,
+        props.probeCorner,
+    ]);
 
-        /////////////////////////////////////////////////////////////////////////
-
-        // const videoElement = videoRef.current;
-        // const videoElement2 = videoRef2.current;
-
-        // const playNextAnimation = () => {
-        //     if (animationIndexRef.current >= animations.length) {
-        //         animationIndexRef.current = 0;
-        //     }
-
-        //     const currentAnimation = animations[animationIndexRef.current];
-        //     let nextAnimation;
-
-        //     if ((animationIndexRef.current + 1) === animations.length) {
-        //         nextAnimation = animations[0];
-        //     } else {
-        //         nextAnimation = animations[animationIndexRef.current + 1];
-        //     }
-        //     // play first animation
-
-        //     videoElement.src = currentAnimation.src;
-        //     videoElement.playbackRate = currentAnimation.speed;
-        //     videoElement.play();
-
-        //     // setup second animation but don't play
-
-        //     videoElement2.src = nextAnimation.src;
-        //     videoElement2.playbackRate = nextAnimation.speed;
-
-        //     repeatCountRef.current += 1;
-        // };
-
-        // const handleVideoEnd = () => {
-        //     // switch z-index of animations
-
-        //     // playNextAnimation
-
-        //     const currentAnimation = animations[animationIndexRef.current];
-        //     if (repeatCountRef.current >= currentAnimation.repeat) {
-        //         videoElement.pause();
-        //         setTimeout(() => {
-        //             repeatCountRef.current = 0;
-        //             animationIndexRef.current += 1;
-        //             playNextAnimation();
-        //         }, 3000);
-        //     } else {
-        //         playNextAnimation();
-        //     }
-        // };
-
-        // videoElement.addEventListener("ended", handleVideoEnd);
-
-        // playNextAnimation(); // Start the first animation
-
-        // return () => {
-        //     videoElement.removeEventListener("ended", handleVideoEnd);
-        // };
-    }, []);
-
-    return (
-        <>
-            <div className={props.classes.container}>
-                <video
-                    className={`${props.classes.firstVideoPlayer} ${props.classes.visible}`}
-                    style={{ maxWidth: "100%" }}
-                    ref={videoRef}
-                    muted
-                />
-                <video
-                    className={`${props.classes.secondVideoPlayer} ${props.classes.hidden}`}
-                    style={{ maxWidth: "100%" }}
-                    ref={videoRef2}
-                    muted
-                />
-            </div>
-        </>
-    );
+    if (animations.length === 0) {
+        return <></>;
+    } else {
+        return (
+            <>
+                <div className={props.classes.container}>
+                    <video
+                        className={`${props.classes.firstVideoPlayer} ${props.classes.visible}`}
+                        style={{ maxWidth: "100%" }}
+                        ref={videoRef}
+                        muted
+                    />
+                    <video
+                        className={`${props.classes.secondVideoPlayer} ${props.classes.hidden}`}
+                        style={{ maxWidth: "100%" }}
+                        ref={videoRef2}
+                        muted
+                    />
+                </div>
+            </>
+        );
+    }
 };
 
 export default withStyles(styles)(AnimationPlayer);

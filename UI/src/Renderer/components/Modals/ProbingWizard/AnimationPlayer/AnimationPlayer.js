@@ -7,6 +7,8 @@ const styles = (theme) => ({
         display: "grid",
         width: "100%",
         height: "100%",
+        boxShadow: "3px 3px 0px 0px #000000",
+        border: "2px solid black"
     },
     secondVideoPlayer: {
         gridArea: "1 / 1 / 2 / 2",

@@ -47,6 +47,48 @@ const ProbingWizard = (props) => {
         }
     }, [props.open]);
 
+    const convertMMToInch = (input) => {
+        return input * 0.0393701;
+    }
+
+    const rectangleDimensionsSane = () => {
+        if (convertMMToInch(featureWidth) > 9) {
+            return false;
+        }
+        if (convertMMToInch(featureLength) > 3) {
+            return false;
+        }
+        return true;
+    }
+
+    const toolDimensionSane = () => {
+        // min tool size 1/32 max 5/16
+        if (toolWidth === "other") {
+            if (convertMMToInch(customToolWidth) < 0.03125 || convertMMToInch(customToolWidth) > 0.3125) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    const saneDimentions = () => {
+        // checks tool size and stock size to make sure they are allowed
+       
+        let stockDimentionsSane;
+
+        switch (featureType) {
+            case "surface":
+                return true;
+            case "circleProtrusion":
+                stockDimentionsSane = convertMMToInch(featureDiameter) <= 3 ? true : false;
+                break;
+            case "rectangleProtrusion":
+                stockDimentionsSane = rectangleDimensionsSane();
+                break;
+        }
+        return toolDimensionSane() && stockDimentionsSane;
+    }
+
     const PictureSVG = () => {
         return (
             <img
@@ -443,6 +485,7 @@ const ProbingWizard = (props) => {
         return animationArray;
     };
 
+    console.log(fieldsFilled());
     return (
         <React.Fragment>
             <Alert
@@ -546,7 +589,7 @@ const ProbingWizard = (props) => {
                                 <Button
                                     onClick={openProbeAlert}
                                     fullWidth
-                                    disabled={!fieldsFilled()}
+                                    disabled={!fieldsFilled() || !saneDimentions()}
                                     style={{
                                         border: "1px solid black",
                                         backgroundColor: "#f6f6f6",

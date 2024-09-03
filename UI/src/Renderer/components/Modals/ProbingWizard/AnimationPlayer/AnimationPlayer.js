@@ -5,10 +5,6 @@ import zIndex from "@material-ui/core/styles/zIndex";
 const styles = (theme) => ({
     container: {
         display: "grid",
-        width: "100%",
-        height: "100%",
-        boxShadow: "3px 3px 0px 0px #000000",
-        border: "2px solid black"
     },
     secondVideoPlayer: {
         gridArea: "1 / 1 / 2 / 2",
@@ -50,7 +46,6 @@ const AnimationPlayer = (props) => {
 
         console.log("activeVideo: " + activeVideo);
         console.log("inactiveVideo: " + inactiveVideo);
-
 
         const handleTransitionEnd = () => {
             console.log("handleTransitionEnd started");
@@ -166,7 +161,14 @@ const AnimationPlayer = (props) => {
     } else {
         return (
             <>
-                <div className={props.classes.container}>
+                <div
+                    className={props.classes.container}
+                    style={{
+                        marginTop: "10px",
+                        boxShadow: "3px 3px 0px 0px #000000",
+                        border: "2px solid black",
+                    }}
+                >
                     <video
                         className={`${props.classes.firstVideoPlayer} ${props.classes.visible}`}
                         style={{ maxWidth: "100%" }}

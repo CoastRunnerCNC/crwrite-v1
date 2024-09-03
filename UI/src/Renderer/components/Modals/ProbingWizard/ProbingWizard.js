@@ -474,7 +474,7 @@ const ProbingWizard = (props) => {
                             display: "grid",
                             gridTemplateColumns: "1fr 1fr",
                             gridTemplateRows: "1fr",
-                            gap: "10px"
+                            gap: "10px",
                         }}
                     >
                         <Box>
@@ -486,7 +486,6 @@ const ProbingWizard = (props) => {
                                     resetState={resetState}
                                 />
                             </Box>
-                            <Box style={{marginTop: "10px"}}>
                                 <AnimationPlayer
                                     animations={getAnimations()}
                                     featureType={featureType}
@@ -495,7 +494,6 @@ const ProbingWizard = (props) => {
                                     probeYSide={probeYSide}
                                     probeCorner={probeCorner}
                                 />
-                            </Box>
                         </Box>
                         <Box>
                             <Box>

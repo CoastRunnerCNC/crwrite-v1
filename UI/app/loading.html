@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>CRWrite</title>
+    <link rel="stylesheet" href="./Walkthrough/introjs.css">
+    <link rel="stylesheet" href="./Walkthrough/walkthrough.css">
+    <style>
+        .titlebar .window-title {
+            font-family: sans-serif;
+        }
+
+        /* Loader CSS */
+        .loader {
+          border: 16px solid #f3f3f3; /* Light grey */
+          border-top: 16px solid #3498db; /* Blue */
+          border-radius: 50%;
+          width: 65px;
+          height: 65px;
+          animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        /* Centering the loader using flexbox */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px #8c8c8c;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px #8d8d8d;
+        }
+    </style>
+</head>
+<body>
+    <div id="App">
+        <div class="loader"></div> <!-- Loader is centered now -->
+    </div>
+</body>
+<script src="./app.js"></script>
+</html>

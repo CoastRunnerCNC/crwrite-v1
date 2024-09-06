@@ -22,7 +22,6 @@ unhandled({
 
 global.sharedObject = { argv: process.argv };
 
-
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
     app.quit();
@@ -89,7 +88,13 @@ if (!gotTheLock) {
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
     app.on("ready", () => {
-        let loading = new BrowserWindow({ show: false, frame: false, height: 150, width: 150 });
+        let loading = new BrowserWindow({
+            show: false,
+            frame: false,
+            height: 150,
+            width: 150,
+            resizable: false,
+        });
         let mainWindow;
         loading.once("show", () => {
             mainWindow = new BrowserWindow({
@@ -123,7 +128,7 @@ if (!gotTheLock) {
             }
             mainWindow.on("closed", () => {
                 console.log("closed");
-        
+
                 // Dereference the window object, usually you would store windows
                 // in an array if your app supports multi windows, this is the time
                 // when you should delete the corresponding element.
@@ -133,11 +138,11 @@ if (!gotTheLock) {
         loading.loadURL(`file://${__dirname}/loading.html`);
         loading.show();
         loading.focus();
-            crwrite.LogString("env.name: " + env.name);
-    if (env.name == "development") {
-        //require('react-devtools-electron');
-        // mainWindow.webContents.openDevTools({ mode: "undocked" });
-    }
+        crwrite.LogString("env.name: " + env.name);
+        if (env.name == "development") {
+            //require('react-devtools-electron');
+            mainWindow.webContents.openDevTools({ mode: "undocked" });
+        }
     });
     crwrite.LogString("Checking macFilePath: " + macFilePath);
     if (macFilePath !== "") {

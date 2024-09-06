@@ -620,10 +620,10 @@ function BottomToolbar(props) {
             <Box
                 style={{
                     display: "grid",
-                    gridTemplateColumns: "80px 1fr 1fr 280px 80px",
+                    gridTemplateColumns: "80px 1fr 1fr 360px",
                     gridTemplateRows: "1fr 1fr",
                     gridTemplateAreas:
-                        '"status mill progress feedrate mode" "status work progress menus mode"',
+                        '"status mill progress feedrate" "status work progress menus"',
                     gap: "6px",
                     padding: "6px",
                     backgroundColor: "black",
@@ -1055,30 +1055,6 @@ function BottomToolbar(props) {
                             </Popper>
                         </Grid>
                     </Grid>
-                </Box>
-                <Box
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr",
-                        gridTemplateRows: "3fr 1f1",
-                        gridArea: "mode",
-                        backgroundColor: "white",
-                    }}
-                >
-                    <Box style={{ justifySelf: "center", alignSelf: "center" }}>
-                        <ManualModeSVG />
-                    </Box>
-                    <Box style={{ justifySelf: "center" }}>
-                        <Typography
-                            style={{
-                                color: "black",
-                                fontWeight: "bold",
-                                fontSize: "12px",
-                            }}
-                        >
-                            Manual Mode
-                        </Typography>
-                    </Box>
                 </Box>
             </Box>
         </>

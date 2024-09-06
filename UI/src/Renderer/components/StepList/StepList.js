@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import {List, ListItem, ListItemText, Typography, ArrowUpwardIcon, ArrowDownwardIcon} from '@material-ui/core';
-import {ArrowUpward, ArrowDownward, Close} from '@material-ui/icons'
+import {List, ListItem, ListItemText, Typography} from '@material-ui/core';
 import app from 'app';
 
 const styles = theme => ({
@@ -137,19 +136,19 @@ class StepList extends React.Component {
 
     getUpArrow(index) {
         if (this.props.editMode && !this.props.submanifestUsed && this.props.steps.length > 1) {
-            return <span onClick={() => {this.handleUpArrow(index)}} className={this.props.classes.upArrow}><ArrowUpward /></span>
+            return <span onClick={() => {this.handleUpArrow(index)}} className={this.props.classes.upArrow}></span>
         }
     }
 
     getDownArrow(index) {
         if (this.props.editMode && !this.props.submanifestUsed && this.props.steps.length > 1) {
-            return <span onClick={() => {this.handleDownArrow(index)}} className={this.props.classes.downArrow}><ArrowDownward /></span>
+            return <span onClick={() => {this.handleDownArrow(index)}} className={this.props.classes.downArrow}></span>
         }
     }
 
     getDeleteIcon(index) {
         if (this.props.editMode && this.props.steps.length > 1) {
-            return <span onClick={() => {this.handleDelete(index)}} className={this.props.classes.deleteButton}><Close /></span>;
+            return <span onClick={() => {this.handleDelete(index)}} className={this.props.classes.deleteButton}></span>;
         }
     }
 

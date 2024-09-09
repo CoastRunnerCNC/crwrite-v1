@@ -310,6 +310,14 @@ function BottomToolbar(props) {
         }
     }, [props.feedRate]);
 
+    const machineConnected = () => {
+        if (props.status === 2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     const handleUnitsSelect = (event) => {
         console.log(event.target.value);
         ipcRenderer.send(
@@ -406,7 +414,7 @@ function BottomToolbar(props) {
         ipcRenderer.send("CNC::ExecuteCommand", "$X");
         ipcRenderer.send("CNC::ExecuteCommand", "$L");
         ipcRenderer.send("CNC::ExecuteCommand", "$HX");
-        closeControlMenu();
+        closeControlMenu({}, true);
     };
 
     const handleClickClearMemory = () => {
@@ -890,6 +898,7 @@ function BottomToolbar(props) {
                                                         onClick={
                                                             handleClickHome
                                                         }
+                                                        disabled={!machineConnected()}
                                                     >
                                                         Home
                                                     </MenuItem>
@@ -897,6 +906,7 @@ function BottomToolbar(props) {
                                                         onClick={
                                                             handleClickAutolevel
                                                         }
+                                                        disabled={!machineConnected()}
                                                     >
                                                         Autolevel
                                                     </MenuItem>
@@ -904,6 +914,7 @@ function BottomToolbar(props) {
                                                         onClick={
                                                             handleClickReset
                                                         }
+                                                        disabled={!machineConnected()}
                                                     >
                                                         Reset
                                                     </MenuItem>
@@ -911,6 +922,7 @@ function BottomToolbar(props) {
                                                         onClick={
                                                             handleClickClearMemory
                                                         }
+                                                        disabled={!machineConnected()}
                                                     >
                                                         Clear Memory
                                                     </MenuItem>

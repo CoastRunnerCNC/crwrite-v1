@@ -36,6 +36,13 @@ const MachineOutputPanel = (props) => {
     useEffect(() => {
         ipcRenderer.removeAllListeners("Jobs::ReadWrites");
         ipcRenderer.on("Jobs::ReadWrites", updateReadWrites);
+
+        return () => {
+            ipcRenderer.removeAllListeners(
+                "Jobs::ReadWrites",
+                updateReadWrites
+            );
+        };
     }, []);
 
     useEffect(() => {
@@ -51,13 +58,6 @@ const MachineOutputPanel = (props) => {
         if (newLines.length > 0) {
             setReadWrites((prevReadWrites) => [...prevReadWrites, ...newLines]);
         }
-
-        return () => {
-            ipcRenderer.removeAllListeners(
-                "Jobs::ReadWrites",
-                updateReadWrites
-            );
-        };
     };
 
     function getDisplay() {

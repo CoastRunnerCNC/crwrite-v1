@@ -65,6 +65,12 @@ function Routes(props) {
                             <Milling
                                 {...props}
                                 status={status}
+                                openShuttle={openShuttle}
+                                shuttleSelectedTab={shuttleSelectedTab}
+                                toggleShuttle={toggleShuttle}
+                                milling={milling}
+                                firmware={firmware}
+                                closeOperationsWindow={closeOperationsWindow}
                                 showOperationsWindow={showOperationsWindow}
                                 feedRate={feedRate}
                                 updateFeedRate={updateFeedRate}

@@ -303,6 +303,9 @@ function BottomToolbar(props) {
     const buttonConfigRef = useRef(null);
     const buttonSupportRef = useRef(null);
     const progressIntervalRef = useRef(null);
+    const navigateToMillingRef = useRef(null);
+    
+    navigateToMillingRef.current = props.navigateToMilling;
 
     useEffect(() => {
         if (props.feedRate != feedRate) {
@@ -310,13 +313,17 @@ function BottomToolbar(props) {
         }
     }, [props.feedRate]);
 
+    const handleClickManualMode = () => {
+        props.toggleShuttle();
+    };
+
     const machineConnected = () => {
         if (props.status === 2) {
             return true;
         } else {
             return false;
         }
-    }
+    };
 
     const handleUnitsSelect = (event) => {
         console.log(event.target.value);
@@ -512,7 +519,8 @@ function BottomToolbar(props) {
 
     const handleProgressResponse = (event, updatedProgress) => {
         try {
-            if (updatedProgress.error != null) {
+            if (updatedProgress.error != null && !navigateToMillingRef.current) {
+                console.log("error set");
                 setShowError(true);
                 setErrorTitle(updatedProgress.error.title);
                 setErrorText(updatedProgress.error.description);
@@ -522,13 +530,11 @@ function BottomToolbar(props) {
 
             if (updatedProgress.milling === false) {
                 setMillingProgress(-1);
-            }
-            else {
-
+            } else {
                 setMillingProgress(updatedProgress.progress.percentage);
             }
         } catch (e) {
-               console.error("handleProgressResponse exception caught")
+            console.error("handleProgressResponse exception caught");
         }
     };
 
@@ -557,12 +563,12 @@ function BottomToolbar(props) {
                 console.log("state: " + realTimeStatus);
             } catch (e) {}
 
-           // if (realTimeStatus && realTimeStatus.state === "milling") {
-                if (!progressIntervalRef.current) {
-                    progressIntervalRef.current = setInterval(() => {
-                        ipcRenderer.send("Jobs::GetProgress");
-                    }, 500);
-                }
+            // if (realTimeStatus && realTimeStatus.state === "milling") {
+            if (!progressIntervalRef.current) {
+                progressIntervalRef.current = setInterval(() => {
+                    ipcRenderer.send("Jobs::GetProgress");
+                }, 500);
+            }
             // } else {
             //     if (progressIntervalRef.current) {
             //         clearInterval(progressIntervalRef.current);
@@ -586,20 +592,18 @@ function BottomToolbar(props) {
 
     return (
         <>
-                <Alert
-                    open={
-                        showError && !props.navigateToMilling
-                    }
-                    message={errorText}
-                    yesNo={false}
-                    onOk={(event) => {
-                        setShowError(false);
-                    }}
-                    onCancel={(event) => {
-                        setShowError(false);
-                    }}
-                    title={errorTitle}
-                />
+            <Alert
+                open={showError && !props.navigateToMilling && !props.openShuttle}
+                message={errorText}
+                yesNo={false}
+                onOk={(event) => {
+                    setShowError(false);
+                }}
+                onCancel={(event) => {
+                    setShowError(false);
+                }}
+                title={errorTitle}
+            />
             <SupportCenter
                 open={openSupportCenter}
                 onClose={() => {
@@ -896,9 +900,21 @@ function BottomToolbar(props) {
                                                     </MenuItem>
                                                     <MenuItem
                                                         onClick={
+                                                            handleClickManualMode
+                                                        }
+                                                        disabled={
+                                                            !machineConnected()
+                                                        }
+                                                    >
+                                                        Manual Mode
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        onClick={
                                                             handleClickHome
                                                         }
-                                                        disabled={!machineConnected()}
+                                                        disabled={
+                                                            !machineConnected()
+                                                        }
                                                     >
                                                         Home
                                                     </MenuItem>
@@ -906,7 +922,9 @@ function BottomToolbar(props) {
                                                         onClick={
                                                             handleClickAutolevel
                                                         }
-                                                        disabled={!machineConnected()}
+                                                        disabled={
+                                                            !machineConnected()
+                                                        }
                                                     >
                                                         Autolevel
                                                     </MenuItem>
@@ -914,7 +932,9 @@ function BottomToolbar(props) {
                                                         onClick={
                                                             handleClickReset
                                                         }
-                                                        disabled={!machineConnected()}
+                                                        disabled={
+                                                            !machineConnected()
+                                                        }
                                                     >
                                                         Reset
                                                     </MenuItem>
@@ -922,7 +942,9 @@ function BottomToolbar(props) {
                                                         onClick={
                                                             handleClickClearMemory
                                                         }
-                                                        disabled={!machineConnected()}
+                                                        disabled={
+                                                            !machineConnected()
+                                                        }
                                                     >
                                                         Clear Memory
                                                     </MenuItem>

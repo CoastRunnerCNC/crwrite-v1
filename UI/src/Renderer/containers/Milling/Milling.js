@@ -37,6 +37,7 @@ import InstructionsPanel from "./InstructionsPanel/InstructionsPanel";
 import MachineOutputPanel from "./MachineOutputPanel/MachineOutputPanel";
 import ImagePanel from "./ImagePanel/ImagePanel";
 import JoggingPanel from "./JoggingPanel/JoggingPanel";
+import Shuttle from "../../components/Modals/Shuttle";
 
 const styles = (theme) => ({
     millingStyle: {
@@ -1136,9 +1137,9 @@ class Milling extends React.Component {
                     open={
                         this.state.showAlert &&
                         status === 2 &&
-                        !this.props.showOperationsWindow
+                        !this.props.openShuttle
                     }
-                    message={this.state.alertMessage}
+                    message={this.state.alertMessage + " MILLING Alert 1"}
                     yesNo={this.state.goBack}
                     onOk={(event) => {
                         this.setState({ showAlert: false });
@@ -1342,14 +1343,27 @@ class Milling extends React.Component {
                     enableEditButton={this.props.settings.enableEditButton}
                 />
 
+                <Shuttle
+                    showOpenIcon={false}
+                    openShuttle={this.props.openShuttle}
+                    shuttleSelectedTab={this.props.shuttleSelectedTab}
+                    toggleShuttle={this.props.toggleShuttle}
+                    milling={this.props.milling}
+                    status={this.props.status}
+                    firmware={this.props.firmware}
+                    closeOperationsWindow={this.props.closeOperationsWindow}
+                    setOperationsWindowOpen={this.props.setOperationsWindowOpen}
+                    feedRate={this.props.feedRate}
+                    updateFeedRate={this.props.updateFeedRate}
+                />
+
                 <Box
                     style={{
                         display: "grid",
                         gridTemplateColumns: "1fr 1fr 1fr",
                         gridTemplateRows: "1fr",
                         gap: "12px",
-                    overflowY: "auto"
-                        
+                        overflowY: "auto",
                     }}
                 >
                     <Box
@@ -1357,7 +1371,7 @@ class Milling extends React.Component {
                             display: "grid",
                             gridTemplateColumns: "1fr",
                             gridTemplateRows: "1fr",
-                            overflowY: "auto"
+                            overflowY: "auto",
                         }}
                     >
                         <StepsPanel
@@ -1458,8 +1472,7 @@ class Milling extends React.Component {
                                 ? "1fr 1fr"
                                 : "1fr",
                             gap: "8px",
-                            overflow: "hidden auto"
-
+                            overflow: "hidden auto",
                         }}
                     >
                         <JoggingPanel open={this.props.openJoggingPanel} />

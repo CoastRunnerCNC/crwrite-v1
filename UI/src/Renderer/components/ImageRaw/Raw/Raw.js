@@ -74,6 +74,10 @@ class Raw extends React.Component {
         this.scrollToBottom();
     }
 
+    componentWillUnmount() {
+        ipcRenderer.removeListener("Jobs::ReadWrites", this.updateReadWrites);
+    }
+
     scrollToBottom() {
         if (this.props.millingInProgress && this.gcodeEndRef.current != null && !this.haltAutoScroll) {
             this.gcodeEndRef.current.scrollIntoView({behavior: "auto", block: 'center'});

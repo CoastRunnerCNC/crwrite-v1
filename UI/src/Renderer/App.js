@@ -12890,6 +12890,7 @@ export default class App extends React.Component {
                             {/* {console.timeEnd("Routes")} */}
                             {/* {console.time("BottomToolbar")} */}
                             <BottomToolbar
+                                showOpenIcon={true}
                                 openShuttle={this.state.openShuttle}
                                 shuttleSelectedTab={
                                     this.state.shuttleSelectedTab

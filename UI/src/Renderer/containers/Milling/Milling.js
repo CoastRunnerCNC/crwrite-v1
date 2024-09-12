@@ -1139,7 +1139,7 @@ class Milling extends React.Component {
                         status === 2 &&
                         !this.props.openShuttle
                     }
-                    message={this.state.alertMessage + " MILLING Alert 1"}
+                    message={this.state.alertMessage}
                     yesNo={this.state.goBack}
                     onOk={(event) => {
                         this.setState({ showAlert: false });

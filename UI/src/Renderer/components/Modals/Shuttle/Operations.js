@@ -1161,13 +1161,13 @@ class Operations extends React.Component {
     sendCommand() {
         let isOutOfBounds = false;
         isOutOfBounds = this.isOutOfBounds(this.state.manualEntry);
-        if (isOutOfBounds) {
-            console.log("out of bounds");
-            this.setState({ limitWarningOpen: true });
-        } else {
+        // if (isOutOfBounds) {
+        //     console.log("out of bounds");
+        //     this.setState({ limitWarningOpen: true });
+        // } else {
             console.log("in bounds");
             this.executeCommand();
-        }
+        // }
     }
 
     executeCommand() {

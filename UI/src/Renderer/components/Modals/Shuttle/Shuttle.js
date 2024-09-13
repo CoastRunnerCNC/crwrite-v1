@@ -212,6 +212,7 @@ class Shuttle extends React.Component {
                             height: "100%",
                             maxWidth: "1600px",
                             backgroundColor: "#f6f6f6",
+                            overflowY: "hidden"
                         },
                     }}
                     maxWidth="xl"
@@ -230,7 +231,7 @@ class Shuttle extends React.Component {
                     </DialogTitle>
                     <DialogContent
                         className={"no-scroll"}
-                        style={{ overflow: "auto" }}
+                        style={{ overflow: "hidden" }}
                     >
                         <Operations
                             closeDialog={this.closeDialog}

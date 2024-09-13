@@ -702,7 +702,17 @@ function Dashboard(props) {
                                 direction="column"
                                 alignItems="flex-end"
                             >
-                                <GuidedModeSVG onClick={onClickRun} />
+                                <Tooltip
+                                    disableFocusListener={true}
+                                    disableTouchListener={true}
+                                    disableHoverListener={status === 2}
+                                    placement="top-start"
+                                    title="Machine must be connected"
+                                >
+                                    <span>
+                                        <GuidedModeSVG onClick={onClickRun} />
+                                    </span>
+                                </Tooltip>
                                 <Shuttle
                                     showOpenIcon={true}
                                     openShuttle={props.openShuttle}

@@ -493,29 +493,6 @@ function BottomToolbar(props) {
         }
     };
 
-    const test = {
-        buffer: { free_planner_blocks: 14, free_rx_bytes: 128 },
-        limits: null,
-        line: 0,
-        machine_pos: {
-            x: { inch: 0, mm: 0 },
-            y: { inch: 0, mm: 0 },
-            z: { inch: 0, mm: 0 },
-        },
-        movementType: "absolute",
-        parserUnits: "mm",
-        raw: "<Alarm|M:0.000,0.000,0.000|B:14,128|L:0|0000>",
-        state: "Alarm",
-        substate: -1,
-        work_coordinates: {
-            wcs: "G54",
-            work_pos: {
-                x: { inch: 0, mm: 0 },
-                y: { inch: 0, mm: 0 },
-                z: { inch: 0, mm: 0 },
-            },
-        },
-    };
 
     const handleProgressResponse = (event, updatedProgress) => {
         try {
@@ -564,7 +541,7 @@ function BottomToolbar(props) {
             } catch (e) {}
 
             // if (realTimeStatus && realTimeStatus.state === "milling") {
-            if (!progressIntervalRef.current) {
+            if (status === 2 && !progressIntervalRef.current) {
                 progressIntervalRef.current = setInterval(() => {
                     ipcRenderer.send("Jobs::GetProgress");
                 }, 500);

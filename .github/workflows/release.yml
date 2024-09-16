@@ -53,7 +53,7 @@ jobs:
         useVcpkgToolchainFile: true
         vcpkgTriplet: '${{ matrix.vcpkg_triplet }}'
         buildDirectory: '${{ github.workspace }}/build'
-        cmakeAppendedArgs: ' ${{ matrix.cmake_platform_args }} -DCRWRITE_AUTH_KEY="${{ secrets.AUTH_KEY }}"'
+        cmakeAppendedArgs: ' ${{ matrix.cmake_platform_args }} -DCR_AUTH_KEY="${{ secrets.AUTH_KEY }}"'
         buildWithCMake: false
     - name: npm install, build, and test (Win)
       if: matrix.platform == 'windows-2019'

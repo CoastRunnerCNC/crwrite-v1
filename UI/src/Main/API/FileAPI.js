@@ -107,7 +107,7 @@ class FileAPI {
         electron.ipcMain.on('File::OpenGCodeFileDialog', function (event) {
             electron.dialog.showOpenDialog({
                 properties: ['openFile', 'treatPackageAsDirectory'],
-                filters: [{ name: "G-Code Files", extensions: [".gcode"] }]
+                filters: [{ name: "G-Code Files", extensions: ["gcode"] }]
             }, function (files) {
                 if (files) {
                     event.sender.send("GCodeFileSelected", files[0]);

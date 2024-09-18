@@ -64,7 +64,7 @@ RestClient::Response RestClient::Post(const std::string& path, const std::string
 	requestStream << "POST " << path << " HTTP/1.1\r\n";
 	requestStream << "Host: " << SERVER << "\r\n";
 	requestStream << "Accept: application/json\r\n";
-	requestStream << "Authorization:Basic " << AUTH_KEY << "\r\n";
+	requestStream << "Authorization: Basic " << AUTH_KEY << "\r\n";
 	requestStream << "Content-Type: application/json\r\n";
 	requestStream << "Content-Length: " << jsonBody.size() << "\r\n";
 	requestStream << "Connection: close\r\n\r\n";

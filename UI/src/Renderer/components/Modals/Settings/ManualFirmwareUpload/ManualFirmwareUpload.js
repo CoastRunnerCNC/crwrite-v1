@@ -80,10 +80,10 @@ class ManualFirmwareUpload extends React.Component {
                                 className={this.props.classes.actionButton}
                                 variant="contained"
                                 onClick={ () => {
-                                    ipcRenderer.once('GCodeFileSelected', (event, gCodeFilePath) => {
+                                    ipcRenderer.once('FirmwareFileSelected', (event, gCodeFilePath) => {
                                         this.setState({path32m1: gCodeFilePath});
                                     });
-                                    ipcRenderer.send('File::OpenGCodeFileDialog');
+                                    ipcRenderer.send('File::OpenFirmwareFileDialog');
                                 } }
                                 fullWidth
                             >
@@ -115,10 +115,10 @@ class ManualFirmwareUpload extends React.Component {
                                 variant="contained"
                                 className={this.props.classes.actionButton}
                                 onClick={ () => {
-                                    ipcRenderer.once('GCodeFileSelected', (event, gCodeFilePath) => {
+                                    ipcRenderer.once('FirmwareFileSelected', (event, gCodeFilePath) => {
                                         this.setState({path328p: gCodeFilePath});
                                     });
-                                    ipcRenderer.send('File::OpenGCodeFileDialog');
+                                    ipcRenderer.send('File::OpenFirmwareFileDialog');
                                 } }
                                 fullWidth
                             >

@@ -113,7 +113,6 @@ class FirmwareUpdater extends React.Component {
                             status_message: 'An error occurred while updating the firmware. Please try again.'
                         });
                     } else {
-    
                         //document.getElementById("StatusText").innerHTML = status + "%";
                         //document.getElementById("StatusBar").style.width = (2.50 * status) + "px";
     

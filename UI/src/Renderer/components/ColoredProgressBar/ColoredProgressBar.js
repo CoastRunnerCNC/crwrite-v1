@@ -8,7 +8,7 @@ const styles = theme => ({
         backgroundColor: '#AA0000'
     },
     barColorPrimary: {
-        backgroundColor: '#FF0000'
+        backgroundColor: 'black'
     }
 });
 
@@ -17,7 +17,7 @@ class ColoredProgressBar extends React.Component {
         const { classes, error } = this.props;
         return <LinearProgress {...this.props}
          color={error ? 'primary' : 'secondary'}
-         classes={{colorPrimary: classes.colorPrimary, barColorPrimary: classes.barColorPrimary}}/>;
+         classes={{colorPrimary: classes.barColorPrimary, barColorPrimary: classes.barColorPrimary, bar: classes.barColorPrimary}}/>;
     }
 }
 

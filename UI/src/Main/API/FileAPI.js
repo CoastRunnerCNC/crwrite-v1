@@ -115,6 +115,17 @@ class FileAPI {
             });
         });
 
+        electron.ipcMain.on('File::OpenFirmwareFileDialog', function (event) {
+            electron.dialog.showOpenDialog({
+                properties: ['openFile', 'treatPackageAsDirectory'],
+                filters: [{ name: "Hex File", extensions: ["hex"] }]
+            }, function (firmwarePath) {
+                if (firmwarePath) {
+                    event.sender.send("FirmwareFileSelected", firmwarePath[0]);
+                }
+            });
+        });
+
         electron.ipcMain.on('File::ExtractAdditionalContent', function (event) {
             let path = electron.dialog.showOpenDialog({ properties: ['openDirectory', 'treatPackageAsDirectory', 'createDirectory'] },
                 function (path) {

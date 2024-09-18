@@ -26,6 +26,33 @@ std::string CustSupportService::Request::ToJsonStr() const
 CustSupportService::Response CustSupportService::Invoke(const CustSupportService::Request& req)
 {
 	MILL_LOG(req.ToJsonStr());
+	
+	// Create / update user
+		// req will have all the needed data. Grab what I need
+		// how do I take just the data I need to send it to RestClient
+		// maybe just send the whole object?
+		std::string newUserJsonString = "{\"user\": {\"" + req.name + "\", \"email\": \"" + req.email + "}}";
+
+		auto raw_resp = RestClient::Post("/api/v2/users/create_or_update.json", newUserJsonString);		
+
+		if (raw_resp.status_code != 201 && raw_resp.status_code != 200) 
+		{
+			MILL_LOG("NEW USER POST FAILED");
+		}
+		else
+		{
+			MILL_LOG("NEW USER POST SUCCESS!!!");
+		}
+
+	// Upload file
+
+	// if (req.log_text)
+	// {
+	// }
+
+	// Create ticket
+
+
 	auto raw_resp = RestClient::Post("/customerServiceRequest/", req.ToJsonStr());
 	if (raw_resp.status_code == 201) {
 		MILL_LOG("Response TRUE");

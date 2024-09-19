@@ -1478,6 +1478,7 @@ class Milling extends React.Component {
                             open={this.props.openImagePanel}
                         />
                         <MachineOutputPanel
+                            milling={this.state.milling}
                             onEditGCode={this.showGCodePopUpInput}
                             selectedStep={this.state.selectedStep}
                             millingInProgress={this.state.millingProgress != -1}

@@ -46,7 +46,6 @@ import ItemPanel from "../../ItemPanel/ItemPanel";
 import CustomInputLabel from "./CustomInputLabel/CustomInputLabel";
 import StopButton from "../../StopButton/StopButton";
 import PauseButton from "../../PauseButton/PauseButton";
-import Timer from "./Timer/Timer";
 
 const path = require("path");
 const DEFAULT_COORDINATE_LIMITS = {

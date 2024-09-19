@@ -6,6 +6,7 @@ import app from "app";
 import Raw from "../../../components/ImageRaw/Raw";
 import { Grid } from "@material-ui/core";
 import { ipcRenderer } from "electron";
+import Timer from "../../../components/Timer/Timer";
 
 const styles = (theme) => ({
     root: {
@@ -25,9 +26,29 @@ const styles = (theme) => ({
 
 const MachineOutputPanel = (props) => {
     const [readWrites, setReadWrites] = useState([]);
+    const [seconds, setSeconds] = useState(0);
     const gcodeEnd = useRef(null);
     const prevProps = useRef();
     const outputPanelHeight = props.imagePanelOpen ? "30vh" : "75vh";
+
+    useEffect(() => {
+        let timerId;
+    
+        if (props.milling === true) {
+          timerId = setInterval(() => {
+            setSeconds(prevCount => prevCount + 1);
+          }, 1000); // Increment every second
+        } else {
+            setSeconds(0)
+        }
+    
+        return () => {
+          // Clean up the timer when the component unmounts or isTimerActive changes
+          if (timerId) {
+            clearInterval(timerId);
+          }
+        };
+      }, [props.milling]);
 
     useEffect(() => {
         prevProps.current = props; // Update prevProps with the current props after every render
@@ -94,6 +115,9 @@ const MachineOutputPanel = (props) => {
             >
                 {getDisplay()}
                 {scrollToBottom()}
+{props.milling === true ?                <div style={{width: "100%", padding: "4px", backgroundColor: "black", color: "white"}}>
+                    <Timer elapsedSeconds={seconds} />
+                </div> : ""}
             </ItemPanel>
         );
     } else {

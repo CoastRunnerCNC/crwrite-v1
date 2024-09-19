@@ -11,18 +11,18 @@ import app from 'app';
 
 const StyledSlider = withStyles({
     thumb: {
-        height: 24,
-        width: 24,
+        height: 16,
+        width: 16,
         backgroundColor: '#fff',
-        border: '2px solid #75327e',
+        border: '2px solid black',
         '&$focused, &:hover': {
-            boxShadow: `0px 0px 0px ${8}px ${fade('#de235b', 0.16)}`,
+            boxShadow: `0px 0px 0px ${8}px ${fade('#000', 0.16)}`,
         },
         '&$activated': {
-            boxShadow: `0px 0px 0px ${8 * 1.5}px ${fade('#de235b', 0.16)}`,
+            boxShadow: `0px 0px 0px ${8 * 1.5}px ${fade('#000', 0.16)}`,
         },
         '&$jumped': {
-            boxShadow: `0px 0px 0px ${8 * 1.5}px ${fade('#de235b', 0.16)}`,
+            boxShadow: `0px 0px 0px ${8 * 1.5}px ${fade('#000', 0.16)}`,
         }
     },
     track: {
@@ -102,7 +102,7 @@ class Feedrate extends React.Component {
         return (
             <React.Fragment>
                 <Paper style={{width: 'calc(100%-48px)', padding: 24}}>
-                    <Grid container>
+                    <Grid container spacing={2} alignItems='center' justify="space-evenly">
                         <Grid item xs={8}>
                             <StyledSlider
                             value={this.state.feedRate}
@@ -114,7 +114,7 @@ class Feedrate extends React.Component {
                             onChangeCommitted={(event, value) => { this.props.updateFeedRate(value); }}
                             />
                         </Grid>
-                        <Grid item xs={4} style={{marginTop: 8}}>
+                        <Grid item xs={4}>
                             <TextField
                                 value={this.state.feedRate2} 
                                 min={30}

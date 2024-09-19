@@ -1434,34 +1434,31 @@ class Milling extends React.Component {
                                     getJobText={getJobText}
                                 />
                             </Grid>
-                            <Grid item>
-                                <Grid container direction="column">
-                                    <Grid item>
-                                        <div className={classes.warning}>
-                                            {/*getMillingInProgressDisplay(this) */}
-                                        </div>
-                                    </Grid>
-                                    <Grid item>
-                                        <Grid
-                                            container
-                                            justify="space-between"
-                                            style={{ marginTop: "8px" }}
-                                        >
-                                            <Grid item>{getWarning(this)}</Grid>
-                                            <Grid item>
-                                                <div
-                                                    className={classes.actions}
-                                                >
-                                                    {/* {getActionButton(this)} */}
-                                                </div>
+                            <Grid item container direction="column">
+                                <Grid item>
+                                    <Grid container direction="column">
+                                        <Grid item>
+                                            <div className={classes.warning}>
+                                                {/*getMillingInProgressDisplay(this) */}
+                                            </div>
+                                        </Grid>
+                                        <Grid item>
+                                            <Grid
+                                                container
+                                                justify="space-between"
+                                                style={{ marginTop: "8px" }}
+                                            >
+                                                <Grid item>
+                                                    {getWarning(this)}
+                                                </Grid>
                                             </Grid>
                                         </Grid>
                                     </Grid>
                                 </Grid>
+                                {/* <Grid id={"feedrate-slider"} item>
+                                    {getFeedrateSlider(this)}
+                                </Grid> */}
                             </Grid>
-                            {/* <Grid id={'feedrate-slider'} item xs={12} style={{ height: '40px' }}>
-                                            {getFeedrateSlider(this)}
-                                        </Grid> */}
                         </Grid>
                     </Box>
                     <Box

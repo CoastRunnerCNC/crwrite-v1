@@ -4,18 +4,14 @@ import { ipcRenderer } from "electron";
 import {
     Button,
     Dialog,
-    DialogTitle,
     DialogContent,
     Grid,
     Select,
     TextField,
     Typography,
-    LinearProgress,
     Tabs,
     Tab,
-    Box,
 } from "@material-ui/core";
-import Raw from "../../ImageRaw/Raw";
 import app from "app";
 import Alert from "../Alert";
 import Slider from "@material-ui/core/Slider";
@@ -25,7 +21,6 @@ import SVGPath from "../../SVGPath/SVGPath";
 import _ from "underscore";
 import "./Operations.scss";
 import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { withStyles } from "@material-ui/core/styles";
 import Input from "@material-ui/core/Input";
@@ -35,17 +30,13 @@ import SendIcon from "@material-ui/icons/Send";
 import ExecuteIcon from "@material-ui/icons/Autorenew";
 import SelectFileIcon from "@material-ui/icons/Attachment";
 import Tooltip from "@material-ui/core/Tooltip";
-import HelpIcon from "@material-ui/icons/Help";
-import RPMDivergence from "../RPMDivergence/RPMDivergence";
 import ReportLimitCatchError from "./ReportLimitCatchError/ReportLimitCatchError";
 import PositionPreset from "./PositionPreset/PositionPreset";
 import ExportOutput from "./ExportOutput/ExportOutput";
 import DisplayPanel from "./DisplayPanel/DisplayPanel";
 import ShuttleSettings from "./ShuttleSettings";
 import ItemPanel from "../../ItemPanel/ItemPanel";
-import CustomInputLabel from "./CustomInputLabel/CustomInputLabel";
 import StopButton from "../../StopButton/StopButton";
-import PauseButton from "../../PauseButton/PauseButton";
 
 const path = require("path");
 const DEFAULT_COORDINATE_LIMITS = {

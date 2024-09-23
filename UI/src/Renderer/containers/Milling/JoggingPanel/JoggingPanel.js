@@ -74,6 +74,17 @@ const JoggingPanel = (props) => {
                                 <Input />
                             </Grid>
                         </Grid>
+                        <Grid>
+                            {/* WCS */}
+
+                            {/* Units */}
+                        </Grid>
+                        <Grid>
+                            {/* Status */}
+                        </Grid>
+                        <Grid>
+                            {/* Feedrate */}
+                        </Grid>
                         <Grid item container>
                             {/* spindle direction */}
                             <Grid item>

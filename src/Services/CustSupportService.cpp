@@ -31,18 +31,19 @@ CustSupportService::Response CustSupportService::Invoke(const CustSupportService
 		// req will have all the needed data. Grab what I need
 		// how do I take just the data I need to send it to RestClient
 		// maybe just send the whole object?
-		std::string newUserJsonString = "{\"user\": {\"" + req.name + "\", \"email\": \"" + req.email + "}}";
 
-		auto raw_resp = RestClient::Post("/api/v2/users/create_or_update.json", newUserJsonString);		
+		// std::string newUserJsonString = "{\"user\": {\"" + req.name + "\", \"email\": \"" + req.email + "}}";
 
-		if (raw_resp.status_code != 201 && raw_resp.status_code != 200) 
-		{
-			MILL_LOG("NEW USER POST FAILED");
-		}
-		else
-		{
-			MILL_LOG("NEW USER POST SUCCESS!!!");
-		}
+		// auto raw_resp = RestClient::Post("/api/v2/users/create_or_update.json", newUserJsonString);		
+
+		// if (raw_resp.status_code != 201 && raw_resp.status_code != 200) 
+		// {
+		// 	MILL_LOG("NEW USER POST FAILED");
+		// }
+		// else
+		// {
+		// 	MILL_LOG("NEW USER POST SUCCESS!!!");
+		// }
 
 	// Upload file
 

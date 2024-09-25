@@ -9,33 +9,59 @@ const styles = (theme) => ({
         borderTop: "1px solid black",
         borderBottom: "1px solid black",
         borderRight: "1px solid black",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
     },
     bottomLeftCell: {
         borderLeft: "1px solid black",
         borderRight: "1px solid black",
         borderTop: "1px solid black",
         borderBottom: "1px solid black",
+        backgroundColor: "black",
+        color: "white",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
     },
     bottomRightCell: {
         borderTop: "1px solid black",
         borderRight: "1px solid black",
         borderBottom: "1px solid black",
+        backgroundColor: "black",
+        color: "white",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
     },
     sideTopCell: {
         borderLeft: "1px solid black",
         borderRight: "1px solid black",
         borderTop: "1px solid black",
         borderBottom: "1px solid black",
+        backgroundColor: "black",
+        color: "white",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
     },
     sideMiddleCell: {
         borderLeft: "1px solid black",
         borderRight: "1px solid black",
         borderBottom: "1px solid black",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
     },
     sideBottomCell: {
         borderLeft: "1px solid black",
         borderRight: "1px solid black",
         borderBottom: "1px solid black",
+        backgroundColor: "black",
+        color: "white",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
 
@@ -155,7 +181,7 @@ const JoggingPanel = (props) => {
                                 className={classes.sideMiddleCell}
                                 style={{ gridRow: "5 / 6" }}
                             >
-                                x
+                                X
                             </div>
                             <div
                                 className={classes.sideMiddleCell}
@@ -226,7 +252,7 @@ const JoggingPanel = (props) => {
                                 className={classes.sideMiddleCell}
                                 style={{ gridRow: "5 / 6" }}
                             >
-                                x
+                                Z
                             </div>
                             <div
                                 className={classes.sideMiddleCell}
@@ -307,7 +333,7 @@ const JoggingPanel = (props) => {
                                     gridRow: "1 / 2",
                                 }}
                             >
-                                x
+                                Y
                             </div>
                             <div
                                 className={classes.bottomMiddleCell}

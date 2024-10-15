@@ -1472,7 +1472,16 @@ class Milling extends React.Component {
                             overflow: "hidden auto",
                         }}
                     >
-                        <JoggingPanel open={this.props.openJoggingPanel} />
+                        <JoggingPanel
+                            open={this.props.openJoggingPanel}
+                            commandKeys={this.props.commandKeys}
+                            eventKeyFrontEndCommandMap={
+                                this.props.eventKeyFrontEndCommandMap
+                            }
+                            refreshShuttleKeys={this.props.refreshShuttleKeys}
+                            feedRate={this.props.feedRate}
+                            updateFeedRate={this.props.updateFeedRate}
+                        />
                         <ImagePanel
                             selectedStep={this.state.selectedStep}
                             open={this.props.openImagePanel}

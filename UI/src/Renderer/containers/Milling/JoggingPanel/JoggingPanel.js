@@ -121,8 +121,18 @@ const MillSVG = () => {
     return (
         <svg
             viewBox="0 0 134 81"
+            width="100%"
+            height="100%"
             fill="none"
+            // preserveAspectRatio="xMidYMid meet"
             xmlns="http://www.w3.org/2000/svg"
+            style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+                width: "auto",
+                height: "auto",
+                display: "block",
+            }}
         >
             <path
                 d="M4.2 3.06C4.2 2.16391 4.2 1.71587 4.37439 1.37362C4.52779 1.07256 4.77256 0.827787 5.07361 0.67439C5.41587 0.5 5.86391 0.5 6.76 0.5H130.44C131.336 0.5 131.784 0.5 132.126 0.67439C132.427 0.827787 132.672 1.07256 132.826 1.37362C133 1.71587 133 2.16392 133 3.06V77.94C133 78.8361 133 79.2841 132.826 79.6264C132.672 79.9274 132.427 80.1722 132.126 80.3256C131.784 80.5 131.336 80.5 130.44 80.5H6.76C5.86391 80.5 5.41587 80.5 5.07361 80.3256C4.77256 80.1722 4.52779 79.9274 4.37439 79.6264C4.2 79.2841 4.2 78.8361 4.2 77.94V3.06Z"
@@ -247,9 +257,9 @@ class JoggingPanel extends React.Component {
         this.updateReadWrites = this.updateReadWrites.bind(this);
         this.setRawHistory = this.setRawHistory.bind(this);
         this.incrementElapsedSeconds = this.incrementElapsedSeconds.bind(this);
-        this.refreshShuttleKeys = this.refreshShuttleKeys.bind(this);
         this.handleSpindleChange = this.handleSpindleChange.bind(this);
         this.jogEnd = this.jogEnd.bind(this);
+        this.handleUnitsChange = this.handleUnitsChange.bind(this);
         this.currentJog = null;
         this.manual_entry_focused = false;
         this.manual_entry_ref = React.createRef();
@@ -262,8 +272,6 @@ class JoggingPanel extends React.Component {
         this.preset2Ref = React.createRef();
         this.preset3Ref = React.createRef();
         this.preset4Ref = React.createRef();
-        this.commandKeys = {};
-        this.eventKeyFrontEndCommandMap = {};
         this.backEndKeyMap = {
             gantry_left: "LEFT",
             gantry_right: "RIGHT",
@@ -324,40 +332,9 @@ class JoggingPanel extends React.Component {
         ipcRenderer.send("Jobs::EmergencyStop");
     }
 
-    refreshShuttleKeys() {
-        ipcRenderer.once(
-            "CNC::GetShuttleKeysResponse",
-            (event, commandKeys) => {
-                this.commandKeys = commandKeys;
-
-                // populate eventKeyFrontEndCommandMap
-                _.each(
-                    this.commandKeys,
-                    (commandKey, commandValue) =>
-                        (this.eventKeyFrontEndCommandMap[
-                            commandKey.toLowerCase()
-                        ] = commandValue)
-                );
-
-                // this is a test
-                // populate pathIdEventKeyMap
-                this.setState({
-                    pathIdEventKeyMap: {
-                        y_neg_path: this.getCommandKey("gantry_left"),
-                        y_pos_path: this.getCommandKey("gantry_right"),
-                        z_neg_path: this.getCommandKey("plunge"),
-                        z_pos_path: this.getCommandKey("retract"),
-                        x_pos_path: this.getCommandKey("lower_table"),
-                        x_neg_path: this.getCommandKey("raise_table"),
-                    },
-                });
-            }
-        );
-        ipcRenderer.send("CNC::GetShuttleKeys");
-    }
 
     fetchAsyncData() {
-        this.refreshShuttleKeys();
+        this.props.refreshShuttleKeys();
 
         ipcRenderer.once("Settings::GetSettingsResponse", (event, settings) => {
             this.setState({ settings: settings });
@@ -454,9 +431,9 @@ class JoggingPanel extends React.Component {
         window.addEventListener("keydown", this.keydownListener, true);
         window.addEventListener("keyup", this.keyupListener, true);
 
-        this.interval = setInterval(() => {
-            ipcRenderer.send("CNC::GetStatus");
-        }, 200);
+        // this.interval = setInterval(() => {
+        //     ipcRenderer.send("CNC::GetStatus");
+        // }, 200);
 
         ipcRenderer.removeListener(
             "CR_UpdateRealtimeStatus",
@@ -704,17 +681,17 @@ class JoggingPanel extends React.Component {
     }
 
     getCommandKey(value) {
-        if (this.commandKeys == null) {
+        if (this.props.commandKeys == null) {
             return "";
         } else {
-            return this.commandKeys[value];
+            return this.props.commandKeys[value];
         }
     }
 
     getFrontEndCommand(eventKey) {
         let sanitizedEventKey = (eventKey || "").toLowerCase();
         let frontEndCommand =
-            this.eventKeyFrontEndCommandMap[sanitizedEventKey];
+            this.props.eventKeyFrontEndCommandMap[sanitizedEventKey];
 
         //We hard key these but allow the jog commands to be bound to other keys as well
         //These are hardcoded because now that NumLock is used to quick-jump to max_distance
@@ -753,7 +730,11 @@ class JoggingPanel extends React.Component {
         return backendCommand;
     }
 
-    jogStart(frontEndCommand, distanceOverride = null, forceNotContinuous = null) {
+    jogStart(
+        frontEndCommand,
+        distanceOverride = null,
+        forceNotContinuous = null
+    ) {
         if (this.currentJog != null || !this.allowedToJog()) {
             return;
         }
@@ -761,20 +742,22 @@ class JoggingPanel extends React.Component {
         let backendCommand = this.getBackendCommand(frontEndCommand);
         this.currentJog = frontEndCommand;
 
-        let inputUnit = this.state.fixed_distance.unit;
         let inputValue = this.state.fixed_distance.value;
 
         if (distanceOverride) {
             inputValue = distanceOverride;
-            inputUnit = "inch"
         }
-
+        console.log("jogStart - inputValue: " + inputValue);
+        console.log(
+            "jogStart - fixed_distance.unit:" + this.state.fixed_distance.unit
+        );
         let value = this.convertToUnits(
             inputValue,
-            inputUnit,
+            this.state.fixed_distance.unit,
             "mm"
         );
 
+        console.log("jogStart - converted value: " + value);
 
         let joggingMode = this.state.mode;
         if (forceNotContinuous) {
@@ -925,10 +908,6 @@ class JoggingPanel extends React.Component {
         ) {
             this.jogEnd();
         }
-    }
-
-    getEventKeyFromPathId(pathId) {
-        return this.state.pathIdEventKeyMap[pathId] || "";
     }
 
     get_work_pos(axis) {
@@ -1243,13 +1222,33 @@ class JoggingPanel extends React.Component {
     }
 
     handleSpindleChange(event) {
-        this.setState({spindle: event.target.value});
+        this.setState({ spindle: event.target.value });
     }
 
     handleDirectionChange(event) {
-        this.setState({direction: event.target.value})
+        this.setState({ direction: event.target.value });
     }
 
+    handleUnitsChange(e) {
+        console.log("handleUnitsChange - value: " + e.target.value);
+        this.sendUnitsInputChange(e.target.value);
+        this.setState({
+            units: e.target.value,
+            fixed_distance: {
+                value: this.state.fixed_distance.value,
+                unit: e.target.value,
+            },
+        });
+        this.fetchAsyncData.call(this);
+        this.unitRef.current.blur();
+        this.focusOnNothing();
+    }
+
+    handleJoggingClick(frontEndCommand, distance) {
+        if (this.state.realTimeStatusDisplay === "Idle") {
+            this.pathClickStarted(frontEndCommand, distance);
+        }
+    }
 
     render() {
         const { classes, open } = this.props;
@@ -1492,17 +1491,7 @@ class JoggingPanel extends React.Component {
                                 ref={component.unitRef}
                                 disableUnderline
                                 value={component.state.units}
-                                onChange={(e) => {
-                                    component.sendUnitsInputChange(
-                                        e.target.value
-                                    );
-                                    component.setState({
-                                        units: e.target.value,
-                                    });
-                                    component.fetchAsyncData.call(component);
-                                    component.unitRef.current.blur();
-                                    component.focusOnNothing();
-                                }}
+                                onChange={component.handleUnitsChange}
                                 onMouseEnter={(ignored) =>
                                     component.setState({
                                         forceShowUnitTooltip: true,
@@ -1518,6 +1507,7 @@ class JoggingPanel extends React.Component {
                                         forceShowUnitTooltip: false,
                                     })
                                 }
+                                disabled={component.state.realTimeStatusDisplay === "Run"}
                             >
                                 <MenuItem
                                     value="mm"
@@ -1586,6 +1576,7 @@ class JoggingPanel extends React.Component {
                                 component.wcsRef.current.blur();
                                 component.focusOnNothing();
                             }}
+                            disabled={component.state.realTimeStatusDisplay === "Run"}
                         >
                             <MenuItem
                                 value="G54"
@@ -1649,7 +1640,7 @@ class JoggingPanel extends React.Component {
 
         function getStatusDisplay(component) {
             return (
-                <Grid item>
+                <Grid item xs={2}>
                     <FormControl
                         style={{ border: "none", backgroundColor: "#f6f6f6" }}
                         className={component.props.classes.formControl}
@@ -1717,6 +1708,7 @@ class JoggingPanel extends React.Component {
                                                 : component.sendCommand();
                                         }}
                                         color="primary"
+                                        disabled={component.state.realTimeStatusDisplay === "Run"}
                                     >
                                         <SendIcon />
                                     </IconButton>
@@ -1729,6 +1721,18 @@ class JoggingPanel extends React.Component {
             }
         }
 
+        function handleClockwiseClick(component) {
+            ipcRenderer.send("CNC::ExecuteCommand", "M3");
+        }
+
+        function handleCounterClockwiseClick(component) {
+            ipcRenderer.send("CNC::ExecuteCommand", "M4");
+        }
+
+        function handleDisableSpindleClick(component) {
+            ipcRenderer.send("CNC::ExecuteCommand", "M5");
+        }
+
         if (open) {
             return (
                 <ItemPanel
@@ -1738,6 +1742,7 @@ class JoggingPanel extends React.Component {
                         padding: "8px",
                     }}
                 >
+                    {getHomingAlertDialog(this)}
                     {/* Main grid container */}
                     <Box
                         style={{
@@ -1781,7 +1786,9 @@ class JoggingPanel extends React.Component {
                                     +
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("raise_table", 1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick("raise_table", 1);
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
                                     style={{ gridRow: "2 / 3" }}
@@ -1789,7 +1796,12 @@ class JoggingPanel extends React.Component {
                                     1
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("raise_table", 0.1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick(
+                                            "raise_table",
+                                            0.1
+                                        );
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
                                     style={{ gridRow: "3 / 4" }}
@@ -1797,7 +1809,12 @@ class JoggingPanel extends React.Component {
                                     0.1
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("raise_table", 0.01)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick(
+                                            "raise_table",
+                                            0.01
+                                        );
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
                                     style={{ gridRow: "4 / 5" }}
@@ -1811,7 +1828,12 @@ class JoggingPanel extends React.Component {
                                     X
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("lower_table", 1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick(
+                                            "lower_table",
+                                            0.01
+                                        );
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
                                     style={{ gridRow: "6 / 7" }}
@@ -1819,7 +1841,12 @@ class JoggingPanel extends React.Component {
                                     0.01
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("lower_table", 1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick(
+                                            "lower_table",
+                                            0.1
+                                        );
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
                                     style={{ gridRow: "7 / 8" }}
@@ -1827,7 +1854,9 @@ class JoggingPanel extends React.Component {
                                     0.1
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("lower_table", 1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick("lower_table", 1);
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
                                     style={{ gridRow: "8 / 9" }}
@@ -1864,7 +1893,9 @@ class JoggingPanel extends React.Component {
                                     +
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("plunge", 1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick("plunge", 1);
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
                                     style={{ gridRow: "2 / 3" }}
@@ -1872,7 +1903,9 @@ class JoggingPanel extends React.Component {
                                     1
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("plunge", 0.1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick("plunge", 0.1);
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
                                     style={{ gridRow: "3 / 4" }}
@@ -1880,7 +1913,9 @@ class JoggingPanel extends React.Component {
                                     0.1
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("plunge", 0.01)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick("plunge", 0.01);
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
                                     style={{ gridRow: "4 / 5" }}
@@ -1894,7 +1929,9 @@ class JoggingPanel extends React.Component {
                                     Z
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("retract", 0.01)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick("retract", 0.01);
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
                                     style={{ gridRow: "6 / 7" }}
@@ -1902,7 +1939,9 @@ class JoggingPanel extends React.Component {
                                     0.01
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("retract", 0.1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick("retract", 0.1);
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
                                     style={{ gridRow: "7 / 8" }}
@@ -1910,7 +1949,9 @@ class JoggingPanel extends React.Component {
                                     0.1
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("retract", 1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick("retract", 1);
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
                                     style={{ gridRow: "8 / 9" }}
@@ -1945,7 +1986,9 @@ class JoggingPanel extends React.Component {
                                     -
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("gantry_left", 1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick("gantry_left", 1);
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.bottomMiddleCell}
                                     style={{
@@ -1956,7 +1999,12 @@ class JoggingPanel extends React.Component {
                                     1
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("gantry_left", 0.1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick(
+                                            "gantry_left",
+                                            0.1
+                                        );
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.bottomMiddleCell}
                                     style={{
@@ -1967,7 +2015,12 @@ class JoggingPanel extends React.Component {
                                     0.1
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("gantry_left", 0.01)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick(
+                                            "gantry_left",
+                                            0.01
+                                        );
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.bottomMiddleCell}
                                     style={{
@@ -1987,7 +2040,12 @@ class JoggingPanel extends React.Component {
                                     Y
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("gantry_right", 0.01)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick(
+                                            "gantry_right",
+                                            0.01
+                                        );
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.bottomMiddleCell}
                                     style={{
@@ -1998,7 +2056,12 @@ class JoggingPanel extends React.Component {
                                     0.01
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("gantry_right", 0.1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick(
+                                            "gantry_right",
+                                            0.1
+                                        );
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.bottomMiddleCell}
                                     style={{
@@ -2009,7 +2072,12 @@ class JoggingPanel extends React.Component {
                                     0.1
                                 </div>
                                 <div
-                                    onMouseDown={() => {this.pathClickStarted("gantry_right", 1)}}
+                                    onMouseDown={() => {
+                                        this.handleJoggingClick(
+                                            "gantry_right",
+                                            1
+                                        );
+                                    }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.bottomMiddleCell}
                                     style={{
@@ -2057,6 +2125,11 @@ class JoggingPanel extends React.Component {
                                     spacing={1}
                                     alignItems="center"
                                 >
+                                    {/* Status */}
+                                    <Grid item>
+                                        <Typography>Status</Typography>
+                                    </Grid>
+                                    {getStatusDisplay(this)}
                                     {/* WCS */}
                                     <Grid item>
                                         <Typography>WCS</Typography>
@@ -2074,11 +2147,6 @@ class JoggingPanel extends React.Component {
                                     spacing={1}
                                     alignItems="center"
                                 >
-                                    {/* Status */}
-                                    <Grid item>
-                                        <Typography>Status</Typography>
-                                    </Grid>
-                                    {getStatusDisplay(this)}
                                 </Grid>
                                 <Grid
                                     item
@@ -2117,6 +2185,12 @@ class JoggingPanel extends React.Component {
                                             }}
                                         />
                                     </Grid>
+                                    <Grid xs={1}>
+                                        <Input value={100} />
+                                    </Grid>
+                                    <Grid xs={1}>
+                                        <Input value={100} />
+                                    </Grid>
                                 </Grid>
                                 <Grid
                                     item
@@ -2129,32 +2203,53 @@ class JoggingPanel extends React.Component {
                                         <Typography>Spindle</Typography>
                                     </Grid>
                                     <Grid item>
-                                        <Select 
+                                        <Select
                                             fullWidth
                                             value={this.state.spindle}
                                             onChange={this.handleSpindleChange}
                                         >
-                                            <MenuItem value="option1">Option 1</MenuItem>
-                                            <MenuItem value="option2">Option 2</MenuItem>
-                                            <MenuItem value="option3">Option 3</MenuItem>
+                                            <MenuItem value="option1">
+                                                Option 1
+                                            </MenuItem>
+                                            <MenuItem value="option2">
+                                                Option 2
+                                            </MenuItem>
+                                            <MenuItem value="option3">
+                                                Option 3
+                                            </MenuItem>
                                         </Select>
                                     </Grid>
                                     <Grid item>
                                         <Typography>Direction</Typography>
                                     </Grid>
-                                    <Grid item xs>
-                                        <Select 
+                                    <Grid item>
+                                        <Select
                                             fullWidth
                                             value={this.state.direction}
-                                            onChange={this.handleDirectionChange} 
+                                            onChange={
+                                                this.handleDirectionChange
+                                            }
+                                            disabled={this.state.realTimeStatusDisplay === "Run"}
                                         >
-                                            <MenuItem value="clockwise">
-                                                Clockwise                                            
+                                            <MenuItem onClick={handleClockwiseClick} value="clockwise">
+                                                Clockwise
                                             </MenuItem>
-                                            <MenuItem value="counter-clockwise">
+                                            <MenuItem onClick={handleCounterClockwiseClick} value="counter-clockwise">
                                                 Counter-clockwise
                                             </MenuItem>
+                                            <MenuItem onClick={handleDisableSpindleClick} value="counter-clockwise">
+                                                Disable
+                                            </MenuItem>
                                         </Select>
+                                    </Grid>
+                                    <Grid xs>
+                                        <Slider />
+                                    </Grid>
+                                    <Grid xs={1}>
+                                        <Input value={100} />
+                                    </Grid>
+                                    <Grid xs={1}>
+                                        <Input value={100} />
                                     </Grid>
                                 </Grid>
                                 <Grid
@@ -2232,14 +2327,6 @@ class JoggingPanel extends React.Component {
                                             />
                                         </FormControl>
                                     </Grid>
-                                </Grid>
-                                <Grid
-                                    item
-                                    container
-                                    spacing={1}
-                                    alignItems="center"
-                                >
-                                    {/* manual entry */}
                                     <Grid item>
                                         <Typography>Manual Entry</Typography>
                                     </Grid>
@@ -2250,21 +2337,56 @@ class JoggingPanel extends React.Component {
                                 <Grid item container justify="space-between">
                                     {/* presets */}
                                     <Grid item>
-                                        <PositionPreset home>
+                                        <PositionPreset
+                                            home
+                                            ref={this.homePresetRef}
+                                            editParentState={() => {
+                                                this.setState({ isHome: true });
+                                            }}
+                                            disabled={this.state.realTimeStatusDisplay === "Run"}
+                                        >
                                             Home
                                         </PositionPreset>
                                     </Grid>
                                     <Grid item>
-                                        <PositionPreset>1</PositionPreset>
+                                        <PositionPreset
+                                            ref={this.preset1Ref}
+                                            units={this.state.units}
+                                            getPosition={this.get_position}
+                                            disabled={this.state.realTimeStatusDisplay === "Run"}
+                                        >
+                                            1
+                                        </PositionPreset>
                                     </Grid>
                                     <Grid item>
-                                        <PositionPreset>2</PositionPreset>
+                                        <PositionPreset
+                                            ref={this.preset2Ref}
+                                            units={this.state.units}
+                                            getPosition={this.get_position}
+                                            disabled={this.state.realTimeStatusDisplay === "Run"}
+                                        >
+                                            2
+                                        </PositionPreset>
                                     </Grid>
                                     <Grid item>
-                                        <PositionPreset>3</PositionPreset>
+                                        <PositionPreset
+                                            ref={this.preset3Ref}
+                                            units={this.state.units}
+                                            getPosition={this.get_position}
+                                            disabled={this.state.realTimeStatusDisplay === "Run"}
+                                        >
+                                            3
+                                        </PositionPreset>
                                     </Grid>
                                     <Grid item>
-                                        <PositionPreset>4</PositionPreset>
+                                        <PositionPreset
+                                            ref={this.preset4Ref}
+                                            units={this.state.units}
+                                            getPosition={this.get_position}
+                                            disabled={this.state.realTimeStatusDisplay === "Run"}
+                                        >
+                                            4
+                                        </PositionPreset>
                                     </Grid>
                                 </Grid>
                             </Grid>

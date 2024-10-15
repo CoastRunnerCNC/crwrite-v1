@@ -25,7 +25,10 @@ function Routes(props) {
         openProbingWizard,
         setOpenProbingWizard,
         openMachineOutputPanel,
-        setNavigateToMilling
+        setNavigateToMilling,
+        commandKeys,
+        eventKeyFrontEndCommandMap,
+        refreshShuttleKeys
     } = props;
 
     return (
@@ -79,6 +82,9 @@ function Routes(props) {
                                 openJoggingPanel={openJoggingPanel}
                                 openMachineOutputPanel={openMachineOutputPanel}
                                 setNavigateToMilling={setNavigateToMilling}
+                                commandKeys={commandKeys}
+                                eventKeyFrontEndCommandMap={eventKeyFrontEndCommandMap}
+                                refreshShuttleKeys={refreshShuttleKeys}
                             />
                         )}
                     />

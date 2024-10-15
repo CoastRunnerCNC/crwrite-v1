@@ -641,7 +641,11 @@ const RunPauseButton = (props) => {
     return (
         <IconButton onClick={handleFeedPause}>
             <div style={circleStyle}>
-                <Typography variant="h5" fontWeight={'fontWeightBold'} style={{color: 'black'}}>
+                <Typography
+                    variant="h5"
+                    fontWeight={"fontWeightBold"}
+                    style={{ color: "black" }}
+                >
                     {paused ? "Run" : "Pause"}
                 </Typography>
             </div>
@@ -693,8 +697,8 @@ class Operations extends React.Component {
             forceShowJoggingTooltip: false,
             forceShowUnitTooltip: false,
             forceShowJoggingTooltipMaxDistance: false,
-            joggingTooltipText: '',
-            focusedInput: '',
+            joggingTooltipText: "",
+            focusedInput: "",
             maxDistanceIsValid: true,
             milling: false,
             millingProgress: -1,
@@ -711,7 +715,7 @@ class Operations extends React.Component {
 
         this.progress = this.progress.bind(this);
         // this.getMillingInProgressDisplay =
-            // this.getMillingInProgressDisplay.bind(this);
+        // this.getMillingInProgressDisplay.bind(this);
         // this.getMillingProgress = this.getMillingProgress.bind(this);
         this.updateRealtimeStatus = this.updateRealtimeStatus.bind(this);
         this.executeCommand = this.executeCommand.bind(this);
@@ -803,11 +807,11 @@ class Operations extends React.Component {
     }
 
     handleInputHasFocus(focusName) {
-        this.setState({focusedInput: focusName});
+        this.setState({ focusedInput: focusName });
     }
 
     handleInputNoLongerHasFocus() {
-        this.setState({focusedInput: ''});
+        this.setState({ focusedInput: "" });
     }
 
     updateMovementType(event, command) {
@@ -956,7 +960,7 @@ class Operations extends React.Component {
 
     componentDidMount() {
         this.fetchAsyncData.call(this);
-        
+
         window.addEventListener("keydown", this.keydownListener, true);
         window.addEventListener("keyup", this.keyupListener, true);
 
@@ -964,7 +968,10 @@ class Operations extends React.Component {
             ipcRenderer.send("CNC::GetStatus");
         }, 200);
 
-        ipcRenderer.removeListener("CR_UpdateRealtimeStatus", this.updateRealtimeStatus);
+        ipcRenderer.removeListener(
+            "CR_UpdateRealtimeStatus",
+            this.updateRealtimeStatus
+        );
         ipcRenderer.on("CR_UpdateRealtimeStatus", this.updateRealtimeStatus);
         ipcRenderer.send("CNC::SetManualEntryMode", true);
 
@@ -981,7 +988,10 @@ class Operations extends React.Component {
         this.stopTimer();
         window.removeEventListener("keydown", this.keydownListener, true);
         window.removeEventListener("keyup", this.keyupListener, true);
-        ipcRenderer.removeListener("CR_UpdateRealtimeStatus", this.updateRealtimeStatus);
+        ipcRenderer.removeListener(
+            "CR_UpdateRealtimeStatus",
+            this.updateRealtimeStatus
+        );
         ipcRenderer.send("CNC::SetManualEntryMode", false);
     }
 
@@ -1059,7 +1069,7 @@ class Operations extends React.Component {
         setTimeout(() => {
             if (document.activeElement instanceof HTMLElement) {
                 document.activeElement.blur();
-                this.setState({focusedInput: ''});
+                this.setState({ focusedInput: "" });
                 console.log("focusOnNothing fired!");
             }
         }, 0);
@@ -1155,8 +1165,8 @@ class Operations extends React.Component {
         //     console.log("out of bounds");
         //     this.setState({ limitWarningOpen: true });
         // } else {
-            console.log("in bounds");
-            this.executeCommand();
+        console.log("in bounds");
+        this.executeCommand();
         // }
     }
 
@@ -1215,17 +1225,14 @@ class Operations extends React.Component {
         //These are hardcoded because now that NumLock is used to quick-jump to max_distance
         //it causes my preferred keybindings (the number pad) to inadvertently switch between
         //the bound keys (4, 8, etc.) and the arrow keys. This allows me to keep my preferred keybindings
-        if(eventKey == 'ArrowLeft') {
-          frontEndCommand = 'gantry_left';
-        }
-        else if(eventKey == 'ArrowRight') {
-          frontEndCommand = 'gantry_right';
-        }
-        else if(eventKey == 'ArrowUp') {
-          frontEndCommand = 'raise_table';
-        }
-        else if(eventKey == 'ArrowDown') {
-          frontEndCommand = 'lower_table';
+        if (eventKey == "ArrowLeft") {
+            frontEndCommand = "gantry_left";
+        } else if (eventKey == "ArrowRight") {
+            frontEndCommand = "gantry_right";
+        } else if (eventKey == "ArrowUp") {
+            frontEndCommand = "raise_table";
+        } else if (eventKey == "ArrowDown") {
+            frontEndCommand = "lower_table";
         }
 
         if (!frontEndCommand) {
@@ -1291,123 +1298,116 @@ class Operations extends React.Component {
         //console.log(eventKey);
 
         if (this.state.focusedInput) {
-          if(
-            eventKey == this.getCommandKey('escape_textbox') ||
-            (
-              this.state.focusedInput == 'max_distance' &&
-              eventKey == 'Enter'
-            )
-          ) {
-            this.focusOnNothing();
-            return;
-          }
+            if (
+                eventKey == this.getCommandKey("escape_textbox") ||
+                (this.state.focusedInput == "max_distance" &&
+                    eventKey == "Enter")
+            ) {
+                this.focusOnNothing();
+                return;
+            }
 
-          if (this.state.focusedInput == 'manual_entry') {
-              if (eventKey == 'Enter') {
-                  this.state.settings.disableLimitCatch ? this.executeCommand() : this.sendCommand();
-              }
-              else if (eventKey === 'ArrowDown' && this.state.isSeekingHistory) {
-                  let index = this.state.historyIndex + 1;
-                  let command = '';
-                  if (index < this.state.entryHistory.length) {
-                      command = this.state.entryHistory[index];
-                  } else {
-                      index = this.state.entryHistory.length;
-                  }
-                  this.setState({
-                      manualEntry: command,
-                      historyIndex: index,
-                      isSeekingHistory: true
-                  });
-              }
-              else if (eventKey === 'ArrowUp') {
-                  let index = this.state.historyIndex - 1;
-                  if (index < 0) { index = 0; }
-                  this.setState({
-                      manualEntry: this.state.entryHistory[index],
-                      historyIndex: index,
-                      isSeekingHistory: true
-                  });
-              }
+            if (this.state.focusedInput == "manual_entry") {
+                if (eventKey == "Enter") {
+                    this.state.settings.disableLimitCatch
+                        ? this.executeCommand()
+                        : this.sendCommand();
+                } else if (
+                    eventKey === "ArrowDown" &&
+                    this.state.isSeekingHistory
+                ) {
+                    let index = this.state.historyIndex + 1;
+                    let command = "";
+                    if (index < this.state.entryHistory.length) {
+                        command = this.state.entryHistory[index];
+                    } else {
+                        index = this.state.entryHistory.length;
+                    }
+                    this.setState({
+                        manualEntry: command,
+                        historyIndex: index,
+                        isSeekingHistory: true,
+                    });
+                } else if (eventKey === "ArrowUp") {
+                    let index = this.state.historyIndex - 1;
+                    if (index < 0) {
+                        index = 0;
+                    }
+                    this.setState({
+                        manualEntry: this.state.entryHistory[index],
+                        historyIndex: index,
+                        isSeekingHistory: true,
+                    });
+                }
 
-              return;
-          }
+                return;
+            }
 
-          return;
-        }
-        else if(!this.state.openShuttleSettings) {
-          if(eventKey == this.getCommandKey('escape_textbox')) {
-            //Putting this condition here so that the escape button doesn't fall through and throw an error message
             return;
-          }
-          else if(eventKey == this.getCommandKey('focus_manual_entry')) {
-            this.manual_entry_ref.current.focus();
-            this.handleInputHasFocus('manual_entry');
-            return;
-          }
-          else if(eventKey == this.getCommandKey('focus_max_distance')) {
-            this.max_distance_ref.current.focus();
-            this.handleInputHasFocus('max_distance');
-            return;
-          }
-          else if(eventKey == this.getCommandKey('switch_units')) {
-            if(this.state.units == 'mm') {
-              this.sendUnitsInputChange('inch');
+        } else if (!this.state.openShuttleSettings) {
+            if (eventKey == this.getCommandKey("escape_textbox")) {
+                //Putting this condition here so that the escape button doesn't fall through and throw an error message
+                return;
+            } else if (eventKey == this.getCommandKey("focus_manual_entry")) {
+                this.manual_entry_ref.current.focus();
+                this.handleInputHasFocus("manual_entry");
+                return;
+            } else if (eventKey == this.getCommandKey("focus_max_distance")) {
+                this.max_distance_ref.current.focus();
+                this.handleInputHasFocus("max_distance");
+                return;
+            } else if (eventKey == this.getCommandKey("switch_units")) {
+                if (this.state.units == "mm") {
+                    this.sendUnitsInputChange("inch");
+                } else if (this.state.units == "inch") {
+                    this.sendUnitsInputChange("mm");
+                }
+                return;
+            } else if (eventKey == this.getCommandKey("switch_jog_mode")) {
+                if (this.state.mode == "Continuous") {
+                    this.setState({ mode: "Fixed" });
+                } else if (this.state.mode == "Fixed") {
+                    this.setState({ mode: "Continuous" });
+                }
+                return;
+            } else if (eventKey == this.getCommandKey("increase_units")) {
+                this.setState({
+                    fixed_distance: {
+                        value: this.state.fixed_distance.value * 10,
+                        unit: this.state.units,
+                    },
+                });
+                return;
+            } else if (eventKey == this.getCommandKey("decrease_units")) {
+                this.setState({
+                    fixed_distance: {
+                        value: this.state.fixed_distance.value / 10,
+                        unit: this.state.units,
+                    },
+                });
+                return;
+            } else if (eventKey == this.getCommandKey("home_preset")) {
+                this.homePresetRef.current.handleClick();
+                return;
+            } else if (eventKey == this.getCommandKey("preset_1")) {
+                this.preset1Ref.current.handleClick();
+                return;
+            } else if (eventKey == this.getCommandKey("preset_2")) {
+                this.preset2Ref.current.handleClick();
+                return;
+            } else if (eventKey == this.getCommandKey("preset_3")) {
+                this.preset3Ref.current.handleClick();
+                return;
+            } else if (eventKey == this.getCommandKey("preset_4")) {
+                this.preset4Ref.current.handleClick();
+                return;
             }
-            else if(this.state.units == 'inch') {
-              this.sendUnitsInputChange('mm');
-            }
-            return;
-          }
-          else if(eventKey == this.getCommandKey('switch_jog_mode')) {
-            if(this.state.mode == 'Continuous') {
-              this.setState({mode: 'Fixed'});
-            }
-            else if(this.state.mode == 'Fixed') {
-              this.setState({mode: 'Continuous'});
-            }
-            return;
-          }
-          else if(eventKey == this.getCommandKey('increase_units')) {
-            this.setState({fixed_distance: { 
-              value: this.state.fixed_distance.value * 10, 
-              unit: this.state.units 
-            }});
-            return;
-          }
-          else if(eventKey == this.getCommandKey('decrease_units')) {
-            this.setState({fixed_distance: { 
-              value: this.state.fixed_distance.value / 10, 
-              unit: this.state.units 
-            }});
-            return;
-          }
-          else if(eventKey == this.getCommandKey('home_preset')) {
-            this.homePresetRef.current.handleClick();
-            return;
-          }
-          else if(eventKey == this.getCommandKey('preset_1')) {
-            this.preset1Ref.current.handleClick();
-            return;
-          }
-          else if(eventKey == this.getCommandKey('preset_2')) {
-            this.preset2Ref.current.handleClick();
-            return;
-          }
-          else if(eventKey == this.getCommandKey('preset_3')) {
-            this.preset3Ref.current.handleClick();
-            return;
-          }
-          else if(eventKey == this.getCommandKey('preset_4')) {
-            this.preset4Ref.current.handleClick();
-            return;
-          }
         }
 
         try {
-            if(!this.state.openShuttleSettings) {
-              let frontEndCommand = this.getFrontEndCommand(eventKey);
-              this.jogStart(frontEndCommand);
+            if (!this.state.openShuttleSettings) {
+                let frontEndCommand = this.getFrontEndCommand(eventKey);
+                this.jogStart(frontEndCommand);
             }
         } catch (e) {
             // do nothing, not all keys have bindings
@@ -1834,16 +1834,25 @@ class Operations extends React.Component {
                                     }
                                     style={{ width: "100%" }}
                                 >
-                                <Input
-                                    value={distance}
-                                    onChange={e => {
-                                        handleMaxDistanceChange(component, e);
-                                    }}
-                                    disableUnderline
-                                    inputRef={component.max_distance_ref}
-                                    onFocus={() => component.handleInputHasFocus('max_distance')}
-                                    onBlur={() => component.handleInputNoLongerHasFocus()}
-                                />
+                                    <Input
+                                        value={distance}
+                                        onChange={(e) => {
+                                            handleMaxDistanceChange(
+                                                component,
+                                                e
+                                            );
+                                        }}
+                                        disableUnderline
+                                        inputRef={component.max_distance_ref}
+                                        onFocus={() =>
+                                            component.handleInputHasFocus(
+                                                "max_distance"
+                                            )
+                                        }
+                                        onBlur={() =>
+                                            component.handleInputNoLongerHasFocus()
+                                        }
+                                    />
                                 </FormControl>
                             </Tooltip>
                         </Grid>
@@ -2411,10 +2420,9 @@ class Operations extends React.Component {
                                 fontWeight: "bold",
                                 fontSize: "1.5em",
                                 backgroundColor: "#f6f6f6",
-                                
                             },
                         }}
-                        style={{border: 'none'}}
+                        style={{ border: "none" }}
                         disableUnderline
                         disabled
                     />
@@ -2443,7 +2451,7 @@ class Operations extends React.Component {
                                 });
                             }}
                             onFocus={() => {
-                                component.handleInputHasFocus('manual_entry');
+                                component.handleInputHasFocus("manual_entry");
                                 component.manual_entry_focused = true;
                             }}
                             onBlur={() => {
@@ -2532,7 +2540,13 @@ class Operations extends React.Component {
                                                                 )}
                                                             </Grid>
                                                         </Grid>
-                                                        <Grid item style={{marginTop: '8px'}}>
+                                                        <Grid
+                                                            item
+                                                            style={{
+                                                                marginTop:
+                                                                    "8px",
+                                                            }}
+                                                        >
                                                             <Grid
                                                                 container
                                                                 spacing={1}
@@ -2542,7 +2556,13 @@ class Operations extends React.Component {
                                                                 )}
                                                             </Grid>
                                                         </Grid>
-                                                        <Grid item style={{marginTop: '8px'}}>
+                                                        <Grid
+                                                            item
+                                                            style={{
+                                                                marginTop:
+                                                                    "8px",
+                                                            }}
+                                                        >
                                                             <Grid
                                                                 container
                                                                 justify="center"
@@ -2551,7 +2571,9 @@ class Operations extends React.Component {
                                                                 <Grid item>
                                                                     <Grid
                                                                         container
-                                                                        spacing={1}
+                                                                        spacing={
+                                                                            1
+                                                                        }
                                                                     >
                                                                         <Grid
                                                                             item
@@ -2566,7 +2588,9 @@ class Operations extends React.Component {
                                                                 <Grid item>
                                                                     <Grid
                                                                         container
-                                                                        spacing={1}
+                                                                        spacing={
+                                                                            1
+                                                                        }
                                                                     >
                                                                         <Grid
                                                                             item
@@ -3184,7 +3208,7 @@ class Operations extends React.Component {
                                                 setHistory={this.setRawHistory}
                                             />
                                         </Grid>
-                                    {/* <Grid item>
+                                        {/* <Grid item>
                                             <Grid container alignItems="center">
                                                 <Grid item xs={1}>
                                                     <Timer

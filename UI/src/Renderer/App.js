@@ -12558,10 +12558,10 @@ export default class App extends React.Component {
             feedRate: 100,
             openShuttle: false,
             shuttleSelectedTab: 0,
-            openImagePanel: true,
-            openJoggingPanel: false,
+            openImagePanel: false,
+            openJoggingPanel: true,
             openProbingWizard: false,
-            openMachineOutputPanel: true,
+            openMachineOutputPanel: false,
             navigateToMilling: false
         };
 
@@ -12576,6 +12576,8 @@ export default class App extends React.Component {
         this.toggleJoggingPanel = this.toggleJoggingPanel.bind(this);
         this.toggleMachineOutputPanel = this.toggleMachineOutputPanel.bind(this)
         this.setNavigateToMilling = this.setNavigateToMilling.bind(this);
+        this.commandKeys = {};
+        this.eventKeyFrontEndCommandMap = {};
 
         if (!props.data) {
             document.title = app.titlebar.title;
@@ -12796,6 +12798,25 @@ export default class App extends React.Component {
         this.setState({navigateToMilling: value});
     }
 
+    refreshShuttleKeys() {
+        ipcRenderer.once(
+            "CNC::GetShuttleKeysResponse",
+            (event, commandKeys) => {
+                this.commandKeys = commandKeys;
+
+                // populate eventKeyFrontEndCommandMap
+                _.each(
+                    this.commandKeys,
+                    (commandKey, commandValue) =>
+                        (this.eventKeyFrontEndCommandMap[
+                            commandKey.toLowerCase()
+                        ] = commandValue)
+                );
+            }
+        );
+        ipcRenderer.send("CNC::GetShuttleKeys");
+    }
+
     render() {
         if (os.platform != "darwin") {
             document.getElementsByClassName("window-appicon")[0].style.width =
@@ -12885,7 +12906,9 @@ export default class App extends React.Component {
                                 openMachineOutputPanel={this.state.openMachineOutputPanel}
                                 openProbingWizard={this.state.openProbingWizard}
                                 setOpenProbingWizard={(value) => {this.setState({openProbingWizard: value})}}
-
+                                commandKeys={this.commandKeys}
+                                eventKeyFrontEndCommandMap={this.eventKeyFrontEndCommandMap}
+                                refreshShuttleKeys={this.refreshShuttleKeys}
                             />
                             {/* {console.timeEnd("Routes")} */}
                             {/* {console.time("BottomToolbar")} */}
@@ -12922,6 +12945,7 @@ export default class App extends React.Component {
                                 toggleMachineOutputPanel={this.toggleMachineOutputPanel}
                                 settings={this.state.settings}
                                 navigateToMilling={this.state.navigateToMilling}
+                                refreshShuttleKeys={this.refreshShuttleKeys}
                             />
                             {/* {console.timeEnd("BottomToolbar")} */}
                         </Box>

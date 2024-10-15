@@ -33,6 +33,7 @@ import Feedrate from "../Feedrate";
 import ViewLogs from "../Modals/ViewLogs";
 import SupportCenter from "../Support/SupportCenter";
 import Alert from "../Modals/Alert";
+import ShuttleSettings from "../Modals/Shuttle/ShuttleSettings";
 
 const styles = (theme) => ({
     root: {
@@ -299,12 +300,16 @@ function BottomToolbar(props) {
     const [showError, setShowError] = useState(false);
     const [errorTitle, setErrorTitle] = useState("");
     const [errorText, setErrorText] = useState("");
+    const [openShuttleSettings, setOpenShuttleSettings] = useState(false);
+    const [pathIdEventKeyMap, setPathIdEventKeyMap] = useState({});
     const buttonControlRef = useRef(null);
     const buttonConfigRef = useRef(null);
     const buttonSupportRef = useRef(null);
     const progressIntervalRef = useRef(null);
     const navigateToMillingRef = useRef(null);
-    
+    const commandKeysRef = useRef({});
+    const eventKeyFrontEndCommandMap = useRef({});
+
     navigateToMillingRef.current = props.navigateToMilling;
 
     useEffect(() => {
@@ -404,7 +409,6 @@ function BottomToolbar(props) {
 
     const handleClickImage = () => {
         props.toggleImagePanel();
-        closeControlMenu({}, true);
     };
 
     const handleClickProbingWizard = () => {
@@ -493,10 +497,12 @@ function BottomToolbar(props) {
         }
     };
 
-
     const handleProgressResponse = (event, updatedProgress) => {
         try {
-            if (updatedProgress.error != null && !navigateToMillingRef.current) {
+            if (
+                updatedProgress.error != null &&
+                !navigateToMillingRef.current
+            ) {
                 console.log("error set");
                 setShowError(true);
                 setErrorTitle(updatedProgress.error.title);
@@ -513,6 +519,12 @@ function BottomToolbar(props) {
         } catch (e) {
             console.error("handleProgressResponse exception caught");
         }
+    };
+
+    const onClickKeyBindings = () => {setOpenShuttleSettings(true)};
+
+    const closeKeyBindings = () => {
+        setOpenShuttleSettings(false);
     };
 
     useEffect(() => {
@@ -569,8 +581,15 @@ function BottomToolbar(props) {
 
     return (
         <>
+            <ShuttleSettings
+                open={openShuttleSettings}
+                close={closeKeyBindings}
+                refreshShuttleKeys={props.refreshShuttleKeys}
+            />
             <Alert
-                open={showError && !props.navigateToMilling && !props.openShuttle}
+                open={
+                    showError && !props.navigateToMilling && !props.openShuttle
+                }
                 message={errorText}
                 yesNo={false}
                 onOk={(event) => {
@@ -864,7 +883,13 @@ function BottomToolbar(props) {
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
-                                                    <MenuItem onClick={props.toggleJoggingPanel}>Jogging</MenuItem>
+                                                    <MenuItem
+                                                        onClick={
+                                                            props.toggleJoggingPanel
+                                                        }
+                                                    >
+                                                        Jogging
+                                                    </MenuItem>
                                                     <MenuItem
                                                         onClick={
                                                             handleClickProbingWizard
@@ -967,6 +992,13 @@ function BottomToolbar(props) {
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
+                                                    <MenuItem
+                                                        onClick={
+                                                            onClickKeyBindings
+                                                        }
+                                                    >
+                                                        Key Bindings
+                                                    </MenuItem>
                                                     <Tooltip
                                                         disableHoverListener={
                                                             !milling

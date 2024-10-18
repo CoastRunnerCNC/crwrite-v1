@@ -20,7 +20,7 @@ const styles = (theme) => ({
         position: "relative",
         border: app.milling.gcodes.border,
         color: app.milling.gcodes.color,
-        overflowY: "auto"
+        overflowY: "auto",
     },
 });
 
@@ -33,22 +33,22 @@ const MachineOutputPanel = (props) => {
 
     useEffect(() => {
         let timerId;
-    
+
         if (props.milling === true) {
-          timerId = setInterval(() => {
-            setSeconds(prevCount => prevCount + 1);
-          }, 1000); // Increment every second
+            timerId = setInterval(() => {
+                setSeconds((prevCount) => prevCount + 1);
+            }, 1000); // Increment every second
         } else {
-            setSeconds(0)
+            setSeconds(0);
         }
-    
+
         return () => {
-          // Clean up the timer when the component unmounts or isTimerActive changes
-          if (timerId) {
-            clearInterval(timerId);
-          }
+            // Clean up the timer when the component unmounts or isTimerActive changes
+            if (timerId) {
+                clearInterval(timerId);
+            }
         };
-      }, [props.milling]);
+    }, [props.milling]);
 
     useEffect(() => {
         prevProps.current = props; // Update prevProps with the current props after every render
@@ -105,6 +105,7 @@ const MachineOutputPanel = (props) => {
             });
         }
     }
+
     if (props.open) {
         return (
             <ItemPanel
@@ -115,13 +116,24 @@ const MachineOutputPanel = (props) => {
             >
                 {getDisplay()}
                 {scrollToBottom()}
-{props.milling === true ?                <div style={{width: "100%", padding: "4px", backgroundColor: "black", color: "white"}}>
-                    <Timer elapsedSeconds={seconds} />
-                </div> : ""}
+                {props.milling === true ? (
+                    <div
+                        style={{
+                            width: "100%",
+                            padding: "4px",
+                            backgroundColor: "black",
+                            color: "white",
+                        }}
+                    >
+                        <Timer elapsedSeconds={seconds} />
+                    </div>
+                ) : (
+                    ""
+                )}
             </ItemPanel>
         );
     } else {
-        return ""
+        return "";
     }
 };
 

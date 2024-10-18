@@ -920,37 +920,6 @@ class Milling extends React.Component {
             return "";
         }
 
-        function getMillingInProgressDisplay(milling) {
-            if (milling.state.millingProgress >= 0) {
-                return (
-                    <React.Fragment>
-                        <Typography variant="h4">
-                            {milling.state.millingProgress}%
-                        </Typography>
-                        <LinearProgress
-                            variant="determinate"
-                            style={{ height: "15px" }}
-                            value={milling.state.millingProgress}
-                        />
-                    </React.Fragment>
-                );
-            }
-
-            return "";
-        }
-
-        function getFeedrateSlider(milling) {
-            return (
-                <div className={classes.slider}>
-                    <Feedrate
-                        selectedStep={milling.state.selectedStepIndex}
-                        feedRate={milling.props.feedRate}
-                        updateFeedRate={milling.props.updateFeedRate}
-                    />
-                </div>
-            );
-        }
-
         function handleNext(event) {
             if (!this.currentEditsPresent()) {
                 if (
@@ -973,24 +942,6 @@ class Milling extends React.Component {
             }
         }
 
-        function handleSkip(event) {
-            this.skipToNextMillingStep(this);
-        }
-
-        function handleStop(event) {
-            ipcRenderer.send("Jobs::EmergencyStop");
-        }
-
-        function handleFeedPause() {
-            if (this.state.paused) {
-                this.setState({ paused: false });
-                ipcRenderer.send("CNC::ExecuteCommand", "~");
-            } else {
-                this.setState({ paused: true });
-                ipcRenderer.send("CNC::ExecuteCommand", "!");
-            }
-        }
-
         function handleCloseStartMilling(start) {
             if (start) {
                 this.setState({
@@ -1010,6 +961,7 @@ class Milling extends React.Component {
         }
 
         function isNextAvailable(component) {
+            console.log("milling progress: " + component.state.millingProgress);
             const value = component.state.millingProgress === -1;
             return value;
         }
@@ -1036,43 +988,6 @@ class Milling extends React.Component {
                 component.state.selectedStep.next_milling_step != null &&
                 !component.state.selectedStep.PopupText;
             return result;
-        }
-
-        function getActionButton(component) {
-            if (component.state.millingProgress === -1) {
-                return (
-                    <Button
-                        onClick={handleNext.bind(component)}
-                        color="secondary"
-                        classes={{ root: classes.nextPrevButtonRoot }}
-                    >
-                        Next
-                    </Button>
-                );
-            } else {
-                return (
-                    <>
-                        <Button
-                            onClick={handleFeedPause.bind(component)}
-                            color="error"
-                            classes={{ root: classes.nextPrevButtonRoot }}
-                        >
-                            {component.state.paused ? "RUN" : "PAUSE"}
-                        </Button>
-                        <Button
-                            style={{
-                                marginLeft: "4px",
-                                backgroundColor: "#FF4345",
-                            }}
-                            onClick={handleStop.bind(component)}
-                            //color="error"
-                            classes={{ root: classes.nextPrevButtonRoot }}
-                        >
-                            Stop
-                        </Button>
-                    </>
-                );
-            }
         }
 
         function onClickBack(component) {
@@ -1401,66 +1316,84 @@ class Milling extends React.Component {
                                 return isSkipAvailable(this);
                             }}
                             classes={classes}
+                            openStepsPanel={this.props.openStepsPanel}
                         />
-
-                        {/* {this.getAddStepButton()} */}
-                        {/* <Button color="secondary" disabled={!isSkipAvailable(this)} className={classes.next} style={{ marginTop: '-4px' }} onClick={handleSkip.bind(this)}>Skip Forward &#62;</Button> */}
+                        <JoggingPanel
+                            open={this.props.openJoggingPanel}
+                            commandKeys={this.props.commandKeys}
+                            eventKeyFrontEndCommandMap={
+                                this.props.eventKeyFrontEndCommandMap
+                            }
+                            refreshShuttleKeys={this.props.refreshShuttleKeys}
+                            feedRate={this.props.feedRate}
+                            updateFeedRate={this.props.updateFeedRate}
+                        />
                     </Box>
-                    <Box>
-                        <Grid
-                            container
-                            direction="column"
-                            justify="space-between"
-                            spacing={0}
-                            style={{ height: "100%" }}
-                        >
-                            <StartMilling
-                                open={this.state.showStartMilling}
-                                onClose={handleCloseStartMilling.bind(this)}
-                            />
-                            <Grid item>
-                                <InstructionsPanel
-                                    editMode={this.state.editMode}
-                                    editTitleValue={this.state.editTitleValue}
-                                    setEditTitleValue={this.setEditTitleValue}
-                                    selectedStep={this.state.selectedStep}
-                                    getEditButton={this.getEditButton}
-                                    editJobTextValue={
-                                        this.state.editJobTextValue
-                                    }
-                                    onEditJobTextChange={
-                                        this.onEditJobTextChange
-                                    }
-                                    getJobText={getJobText}
+                    {this.props.openStepsPanel ? (
+                        <Box>
+                            <Grid
+                                container
+                                direction="column"
+                                justify="space-between"
+                                spacing={0}
+                                style={{ height: "100%" }}
+                            >
+                                <StartMilling
+                                    open={this.state.showStartMilling}
+                                    onClose={handleCloseStartMilling.bind(this)}
                                 />
-                            </Grid>
-                            <Grid item container direction="column">
                                 <Grid item>
-                                    <Grid container direction="column">
-                                        <Grid item>
-                                            <div className={classes.warning}>
-                                                {/*getMillingInProgressDisplay(this) */}
-                                            </div>
-                                        </Grid>
-                                        <Grid item>
-                                            <Grid
-                                                container
-                                                justify="space-between"
-                                                style={{ marginTop: "8px" }}
-                                            >
-                                                <Grid item>
-                                                    {getWarning(this)}
+                                    <InstructionsPanel
+                                        editMode={this.state.editMode}
+                                        editTitleValue={
+                                            this.state.editTitleValue
+                                        }
+                                        setEditTitleValue={
+                                            this.setEditTitleValue
+                                        }
+                                        selectedStep={this.state.selectedStep}
+                                        getEditButton={this.getEditButton}
+                                        editJobTextValue={
+                                            this.state.editJobTextValue
+                                        }
+                                        onEditJobTextChange={
+                                            this.onEditJobTextChange
+                                        }
+                                        getJobText={getJobText}
+                                    />
+                                </Grid>
+                                <Grid item container direction="column">
+                                    <Grid item>
+                                        <Grid container direction="column">
+                                            <Grid item>
+                                                <div
+                                                    className={classes.warning}
+                                                >
+                                                    {/*getMillingInProgressDisplay(this) */}
+                                                </div>
+                                            </Grid>
+                                            <Grid item>
+                                                <Grid
+                                                    container
+                                                    justify="space-between"
+                                                    style={{ marginTop: "8px" }}
+                                                >
+                                                    <Grid item>
+                                                        {getWarning(this)}
+                                                    </Grid>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                </Grid>
-                                {/* <Grid id={"feedrate-slider"} item>
+                                    {/* <Grid id={"feedrate-slider"} item>
                                     {getFeedrateSlider(this)}
                                 </Grid> */}
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Box>
+                        </Box>
+                    ) : (
+                        ""
+                    )}
                     <Box
                         style={{
                             display: "grid",
@@ -1472,16 +1405,6 @@ class Milling extends React.Component {
                             overflow: "hidden auto",
                         }}
                     >
-                        <JoggingPanel
-                            open={this.props.openJoggingPanel}
-                            commandKeys={this.props.commandKeys}
-                            eventKeyFrontEndCommandMap={
-                                this.props.eventKeyFrontEndCommandMap
-                            }
-                            refreshShuttleKeys={this.props.refreshShuttleKeys}
-                            feedRate={this.props.feedRate}
-                            updateFeedRate={this.props.updateFeedRate}
-                        />
                         <ImagePanel
                             selectedStep={this.state.selectedStep}
                             open={this.props.openImagePanel}
@@ -1490,7 +1413,7 @@ class Milling extends React.Component {
                             milling={this.state.milling}
                             onEditGCode={this.showGCodePopUpInput}
                             selectedStep={this.state.selectedStep}
-                            millingInProgress={this.state.millingProgress != -1}
+                            millingInProgress={this.state.millingProgress != -1 || this.props.openJoggingPanel === true}
                             editMode={this.state.editMode}
                             imagePanelOpen={this.props.openImagePanel}
                             open={this.props.openMachineOutputPanel}

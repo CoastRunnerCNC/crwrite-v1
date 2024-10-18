@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { ipcRenderer } from "electron";
 import {
@@ -332,7 +332,6 @@ class JoggingPanel extends React.Component {
         ipcRenderer.send("Jobs::EmergencyStop");
     }
 
-
     fetchAsyncData() {
         this.props.refreshShuttleKeys();
 
@@ -477,6 +476,10 @@ class JoggingPanel extends React.Component {
             } else {
                 this.stopTimer();
             }
+        }
+
+        if (this.props.feedRate != prevProps.feedRate) {
+            this.setState({ feedRate: this.props.feedRate });
         }
     }
 
@@ -891,7 +894,7 @@ class JoggingPanel extends React.Component {
         }
 
         try {
-            if (!this.state.openShuttleSettings) {
+            if (this.state.realTimeStatus.state.toLowerCase() != "alarm") {
                 let frontEndCommand = this.getFrontEndCommand(eventKey);
                 this.jogStart(frontEndCommand);
             }
@@ -1507,7 +1510,10 @@ class JoggingPanel extends React.Component {
                                         forceShowUnitTooltip: false,
                                     })
                                 }
-                                disabled={component.state.realTimeStatusDisplay === "Run"}
+                                disabled={
+                                    component.state.realTimeStatusDisplay ===
+                                    "Run"
+                                }
                             >
                                 <MenuItem
                                     value="mm"
@@ -1576,7 +1582,9 @@ class JoggingPanel extends React.Component {
                                 component.wcsRef.current.blur();
                                 component.focusOnNothing();
                             }}
-                            disabled={component.state.realTimeStatusDisplay === "Run"}
+                            disabled={
+                                component.state.realTimeStatusDisplay === "Run"
+                            }
                         >
                             <MenuItem
                                 value="G54"
@@ -1708,7 +1716,10 @@ class JoggingPanel extends React.Component {
                                                 : component.sendCommand();
                                         }}
                                         color="primary"
-                                        disabled={component.state.realTimeStatusDisplay === "Run"}
+                                        disabled={
+                                            component.state
+                                                .realTimeStatusDisplay === "Run"
+                                        }
                                     >
                                         <SendIcon />
                                     </IconButton>
@@ -1787,7 +1798,10 @@ class JoggingPanel extends React.Component {
                                 </div>
                                 <div
                                     onMouseDown={() => {
-                                        this.handleJoggingClick("raise_table", 1);
+                                        this.handleJoggingClick(
+                                            "raise_table",
+                                            1
+                                        );
                                     }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
@@ -1855,7 +1869,10 @@ class JoggingPanel extends React.Component {
                                 </div>
                                 <div
                                     onMouseDown={() => {
-                                        this.handleJoggingClick("lower_table", 1);
+                                        this.handleJoggingClick(
+                                            "lower_table",
+                                            1
+                                        );
                                     }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
@@ -1930,7 +1947,10 @@ class JoggingPanel extends React.Component {
                                 </div>
                                 <div
                                     onMouseDown={() => {
-                                        this.handleJoggingClick("retract", 0.01);
+                                        this.handleJoggingClick(
+                                            "retract",
+                                            0.01
+                                        );
                                     }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.sideMiddleCell}
@@ -1987,7 +2007,10 @@ class JoggingPanel extends React.Component {
                                 </div>
                                 <div
                                     onMouseDown={() => {
-                                        this.handleJoggingClick("gantry_left", 1);
+                                        this.handleJoggingClick(
+                                            "gantry_left",
+                                            1
+                                        );
                                     }}
                                     onMouseUp={this.jogEnd}
                                     className={classes.bottomMiddleCell}
@@ -2146,8 +2169,7 @@ class JoggingPanel extends React.Component {
                                     container
                                     spacing={1}
                                     alignItems="center"
-                                >
-                                </Grid>
+                                ></Grid>
                                 <Grid
                                     item
                                     container
@@ -2186,11 +2208,34 @@ class JoggingPanel extends React.Component {
                                         />
                                     </Grid>
                                     <Grid xs={1}>
-                                        <Input value={100} />
+                                        <Input
+                                            value={this.state.feedRate2}
+                                            min={30}
+                                            max={
+                                                this.state.settings.maxFeedRate
+                                            }
+                                            onChange={(event) => {
+                                                this.setState({
+                                                    feedRate2:
+                                                        event.target.value,
+                                                });
+                                            }}
+                                            onBlur={(event) => {this.onFeedRateNumberChange(event, Number(event.target.value))}}
+                                            onKeyDown={(event) => {
+                                                event.key === "Enter"
+                                                    ? this.onFeedRateNumberChange(
+                                                          event,
+                                                          Number(
+                                                              event.target.value
+                                                          )
+                                                      )
+                                                    : "";
+                                            }}
+                                        />
                                     </Grid>
-                                    <Grid xs={1}>
+                                    {/* <Grid xs={1}>
                                         <Input value={100} />
-                                    </Grid>
+                                    </Grid> */}
                                 </Grid>
                                 <Grid
                                     item
@@ -2229,28 +2274,45 @@ class JoggingPanel extends React.Component {
                                             onChange={
                                                 this.handleDirectionChange
                                             }
-                                            disabled={this.state.realTimeStatusDisplay === "Run"}
+                                            disabled={
+                                                this.state
+                                                    .realTimeStatusDisplay ===
+                                                "Run"
+                                            }
                                         >
-                                            <MenuItem onClick={handleClockwiseClick} value="clockwise">
+                                            <MenuItem
+                                                onClick={handleClockwiseClick}
+                                                value="clockwise"
+                                            >
                                                 Clockwise
                                             </MenuItem>
-                                            <MenuItem onClick={handleCounterClockwiseClick} value="counter-clockwise">
+                                            <MenuItem
+                                                onClick={
+                                                    handleCounterClockwiseClick
+                                                }
+                                                value="counter-clockwise"
+                                            >
                                                 Counter-clockwise
                                             </MenuItem>
-                                            <MenuItem onClick={handleDisableSpindleClick} value="counter-clockwise">
+                                            <MenuItem
+                                                onClick={
+                                                    handleDisableSpindleClick
+                                                }
+                                                value="counter-clockwise"
+                                            >
                                                 Disable
                                             </MenuItem>
                                         </Select>
                                     </Grid>
-                                    <Grid xs>
+                                    {/* <Grid xs>
                                         <Slider />
                                     </Grid>
                                     <Grid xs={1}>
-                                        <Input value={100} />
+                                        <Input disabled value={100} />
                                     </Grid>
                                     <Grid xs={1}>
                                         <Input value={100} />
-                                    </Grid>
+                                    </Grid> */}
                                 </Grid>
                                 <Grid
                                     item
@@ -2343,7 +2405,11 @@ class JoggingPanel extends React.Component {
                                             editParentState={() => {
                                                 this.setState({ isHome: true });
                                             }}
-                                            disabled={this.state.realTimeStatusDisplay === "Run"}
+                                            disabled={
+                                                this.state
+                                                    .realTimeStatusDisplay ===
+                                                "Run"
+                                            }
                                         >
                                             Home
                                         </PositionPreset>
@@ -2353,7 +2419,11 @@ class JoggingPanel extends React.Component {
                                             ref={this.preset1Ref}
                                             units={this.state.units}
                                             getPosition={this.get_position}
-                                            disabled={this.state.realTimeStatusDisplay === "Run"}
+                                            disabled={
+                                                this.state
+                                                    .realTimeStatusDisplay ===
+                                                "Run"
+                                            }
                                         >
                                             1
                                         </PositionPreset>
@@ -2363,7 +2433,11 @@ class JoggingPanel extends React.Component {
                                             ref={this.preset2Ref}
                                             units={this.state.units}
                                             getPosition={this.get_position}
-                                            disabled={this.state.realTimeStatusDisplay === "Run"}
+                                            disabled={
+                                                this.state
+                                                    .realTimeStatusDisplay ===
+                                                "Run"
+                                            }
                                         >
                                             2
                                         </PositionPreset>
@@ -2373,7 +2447,11 @@ class JoggingPanel extends React.Component {
                                             ref={this.preset3Ref}
                                             units={this.state.units}
                                             getPosition={this.get_position}
-                                            disabled={this.state.realTimeStatusDisplay === "Run"}
+                                            disabled={
+                                                this.state
+                                                    .realTimeStatusDisplay ===
+                                                "Run"
+                                            }
                                         >
                                             3
                                         </PositionPreset>
@@ -2383,7 +2461,11 @@ class JoggingPanel extends React.Component {
                                             ref={this.preset4Ref}
                                             units={this.state.units}
                                             getPosition={this.get_position}
-                                            disabled={this.state.realTimeStatusDisplay === "Run"}
+                                            disabled={
+                                                this.state
+                                                    .realTimeStatusDisplay ===
+                                                "Run"
+                                            }
                                         >
                                             4
                                         </PositionPreset>

@@ -416,6 +416,11 @@ function BottomToolbar(props) {
         closeControlMenu({}, true);
     };
 
+    const handleJoggingPanelClick = () => {
+        props.toggleJoggingPanel();
+        props.toggleStepsPanel();
+    }
+
     const handleClickHome = () => {
         ipcRenderer.send("CNC::ExecuteCommand", "$H");
         closeControlMenu({}, true);
@@ -885,7 +890,7 @@ function BottomToolbar(props) {
                                                     {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
                                                     <MenuItem
                                                         onClick={
-                                                            props.toggleJoggingPanel
+                                                            handleJoggingPanelClick
                                                         }
                                                     >
                                                         Jogging

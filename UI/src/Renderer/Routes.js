@@ -22,6 +22,7 @@ function Routes(props) {
         setOperationsWindowOpen,
         openImagePanel,
         openJoggingPanel,
+        openStepsPanel,
         openProbingWizard,
         setOpenProbingWizard,
         openMachineOutputPanel,
@@ -80,6 +81,7 @@ function Routes(props) {
                                 settings={settings}
                                 openImagePanel={openImagePanel}
                                 openJoggingPanel={openJoggingPanel}
+                                openStepsPanel={openStepsPanel}
                                 openMachineOutputPanel={openMachineOutputPanel}
                                 setNavigateToMilling={setNavigateToMilling}
                                 commandKeys={commandKeys}

@@ -12561,7 +12561,8 @@ export default class App extends React.Component {
             openImagePanel: false,
             openJoggingPanel: true,
             openProbingWizard: false,
-            openMachineOutputPanel: false,
+            openMachineOutputPanel: true,
+            openStepsPanel: false,
             navigateToMilling: false
         };
 
@@ -12574,7 +12575,8 @@ export default class App extends React.Component {
         this.toggleShuttle = this.toggleShuttle.bind(this);
         this.toggleImagePanel = this.toggleImagePanel.bind(this);
         this.toggleJoggingPanel = this.toggleJoggingPanel.bind(this);
-        this.toggleMachineOutputPanel = this.toggleMachineOutputPanel.bind(this)
+        this.toggleMachineOutputPanel = this.toggleMachineOutputPanel.bind(this);
+        this.toggleStepsPanel = this.toggleStepsPanel.bind(this);
         this.setNavigateToMilling = this.setNavigateToMilling.bind(this);
         this.commandKeys = {};
         this.eventKeyFrontEndCommandMap = {};
@@ -12603,7 +12605,12 @@ export default class App extends React.Component {
         this.setState({openMachineOutputPanel: !this.state.openMachineOutputPanel})
     }
 
+    toggleStepsPanel() {
+        this.setState({openStepsPanel: !this.state.openStepsPanel});
+    }
+
     updateFeedrate(newFeedRate) {
+        ipcRenderer.send("Logs::LogString", typeof newFeedRate + " " + String(newFeedRate));
         ipcRenderer.send("Settings::SetFeedRate", newFeedRate);
         this.setState({ feedRate: newFeedRate });
     }
@@ -12904,6 +12911,7 @@ export default class App extends React.Component {
                                 openImagePanel={this.state.openImagePanel}
                                 openJoggingPanel={this.state.openJoggingPanel}
                                 openMachineOutputPanel={this.state.openMachineOutputPanel}
+                                openStepsPanel={this.state.openStepsPanel}
                                 openProbingWizard={this.state.openProbingWizard}
                                 setOpenProbingWizard={(value) => {this.setState({openProbingWizard: value})}}
                                 commandKeys={this.commandKeys}
@@ -12943,6 +12951,7 @@ export default class App extends React.Component {
                                 toggleImagePanel={this.toggleImagePanel}
                                 toggleJoggingPanel={this.toggleJoggingPanel}
                                 toggleMachineOutputPanel={this.toggleMachineOutputPanel}
+                                toggleStepsPanel={this.toggleStepsPanel}
                                 settings={this.state.settings}
                                 navigateToMilling={this.state.navigateToMilling}
                                 refreshShuttleKeys={this.refreshShuttleKeys}

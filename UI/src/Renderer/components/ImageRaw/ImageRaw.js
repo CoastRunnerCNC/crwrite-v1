@@ -37,7 +37,6 @@ class ImageRaw extends React.Component {
     }
 
     componentDidMount() {
-        ipcRenderer.removeAllListeners("Jobs::ReadWrites");
         ipcRenderer.on("Jobs::ReadWrites", this.updateReadWrites);
         ipcRenderer.removeAllListeners("ShowMillingCode");
         ipcRenderer.on("ShowMillingCode", () => {
@@ -46,7 +45,7 @@ class ImageRaw extends React.Component {
     }
 
     componentWillUnmount() {
-        ipcRenderer.removeAllListeners("Jobs::ReadWrites", this.updateReadWrites);
+        ipcRenderer.removeListener("Jobs::ReadWrites", this.updateReadWrites);
     }
 
     shouldComponentUpdate(nextProps, nextState) {

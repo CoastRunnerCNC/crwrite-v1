@@ -55,11 +55,11 @@ const MachineOutputPanel = (props) => {
     });
 
     useEffect(() => {
-        ipcRenderer.removeAllListeners("Jobs::ReadWrites");
+        ipcRenderer.removeListener("Jobs::ReadWrites", updateReadWrites);
         ipcRenderer.on("Jobs::ReadWrites", updateReadWrites);
 
         return () => {
-            ipcRenderer.removeAllListeners(
+            ipcRenderer.removeListener(
                 "Jobs::ReadWrites",
                 updateReadWrites
             );

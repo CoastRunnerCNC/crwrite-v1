@@ -62,10 +62,11 @@ class CNCMillAPI {
 
         electron.ipcMain.on('CNC::GetStatus', function (event) {
             let readWrites = crwrite.GetReadWrites();
-            console.log("readWrites: " + readWrites);
+            console.log("readWrites: " + JSON.stringify(readWrites));
             let status = crwrite.GetStatus();
             console.log("status: " + status);
             event.sender.send('Jobs::ReadWrites', readWrites);
+            console.log("post readwrites");
             event.sender.send("CR_UpdateRealtimeStatus", status);
         });
 

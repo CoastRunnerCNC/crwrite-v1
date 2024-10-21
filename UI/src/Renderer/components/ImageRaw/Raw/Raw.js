@@ -72,6 +72,7 @@ class Raw extends React.Component {
 
     componentDidMount() {
         this.scrollToBottom();
+        ipcRenderer.on("Jobs::ReadWrites", this.updateReadWrites);
     }
 
     componentWillUnmount() {
@@ -89,7 +90,7 @@ class Raw extends React.Component {
     }
 
     updateReadWrites(event, newLines) {
-        console.log("updatedReadWrites: ");
+        console.log("updatedReadWrites: " + JSON.stringify(newLines));
         if (newLines.length > 0) {
             let readWrites = this.state.readWrites.concat(newLines);
 
@@ -120,8 +121,6 @@ class Raw extends React.Component {
 
     render() {
         const { classes, selectedStep, millingInProgress, height } = this.props;
-        ipcRenderer.removeListener("Jobs::ReadWrites", this.updateReadWrites);
-        ipcRenderer.on("Jobs::ReadWrites", this.updateReadWrites);
 
         function getGCodeDisplay(milling, readWrites) {
             if (milling) {

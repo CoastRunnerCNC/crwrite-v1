@@ -482,7 +482,7 @@ class JoggingPanel extends React.Component {
         }
 
         if (this.props.feedRate != prevProps.feedRate) {
-            this.setState({ feedRate: this.props.feedRate });
+            this.setState({ feedRate: this.props.feedRate, feedRate2: this.props.feedRate });
         }
     }
 

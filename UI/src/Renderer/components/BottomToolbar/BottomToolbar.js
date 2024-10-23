@@ -896,7 +896,7 @@ function BottomToolbar(props) {
                                                     >
                                                         Probing Wizard
                                                     </MenuItem>
-                                                    <MenuItem
+                                                    {/* <MenuItem
                                                         onClick={
                                                             handleClickManualMode
                                                         }
@@ -905,7 +905,7 @@ function BottomToolbar(props) {
                                                         }
                                                     >
                                                         Manual Mode
-                                                    </MenuItem>
+                                                    </MenuItem> */}
                                                     <MenuItem
                                                         onClick={
                                                             handleClickHome

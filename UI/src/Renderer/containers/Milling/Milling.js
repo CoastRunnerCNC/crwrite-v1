@@ -1060,7 +1060,7 @@ class Milling extends React.Component {
                     open={
                         this.state.showAlert &&
                         status === 2 &&
-                        !this.props.openShuttle
+                        !this.props.openJoggingPanel
                     }
                     message={this.state.alertMessage}
                     yesNo={this.state.goBack}

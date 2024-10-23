@@ -584,7 +584,7 @@ function BottomToolbar(props) {
             />
             <Alert
                 open={
-                    showError && !props.navigateToMilling && !props.openShuttle
+                    showError && !props.navigateToMilling && !props.openJoggingPanel
                 }
                 message={errorText}
                 yesNo={false}

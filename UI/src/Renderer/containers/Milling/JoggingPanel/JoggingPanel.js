@@ -426,6 +426,7 @@ class JoggingPanel extends React.Component {
 
     componentDidMount() {
         this.fetchAsyncData.call(this);
+        this.props.setManualMode(true);
 
         window.addEventListener("keydown", this.keydownListener, true);
         window.addEventListener("keyup", this.keyupListener, true);
@@ -459,6 +460,8 @@ class JoggingPanel extends React.Component {
             this.updateRealtimeStatus
         );
         ipcRenderer.send("CNC::SetManualEntryMode", false);
+        console.log("component unmounting");
+        this.props.setManualMode(false);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -1254,7 +1257,8 @@ class JoggingPanel extends React.Component {
     }
 
     render() {
-        const { classes, open } = this.props;
+        const { classes} = this.props;
+
         function handleMaxDistanceChange(component, e) {
             const value = e.currentTarget.value;
             const isValid = component.isMaxDistanceValid(value);
@@ -1744,7 +1748,6 @@ class JoggingPanel extends React.Component {
             ipcRenderer.send("CNC::ExecuteCommand", "M5");
         }
 
-        if (open) {
             return (
                 <ItemPanel
                     title="Jogging"
@@ -1753,6 +1756,23 @@ class JoggingPanel extends React.Component {
                         padding: "8px",
                     }}
                 >
+                    <Alert
+                        open={this.props.showJoggingResetAlert}
+                        message={
+                            "Your machine is currently executing gcode. Closing this window will reset your machine.\n\nAre you sure you want to close this window?"
+                        }
+                        yesNo={true}
+                        onOk={(event) => {
+                            ipcRenderer.send("CNC::ExecuteCommand", "|");
+                            this.props.toggleJoggingPanel();
+                            this.props.toggleStepsPanel();
+                            this.props.setShowJoggingResetAlert(false);
+                        }}
+                        onCancel={(event) => {
+                            this.props.setShowJoggingResetAlert(false);
+                        }}
+                        title={"Reset Machine?"}
+                    />
                     {getHomingAlertDialog(this)}
                     {/* Main grid container */}
                     <Box
@@ -2220,7 +2240,12 @@ class JoggingPanel extends React.Component {
                                                         event.target.value,
                                                 });
                                             }}
-                                            onBlur={(event) => {this.onFeedRateNumberChange(event, Number(event.target.value))}}
+                                            onBlur={(event) => {
+                                                this.onFeedRateNumberChange(
+                                                    event,
+                                                    Number(event.target.value)
+                                                );
+                                            }}
                                             onKeyDown={(event) => {
                                                 event.key === "Enter"
                                                     ? this.onFeedRateNumberChange(
@@ -2476,9 +2501,6 @@ class JoggingPanel extends React.Component {
                     </Box>
                 </ItemPanel>
             );
-        } else {
-            return "";
-        }
     }
 }
 

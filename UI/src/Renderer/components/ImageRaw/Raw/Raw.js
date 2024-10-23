@@ -90,7 +90,6 @@ class Raw extends React.Component {
     }
 
     updateReadWrites(event, newLines) {
-        console.log("updatedReadWrites: " + JSON.stringify(newLines));
         if (newLines.length > 0) {
             let readWrites = this.state.readWrites.concat(newLines);
 
@@ -124,7 +123,6 @@ class Raw extends React.Component {
 
         function getGCodeDisplay(milling, readWrites) {
             if (milling) {
-                console.log("proper display");
                 return readWrites.map((readWrite, index) => {
                     return (
                         <Typography className={classes.raw} variant="body1" color="textPrimary" key={index} align="left" style={{ marginLeft: '10px' }}>

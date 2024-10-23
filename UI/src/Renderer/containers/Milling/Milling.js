@@ -175,6 +175,7 @@ class Milling extends React.Component {
         this.getAddStepButton = this.getAddStepButton.bind(this);
         this.handlePopupOkay = this.handlePopupOkay.bind(this);
         this.parseGoTo = this.parseGoTo.bind(this);
+        this.setManualMode = this.setManualMode.bind(this);
         this.handleEmergencyStopResponse =
             this.handleEmergencyStopResponse.bind(this);
         ipcRenderer.removeAllListeners("CRFileDoubleClick");
@@ -637,6 +638,9 @@ class Milling extends React.Component {
                             showNext: true,
                             milling: false,
                         });
+                     } else if (this.state.manualMode && this.state.millingProgress === 100) {
+                        console.log("Manual mode updated progress to -1");
+                        this.setState({millingProgress: -1})
                     }
 
                     if (this.status_loop === true) {
@@ -896,6 +900,10 @@ class Milling extends React.Component {
             milling: false,
             paused: false,
         });
+    }
+
+    setManualMode(value) {
+        this.setState({manualMode: value});
     }
 
     render() {
@@ -1318,8 +1326,8 @@ class Milling extends React.Component {
                             classes={classes}
                             openStepsPanel={this.props.openStepsPanel}
                         />
+                        {this.props.openJoggingPanel ?
                         <JoggingPanel
-                            open={this.props.openJoggingPanel}
                             commandKeys={this.props.commandKeys}
                             eventKeyFrontEndCommandMap={
                                 this.props.eventKeyFrontEndCommandMap
@@ -1327,7 +1335,12 @@ class Milling extends React.Component {
                             refreshShuttleKeys={this.props.refreshShuttleKeys}
                             feedRate={this.props.feedRate}
                             updateFeedRate={this.props.updateFeedRate}
-                        />
+                            setManualMode={this.setManualMode}
+                            showJoggingResetAlert={this.props.showJoggingResetAlert}
+                            toggleJoggingPanel={this.props.toggleJoggingPanel}
+                            setShowJoggingResetAlert={this.props.setShowJoggingResetAlert}
+                            toggleStepsPanel={this.props.toggleStepsPanel}
+                        /> : null}
                     </Box>
                     {this.props.openStepsPanel ? (
                         <Box>

@@ -417,9 +417,15 @@ function BottomToolbar(props) {
     };
 
     const handleJoggingPanelClick = () => {
-        props.toggleJoggingPanel();
-        props.toggleStepsPanel();
-    }
+        console.log("handleJoggingPanelClick - RTS: " + realTimeStatus.state);
+        if (props.openJoggingPanel === true && realTimeStatus.state === "Run") {
+            console.log("handleJoggingPanelClick - setting jogging alert");
+            props.setShowJoggingResetAlert(true);
+        } else {
+            props.toggleJoggingPanel();
+            props.toggleStepsPanel();
+        }
+    };
 
     const handleClickHome = () => {
         ipcRenderer.send("CNC::ExecuteCommand", "$H");
@@ -489,11 +495,8 @@ function BottomToolbar(props) {
             // console.log(status);
             // console.log(JSON.stringify(status));
             const parsed = JSON.parse(status);
-            console.log(parsed);
-            console.log("parsed.error: " + parsed.error);
             if (parsed.error == null) {
                 let status = parsed.status;
-                console.log("state: " + JSON.stringify(status.state));
                 setRealTimeStatus(status);
                 setUnits(status.parserUnits);
             }
@@ -526,7 +529,9 @@ function BottomToolbar(props) {
         }
     };
 
-    const onClickKeyBindings = () => {setOpenShuttleSettings(true)};
+    const onClickKeyBindings = () => {
+        setOpenShuttleSettings(true);
+    };
 
     const closeKeyBindings = () => {
         setOpenShuttleSettings(false);
@@ -552,25 +557,11 @@ function BottomToolbar(props) {
         ipcRenderer.on("Jobs::GetProgressResponse", handleProgressResponse);
 
         const checkForMillingInterval = setInterval(() => {
-            try {
-                console.log("state: " + JSON.stringify(realTimeStatus));
-                console.log("state: " + realTimeStatus);
-            } catch (e) {}
-
-            // if (realTimeStatus && realTimeStatus.state === "milling") {
             if (status === 2 && !progressIntervalRef.current) {
                 progressIntervalRef.current = setInterval(() => {
                     ipcRenderer.send("Jobs::GetProgress");
                 }, 500);
             }
-            // } else {
-            //     if (progressIntervalRef.current) {
-            //         clearInterval(progressIntervalRef.current);
-            //         progressIntervalRef.current = null;
-            //         console.log("reseting milling progress");
-            //         setMillingProgress(-1);
-            //     }
-            // }
         }, 2000);
         // Clean up the interval and the event listener on component unmount
         return () => {

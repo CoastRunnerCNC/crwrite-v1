@@ -29,7 +29,11 @@ function Routes(props) {
         setNavigateToMilling,
         commandKeys,
         eventKeyFrontEndCommandMap,
-        refreshShuttleKeys
+        refreshShuttleKeys,
+        showJoggingResetAlert,
+        toggleJoggingPanel,
+        setShowJoggingResetAlert,
+        toggleStepsPanel,
     } = props;
 
     return (
@@ -87,6 +91,10 @@ function Routes(props) {
                                 commandKeys={commandKeys}
                                 eventKeyFrontEndCommandMap={eventKeyFrontEndCommandMap}
                                 refreshShuttleKeys={refreshShuttleKeys}
+                                showJoggingResetAlert={showJoggingResetAlert}
+                                toggleJoggingPanel={toggleJoggingPanel}
+                                setShowJoggingResetAlert={setShowJoggingResetAlert}
+                                toggleStepsPanel={toggleStepsPanel}
                             />
                         )}
                     />

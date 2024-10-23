@@ -12563,7 +12563,8 @@ export default class App extends React.Component {
             openProbingWizard: false,
             openMachineOutputPanel: true,
             openStepsPanel: false,
-            navigateToMilling: false
+            navigateToMilling: false,
+            showJoggingResetAlert: false,
         };
 
         this.updateStatus = this.updateStatus.bind(this);
@@ -12578,6 +12579,7 @@ export default class App extends React.Component {
         this.toggleMachineOutputPanel = this.toggleMachineOutputPanel.bind(this);
         this.toggleStepsPanel = this.toggleStepsPanel.bind(this);
         this.setNavigateToMilling = this.setNavigateToMilling.bind(this);
+        this.setShowJoggingResetAlert = this.setShowJoggingResetAlert.bind(this);
         this.commandKeys = {};
         this.eventKeyFrontEndCommandMap = {};
 
@@ -12599,6 +12601,10 @@ export default class App extends React.Component {
 
     toggleJoggingPanel() {
         this.setState({openJoggingPanel: !this.state.openJoggingPanel});
+    }
+
+    setShowJoggingResetAlert(value) {
+        this.setState({showJoggingResetAlert: value});
     }
 
     toggleMachineOutputPanel() {
@@ -12917,6 +12923,10 @@ export default class App extends React.Component {
                                 commandKeys={this.commandKeys}
                                 eventKeyFrontEndCommandMap={this.eventKeyFrontEndCommandMap}
                                 refreshShuttleKeys={this.refreshShuttleKeys}
+                                showJoggingResetAlert={this.state.showJoggingResetAlert}
+                                setShowJoggingResetAlert={this.setShowJoggingResetAlert}
+                                toggleJoggingPanel={this.toggleJoggingPanel}
+                                toggleStepsPanel={this.toggleStepsPanel}
                             />
                             {/* {console.timeEnd("Routes")} */}
                             {/* {console.time("BottomToolbar")} */}
@@ -12950,11 +12960,13 @@ export default class App extends React.Component {
                                 updateSetting={this.updateSetting}
                                 toggleImagePanel={this.toggleImagePanel}
                                 toggleJoggingPanel={this.toggleJoggingPanel}
+                                openJoggingPanel={this.state.openJoggingPanel}
                                 toggleMachineOutputPanel={this.toggleMachineOutputPanel}
                                 toggleStepsPanel={this.toggleStepsPanel}
                                 settings={this.state.settings}
                                 navigateToMilling={this.state.navigateToMilling}
                                 refreshShuttleKeys={this.refreshShuttleKeys}
+                                setShowJoggingResetAlert={this.setShowJoggingResetAlert}
                             />
                             {/* {console.timeEnd("BottomToolbar")} */}
                         </Box>

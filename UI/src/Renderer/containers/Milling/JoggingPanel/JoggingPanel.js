@@ -1257,7 +1257,7 @@ class JoggingPanel extends React.Component {
     }
 
     render() {
-        const { classes} = this.props;
+        const { classes } = this.props;
 
         function handleMaxDistanceChange(component, e) {
             const value = e.currentTarget.value;
@@ -1748,49 +1748,49 @@ class JoggingPanel extends React.Component {
             ipcRenderer.send("CNC::ExecuteCommand", "M5");
         }
 
-            return (
-                <ItemPanel
-                    title="Jogging"
-                    small
-                    contentStyle={{
-                        padding: "8px",
+        return (
+            <ItemPanel
+                title="Jogging"
+                small
+                contentStyle={{
+                    padding: "8px",
+                }}
+            >
+                <Alert
+                    open={this.props.showJoggingResetAlert}
+                    message={
+                        "Your machine is currently executing gcode. Closing this window will reset your machine.\n\nAre you sure you want to close this window?"
+                    }
+                    yesNo={true}
+                    onOk={(event) => {
+                        ipcRenderer.send("CNC::ExecuteCommand", "|");
+                        this.props.toggleJoggingPanel();
+                        this.props.toggleStepsPanel();
+                        this.props.setShowJoggingResetAlert(false);
+                    }}
+                    onCancel={(event) => {
+                        this.props.setShowJoggingResetAlert(false);
+                    }}
+                    title={"Reset Machine?"}
+                />
+                {getHomingAlertDialog(this)}
+                {/* Main grid container */}
+                <Box
+                    style={{
+                        display: "grid",
+                        gridTemplateRows: "220px 16px 1fr",
+                        gridTemplateColumns: "1fr",
                     }}
                 >
-                    <Alert
-                        open={this.props.showJoggingResetAlert}
-                        message={
-                            "Your machine is currently executing gcode. Closing this window will reset your machine.\n\nAre you sure you want to close this window?"
-                        }
-                        yesNo={true}
-                        onOk={(event) => {
-                            ipcRenderer.send("CNC::ExecuteCommand", "|");
-                            this.props.toggleJoggingPanel();
-                            this.props.toggleStepsPanel();
-                            this.props.setShowJoggingResetAlert(false);
-                        }}
-                        onCancel={(event) => {
-                            this.props.setShowJoggingResetAlert(false);
-                        }}
-                        title={"Reset Machine?"}
-                    />
-                    {getHomingAlertDialog(this)}
-                    {/* Main grid container */}
+                    {/* Jog controls container */}
                     <Box
                         style={{
                             display: "grid",
-                            gridTemplateRows: "220px 16px 1fr",
-                            gridTemplateColumns: "1fr",
-                        }}
-                    >
-                        {/* Jog controls container */}
-                        <Box
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns:
-                                    "12px 36px 1fr 3fr 1fr 36px 12px",
-                                gridTemplateRows:
-                                    "12px 16px 1fr 16px 10px 17px 12px",
-                                gridTemplateAreas: `
+                            gridTemplateColumns:
+                                "12px 36px 1fr 3fr 1fr 36px 12px",
+                            gridTemplateRows:
+                                "12px 16px 1fr 16px 10px 17px 12px",
+                            gridTemplateAreas: `
                             " . . . . . . ."
                             ". xControls . . . zControls ."
                             ". xControls . millSVG . zControls ."
@@ -1798,538 +1798,494 @@ class JoggingPanel extends React.Component {
                             ". . . . . . ."
                             ". yControls yControls yControls yControls yControls ."
                             `,
+                        }}
+                    >
+                        {/* x controls */}
+                        <Box
+                            style={{
+                                gridArea: "xControls",
+                                display: "grid",
+                                gridTemplateColumns: "1fr",
+                                gridTemplateRows:
+                                    "16px 20px 20px 20px 1fr 20px 20px 20px 16px",
                             }}
                         >
-                            {/* x controls */}
-                            <Box
-                                style={{
-                                    gridArea: "xControls",
-                                    display: "grid",
-                                    gridTemplateColumns: "1fr",
-                                    gridTemplateRows:
-                                        "16px 20px 20px 20px 1fr 20px 20px 20px 16px",
-                                }}
+                            <div
+                                className={classes.sideTopCell}
+                                style={{ gridRow: "1 / 2" }}
                             >
-                                <div
-                                    className={classes.sideTopCell}
-                                    style={{ gridRow: "1 / 2" }}
-                                >
-                                    +
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "raise_table",
-                                            1
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "2 / 3" }}
-                                >
-                                    1
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "raise_table",
-                                            0.1
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "3 / 4" }}
-                                >
-                                    0.1
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "raise_table",
-                                            0.01
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "4 / 5" }}
-                                >
-                                    0.01
-                                </div>
-                                <div
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "5 / 6" }}
-                                >
-                                    X
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "lower_table",
-                                            0.01
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "6 / 7" }}
-                                >
-                                    0.01
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "lower_table",
-                                            0.1
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "7 / 8" }}
-                                >
-                                    0.1
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "lower_table",
-                                            1
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "8 / 9" }}
-                                >
-                                    1
-                                </div>
-                                <div
-                                    className={classes.sideBottomCell}
-                                    style={{ gridRow: "9 / 10" }}
-                                >
-                                    -
-                                </div>
-                            </Box>
-
-                            {/* svg */}
-                            <Box style={{ gridArea: "millSVG" }}>
-                                <MillSVG />
-                            </Box>
-
-                            {/* z controls */}
-                            <Box
-                                style={{
-                                    gridArea: "zControls",
-                                    display: "grid",
-                                    gridTemplateColumns: "1fr",
-                                    gridTemplateRows:
-                                        "16px 20px 20px 20px 1fr 20px 20px 20px 16px",
+                                +
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("raise_table", 1);
                                 }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "2 / 3" }}
                             >
-                                <div
-                                    className={classes.sideTopCell}
-                                    style={{ gridRow: "1 / 2" }}
-                                >
-                                    +
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick("plunge", 1);
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "2 / 3" }}
-                                >
-                                    1
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick("plunge", 0.1);
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "3 / 4" }}
-                                >
-                                    0.1
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick("plunge", 0.01);
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "4 / 5" }}
-                                >
-                                    0.01
-                                </div>
-                                <div
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "5 / 6" }}
-                                >
-                                    Z
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "retract",
-                                            0.01
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "6 / 7" }}
-                                >
-                                    0.01
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick("retract", 0.1);
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "7 / 8" }}
-                                >
-                                    0.1
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick("retract", 1);
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.sideMiddleCell}
-                                    style={{ gridRow: "8 / 9" }}
-                                >
-                                    1
-                                </div>
-                                <div
-                                    className={classes.sideBottomCell}
-                                    style={{ gridRow: "9 / 10" }}
-                                >
-                                    -
-                                </div>
-                            </Box>
-
-                            {/* y controls */}
-                            <Box
-                                style={{
-                                    gridArea: "yControls",
-                                    display: "grid",
-                                    gridTemplateRows: "1fr",
-                                    gridTemplateColumns:
-                                        "12px 36px 36px 36px 1fr 36px 36px 36px 12px",
+                                1
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("raise_table", 0.1);
                                 }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "3 / 4" }}
                             >
-                                <div
-                                    className={classes.bottomLeftCell}
-                                    style={{
-                                        gridColumn: "1 / 2",
-                                        gridRow: "1 / 2",
-                                    }}
-                                >
-                                    -
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "gantry_left",
-                                            1
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.bottomMiddleCell}
-                                    style={{
-                                        gridColumn: "2 / 3",
-                                        gridRow: "1 / 2",
-                                    }}
-                                >
-                                    1
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "gantry_left",
-                                            0.1
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.bottomMiddleCell}
-                                    style={{
-                                        gridColumn: "3 / 4",
-                                        gridRow: "1 / 2",
-                                    }}
-                                >
-                                    0.1
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "gantry_left",
-                                            0.01
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.bottomMiddleCell}
-                                    style={{
-                                        gridColumn: "4 / 5",
-                                        gridRow: "1 / 2",
-                                    }}
-                                >
-                                    0.01
-                                </div>
-                                <div
-                                    className={classes.bottomMiddleCell}
-                                    style={{
-                                        gridColumn: "5 / 6",
-                                        gridRow: "1 / 2",
-                                    }}
-                                >
-                                    Y
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "gantry_right",
-                                            0.01
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.bottomMiddleCell}
-                                    style={{
-                                        gridColumn: "6 / 7",
-                                        gridRow: "1 / 2",
-                                    }}
-                                >
-                                    0.01
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "gantry_right",
-                                            0.1
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.bottomMiddleCell}
-                                    style={{
-                                        gridColumn: "7 / 8",
-                                        gridRow: "1 / 2",
-                                    }}
-                                >
-                                    0.1
-                                </div>
-                                <div
-                                    onMouseDown={() => {
-                                        this.handleJoggingClick(
-                                            "gantry_right",
-                                            1
-                                        );
-                                    }}
-                                    onMouseUp={this.jogEnd}
-                                    className={classes.bottomMiddleCell}
-                                    style={{
-                                        gridColumn: "8 / 9",
-                                        gridRow: "1 / 2",
-                                    }}
-                                >
-                                    1
-                                </div>
-                                <div
-                                    className={classes.bottomRightCell}
-                                    style={{
-                                        gridColumn: "9 / 10",
-                                        gridRow: "1 / 2",
-                                    }}
-                                >
-                                    +
-                                </div>
-                            </Box>
+                                0.1
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick(
+                                        "raise_table",
+                                        0.01
+                                    );
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "4 / 5" }}
+                            >
+                                0.01
+                            </div>
+                            <div
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "5 / 6" }}
+                            >
+                                X
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick(
+                                        "lower_table",
+                                        0.01
+                                    );
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "6 / 7" }}
+                            >
+                                0.01
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("lower_table", 0.1);
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "7 / 8" }}
+                            >
+                                0.1
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("lower_table", 1);
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "8 / 9" }}
+                            >
+                                1
+                            </div>
+                            <div
+                                className={classes.sideBottomCell}
+                                style={{ gridRow: "9 / 10" }}
+                            >
+                                -
+                            </div>
                         </Box>
-                        <Box>
-                            <HorizontalLines />
+
+                        {/* svg */}
+                        <Box style={{ gridArea: "millSVG" }}>
+                            <MillSVG />
                         </Box>
-                        <Box>
-                            {/* jogging settings - flexbox */}
+
+                        {/* z controls */}
+                        <Box
+                            style={{
+                                gridArea: "zControls",
+                                display: "grid",
+                                gridTemplateColumns: "1fr",
+                                gridTemplateRows:
+                                    "16px 20px 20px 20px 1fr 20px 20px 20px 16px",
+                            }}
+                        >
+                            <div
+                                className={classes.sideTopCell}
+                                style={{ gridRow: "1 / 2" }}
+                            >
+                                +
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("plunge", 1);
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "2 / 3" }}
+                            >
+                                1
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("plunge", 0.1);
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "3 / 4" }}
+                            >
+                                0.1
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("plunge", 0.01);
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "4 / 5" }}
+                            >
+                                0.01
+                            </div>
+                            <div
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "5 / 6" }}
+                            >
+                                Z
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("retract", 0.01);
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "6 / 7" }}
+                            >
+                                0.01
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("retract", 0.1);
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "7 / 8" }}
+                            >
+                                0.1
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("retract", 1);
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.sideMiddleCell}
+                                style={{ gridRow: "8 / 9" }}
+                            >
+                                1
+                            </div>
+                            <div
+                                className={classes.sideBottomCell}
+                                style={{ gridRow: "9 / 10" }}
+                            >
+                                -
+                            </div>
+                        </Box>
+
+                        {/* y controls */}
+                        <Box
+                            style={{
+                                gridArea: "yControls",
+                                display: "grid",
+                                gridTemplateRows: "1fr",
+                                gridTemplateColumns:
+                                    "12px 36px 36px 36px 1fr 36px 36px 36px 12px",
+                            }}
+                        >
+                            <div
+                                className={classes.bottomLeftCell}
+                                style={{
+                                    gridColumn: "1 / 2",
+                                    gridRow: "1 / 2",
+                                }}
+                            >
+                                -
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("gantry_left", 1);
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.bottomMiddleCell}
+                                style={{
+                                    gridColumn: "2 / 3",
+                                    gridRow: "1 / 2",
+                                }}
+                            >
+                                1
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("gantry_left", 0.1);
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.bottomMiddleCell}
+                                style={{
+                                    gridColumn: "3 / 4",
+                                    gridRow: "1 / 2",
+                                }}
+                            >
+                                0.1
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick(
+                                        "gantry_left",
+                                        0.01
+                                    );
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.bottomMiddleCell}
+                                style={{
+                                    gridColumn: "4 / 5",
+                                    gridRow: "1 / 2",
+                                }}
+                            >
+                                0.01
+                            </div>
+                            <div
+                                className={classes.bottomMiddleCell}
+                                style={{
+                                    gridColumn: "5 / 6",
+                                    gridRow: "1 / 2",
+                                }}
+                            >
+                                Y
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick(
+                                        "gantry_right",
+                                        0.01
+                                    );
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.bottomMiddleCell}
+                                style={{
+                                    gridColumn: "6 / 7",
+                                    gridRow: "1 / 2",
+                                }}
+                            >
+                                0.01
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick(
+                                        "gantry_right",
+                                        0.1
+                                    );
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.bottomMiddleCell}
+                                style={{
+                                    gridColumn: "7 / 8",
+                                    gridRow: "1 / 2",
+                                }}
+                            >
+                                0.1
+                            </div>
+                            <div
+                                onMouseDown={() => {
+                                    this.handleJoggingClick("gantry_right", 1);
+                                }}
+                                onMouseUp={this.jogEnd}
+                                className={classes.bottomMiddleCell}
+                                style={{
+                                    gridColumn: "8 / 9",
+                                    gridRow: "1 / 2",
+                                }}
+                            >
+                                1
+                            </div>
+                            <div
+                                className={classes.bottomRightCell}
+                                style={{
+                                    gridColumn: "9 / 10",
+                                    gridRow: "1 / 2",
+                                }}
+                            >
+                                +
+                            </div>
+                        </Box>
+                    </Box>
+                    <Box>
+                        <HorizontalLines />
+                    </Box>
+                    <Box>
+                        {/* jogging settings - flexbox */}
+                        <Grid
+                            container
+                            direction="column"
+                            justify="space-around"
+                            style={{ height: "100%" }}
+                        >
                             <Grid
+                                item
                                 container
-                                direction="column"
-                                justify="space-around"
-                                style={{ height: "100%" }}
+                                spacing={1}
+                                alignItems="center"
                             >
-                                <Grid
-                                    item
-                                    container
-                                    spacing={1}
-                                    alignItems="center"
-                                >
-                                    {/* mode max */}
-                                    {getJoggingMode(this)}
-                                    {maxDistanceInput(this)}
+                                {/* mode max */}
+                                {getJoggingMode(this)}
+                                {maxDistanceInput(this)}
+                            </Grid>
+                            <Grid
+                                item
+                                container
+                                spacing={1}
+                                alignItems="center"
+                            >
+                                {/* Status */}
+                                <Grid item>
+                                    <Typography>Status</Typography>
                                 </Grid>
-                                <Grid
-                                    item
-                                    container
-                                    spacing={1}
-                                    alignItems="center"
-                                >
-                                    {/* Status */}
-                                    <Grid item>
-                                        <Typography>Status</Typography>
-                                    </Grid>
-                                    {getStatusDisplay(this)}
-                                    {/* WCS */}
-                                    <Grid item>
-                                        <Typography>WCS</Typography>
-                                    </Grid>
-                                    {getWCSSelect(this)}
-                                    {/* Units */}
-                                    <Grid item>
-                                        <Typography>Units</Typography>
-                                    </Grid>
-                                    {getUnitsSelect(this)}
+                                {getStatusDisplay(this)}
+                                {/* WCS */}
+                                <Grid item>
+                                    <Typography>WCS</Typography>
                                 </Grid>
-                                <Grid
-                                    item
-                                    container
-                                    spacing={1}
-                                    alignItems="center"
-                                ></Grid>
-                                <Grid
-                                    item
-                                    container
-                                    spacing={1}
-                                    alignItems="center"
-                                >
-                                    {/* Feedrate */}
-                                    <Grid item>
-                                        <Typography>Feedrate</Typography>
-                                    </Grid>
-                                    <Grid item xs>
-                                        <Slider
-                                            className={
-                                                this.props.classes.slider
-                                            }
-                                            value={this.state.feedRate}
-                                            step={2}
-                                            min={30}
-                                            disabled={
-                                                !this.state.settings
-                                                    .enable_slider
-                                            }
-                                            max={
-                                                this.state.settings.maxFeedRate
-                                            }
-                                            aria-labelledby="label"
-                                            onChange={this.onFeedRateChange}
-                                            onChangeCommitted={(
+                                {getWCSSelect(this)}
+                                {/* Units */}
+                                <Grid item>
+                                    <Typography>Units</Typography>
+                                </Grid>
+                                {getUnitsSelect(this)}
+                            </Grid>
+                            <Grid
+                                item
+                                container
+                                spacing={1}
+                                alignItems="center"
+                            ></Grid>
+                            <Grid
+                                item
+                                container
+                                spacing={1}
+                                alignItems="center"
+                            >
+                                {/* Feedrate */}
+                                <Grid item>
+                                    <Typography>Feedrate</Typography>
+                                </Grid>
+                                <Grid item xs>
+                                    <Slider
+                                        className={this.props.classes.slider}
+                                        value={this.state.feedRate}
+                                        step={2}
+                                        min={30}
+                                        disabled={
+                                            !this.state.settings.enable_slider
+                                        }
+                                        max={this.state.settings.maxFeedRate}
+                                        aria-labelledby="label"
+                                        onChange={this.onFeedRateChange}
+                                        onChangeCommitted={(event, value) => {
+                                            this.props.updateFeedRate(value);
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid xs={1}>
+                                    <Input
+                                        value={this.state.feedRate2}
+                                        min={30}
+                                        max={this.state.settings.maxFeedRate}
+                                        onChange={(event) => {
+                                            this.setState({
+                                                feedRate2: event.target.value,
+                                            });
+                                        }}
+                                        onBlur={(event) => {
+                                            this.onFeedRateNumberChange(
                                                 event,
-                                                value
-                                            ) => {
-                                                this.props.updateFeedRate(
-                                                    value
-                                                );
-                                            }}
-                                        />
-                                    </Grid>
-                                    <Grid xs={1}>
-                                        <Input
-                                            value={this.state.feedRate2}
-                                            min={30}
-                                            max={
-                                                this.state.settings.maxFeedRate
-                                            }
-                                            onChange={(event) => {
-                                                this.setState({
-                                                    feedRate2:
-                                                        event.target.value,
-                                                });
-                                            }}
-                                            onBlur={(event) => {
-                                                this.onFeedRateNumberChange(
-                                                    event,
-                                                    Number(event.target.value)
-                                                );
-                                            }}
-                                            onKeyDown={(event) => {
-                                                event.key === "Enter"
-                                                    ? this.onFeedRateNumberChange(
-                                                          event,
-                                                          Number(
-                                                              event.target.value
-                                                          )
-                                                      )
-                                                    : "";
-                                            }}
-                                        />
-                                    </Grid>
-                                    {/* <Grid xs={1}>
+                                                Number(event.target.value)
+                                            );
+                                        }}
+                                        onKeyDown={(event) => {
+                                            event.key === "Enter"
+                                                ? this.onFeedRateNumberChange(
+                                                      event,
+                                                      Number(event.target.value)
+                                                  )
+                                                : "";
+                                        }}
+                                    />
+                                </Grid>
+                                {/* <Grid xs={1}>
                                         <Input value={100} />
                                     </Grid> */}
+                            </Grid>
+                            <Grid
+                                item
+                                container
+                                spacing={1}
+                                alignItems="center"
+                            >
+                                {/* spindle direction */}
+                                <Grid item>
+                                    <Typography>Spindle</Typography>
                                 </Grid>
-                                <Grid
-                                    item
-                                    container
-                                    spacing={1}
-                                    alignItems="center"
-                                >
-                                    {/* spindle direction */}
-                                    <Grid item>
-                                        <Typography>Spindle</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Select
-                                            fullWidth
-                                            value={this.state.spindle}
-                                            onChange={this.handleSpindleChange}
+                                <Grid item>
+                                    <Select
+                                        fullWidth
+                                        value={this.state.spindle}
+                                        onChange={this.handleSpindleChange}
+                                    >
+                                        <MenuItem value="option1">
+                                            Option 1
+                                        </MenuItem>
+                                        <MenuItem value="option2">
+                                            Option 2
+                                        </MenuItem>
+                                        <MenuItem value="option3">
+                                            Option 3
+                                        </MenuItem>
+                                    </Select>
+                                </Grid>
+                                <Grid item>
+                                    <Typography>Direction</Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Select
+                                        fullWidth
+                                        value={this.state.direction}
+                                        onChange={this.handleDirectionChange}
+                                        disabled={
+                                            this.state.realTimeStatusDisplay ===
+                                            "Run"
+                                        }
+                                    >
+                                        <MenuItem
+                                            onClick={handleClockwiseClick}
+                                            value="clockwise"
                                         >
-                                            <MenuItem value="option1">
-                                                Option 1
-                                            </MenuItem>
-                                            <MenuItem value="option2">
-                                                Option 2
-                                            </MenuItem>
-                                            <MenuItem value="option3">
-                                                Option 3
-                                            </MenuItem>
-                                        </Select>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>Direction</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Select
-                                            fullWidth
-                                            value={this.state.direction}
-                                            onChange={
-                                                this.handleDirectionChange
+                                            Clockwise
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={
+                                                handleCounterClockwiseClick
                                             }
-                                            disabled={
-                                                this.state
-                                                    .realTimeStatusDisplay ===
-                                                "Run"
-                                            }
+                                            value="counter-clockwise"
                                         >
-                                            <MenuItem
-                                                onClick={handleClockwiseClick}
-                                                value="clockwise"
-                                            >
-                                                Clockwise
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={
-                                                    handleCounterClockwiseClick
-                                                }
-                                                value="counter-clockwise"
-                                            >
-                                                Counter-clockwise
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={
-                                                    handleDisableSpindleClick
-                                                }
-                                                value="counter-clockwise"
-                                            >
-                                                Disable
-                                            </MenuItem>
-                                        </Select>
-                                    </Grid>
-                                    {/* <Grid xs>
+                                            Counter-clockwise
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={handleDisableSpindleClick}
+                                            value="counter-clockwise"
+                                        >
+                                            Disable
+                                        </MenuItem>
+                                    </Select>
+                                </Grid>
+                                {/* <Grid xs>
                                         <Slider />
                                     </Grid>
                                     <Grid xs={1}>
@@ -2338,169 +2294,161 @@ class JoggingPanel extends React.Component {
                                     <Grid xs={1}>
                                         <Input value={100} />
                                     </Grid> */}
+                            </Grid>
+                            <Grid
+                                item
+                                container
+                                spacing={1}
+                                alignItems="center"
+                            >
+                                {/* file */}
+                                <Grid item>
+                                    <Typography>File</Typography>
                                 </Grid>
-                                <Grid
-                                    item
-                                    container
-                                    spacing={1}
-                                    alignItems="center"
-                                >
-                                    {/* file */}
-                                    <Grid item>
-                                        <Typography>File</Typography>
-                                    </Grid>
-                                    <Grid item xs>
-                                        <FormControl
-                                            className={
-                                                this.props.classes.formControl
-                                            }
-                                            fullWidth
-                                        >
-                                            {/* <InputLabel id="g-code-file-input">Run G-code File</InputLabel> */}
-                                            <Input
-                                                id="g-code-file-input"
-                                                style={{
-                                                    color: app.modal.color,
-                                                    height: "32px",
-                                                }}
-                                                inputProps={{
-                                                    style: {
-                                                        color: app.modal.color,
-                                                    },
-                                                }}
-                                                value={
-                                                    this.state
-                                                        .gCodeFilePathDisplay
-                                                }
-                                                placeholder="Run G-code File"
-                                                startAdornment={
-                                                    <InputAdornment position="start">
-                                                        <IconButton
-                                                            style={{
-                                                                padding: "0px",
-                                                            }}
-                                                            onClick={
-                                                                this
-                                                                    .selectGCodeFile
-                                                            }
-                                                            color="primary"
-                                                        >
-                                                            <SelectFileIcon />
-                                                        </IconButton>
-                                                    </InputAdornment>
-                                                }
-                                                endAdornment={
-                                                    <InputAdornment position="end">
-                                                        <IconButton
-                                                            style={{
-                                                                padding: "0px",
-                                                            }}
-                                                            onClick={
-                                                                this
-                                                                    .uploadGCodeFile
-                                                            }
-                                                            color="primary"
-                                                            disabled={
-                                                                !this.state
-                                                                    .gCodeFilePath
-                                                            }
-                                                        >
-                                                            <ExecuteIcon />
-                                                        </IconButton>
-                                                    </InputAdornment>
-                                                }
-                                                disableUnderline
-                                                readOnly
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>Manual Entry</Typography>
-                                    </Grid>
-                                    <Grid item xs>
-                                        {getManualEntryRow(this)}
-                                    </Grid>
-                                </Grid>
-                                <Grid item container justify="space-between">
-                                    {/* presets */}
-                                    <Grid item>
-                                        <PositionPreset
-                                            home
-                                            ref={this.homePresetRef}
-                                            editParentState={() => {
-                                                this.setState({ isHome: true });
+                                <Grid item xs>
+                                    <FormControl
+                                        className={
+                                            this.props.classes.formControl
+                                        }
+                                        fullWidth
+                                    >
+                                        {/* <InputLabel id="g-code-file-input">Run G-code File</InputLabel> */}
+                                        <Input
+                                            id="g-code-file-input"
+                                            style={{
+                                                color: app.modal.color,
+                                                height: "32px",
                                             }}
-                                            disabled={
-                                                this.state
-                                                    .realTimeStatusDisplay ===
-                                                "Run"
+                                            inputProps={{
+                                                style: {
+                                                    color: app.modal.color,
+                                                },
+                                            }}
+                                            value={
+                                                this.state.gCodeFilePathDisplay
                                             }
-                                        >
-                                            Home
-                                        </PositionPreset>
-                                    </Grid>
-                                    <Grid item>
-                                        <PositionPreset
-                                            ref={this.preset1Ref}
-                                            units={this.state.units}
-                                            getPosition={this.get_position}
-                                            disabled={
-                                                this.state
-                                                    .realTimeStatusDisplay ===
-                                                "Run"
+                                            placeholder="Run G-code File"
+                                            startAdornment={
+                                                <InputAdornment position="start">
+                                                    <IconButton
+                                                        style={{
+                                                            padding: "0px",
+                                                        }}
+                                                        onClick={
+                                                            this.selectGCodeFile
+                                                        }
+                                                        color="primary"
+                                                    >
+                                                        <SelectFileIcon />
+                                                    </IconButton>
+                                                </InputAdornment>
                                             }
-                                        >
-                                            1
-                                        </PositionPreset>
-                                    </Grid>
-                                    <Grid item>
-                                        <PositionPreset
-                                            ref={this.preset2Ref}
-                                            units={this.state.units}
-                                            getPosition={this.get_position}
-                                            disabled={
-                                                this.state
-                                                    .realTimeStatusDisplay ===
-                                                "Run"
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        style={{
+                                                            padding: "0px",
+                                                        }}
+                                                        onClick={
+                                                            this.uploadGCodeFile
+                                                        }
+                                                        color="primary"
+                                                        disabled={
+                                                            !this.state
+                                                                .gCodeFilePath
+                                                        }
+                                                    >
+                                                        <ExecuteIcon />
+                                                    </IconButton>
+                                                </InputAdornment>
                                             }
-                                        >
-                                            2
-                                        </PositionPreset>
-                                    </Grid>
-                                    <Grid item>
-                                        <PositionPreset
-                                            ref={this.preset3Ref}
-                                            units={this.state.units}
-                                            getPosition={this.get_position}
-                                            disabled={
-                                                this.state
-                                                    .realTimeStatusDisplay ===
-                                                "Run"
-                                            }
-                                        >
-                                            3
-                                        </PositionPreset>
-                                    </Grid>
-                                    <Grid item>
-                                        <PositionPreset
-                                            ref={this.preset4Ref}
-                                            units={this.state.units}
-                                            getPosition={this.get_position}
-                                            disabled={
-                                                this.state
-                                                    .realTimeStatusDisplay ===
-                                                "Run"
-                                            }
-                                        >
-                                            4
-                                        </PositionPreset>
-                                    </Grid>
+                                            disableUnderline
+                                            readOnly
+                                        />
+                                    </FormControl>
+                                </Grid>
+                                <Grid item>
+                                    <Typography>Manual Entry</Typography>
+                                </Grid>
+                                <Grid item xs>
+                                    {getManualEntryRow(this)}
                                 </Grid>
                             </Grid>
-                        </Box>
+                            <Grid item container justify="space-between">
+                                {/* presets */}
+                                <Grid item>
+                                    <PositionPreset
+                                        home
+                                        ref={this.homePresetRef}
+                                        editParentState={() => {
+                                            this.setState({ isHome: true });
+                                        }}
+                                        disabled={
+                                            this.state.realTimeStatusDisplay ===
+                                            "Run"
+                                        }
+                                    >
+                                        Home
+                                    </PositionPreset>
+                                </Grid>
+                                <Grid item>
+                                    <PositionPreset
+                                        ref={this.preset1Ref}
+                                        units={this.state.units}
+                                        getPosition={this.get_position}
+                                        disabled={
+                                            this.state.realTimeStatusDisplay ===
+                                            "Run"
+                                        }
+                                    >
+                                        1
+                                    </PositionPreset>
+                                </Grid>
+                                <Grid item>
+                                    <PositionPreset
+                                        ref={this.preset2Ref}
+                                        units={this.state.units}
+                                        getPosition={this.get_position}
+                                        disabled={
+                                            this.state.realTimeStatusDisplay ===
+                                            "Run"
+                                        }
+                                    >
+                                        2
+                                    </PositionPreset>
+                                </Grid>
+                                <Grid item>
+                                    <PositionPreset
+                                        ref={this.preset3Ref}
+                                        units={this.state.units}
+                                        getPosition={this.get_position}
+                                        disabled={
+                                            this.state.realTimeStatusDisplay ===
+                                            "Run"
+                                        }
+                                    >
+                                        3
+                                    </PositionPreset>
+                                </Grid>
+                                <Grid item>
+                                    <PositionPreset
+                                        ref={this.preset4Ref}
+                                        units={this.state.units}
+                                        getPosition={this.get_position}
+                                        disabled={
+                                            this.state.realTimeStatusDisplay ===
+                                            "Run"
+                                        }
+                                    >
+                                        4
+                                    </PositionPreset>
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Box>
-                </ItemPanel>
-            );
+                </Box>
+            </ItemPanel>
+        );
     }
 }
 

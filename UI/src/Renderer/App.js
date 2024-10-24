@@ -12578,10 +12578,12 @@ export default class App extends React.Component {
         this.toggleShuttle = this.toggleShuttle.bind(this);
         this.toggleImagePanel = this.toggleImagePanel.bind(this);
         this.toggleJoggingPanel = this.toggleJoggingPanel.bind(this);
-        this.toggleMachineOutputPanel = this.toggleMachineOutputPanel.bind(this);
+        this.toggleMachineOutputPanel =
+            this.toggleMachineOutputPanel.bind(this);
         this.toggleStepsPanel = this.toggleStepsPanel.bind(this);
         this.setNavigateToMilling = this.setNavigateToMilling.bind(this);
-        this.setShowJoggingResetAlert = this.setShowJoggingResetAlert.bind(this);
+        this.setShowJoggingResetAlert =
+            this.setShowJoggingResetAlert.bind(this);
         this.commandKeys = {};
         this.eventKeyFrontEndCommandMap = {};
 
@@ -12602,23 +12604,28 @@ export default class App extends React.Component {
     }
 
     toggleJoggingPanel() {
-        this.setState({openJoggingPanel: !this.state.openJoggingPanel});
+        this.setState({ openJoggingPanel: !this.state.openJoggingPanel });
     }
 
     setShowJoggingResetAlert(value) {
-        this.setState({showJoggingResetAlert: value});
+        this.setState({ showJoggingResetAlert: value });
     }
 
     toggleMachineOutputPanel() {
-        this.setState({openMachineOutputPanel: !this.state.openMachineOutputPanel})
+        this.setState({
+            openMachineOutputPanel: !this.state.openMachineOutputPanel,
+        });
     }
 
     toggleStepsPanel() {
-        this.setState({openStepsPanel: !this.state.openStepsPanel});
+        this.setState({ openStepsPanel: !this.state.openStepsPanel });
     }
 
     updateFeedrate(newFeedRate) {
-        ipcRenderer.send("Logs::LogString", typeof newFeedRate + " " + String(newFeedRate));
+        ipcRenderer.send(
+            "Logs::LogString",
+            typeof newFeedRate + " " + String(newFeedRate)
+        );
         ipcRenderer.send("Settings::SetFeedRate", newFeedRate);
         this.setState({ feedRate: newFeedRate });
     }
@@ -12626,7 +12633,7 @@ export default class App extends React.Component {
     updateSpindleRate(newSpindleRate) {
         this.setState({
             spindleRate: newSpindleRate,
-        })
+        });
     }
 
     getFirmwareYMD(versionStr) {
@@ -12767,7 +12774,6 @@ export default class App extends React.Component {
 
     componentWillUnmount() {
         ipcRenderer.removeAllListeners("CR_UpdateCRStatus");
-        
     }
 
     updateStatus(event, newConnectionStatus, newMillingStatus) {
@@ -12816,7 +12822,7 @@ export default class App extends React.Component {
     }
 
     setNavigateToMilling(value) {
-        this.setState({navigateToMilling: value});
+        this.setState({ navigateToMilling: value });
     }
 
     refreshShuttleKeys() {
@@ -12855,6 +12861,36 @@ export default class App extends React.Component {
                 "window-title"
             )[0].style.marginLeft = "55px";
         }
+
+        const sharedProps = {
+            status: this.state.cncMillStatus,
+            feedRate: this.state.feedRate,
+            updateFeedRate: this.updateFeedrate,
+            spindleRate: this.state.spindleRate,
+            updateSpindleRate: this.updateSpindleRate,
+            settings: this.state.settings,
+            milling: this.state.millingInProgress,
+            openShuttle: this.state.openShuttle,
+            shuttleSelectedTab: this.state.shuttleSelectedTab,
+            toggleShuttle: this.toggleShuttle,
+            closeOperationsWindow: this.closeOperationsWindow,
+            setOperationsWindowOpen: this.setOperationsWindowOpen,
+            firmware: this.state.firmware,
+            navigateToMilling: this.state.navigateToMilling,
+            setNavigateToMilling: this.setNavigateToMilling,
+            refreshShuttleKeys: this.refreshShuttleKeys,
+            showJoggingResetAlert: this.state.showJoggingResetAlert,
+            setShowJoggingResetAlert: this.setShowJoggingResetAlert,
+            openImagePanel: this.state.openImagePanel,
+            openJoggingPanel: this.state.openJoggingPanel,
+            openMachineOutputPanel: this.state.openMachineOutputPanel,
+            openStepsPanel: this.state.openStepsPanel,
+            openProbingWizard: this.state.openProbingWizard,
+            setOpenProbingWizard: (value) => {
+                this.setState({ openProbingWizard: value });
+            },
+        };
+
         return (
             <React.Fragment>
                 <MuiThemeProvider theme={theme}>
@@ -12875,7 +12911,7 @@ export default class App extends React.Component {
                         >
                             <CoastRunnerLogo onClick={() => {}} />
                         </Box>
-                        {/* {console.time("Alert")} */}
+
                         <Alert
                             open={
                                 this.state.alertMessage.length > 0 &&
@@ -12883,102 +12919,50 @@ export default class App extends React.Component {
                             }
                             message={this.state.alertMessage}
                             yesNo={false}
-                            onOk={(event) => {
+                            onOk={() => {
                                 this.setState({ alertMessage: "" });
                             }}
-                            onCancel={(event) => {}}
+                            onCancel={() => {}}
                         />
-                        {/* {console.timeEnd("Alert")} */}
-                        {/* {console.time("Routes")} */}
+
                         <Box
                             style={{
                                 display: "grid",
                                 gridTemplateRows: "1fr 80px",
                                 gap: "10px",
                                 padding: "10px",
-                                overflowY: "auto"
+                                overflowY: "auto",
                             }}
                         >
                             <Routes
-                                status={this.state.cncMillStatus}
-                                navigateToMilling={this.state.navigateToMilling}
-                                setNavigateToMilling={this.setNavigateToMilling}
-                                showOperationsWindow={
-                                    this.state.showOperationsWindow
-                                }
-                                feedRate={this.state.feedRate}
-                                updateFeedRate={this.updateFeedrate}
-                                spindleRate={this.state.spindleRate}
-                                updateSpindleRate={this.updateSpindleRate}
-                                settings={this.state.settings}
-                                milling={this.state.millingInProgress}
-                                openShuttle={this.state.openShuttle}
-                                shuttleSelectedTab={
-                                    this.state.shuttleSelectedTab
-                                }
-                                toggleShuttle={this.toggleShuttle}
-                                closeOperationsWindow={
-                                    this.closeOperationsWindow
-                                }
-                                setOperationsWindowOpen={
-                                    this.setOperationsWindowOpen
-                                }
-                                firmware={this.state.firmware}
-                                openImagePanel={this.state.openImagePanel}
-                                openJoggingPanel={this.state.openJoggingPanel}
-                                openMachineOutputPanel={this.state.openMachineOutputPanel}
-                                openStepsPanel={this.state.openStepsPanel}
-                                openProbingWizard={this.state.openProbingWizard}
-                                setOpenProbingWizard={(value) => {this.setState({openProbingWizard: value})}}
+                                {...sharedProps}
                                 commandKeys={this.commandKeys}
-                                eventKeyFrontEndCommandMap={this.eventKeyFrontEndCommandMap}
-                                refreshShuttleKeys={this.refreshShuttleKeys}
-                                showJoggingResetAlert={this.state.showJoggingResetAlert}
-                                setShowJoggingResetAlert={this.setShowJoggingResetAlert}
+                                eventKeyFrontEndCommandMap={
+                                    this.eventKeyFrontEndCommandMap
+                                }
                                 toggleJoggingPanel={this.toggleJoggingPanel}
                                 toggleStepsPanel={this.toggleStepsPanel}
                             />
-                            {/* {console.timeEnd("Routes")} */}
-                            {/* {console.time("BottomToolbar")} */}
+
+                            {/* BottomToolbar component with shared props */}
                             <BottomToolbar
+                                {...sharedProps}
                                 showOpenIcon={true}
-                                openShuttle={this.state.openShuttle}
-                                shuttleSelectedTab={
-                                    this.state.shuttleSelectedTab
-                                }
-                                toggleShuttle={this.toggleShuttle}
-                                status={this.state.cncMillStatus}
-                                milling={this.state.millingInProgress}
-                                firmware={this.state.firmware}
                                 firmwareAvailable={this.state.firmwareAvailable}
                                 set_walkthrough_showing={(showing) => {
                                     this.setState({
                                         walkthrough_showing: showing,
                                     });
                                 }}
-                                closeOperationsWindow={
-                                    this.closeOperationsWindow
-                                }
-                                setOperationsWindowOpen={
-                                    this.setOperationsWindowOpen
-                                }
-                                setOpenProbingWizard={(value) => {this.setState({openProbingWizard: value})}}
                                 checkFirmwareUpdates={this.checkFirmwareUpdates}
                                 updateMachineStatus={this.updateStatus}
-                                feedRate={this.state.feedRate}
-                                updateFeedRate={this.updateFeedrate}
                                 updateSetting={this.updateSetting}
                                 toggleImagePanel={this.toggleImagePanel}
                                 toggleJoggingPanel={this.toggleJoggingPanel}
-                                openJoggingPanel={this.state.openJoggingPanel}
-                                toggleMachineOutputPanel={this.toggleMachineOutputPanel}
-                                toggleStepsPanel={this.toggleStepsPanel}
-                                settings={this.state.settings}
-                                navigateToMilling={this.state.navigateToMilling}
-                                refreshShuttleKeys={this.refreshShuttleKeys}
-                                setShowJoggingResetAlert={this.setShowJoggingResetAlert}
+                                toggleMachineOutputPanel={
+                                    this.toggleMachineOutputPanel
+                                }
                             />
-                            {/* {console.timeEnd("BottomToolbar")} */}
                         </Box>
                     </Box>
                 </MuiThemeProvider>

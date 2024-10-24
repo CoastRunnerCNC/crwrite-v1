@@ -6,37 +6,24 @@ import Dashboard from "./containers/Dashboard";
 import Milling from "./containers/Milling";
 
 function Routes(props) {
-    const {
-        status,
-        navigateToMilling,
-        showOperationsWindow,
-        firmware,
-        feedRate,
-        updateFeedRate,
-        settings,
-        toggleShuttle,
-        milling,
-        openShuttle,
-        shuttleSelectedTab,
-        closeOperationsWindow,
-        setOperationsWindowOpen,
-        openImagePanel,
-        openJoggingPanel,
-        openStepsPanel,
-        openProbingWizard,
-        setOpenProbingWizard,
-        openMachineOutputPanel,
-        setNavigateToMilling,
-        commandKeys,
-        eventKeyFrontEndCommandMap,
-        refreshShuttleKeys,
-        showJoggingResetAlert,
-        toggleJoggingPanel,
-        setShowJoggingResetAlert,
-        toggleStepsPanel,
-        spindleRate,
-        updateSpindleRate,
-    } = props;
+    // Create a reusable object containing common props
+    const sharedProps = {
+        status: props.status,
+        firmware: props.firmware,
+        feedRate: props.feedRate,
+        updateFeedRate: props.updateFeedRate,
+        settings: props.settings,
+        toggleShuttle: props.toggleShuttle,
+        milling: props.milling,
+        openShuttle: props.openShuttle,
+        shuttleSelectedTab: props.shuttleSelectedTab,
+        closeOperationsWindow: props.closeOperationsWindow,
+        setOperationsWindowOpen: props.setOperationsWindowOpen,
+        openProbingWizard: props.openProbingWizard,
+        setOpenProbingWizard: props.setOpenProbingWizard,
+        navigateToMilling: props.navigateToMilling,
+        setNavigateToMilling: props.setNavigateToMilling,
+    };
 
     return (
         <Router>
@@ -45,60 +32,34 @@ function Routes(props) {
                     <Route
                         exact
                         path="/"
-                        render={(props) => (
+                        render={(routeProps) => (
                             <Dashboard
-                                {...props}
-                                firmware={firmware}
-                                status={status}
-                                feedRate={feedRate}
-                                milling={milling}
-                                settings={settings}
-                                openShuttle={openShuttle}
-                                shuttleSelectedTab={shuttleSelectedTab}
-                                toggleShuttle={toggleShuttle}
-                                closeOperationsWindow={closeOperationsWindow}
-                                setOperationsWindowOpen={
-                                    setOperationsWindowOpen
-                                }
-                                updateFeedRate={updateFeedRate}
-                                openProbingWizard={openProbingWizard}
-                                setOpenProbingWizard={setOpenProbingWizard}
-                                navigateToMilling={navigateToMilling}
-                                setNavigateToMilling={setNavigateToMilling}
+                                {...routeProps}
+                                {...sharedProps}
                             />
                         )}
                     />
                     <Route
                         exact
                         path="/milling"
-                        render={(props) => (
+                        render={(routeProps) => (
                             <Milling
-                                {...props}
-                                status={status}
-                                openShuttle={openShuttle}
-                                shuttleSelectedTab={shuttleSelectedTab}
-                                toggleShuttle={toggleShuttle}
-                                milling={milling}
-                                firmware={firmware}
-                                closeOperationsWindow={closeOperationsWindow}
-                                showOperationsWindow={showOperationsWindow}
-                                feedRate={feedRate}
-                                updateFeedRate={updateFeedRate}
-                                spindleRate={spindleRate}
-                                updateSpindleRate={updateSpindleRate}
-                                settings={settings}
-                                openImagePanel={openImagePanel}
-                                openJoggingPanel={openJoggingPanel}
-                                openStepsPanel={openStepsPanel}
-                                openMachineOutputPanel={openMachineOutputPanel}
-                                setNavigateToMilling={setNavigateToMilling}
-                                commandKeys={commandKeys}
-                                eventKeyFrontEndCommandMap={eventKeyFrontEndCommandMap}
-                                refreshShuttleKeys={refreshShuttleKeys}
-                                showJoggingResetAlert={showJoggingResetAlert}
-                                toggleJoggingPanel={toggleJoggingPanel}
-                                setShowJoggingResetAlert={setShowJoggingResetAlert}
-                                toggleStepsPanel={toggleStepsPanel}
+                                {...routeProps}
+                                {...sharedProps}
+                                showOperationsWindow={props.showOperationsWindow}
+                                spindleRate={props.spindleRate}
+                                updateSpindleRate={props.updateSpindleRate}
+                                openImagePanel={props.openImagePanel}
+                                openJoggingPanel={props.openJoggingPanel}
+                                openStepsPanel={props.openStepsPanel}
+                                openMachineOutputPanel={props.openMachineOutputPanel}
+                                commandKeys={props.commandKeys}
+                                eventKeyFrontEndCommandMap={props.eventKeyFrontEndCommandMap}
+                                refreshShuttleKeys={props.refreshShuttleKeys}
+                                showJoggingResetAlert={props.showJoggingResetAlert}
+                                toggleJoggingPanel={props.toggleJoggingPanel}
+                                setShowJoggingResetAlert={props.setShowJoggingResetAlert}
+                                toggleStepsPanel={props.toggleStepsPanel}
                             />
                         )}
                     />
@@ -107,6 +68,7 @@ function Routes(props) {
         </Router>
     );
 }
+
 
 Routes.propTypes = {
     status: PropTypes.number.isRequired,

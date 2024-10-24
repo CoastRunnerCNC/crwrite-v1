@@ -1291,6 +1291,7 @@ class Milling extends React.Component {
                 >
                     <Box
                         style={{
+                            gridColumn: "span 2",
                             display: "grid",
                             gridTemplateColumns: "1fr",
                             gridTemplateRows: "1fr",
@@ -1335,6 +1336,8 @@ class Milling extends React.Component {
                             refreshShuttleKeys={this.props.refreshShuttleKeys}
                             feedRate={this.props.feedRate}
                             updateFeedRate={this.props.updateFeedRate}
+                            spindleRate={this.props.spindleRate}
+                            updateSpindleRate={this.props.updateSpindleRate}
                             setManualMode={this.setManualMode}
                             showJoggingResetAlert={this.props.showJoggingResetAlert}
                             toggleJoggingPanel={this.props.toggleJoggingPanel}

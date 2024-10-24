@@ -34,6 +34,8 @@ function Routes(props) {
         toggleJoggingPanel,
         setShowJoggingResetAlert,
         toggleStepsPanel,
+        spindleRate,
+        updateSpindleRate,
     } = props;
 
     return (
@@ -82,6 +84,8 @@ function Routes(props) {
                                 showOperationsWindow={showOperationsWindow}
                                 feedRate={feedRate}
                                 updateFeedRate={updateFeedRate}
+                                spindleRate={spindleRate}
+                                updateSpindleRate={updateSpindleRate}
                                 settings={settings}
                                 openImagePanel={openImagePanel}
                                 openJoggingPanel={openJoggingPanel}

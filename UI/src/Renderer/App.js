@@ -12556,6 +12556,7 @@ export default class App extends React.Component {
             showOperationsWindow: false,
             firmwareAvailable: false,
             feedRate: 100,
+            spindleRate: 100,
             openShuttle: false,
             shuttleSelectedTab: 0,
             openImagePanel: false,
@@ -12572,6 +12573,7 @@ export default class App extends React.Component {
         this.setOperationsWindowOpen = this.setOperationsWindowOpen.bind(this);
         this.checkFirmwareUpdates = this.checkFirmwareUpdates.bind(this);
         this.updateFeedrate = this.updateFeedrate.bind(this);
+        this.updateSpindleRate = this.updateSpindleRate.bind(this);
         this.updateSetting = this.updateSetting.bind(this);
         this.toggleShuttle = this.toggleShuttle.bind(this);
         this.toggleImagePanel = this.toggleImagePanel.bind(this);
@@ -12619,6 +12621,12 @@ export default class App extends React.Component {
         ipcRenderer.send("Logs::LogString", typeof newFeedRate + " " + String(newFeedRate));
         ipcRenderer.send("Settings::SetFeedRate", newFeedRate);
         this.setState({ feedRate: newFeedRate });
+    }
+
+    updateSpindleRate(newSpindleRate) {
+        this.setState({
+            spindleRate: newSpindleRate,
+        })
     }
 
     getFirmwareYMD(versionStr) {
@@ -12900,6 +12908,8 @@ export default class App extends React.Component {
                                 }
                                 feedRate={this.state.feedRate}
                                 updateFeedRate={this.updateFeedrate}
+                                spindleRate={this.state.spindleRate}
+                                updateSpindleRate={this.updateSpindleRate}
                                 settings={this.state.settings}
                                 milling={this.state.millingInProgress}
                                 openShuttle={this.state.openShuttle}

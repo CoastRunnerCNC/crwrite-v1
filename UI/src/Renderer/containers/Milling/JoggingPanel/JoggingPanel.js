@@ -188,6 +188,8 @@ class JoggingPanel extends React.Component {
             fixed_distance: { value: 1.0, unit: "mm" },
             feedRate: this.props.feedRate,
             feedRate2: 100,
+            spindleRate: 100,
+            spindleRate2: 100,
             jogRate: 0,
             homingAlertDialogOpen: false,
             pathIdEventKeyMap: {},
@@ -260,6 +262,8 @@ class JoggingPanel extends React.Component {
         this.handleSpindleChange = this.handleSpindleChange.bind(this);
         this.jogEnd = this.jogEnd.bind(this);
         this.handleUnitsChange = this.handleUnitsChange.bind(this);
+        this.onSpindleRateChange = this.onSpindleRateChange.bind(this);
+        this.onSpindleRateNumberChange = this.onSpindleRateNumberChange.bind(this);
         this.currentJog = null;
         this.manual_entry_focused = false;
         this.manual_entry_ref = React.createRef();
@@ -482,7 +486,17 @@ class JoggingPanel extends React.Component {
         }
 
         if (this.props.feedRate != prevProps.feedRate) {
-            this.setState({ feedRate: this.props.feedRate, feedRate2: this.props.feedRate });
+            this.setState({
+                feedRate: this.props.feedRate,
+                feedRate2: this.props.feedRate,
+            });
+        }
+
+        if (this.props.feedRate != prevProps.feedRate) {
+            this.setState({
+                spindleRate: this.props.spindleRate,
+                spindleRate2: this.props.spindleRate
+            })
         }
     }
 
@@ -964,6 +978,20 @@ class JoggingPanel extends React.Component {
         this.focusOnNothing();
     }
 
+    onSpindleRateChange(event, spindleRate) {
+        this.setState({ spindleRate: spindleRate, spindleRate2: spindleRate });
+        this.focusOnNothing();
+    }
+
+    onSpindleRateNumberChange(event, newSpindleRate) {
+        if (newSpindleRate < 30) {
+            newSpindleRate = 30;
+        } else if (newSpindleRate > 300) {
+            newSpindleRate = 300
+        }
+        this.onSpindleRateChange(event, newSpindleRate);
+        this.props.updateSpindleRate(newSpindleRate);
+    }
     onFeedRateNumberChange(event, newFeedRate) {
         if (newFeedRate < 30) {
             newFeedRate = 30;
@@ -1326,6 +1354,10 @@ class JoggingPanel extends React.Component {
                                         onBlur={() =>
                                             component.handleInputNoLongerHasFocus()
                                         }
+                                        style={{
+                                            color: app.modal.color,
+                                            height: "32px",
+                                        }}
                                     />
                                 </FormControl>
                             </Tooltip>
@@ -1369,6 +1401,10 @@ class JoggingPanel extends React.Component {
                                             forceShowJoggingTooltip: false,
                                         })
                                     }
+                                    style={{
+                                        color: app.modal.color,
+                                        height: "32px",
+                                    }}
                                 >
                                     <MenuItem
                                         value="Continuous"
@@ -1518,6 +1554,10 @@ class JoggingPanel extends React.Component {
                                     component.state.realTimeStatusDisplay ===
                                     "Run"
                                 }
+                                style={{
+                                    color: app.modal.color,
+                                    height: "32px",
+                                }}
                             >
                                 <MenuItem
                                     value="mm"
@@ -1585,6 +1625,10 @@ class JoggingPanel extends React.Component {
                                 component.fetchAsyncData.call(component);
                                 component.wcsRef.current.blur();
                                 component.focusOnNothing();
+                            }}
+                            style={{
+                                color: app.modal.color,
+                                height: "32px",
                             }}
                             disabled={
                                 component.state.realTimeStatusDisplay === "Run"
@@ -1662,6 +1706,10 @@ class JoggingPanel extends React.Component {
                             id="status-input-label"
                             value={component.state.realTimeStatusDisplay}
                             disableUnderline
+                            style={{
+                                color: app.modal.color,
+                                height: "32px",
+                            }}
                             disabled
                         />
                     </FormControl>
@@ -2120,331 +2168,422 @@ class JoggingPanel extends React.Component {
                     <Box>
                         <HorizontalLines />
                     </Box>
-                    <Box>
-                        {/* jogging settings - flexbox */}
-                        <Grid
-                            container
-                            direction="column"
-                            justify="space-around"
-                            style={{ height: "100%" }}
-                        >
+                    <Box
+                        style={{
+                            display: "grid",
+                            gridTemplateRows: "1fr",
+                            gridTemplateColumns: "36px 1fr 36px",
+                            // gap: "16px",
+                        }}
+                    >
+                        {/* jogging settings */}
+                        <Box></Box>
+                        <Box>
                             <Grid
-                                item
                                 container
-                                spacing={1}
-                                alignItems="center"
+                                direction="column"
+                                spacing={2}
+                                style={{ marginTop: "16px" }}
                             >
+                                <Grid
+                                    item
+                                    container
+                                    spacing={1}
+                                    alignItems="center"
+                                >
+                                    {getJoggingMode(this)}
+                                </Grid>
                                 {/* mode max */}
-                                {getJoggingMode(this)}
-                                {maxDistanceInput(this)}
-                            </Grid>
-                            <Grid
-                                item
-                                container
-                                spacing={1}
-                                alignItems="center"
-                            >
-                                {/* Status */}
-                                <Grid item>
-                                    <Typography>Status</Typography>
+                                <Grid
+                                    item
+                                    container
+                                    spacing={1}
+                                    alignItems="center"
+                                >
+                                    {maxDistanceInput(this)}
                                 </Grid>
-                                {getStatusDisplay(this)}
-                                {/* WCS */}
-                                <Grid item>
-                                    <Typography>WCS</Typography>
-                                </Grid>
-                                {getWCSSelect(this)}
-                                {/* Units */}
-                                <Grid item>
-                                    <Typography>Units</Typography>
-                                </Grid>
-                                {getUnitsSelect(this)}
-                            </Grid>
-                            <Grid
-                                item
-                                container
-                                spacing={1}
-                                alignItems="center"
-                            ></Grid>
-                            <Grid
-                                item
-                                container
-                                spacing={1}
-                                alignItems="center"
-                            >
-                                {/* Feedrate */}
-                                <Grid item>
-                                    <Typography>Feedrate</Typography>
-                                </Grid>
-                                <Grid item xs>
-                                    <Slider
-                                        className={this.props.classes.slider}
-                                        value={this.state.feedRate}
-                                        step={2}
-                                        min={30}
-                                        disabled={
-                                            !this.state.settings.enable_slider
-                                        }
-                                        max={this.state.settings.maxFeedRate}
-                                        aria-labelledby="label"
-                                        onChange={this.onFeedRateChange}
-                                        onChangeCommitted={(event, value) => {
-                                            this.props.updateFeedRate(value);
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid xs={1}>
-                                    <Input
-                                        value={this.state.feedRate2}
-                                        min={30}
-                                        max={this.state.settings.maxFeedRate}
-                                        onChange={(event) => {
-                                            this.setState({
-                                                feedRate2: event.target.value,
-                                            });
-                                        }}
-                                        onBlur={(event) => {
-                                            this.onFeedRateNumberChange(
-                                                event,
-                                                Number(event.target.value)
-                                            );
-                                        }}
-                                        onKeyDown={(event) => {
-                                            event.key === "Enter"
-                                                ? this.onFeedRateNumberChange(
-                                                      event,
-                                                      Number(event.target.value)
-                                                  )
-                                                : "";
-                                        }}
-                                    />
-                                </Grid>
-                                {/* <Grid xs={1}>
-                                        <Input value={100} />
-                                    </Grid> */}
-                            </Grid>
-                            <Grid
-                                item
-                                container
-                                spacing={1}
-                                alignItems="center"
-                            >
-                                {/* spindle direction */}
-                                <Grid item>
-                                    <Typography>Spindle</Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Select
-                                        fullWidth
-                                        value={this.state.spindle}
-                                        onChange={this.handleSpindleChange}
-                                    >
-                                        <MenuItem value="option1">
-                                            Option 1
-                                        </MenuItem>
-                                        <MenuItem value="option2">
-                                            Option 2
-                                        </MenuItem>
-                                        <MenuItem value="option3">
-                                            Option 3
-                                        </MenuItem>
-                                    </Select>
-                                </Grid>
-                                <Grid item>
-                                    <Typography>Direction</Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Select
-                                        fullWidth
-                                        value={this.state.direction}
-                                        onChange={this.handleDirectionChange}
-                                        disabled={
-                                            this.state.realTimeStatusDisplay ===
-                                            "Run"
-                                        }
-                                    >
-                                        <MenuItem
-                                            onClick={handleClockwiseClick}
-                                            value="clockwise"
-                                        >
-                                            Clockwise
-                                        </MenuItem>
-                                        <MenuItem
-                                            onClick={
-                                                handleCounterClockwiseClick
-                                            }
-                                            value="counter-clockwise"
-                                        >
-                                            Counter-clockwise
-                                        </MenuItem>
-                                        <MenuItem
-                                            onClick={handleDisableSpindleClick}
-                                            value="counter-clockwise"
-                                        >
-                                            Disable
-                                        </MenuItem>
-                                    </Select>
-                                </Grid>
-                                {/* <Grid xs>
-                                        <Slider />
+                                <Grid
+                                    item
+                                    container
+                                    spacing={1}
+                                    alignItems="center"
+                                >
+                                    {/* Status */}
+                                    <Grid item>
+                                        <Typography>Status</Typography>
                                     </Grid>
-                                    <Grid xs={1}>
+                                    {getStatusDisplay(this)}
+                                    {/* WCS */}
+                                    <Grid item>
+                                        <Typography>WCS</Typography>
+                                    </Grid>
+                                    {getWCSSelect(this)}
+                                    {/* Units */}
+                                    <Grid item>
+                                        <Typography>Units</Typography>
+                                    </Grid>
+                                    {getUnitsSelect(this)}
+                                </Grid>
+                                <Grid
+                                    item
+                                    container
+                                    spacing={1}
+                                    alignItems="center"
+                                >
+                                    {/* Feedrate */}
+                                    <Grid item>
+                                        <Typography>Feedrate</Typography>
+                                    </Grid>
+                                    <Grid item xs>
+                                        <Slider
+                                            className={
+                                                this.props.classes.slider
+                                            }
+                                            value={this.state.feedRate}
+                                            step={2}
+                                            min={30}
+                                            disabled={
+                                                !this.state.settings
+                                                    .enable_slider
+                                            }
+                                            max={
+                                                this.state.settings.maxFeedRate
+                                            }
+                                            aria-labelledby="label"
+                                            onChange={this.onFeedRateChange}
+                                            onChangeCommitted={(
+                                                event,
+                                                value
+                                            ) => {
+                                                this.props.updateFeedRate(
+                                                    value
+                                                );
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={1}>
+                                        <Input
+                                            value={this.state.feedRate2}
+                                            min={30}
+                                            max={
+                                                this.state.settings.maxFeedRate
+                                            }
+                                            onChange={(event) => {
+                                                this.setState({
+                                                    feedRate2:
+                                                        event.target.value,
+                                                });
+                                            }}
+                                            onBlur={(event) => {
+                                                this.onFeedRateNumberChange(
+                                                    event,
+                                                    Number(event.target.value)
+                                                );
+                                            }}
+                                            onKeyDown={(event) => {
+                                                event.key === "Enter"
+                                                    ? this.onFeedRateNumberChange(
+                                                          event,
+                                                          Number(
+                                                              event.target.value
+                                                          )
+                                                      )
+                                                    : "";
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={1}>
                                         <Input disabled value={100} />
                                     </Grid>
-                                    <Grid xs={1}>
-                                        <Input value={100} />
-                                    </Grid> */}
-                            </Grid>
-                            <Grid
-                                item
-                                container
-                                spacing={1}
-                                alignItems="center"
-                            >
-                                {/* file */}
-                                <Grid item>
-                                    <Typography>File</Typography>
                                 </Grid>
-                                <Grid item xs>
-                                    <FormControl
-                                        className={
-                                            this.props.classes.formControl
-                                        }
-                                        fullWidth
-                                    >
-                                        {/* <InputLabel id="g-code-file-input">Run G-code File</InputLabel> */}
-                                        <Input
-                                            id="g-code-file-input"
-                                            style={{
-                                                color: app.modal.color,
-                                                height: "32px",
+                                <Grid
+                                    item
+                                    container
+                                    spacing={1}
+                                    alignItems="center"
+                                >
+                                    {/* spindle direction */}
+                                    <Grid item>
+                                        <Typography>Spindle</Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Select
+                                            fullWidth
+                                            value={this.state.spindle}
+                                            onChange={this.handleSpindleChange}
+                                        >
+                                            <MenuItem value="option1">
+                                                Option 1
+                                            </MenuItem>
+                                            <MenuItem value="option2">
+                                                Option 2
+                                            </MenuItem>
+                                            <MenuItem value="option3">
+                                                Option 3
+                                            </MenuItem>
+                                        </Select>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography>Direction</Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Select
+                                            fullWidth
+                                            value={this.state.direction}
+                                            onChange={
+                                                this.handleDirectionChange
+                                            }
+                                            disabled={
+                                                this.state
+                                                    .realTimeStatusDisplay ===
+                                                "Run"
+                                            }
+                                        >
+                                            <MenuItem
+                                                onClick={handleClockwiseClick}
+                                                value="clockwise"
+                                            >
+                                                Clockwise
+                                            </MenuItem>
+                                            <MenuItem
+                                                onClick={
+                                                    handleCounterClockwiseClick
+                                                }
+                                                value="counter-clockwise"
+                                            >
+                                                Counter-clockwise
+                                            </MenuItem>
+                                            <MenuItem
+                                                onClick={
+                                                    handleDisableSpindleClick
+                                                }
+                                                value="counter-clockwise"
+                                            >
+                                                Disable
+                                            </MenuItem>
+                                        </Select>
+                                    </Grid>
+                                    <Grid item xs>
+                                        <Slider
+                                            className={
+                                                this.props.classes.slider
+                                            }
+                                            value={this.state.spindleRate}
+                                            step={2}
+                                            min={30}
+                                            max={300}
+                                            aria-labelledby="label"
+                                            onChange={this.onSpindleRateChange}
+                                            onChangeCommitted={(
+                                                event,
+                                                value
+                                            ) => {
+                                                this.props.updateSpindleRate(
+                                                    value
+                                                );
                                             }}
-                                            inputProps={{
-                                                style: {
-                                                    color: app.modal.color,
-                                                },
-                                            }}
-                                            value={
-                                                this.state.gCodeFilePathDisplay
-                                            }
-                                            placeholder="Run G-code File"
-                                            startAdornment={
-                                                <InputAdornment position="start">
-                                                    <IconButton
-                                                        style={{
-                                                            padding: "0px",
-                                                        }}
-                                                        onClick={
-                                                            this.selectGCodeFile
-                                                        }
-                                                        color="primary"
-                                                    >
-                                                        <SelectFileIcon />
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            }
-                                            endAdornment={
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        style={{
-                                                            padding: "0px",
-                                                        }}
-                                                        onClick={
-                                                            this.uploadGCodeFile
-                                                        }
-                                                        color="primary"
-                                                        disabled={
-                                                            !this.state
-                                                                .gCodeFilePath
-                                                        }
-                                                    >
-                                                        <ExecuteIcon />
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            }
-                                            disableUnderline
-                                            readOnly
                                         />
-                                    </FormControl>
+                                    </Grid>
+                                    <Grid item xs={1}>
+                                        <Input
+                                            value={this.state.spindleRate2}
+                                            min={30}
+                                            max={
+                                                300
+                                            }
+                                            onChange={(event) => {
+                                                this.setState({
+                                                    spindleRate2:
+                                                        event.target.value,
+                                                });
+                                            }}
+                                            onBlur={(event) => {
+                                                this.onSpindleRateNumberChange(
+                                                    event,
+                                                    Number(event.target.value)
+                                                );
+                                            }}
+                                            onKeyDown={(event) => {
+                                                event.key === "Enter"
+                                                    ? this.onSpindleRateNumberChange(
+                                                          event,
+                                                          Number(
+                                                              event.target.value
+                                                          )
+                                                      )
+                                                    : "";
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={1}>
+                                        <Input disabled value={100} />
+                                    </Grid>
                                 </Grid>
-                                <Grid item>
-                                    <Typography>Manual Entry</Typography>
+                                <Grid
+                                    item
+                                    container
+                                    spacing={1}
+                                    alignItems="center"
+                                >
+                                    {/* file */}
+                                    <Grid item>
+                                        <Typography>File</Typography>
+                                    </Grid>
+                                    <Grid item xs>
+                                        <FormControl
+                                            className={
+                                                this.props.classes.formControl
+                                            }
+                                            fullWidth
+                                        >
+                                            {/* <InputLabel id="g-code-file-input">Run G-code File</InputLabel> */}
+                                            <Input
+                                                id="g-code-file-input"
+                                                style={{
+                                                    color: app.modal.color,
+                                                    height: "32px",
+                                                }}
+                                                inputProps={{
+                                                    style: {
+                                                        color: app.modal.color,
+                                                    },
+                                                }}
+                                                value={
+                                                    this.state
+                                                        .gCodeFilePathDisplay
+                                                }
+                                                placeholder="Run G-code File"
+                                                startAdornment={
+                                                    <InputAdornment position="start">
+                                                        <IconButton
+                                                            style={{
+                                                                padding: "0px",
+                                                            }}
+                                                            onClick={
+                                                                this
+                                                                    .selectGCodeFile
+                                                            }
+                                                            color="primary"
+                                                        >
+                                                            <SelectFileIcon />
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                }
+                                                endAdornment={
+                                                    <InputAdornment position="end">
+                                                        <IconButton
+                                                            style={{
+                                                                padding: "0px",
+                                                            }}
+                                                            onClick={
+                                                                this
+                                                                    .uploadGCodeFile
+                                                            }
+                                                            color="primary"
+                                                            disabled={
+                                                                !this.state
+                                                                    .gCodeFilePath
+                                                            }
+                                                        >
+                                                            <ExecuteIcon />
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                }
+                                                disableUnderline
+                                                readOnly
+                                            />
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography>Manual Entry</Typography>
+                                    </Grid>
+                                    <Grid item xs>
+                                        {getManualEntryRow(this)}
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs>
-                                    {getManualEntryRow(this)}
+                                <Grid
+                                    item
+                                    container
+                                    justify="center"
+                                    spacing={2}
+                                >
+                                    {/* presets */}
+                                    <Grid item>
+                                        <PositionPreset
+                                            home
+                                            ref={this.homePresetRef}
+                                            editParentState={() => {
+                                                this.setState({ isHome: true });
+                                            }}
+                                            disabled={
+                                                this.state
+                                                    .realTimeStatusDisplay ===
+                                                "Run"
+                                            }
+                                        >
+                                            Home
+                                        </PositionPreset>
+                                    </Grid>
+                                    <Grid item>
+                                        <PositionPreset
+                                            ref={this.preset1Ref}
+                                            units={this.state.units}
+                                            getPosition={this.get_position}
+                                            disabled={
+                                                this.state
+                                                    .realTimeStatusDisplay ===
+                                                "Run"
+                                            }
+                                        >
+                                            1
+                                        </PositionPreset>
+                                    </Grid>
+                                    <Grid item>
+                                        <PositionPreset
+                                            ref={this.preset2Ref}
+                                            units={this.state.units}
+                                            getPosition={this.get_position}
+                                            disabled={
+                                                this.state
+                                                    .realTimeStatusDisplay ===
+                                                "Run"
+                                            }
+                                        >
+                                            2
+                                        </PositionPreset>
+                                    </Grid>
+                                    <Grid item>
+                                        <PositionPreset
+                                            ref={this.preset3Ref}
+                                            units={this.state.units}
+                                            getPosition={this.get_position}
+                                            disabled={
+                                                this.state
+                                                    .realTimeStatusDisplay ===
+                                                "Run"
+                                            }
+                                        >
+                                            3
+                                        </PositionPreset>
+                                    </Grid>
+                                    <Grid item>
+                                        <PositionPreset
+                                            ref={this.preset4Ref}
+                                            units={this.state.units}
+                                            getPosition={this.get_position}
+                                            disabled={
+                                                this.state
+                                                    .realTimeStatusDisplay ===
+                                                "Run"
+                                            }
+                                        >
+                                            4
+                                        </PositionPreset>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid item container justify="space-between">
-                                {/* presets */}
-                                <Grid item>
-                                    <PositionPreset
-                                        home
-                                        ref={this.homePresetRef}
-                                        editParentState={() => {
-                                            this.setState({ isHome: true });
-                                        }}
-                                        disabled={
-                                            this.state.realTimeStatusDisplay ===
-                                            "Run"
-                                        }
-                                    >
-                                        Home
-                                    </PositionPreset>
-                                </Grid>
-                                <Grid item>
-                                    <PositionPreset
-                                        ref={this.preset1Ref}
-                                        units={this.state.units}
-                                        getPosition={this.get_position}
-                                        disabled={
-                                            this.state.realTimeStatusDisplay ===
-                                            "Run"
-                                        }
-                                    >
-                                        1
-                                    </PositionPreset>
-                                </Grid>
-                                <Grid item>
-                                    <PositionPreset
-                                        ref={this.preset2Ref}
-                                        units={this.state.units}
-                                        getPosition={this.get_position}
-                                        disabled={
-                                            this.state.realTimeStatusDisplay ===
-                                            "Run"
-                                        }
-                                    >
-                                        2
-                                    </PositionPreset>
-                                </Grid>
-                                <Grid item>
-                                    <PositionPreset
-                                        ref={this.preset3Ref}
-                                        units={this.state.units}
-                                        getPosition={this.get_position}
-                                        disabled={
-                                            this.state.realTimeStatusDisplay ===
-                                            "Run"
-                                        }
-                                    >
-                                        3
-                                    </PositionPreset>
-                                </Grid>
-                                <Grid item>
-                                    <PositionPreset
-                                        ref={this.preset4Ref}
-                                        units={this.state.units}
-                                        getPosition={this.get_position}
-                                        disabled={
-                                            this.state.realTimeStatusDisplay ===
-                                            "Run"
-                                        }
-                                    >
-                                        4
-                                    </PositionPreset>
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                        </Box>
+                        <Box></Box>
                     </Box>
                 </Box>
             </ItemPanel>

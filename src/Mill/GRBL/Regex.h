@@ -18,6 +18,9 @@ namespace GRBL
 	static const std::regex RXPRBV1 = std::regex("^\\[PRB:(-?\\d*\\.?\\d+),(-?\\d*\\.?\\d+),(-?\\d*\\.?\\d+):(-?\\d*\\.?\\d+).*", std::regex_constants::icase);
 	static const std::regex RXSTATUS = std::regex("^<(\\w+),(\\w+):(-?\\d+\\.?\\d+),(-?\\d+\\.?\\d+),(-?\\d+\\.?\\d+),(\\w+):(-?\\d+\\.?\\d+),(-?\\d+\\.?\\d+),(-?\\d+\\.?\\d+),(\\w+):(\\d),(\\w+):(\\d),(\\w+):(\\d),(\\w+):(\\d+)\\|(\\d)\\|(\\d+)>.*", std::regex_constants::icase);
 	static const std::regex CMDFEEDRATE = std::regex("^.*F(\\d+).*", std::regex_constants::icase);
+	static const std::regex CMDSPINDLEDIRECTION = std::regex("^.*M(3|4|5).*", std::regex_constants::icase);
+	static const std::regex CMDSPINDLESPEED = std::regex("^.*S(\\d+).*", std::regex_constants::icase);
+
 	static const std::regex RXWCS = std::regex("^\\[(.?\\d+):(-?\\d*\\.?\\d+),(-?\\d*\\.?\\d+),(-?\\d*\\.?\\d+).*", std::regex_constants::icase);
 	//static const std::regex RXTLO=std::regex("^\\[(.?\\d+):(-?\\d*\\.?\\d+).*",std::regex_constants::icase);
 

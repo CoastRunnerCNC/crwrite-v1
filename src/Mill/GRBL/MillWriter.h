@@ -4,6 +4,7 @@
 #include <Mill/GRBL/ConnectionState.h>
 #include <Mill/GRBL/SerialConnection.h>
 #include <Mill/GRBL/Settings/FeedRate.h>
+#include <Mill/GRBL/Settings/SpindleRate.h>
 #include <Files/GCodeLine.h>
 
 // Intermediary that does some pre-processing on commands sent to GRBL controller
@@ -16,8 +17,9 @@ public:
     MillWriter(
         const ConnectionState::Ptr& pState,
         const SerialConnection::Ptr& pSerial,
-        const FeedRate::Ptr& pFeedRate
-    )   : m_pState(pState), m_pSerial(pSerial), m_pFeedRate(pFeedRate) { }
+        const FeedRate::Ptr& pFeedRate,
+        const SpindleRate::Ptr& pSpindleRate
+    )   : m_pState(pState), m_pSerial(pSerial), m_pFeedRate(pFeedRate), m_pSpindleRate(pSpindleRate) { }
 
     void Write(const GCodeLine& line);
 
@@ -30,4 +32,5 @@ private:
     ConnectionState::Ptr m_pState;
     SerialConnection::Ptr m_pSerial;
     FeedRate::Ptr m_pFeedRate;
+    SpindleRate::Ptr m_pSpindleRate;
 };

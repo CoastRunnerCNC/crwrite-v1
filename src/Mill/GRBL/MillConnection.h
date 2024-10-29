@@ -5,6 +5,7 @@
 #include <Mill/CNCMill.h>
 #include <Mill/Status/MillingError.h>
 #include <Mill/GRBL/Settings/FeedRate.h>
+#include <Mill/GRBL/Settings/SpindleRate.h>
 #include <Mill/GRBL/Settings/MillSettings.h>
 #include <Mill/GRBL/MillWriter.h>
 #include <Mill/GRBL/Jogging/JogDirection.h>
@@ -103,6 +104,10 @@ public:
 	int GetFeedRateSlider() const noexcept { return m_pFeedRate->GetSlider(); }
 	void SetFeedRateSlider(const int slider) noexcept { m_pFeedRate->SetSlider(slider); }
 
+	// Spindle Rate
+	int GetSpindleRateSlider() const noexcept { return m_pSpindleRate->GetSlider(); }
+	void SetSpindleRateSlider(const int slider) noexcept { m_pSpindleRate->SetSlider(slider); }
+
 	// Emergency Stop
 	void EmergencyStop();
 
@@ -151,6 +156,7 @@ private:
 	Progress m_progress;
 
 	FeedRate::Ptr m_pFeedRate;
+	SpindleRate::Ptr m_pSpindleRate;
 	std::unique_ptr<SAVED_PREPROBE_STATE> m_SavedPreprobeState{ nullptr };
 
 	mutable std::recursive_mutex m_mutex;

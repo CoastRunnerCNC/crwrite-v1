@@ -33,12 +33,13 @@ MillConnection::MillConnection(
     const SerialConnection::Ptr& pSerial)
     : m_progress(),
     m_pFeedRate(std::make_shared<FeedRate>()),
+    m_pSpindleRate(std::make_shared<SpindleRate>()),
     m_mutex(),
     m_pSerialConnection(pSerial),
     m_cncMill(cncMill),
     m_pState(pState),
     m_protocol(pSerial, pState),
-    m_pWriter(std::make_unique<MillWriter>(pState, pSerial, m_pFeedRate)),
+    m_pWriter(std::make_unique<MillWriter>(pState, pSerial, m_pFeedRate, m_pSpindleRate)),
     m_emergencyStop(false)
 {
 }
@@ -285,6 +286,11 @@ void MillConnection::ExecuteProgram(const std::vector<GCodeLine>& gcodes, const 
         if (m_pFeedRate->IsUpdateRequired()) {
             MILL_LOG("FeedRate Update Required");
             ExecuteLine(GCodeLine(StringUtil::Format("F%d", m_pFeedRate->GetFeedRate()), true), true, isManualEntry);
+        }
+
+        if (m_pSpindleRate->IsUpdateRequired()) {
+            MILL_LOG("SpindleRate Update Required");
+            ExecuteLine(GCodeLine(StringUtil::Format("S%d", m_pFeedRate->GetFeedRate()), true), true, isManualEntry);
         }
 
         m_progress.SetCompleted(i + 1);

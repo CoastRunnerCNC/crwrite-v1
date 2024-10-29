@@ -144,6 +144,18 @@ void MillWriter::WriteLine(const GCodeLine& line) {
         }
     }
 
+    std::smatch sm2;
+    if (std::regex_match(cleaned, sm, GRBL::CMDSPINDLEDIRECTION) && !line.GetInjectedCommand()) {
+        int spindleRate = m_pSpindleRate->UpdateSpindleRate(stoi(sm[1].str()));
+        if (spindleRate > 0) {
+            cleaned = std::regex_replace(
+                cleaned,
+                std::regex("S\\d+", std::regex_constants::icase),
+                "S" + std::to_string(spindleRate)
+            );
+        }
+    }
+
     if (std::regex_match(cleaned, sm, GRBL::RXSETTINGS)) {
         m_pState->UpdateSetting(
             (uint8_t)std::stoi(sm[1].str()),

@@ -1291,7 +1291,7 @@ class Milling extends React.Component {
                 >
                     <Box
                         style={{
-                            gridColumn: "span 2",
+                            gridColumn: this.props.openJoggingPanel ? "span 2" : "",
                             display: "grid",
                             gridTemplateColumns: "1fr",
                             gridTemplateRows: "1fr",

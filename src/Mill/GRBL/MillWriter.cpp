@@ -145,7 +145,7 @@ void MillWriter::WriteLine(const GCodeLine& line) {
     }
 
     std::smatch sm2;
-    if (std::regex_match(cleaned, sm, GRBL::CMDSPINDLEDIRECTION) && !line.GetInjectedCommand()) {
+    if (std::regex_match(cleaned, sm, GRBL::CMDSPINDLESPEED) && !line.GetInjectedCommand()) {
         int spindleRate = m_pSpindleRate->UpdateSpindleRate(stoi(sm[1].str()));
         if (spindleRate > 0) {
             cleaned = std::regex_replace(

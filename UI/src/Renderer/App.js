@@ -12958,6 +12958,7 @@ export default class App extends React.Component {
                                 updateMachineStatus={this.updateStatus}
                                 updateSetting={this.updateSetting}
                                 toggleImagePanel={this.toggleImagePanel}
+                                toggleStepsPanel={this.toggleStepsPanel}
                                 toggleJoggingPanel={this.toggleJoggingPanel}
                                 toggleMachineOutputPanel={
                                     this.toggleMachineOutputPanel

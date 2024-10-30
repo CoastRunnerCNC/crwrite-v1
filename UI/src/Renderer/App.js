@@ -12566,6 +12566,7 @@ export default class App extends React.Component {
             openStepsPanel: false,
             navigateToMilling: false,
             showJoggingResetAlert: false,
+            disableJoggingAbortOnMouseUp: false
         };
 
         this.updateStatus = this.updateStatus.bind(this);
@@ -12582,6 +12583,7 @@ export default class App extends React.Component {
             this.toggleMachineOutputPanel.bind(this);
         this.toggleStepsPanel = this.toggleStepsPanel.bind(this);
         this.setNavigateToMilling = this.setNavigateToMilling.bind(this);
+        this.setDisableJoggingAbortOnMouseUp = this.setDisableJoggingAbortOnMouseUp.bind(this);
         this.setShowJoggingResetAlert =
             this.setShowJoggingResetAlert.bind(this);
         this.commandKeys = {};
@@ -12634,6 +12636,7 @@ export default class App extends React.Component {
         this.setState({
             spindleRate: newSpindleRate,
         });
+        ipcRenderer.send("Settings::SetSpindleRate", newSpindleRate);
     }
 
     getFirmwareYMD(versionStr) {
@@ -12844,6 +12847,10 @@ export default class App extends React.Component {
         ipcRenderer.send("CNC::GetShuttleKeys");
     }
 
+    setDisableJoggingAbortOnMouseUp(value) {
+        this.setState({disableJoggingAbortOnMouseUp: value});
+    }
+
     render() {
         if (os.platform != "darwin") {
             document.getElementsByClassName("window-appicon")[0].style.width =
@@ -12889,6 +12896,8 @@ export default class App extends React.Component {
             setOpenProbingWizard: (value) => {
                 this.setState({ openProbingWizard: value });
             },
+            disableJoggingAbortOnMouseUp: this.state.disableJoggingAbortOnMouseUp
+
         };
 
         return (
@@ -12963,6 +12972,7 @@ export default class App extends React.Component {
                                 toggleMachineOutputPanel={
                                     this.toggleMachineOutputPanel
                                 }
+                                setDisableJoggingAbortOnMouseUp={this.setDisableJoggingAbortOnMouseUp}
                             />
                         </Box>
                     </Box>

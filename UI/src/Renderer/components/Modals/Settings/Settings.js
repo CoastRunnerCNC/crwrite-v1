@@ -86,7 +86,8 @@ function Settings(props) {
     function displaySelectedWindow() {
         if (props.open === true) {
             if (selectedTab === 0) {
-                return (<Operation settings={settings} closeDialog={handleClose} updateSetting={props.updateSetting} />);
+                return (<Operation settings={settings} closeDialog={handleClose} updateSetting={props.updateSetting} disableJoggingAbortOnMouseUp={props.disableJoggingAbortOnMouseUp} setDisableJoggingAbortOnMouseUp={props.setDisableJoggingAbortOnMouseUp}
+                    />);
             } else if (selectedTab === 1) {
                 return (<Machine firmware={firmware} disabled={false} />);
             } else if (selectedTab === 2) {

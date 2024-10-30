@@ -1343,6 +1343,7 @@ class Milling extends React.Component {
                             toggleJoggingPanel={this.props.toggleJoggingPanel}
                             setShowJoggingResetAlert={this.props.setShowJoggingResetAlert}
                             toggleStepsPanel={this.props.toggleStepsPanel}
+                            disableJoggingAbortOnMouseUp={this.props.disableJoggingAbortOnMouseUp}
                         /> : null}
                     </Box>
                     {this.props.openStepsPanel ? (

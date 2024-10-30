@@ -365,7 +365,35 @@ bool MillDaemon::SetFeedRate(const int feedRate)
 	return false;
 }
 
+//////////////////////////////////////////////////////
+// SpindleRate
+//////////////////////////////////////////////////////
 
+int MillDaemon::GetSpindleRate() const
+{
+	int spindleRate = -1;
+
+	auto pConnection = m_pConnector->GetNoLockConnection();
+	if (pConnection != nullptr)
+	{
+		spindleRate = pConnection->GetSpindleRateSlider();
+	}
+
+	return spindleRate;
+}
+
+bool MillDaemon::SetSpindleRate(const int spindleRate)
+{
+	auto pConnection = m_pConnector->GetNoLockConnection();
+	if (pConnection != nullptr)
+	{
+		CR_LOG_F("SpindleRate slider changed from %d to %d", pConnection->GetSpindleRateSlider(), spindleRate);
+		pConnection->SetSpindleRateSlider(spindleRate);
+		return true;
+	}
+
+	return false;
+}
 
 //////////////////////////////////////////////////////
 // Settings

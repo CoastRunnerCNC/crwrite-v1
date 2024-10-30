@@ -60,6 +60,7 @@ function Routes(props) {
                                 toggleJoggingPanel={props.toggleJoggingPanel}
                                 setShowJoggingResetAlert={props.setShowJoggingResetAlert}
                                 toggleStepsPanel={props.toggleStepsPanel}
+                                disableJoggingAbortOnMouseUp={props.disableJoggingAbortOnMouseUp}
                             />
                         )}
                     />

@@ -237,7 +237,6 @@ class JoggingPanel extends React.Component {
         this.onFeedRateChange = this.onFeedRateChange.bind(this);
         this.onJogRateChange = this.onJogRateChange.bind(this);
         this.pathClickStarted = this.pathClickStarted.bind(this);
-        this.pathClickEnded = this.pathClickEnded.bind(this);
         this.sendCommand = this.sendCommand.bind(this);
         this.isOutOfBounds = this.isOutOfBounds.bind(this);
         this.tempIsMovementAbsolute = this.tempIsMovementAbsolute.bind(this);
@@ -263,7 +262,8 @@ class JoggingPanel extends React.Component {
         this.jogEnd = this.jogEnd.bind(this);
         this.handleUnitsChange = this.handleUnitsChange.bind(this);
         this.onSpindleRateChange = this.onSpindleRateChange.bind(this);
-        this.onSpindleRateNumberChange = this.onSpindleRateNumberChange.bind(this);
+        this.onSpindleRateNumberChange =
+            this.onSpindleRateNumberChange.bind(this);
         this.currentJog = null;
         this.manual_entry_focused = false;
         this.manual_entry_ref = React.createRef();
@@ -495,8 +495,8 @@ class JoggingPanel extends React.Component {
         if (this.props.feedRate != prevProps.feedRate) {
             this.setState({
                 spindleRate: this.props.spindleRate,
-                spindleRate2: this.props.spindleRate
-            })
+                spindleRate2: this.props.spindleRate,
+            });
         }
     }
 
@@ -794,7 +794,9 @@ class JoggingPanel extends React.Component {
 
     jogEnd() {
         if (this.currentJog != null) {
-            ipcRenderer.send("CNC::CancelJog");
+            if (!this.props.disableJoggingAbortOnMouseUp) {
+                ipcRenderer.send("CNC::CancelJog");
+            }
             this.currentJog = null;
         }
     }
@@ -987,7 +989,7 @@ class JoggingPanel extends React.Component {
         if (newSpindleRate < 30) {
             newSpindleRate = 30;
         } else if (newSpindleRate > 300) {
-            newSpindleRate = 300
+            newSpindleRate = 300;
         }
         this.onSpindleRateChange(event, newSpindleRate);
         this.props.updateSpindleRate(newSpindleRate);
@@ -1018,10 +1020,6 @@ class JoggingPanel extends React.Component {
         if (frontEndCommand) {
             this.jogStart(frontEndCommand, distance, true);
         }
-    }
-
-    pathClickEnded() {
-        this.jogEnd();
     }
 
     isValueInRange(value, pointA, pointB) {
@@ -1796,6 +1794,8 @@ class JoggingPanel extends React.Component {
             ipcRenderer.send("CNC::ExecuteCommand", "M5");
         }
 
+        console.log(this.props.disableJoggingAbortOnMouseUp);
+
         return (
             <ItemPanel
                 title="Jogging"
@@ -2388,9 +2388,7 @@ class JoggingPanel extends React.Component {
                                         <Input
                                             value={this.state.spindleRate2}
                                             min={30}
-                                            max={
-                                                300
-                                            }
+                                            max={300}
                                             onChange={(event) => {
                                                 this.setState({
                                                     spindleRate2:

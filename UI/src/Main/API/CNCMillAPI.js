@@ -3,6 +3,7 @@ import APIUtility from "./APIUtility";
 const crwrite = require("crwrite");
 const electron = require("electron");
 var jogging = false;
+var machineState = null;
 
 class CNCMillAPI {
     static Initialize() {
@@ -15,7 +16,7 @@ class CNCMillAPI {
         });
 
         electron.ipcMain.on('CNC::Jog', function (event, direction, continuous, distance_mm) {
-            if (!jogging) {
+            if (!jogging || machineState != "Jog") {
                 try {
                     const parsed_distance = parseFloat(distance_mm);
 
@@ -65,6 +66,14 @@ class CNCMillAPI {
             console.log("readWrites: " + JSON.stringify(readWrites));
             let status = crwrite.GetStatus();
             console.log("status: " + status);
+            let statusObj
+            try {
+                statusObj = JSON.parse(status);
+            } catch {
+                console.error("Failed to parse status JSON:", error);
+            }
+            machineState = statusObj.status.state;
+            console.log("machineState: " + machineState)
             event.sender.send('Jobs::ReadWrites', readWrites);
             console.log("post readwrites");
             event.sender.send("CR_UpdateRealtimeStatus", status);
@@ -129,3 +138,45 @@ class CNCMillAPI {
 }
 
 export default CNCMillAPI;
+
+
+
+// status: {
+//     "status":{
+//         "buffer":{
+//             "free_planner_blocks":14,"free_rx_bytes":128
+//         },
+//         "limits":null,
+//         "line":0,
+//         "machine_pos":{
+//             "x":{
+//                 "inch":-3.3858267716535435,"mm":-86.0
+//             },
+//             "y":{
+//                 "inch":-0.01968503937007874,"mm":-0.5
+//             },
+//             "z":{
+//                 "inch":-0.01968503937007874,"mm":-0.5
+//             }
+//         },
+//         "movementType":"absolute",
+//         "parserUnits":"mm",
+//         "raw":"<Idle|M:-86.000,-0.500,-0.500|B:14,128|L:0|0000|W:0.000,0.000,0.000>",
+//         "state":"Idle",
+//         "substate":-1,
+//         "work_coordinates":{
+//             "wcs":"G54",
+//             "work_pos":{
+//                 "x":{
+//                     "inch":-3.3858267716535435,"mm":-86.0
+//                 },
+//                 "y":{
+//                     "inch":-0.01968503937007874,"mm":-0.5
+//                 },
+//                 "z":{
+//                     "inch":-0.01968503937007874,"mm":-0.5
+//                 }
+//             }
+//         }
+//     }
+// }

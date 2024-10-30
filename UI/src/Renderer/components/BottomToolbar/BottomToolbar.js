@@ -620,6 +620,8 @@ function BottomToolbar(props) {
                 checkFirmwareUpdates={props.checkFirmwareUpdates}
                 updateMachineStatus={props.updateMachineStatus}
                 updateSetting={props.updateSetting}
+                disableJoggingAbortOnMouseUp={props.disableJoggingAbortOnMouseUp}
+                setDisableJoggingAbortOnMouseUp={props.setDisableJoggingAbortOnMouseUp}
             />
             <Box
                 style={{

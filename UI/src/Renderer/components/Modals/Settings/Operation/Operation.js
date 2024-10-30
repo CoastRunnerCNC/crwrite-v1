@@ -69,6 +69,7 @@ class Operation extends React.Component {
             maxFeedRate: 100,
             disableLimitCatch: false,
             enableEditButton: false,
+            disableJoggingAbortOnMouseUp: false
         };
 
         this.closeDialog = this.props.closeDialog;
@@ -90,6 +91,7 @@ class Operation extends React.Component {
             maxFeedRate: this.props.settings.maxFeedRate,
             disableLimitCatch: this.props.settings.disableLimitCatch,
             enableEditButton: this.props.settings.enableEditButton,
+            disableJoggingAbortOnMouseUp: this.props.disableJoggingAbortOnMouseUp
         });
     }
 
@@ -114,6 +116,7 @@ class Operation extends React.Component {
             "enableEditButton",
             this.state.enableEditButton
         );
+        this.props.setDisableJoggingAbortOnMouseUp(this.state.disableJoggingAbortOnMouseUp);
         this.closeDialog();
     }
 
@@ -238,6 +241,20 @@ class Operation extends React.Component {
                         />
                     }
                     label="Disable warning when manual entry will trigger a limit alarm"
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={this.state.disableJoggingAbortOnMouseUp}
+                            onChange={(e) => {
+                                this.setState({
+                                    disableJoggingAbortOnMouseUp:
+                                        !this.state.disableJoggingAbortOnMouseUp,
+                                });
+                            }}
+                        />
+                    }
+                    label="Disable manual jogging abort on mouse up"
                 />
                 {this.getEditButtonSetting()}
 

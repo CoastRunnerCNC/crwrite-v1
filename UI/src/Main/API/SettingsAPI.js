@@ -58,6 +58,10 @@ export default class SettingsAPI {
             crwrite.SetFeedRate(feedRate);
         });
 
+        electron.ipcMain.on('Settings::SetSpindleRate', function (event, feedRate) {
+            crwrite.SetSpindleRate(feedRate);
+        });
+        
         electron.ipcMain.on('Settings::GetPositionButton', function (event, buttonNumber) {
             event.reply('Settings::ResponseGetPositionButton', crwrite.GetPositionButton(buttonNumber));
         });

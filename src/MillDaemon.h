@@ -114,7 +114,9 @@ public:
 
 	int GetFeedRate() const;
 
-	bool SetFeedRate(const int feedRate);
+	int GetFeedRateSlider() const;
+
+	bool SetFeedRateSlider(const int feedRate);
 
 	//////////////////////////////////////////////////////
 	// SpindleRate
@@ -122,7 +124,9 @@ public:
 
 	int GetSpindleRate() const;
 
-	bool SetSpindleRate(const int spindleRate);
+	int GetSpindleRateSlider() const;
+
+	bool SetSpindleRateSlider(const int spindleRate);
 
 	//////////////////////////////////////////////////////
 	// Firmware

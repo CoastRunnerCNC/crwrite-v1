@@ -69,11 +69,14 @@ class CNCMillAPI {
             let statusObj
             try {
                 statusObj = JSON.parse(status);
+                if (statusObj.status) {
+                    machineState = statusObj.status.state;
+                    console.log("machineState: " + machineState)
+                }
             } catch {
                 console.error("Failed to parse status JSON:", error);
             }
-            machineState = statusObj.status.state;
-            console.log("machineState: " + machineState)
+
             event.sender.send('Jobs::ReadWrites', readWrites);
             console.log("post readwrites");
             event.sender.send("CR_UpdateRealtimeStatus", status);

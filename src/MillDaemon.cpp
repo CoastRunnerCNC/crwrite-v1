@@ -346,13 +346,26 @@ int MillDaemon::GetFeedRate() const
 	auto pConnection = m_pConnector->GetNoLockConnection();
 	if (pConnection != nullptr)
 	{
-		feedRate = pConnection->GetFeedRateSlider();
+		feedRate = pConnection->GetFeedRate();
 	}
 
 	return feedRate;
 }
 
-bool MillDaemon::SetFeedRate(const int feedRate)
+int MillDaemon::GetFeedRateSlider() const
+{
+	int feedRateSlider = -1;
+
+	auto pConnection = m_pConnector->GetNoLockConnection();
+	if (pConnection != nullptr)
+	{
+		feedRateSlider = pConnection->GetFeedRateSlider();
+	}
+
+	return feedRateSlider;
+}
+
+bool MillDaemon::SetFeedRateSlider(const int feedRate)
 {
 	auto pConnection = m_pConnector->GetNoLockConnection();
 	if (pConnection != nullptr)
@@ -376,19 +389,32 @@ int MillDaemon::GetSpindleRate() const
 	auto pConnection = m_pConnector->GetNoLockConnection();
 	if (pConnection != nullptr)
 	{
-		spindleRate = pConnection->GetSpindleRateSlider();
+		spindleRate = pConnection->GetSpindleRate();
 	}
 
 	return spindleRate;
 }
 
-bool MillDaemon::SetSpindleRate(const int spindleRate)
+int MillDaemon::GetSpindleRateSlider() const
+{
+	int spindleRateSlider = -1;
+
+	auto pConnection = m_pConnector->GetNoLockConnection();
+	if (pConnection != nullptr)
+	{
+		spindleRateSlider = pConnection->GetSpindleRateSlider();
+	}
+
+	return spindleRateSlider;
+}
+
+bool MillDaemon::SetSpindleRateSlider(const int spindleRateSlider)
 {
 	auto pConnection = m_pConnector->GetNoLockConnection();
 	if (pConnection != nullptr)
 	{
-		CR_LOG_F("SpindleRate slider changed from %d to %d", pConnection->GetSpindleRateSlider(), spindleRate);
-		pConnection->SetSpindleRateSlider(spindleRate);
+		CR_LOG_F("SpindleRate slider changed from %d to %d", pConnection->GetSpindleRateSlider(), spindleRateSlider);
+		pConnection->SetSpindleRateSlider(spindleRateSlider);
 		return true;
 	}
 

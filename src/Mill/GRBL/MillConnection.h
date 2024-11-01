@@ -101,10 +101,12 @@ public:
 	std::vector<std::pair<std::string, Point3>> GetOffsets() noexcept;	// All WCS offsets and other offsets
 
 	// Feed Rate
+	int GetFeedRate() const noexcept { return m_pFeedRate->GetFeedRate(false); }
 	int GetFeedRateSlider() const noexcept { return m_pFeedRate->GetSlider(); }
 	void SetFeedRateSlider(const int slider) noexcept { m_pFeedRate->SetSlider(slider); }
 
 	// Spindle Rate
+	int GetSpindleRate() const noexcept { return m_pSpindleRate->GetSpindleRate(false); }
 	int GetSpindleRateSlider() const noexcept { return m_pSpindleRate->GetSlider(); }
 	void SetSpindleRateSlider(const int slider) noexcept { m_pSpindleRate->SetSlider(slider); }
 

@@ -212,12 +212,11 @@ class JoggingPanel extends React.Component {
             rawHistory: [],
             timerElapsedSeconds: 0,
             openShuttleSettings: false,
+            GRBLFeedRate: 100,
+            GRBLSpindleRate: 100,
         };
 
         this.progress = this.progress.bind(this);
-        // this.getMillingInProgressDisplay =
-        // this.getMillingInProgressDisplay.bind(this);
-        // this.getMillingProgress = this.getMillingProgress.bind(this);
         this.updateRealtimeStatus = this.updateRealtimeStatus.bind(this);
         this.executeCommand = this.executeCommand.bind(this);
         this.uploadGCodeFile = this.uploadGCodeFile.bind(this);
@@ -258,7 +257,6 @@ class JoggingPanel extends React.Component {
         this.updateReadWrites = this.updateReadWrites.bind(this);
         this.setRawHistory = this.setRawHistory.bind(this);
         this.incrementElapsedSeconds = this.incrementElapsedSeconds.bind(this);
-        this.handleSpindleChange = this.handleSpindleChange.bind(this);
         this.jogEnd = this.jogEnd.bind(this);
         this.handleUnitsChange = this.handleUnitsChange.bind(this);
         this.onSpindleRateChange = this.onSpindleRateChange.bind(this);
@@ -550,6 +548,8 @@ class JoggingPanel extends React.Component {
                     WCS: wcs,
                     units: status.parserUnits,
                     movementType: status.movementType,
+                    GRBLFeedRate: status.feedrate,
+                    GRBLSpindleRate: status.spindlerate
                 });
             }
         } catch (e) {
@@ -1251,10 +1251,6 @@ class JoggingPanel extends React.Component {
             clearInterval(this.timerInterval);
             this.timerInterval = null;
         }
-    }
-
-    handleSpindleChange(event) {
-        this.setState({ spindle: event.target.value });
     }
 
     handleDirectionChange(event) {
@@ -2293,7 +2289,7 @@ class JoggingPanel extends React.Component {
                                         />
                                     </Grid>
                                     <Grid item xs={1}>
-                                        <Input disabled value={100} />
+                                        <Input disabled value={this.state.GRBLFeedRate} />
                                     </Grid>
                                 </Grid>
                                 <Grid
@@ -2303,26 +2299,7 @@ class JoggingPanel extends React.Component {
                                     alignItems="center"
                                 >
                                     {/* spindle direction */}
-                                    <Grid item>
-                                        <Typography>Spindle</Typography>
-                                    </Grid>
-                                    <Grid item>
-                                        <Select
-                                            fullWidth
-                                            value={this.state.spindle}
-                                            onChange={this.handleSpindleChange}
-                                        >
-                                            <MenuItem value="option1">
-                                                Option 1
-                                            </MenuItem>
-                                            <MenuItem value="option2">
-                                                Option 2
-                                            </MenuItem>
-                                            <MenuItem value="option3">
-                                                Option 3
-                                            </MenuItem>
-                                        </Select>
-                                    </Grid>
+
                                     <Grid item>
                                         <Typography>Direction</Typography>
                                     </Grid>
@@ -2357,7 +2334,7 @@ class JoggingPanel extends React.Component {
                                                 onClick={
                                                     handleDisableSpindleClick
                                                 }
-                                                value="counter-clockwise"
+                                                value="disable"
                                             >
                                                 Disable
                                             </MenuItem>
@@ -2414,7 +2391,7 @@ class JoggingPanel extends React.Component {
                                         />
                                     </Grid>
                                     <Grid item xs={1}>
-                                        <Input disabled value={100} />
+                                        <Input disabled value={this.state.GRBLSpindleRate} />
                                     </Grid>
                                 </Grid>
                                 <Grid

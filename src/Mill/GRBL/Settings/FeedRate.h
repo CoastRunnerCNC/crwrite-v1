@@ -4,7 +4,8 @@
 #include <Common/Logger.h>
 using namespace MillLogger;
 
-class FeedRate {
+class FeedRate
+{
 public:
 	using Ptr = std::shared_ptr<FeedRate>;
 
@@ -50,11 +51,14 @@ public:
 		return m_updateRequired;
 	}
 
-	int GetFeedRate() noexcept
+	int GetFeedRate(const bool sendToGRBL) noexcept
 	{
 		std::lock_guard<std::mutex> write(m_mutex);
 
-		m_updateRequired = false;
+		if (sendToGRBL)
+		{
+			m_updateRequired = false;
+		}
 
 		return ((m_feedRate * m_slider) / 100);
 	}
@@ -62,7 +66,7 @@ public:
 private:
 	mutable std::mutex m_mutex;
 
-	bool m_updateRequired{ false };
-	int m_slider{ 100 };
-	int m_feedRate{ 100 };
+	bool m_updateRequired{false};
+	int m_slider{100};
+	int m_feedRate{100};
 };

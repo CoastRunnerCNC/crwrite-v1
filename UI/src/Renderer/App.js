@@ -12566,7 +12566,7 @@ export default class App extends React.Component {
             openStepsPanel: false,
             navigateToMilling: false,
             showJoggingResetAlert: false,
-            disableJoggingAbortOnMouseUp: false
+            disableJoggingAbortOnMouseUp: false,
         };
 
         this.updateStatus = this.updateStatus.bind(this);
@@ -12583,7 +12583,8 @@ export default class App extends React.Component {
             this.toggleMachineOutputPanel.bind(this);
         this.toggleStepsPanel = this.toggleStepsPanel.bind(this);
         this.setNavigateToMilling = this.setNavigateToMilling.bind(this);
-        this.setDisableJoggingAbortOnMouseUp = this.setDisableJoggingAbortOnMouseUp.bind(this);
+        this.setDisableJoggingAbortOnMouseUp =
+            this.setDisableJoggingAbortOnMouseUp.bind(this);
         this.setShowJoggingResetAlert =
             this.setShowJoggingResetAlert.bind(this);
         this.commandKeys = {};
@@ -12628,7 +12629,7 @@ export default class App extends React.Component {
             "Logs::LogString",
             typeof newFeedRate + " " + String(newFeedRate)
         );
-        ipcRenderer.send("Settings::SetFeedRate", newFeedRate);
+        ipcRenderer.send("Settings::SetFeedRateSlider", newFeedRate);
         this.setState({ feedRate: newFeedRate });
     }
 
@@ -12636,7 +12637,7 @@ export default class App extends React.Component {
         this.setState({
             spindleRate: newSpindleRate,
         });
-        ipcRenderer.send("Settings::SetSpindleRate", newSpindleRate);
+        ipcRenderer.send("Settings::SetSpindleRateSlider", newSpindleRate);
     }
 
     getFirmwareYMD(versionStr) {
@@ -12848,7 +12849,7 @@ export default class App extends React.Component {
     }
 
     setDisableJoggingAbortOnMouseUp(value) {
-        this.setState({disableJoggingAbortOnMouseUp: value});
+        this.setState({ disableJoggingAbortOnMouseUp: value });
     }
 
     render() {
@@ -12896,8 +12897,8 @@ export default class App extends React.Component {
             setOpenProbingWizard: (value) => {
                 this.setState({ openProbingWizard: value });
             },
-            disableJoggingAbortOnMouseUp: this.state.disableJoggingAbortOnMouseUp
-
+            disableJoggingAbortOnMouseUp:
+                this.state.disableJoggingAbortOnMouseUp,
         };
 
         return (
@@ -12972,7 +12973,9 @@ export default class App extends React.Component {
                                 toggleMachineOutputPanel={
                                     this.toggleMachineOutputPanel
                                 }
-                                setDisableJoggingAbortOnMouseUp={this.setDisableJoggingAbortOnMouseUp}
+                                setDisableJoggingAbortOnMouseUp={
+                                    this.setDisableJoggingAbortOnMouseUp
+                                }
                             />
                         </Box>
                     </Box>
@@ -12981,3 +12984,21 @@ export default class App extends React.Component {
         );
     }
 }
+
+let moob = {
+    status: {
+        buffer: { free_planner_blocks: 14, free_rx_bytes: 128 },
+        limits: null,
+        line: 0,
+        machine_pos: {
+            x: { inch: 0.0, mm: 0.0 },
+            y: { inch: 0.0, mm: 0.0 },
+            z: { inch: 0.0, mm: 0.0 },
+        },
+        movementType: "absolute",
+        parserUnits: "mm",
+        raw: "<Alarm|M:0.000,0.000,0.000|B:14,128|L:0|0000>",
+        state: "Alarm",
+        substate: -1,
+    },
+};

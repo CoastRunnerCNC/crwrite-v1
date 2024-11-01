@@ -596,6 +596,11 @@ napi_value GetFeedRate(napi_env env, napi_callback_info info)
 	return NapiUInt32::Create(env, MillDaemon::GetInstance().GetFeedRate()).napi;
 }
 
+napi_value GetFeedRateSlider(napi_env env, napi_callback_info info)
+{
+	return NapiUInt32::Create(env, MillDaemon::GetInstance().GetFeedRateSlider()).napi;
+}
+
 napi_value GetSpindleRate(napi_env env, napi_callback_info info)
 {
 	return NapiUInt32::Create(env, MillDaemon::GetInstance().GetSpindleRate()).napi;
@@ -686,17 +691,17 @@ napi_value CRWriteMeetsMinimumVersion(napi_env env, napi_callback_info info) {
 	return NapiBool::Create(env, MillDaemon::GetInstance().CRWriteMeetsMinimumVersion(input)).napi;
 }
 
-napi_value SetFeedRate(napi_env env, napi_callback_info info)
+napi_value SetFeedRateSlider(napi_env env, napi_callback_info info)
 {
 	std::vector<NapiValue> args = NapiArgs::GetArgs(env, info);
-	MillDaemon::GetInstance().SetFeedRate(args[0].ToInt32().Get());
+	MillDaemon::GetInstance().SetFeedRateSlider(args[0].ToInt32().Get());
 	return nullptr;
 }
 
-napi_value SetSpindleRate(napi_env env, napi_callback_info info)
+napi_value SetSpindleRateSlider(napi_env env, napi_callback_info info)
 {
 	std::vector<NapiValue> args = NapiArgs::GetArgs(env, info);
-	MillDaemon::GetInstance().SetSpindleRate(args[0].ToInt32().Get());
+	MillDaemon::GetInstance().SetSpindleRateSlider(args[0].ToInt32().Get());
 	return nullptr;
 }
 
@@ -834,9 +839,13 @@ napi_value LogString(napi_env env, napi_callback_info info) {
 napi_value GetStatus(napi_env env, napi_callback_info info)
 {
 	auto status = MillDaemon::GetInstance().GetStatus();
+	auto spindleRate = MillDaemon::GetInstance().GetSpindleRate();
+	auto feedRate = MillDaemon::GetInstance().GetFeedRate();
 	auto json = Json::Value{ };
 	if (status != nullptr) {
 		json["status"] = status->ToJSON();
+		json["status"]["feedrate"] = feedRate;
+		json["status"]["spindlerate"] = spindleRate;
 	}
 	else {
 		json["error"] = "NO_STATUS"; // TODO: Determine error
@@ -935,10 +944,11 @@ napi_value Init(napi_env env, napi_value exports)
 		DECLARE_NAPI_METHOD("GetMachineConfig", GetMachineConfig),
 
 		DECLARE_NAPI_METHOD("GetFeedRate", GetFeedRate),
-		DECLARE_NAPI_METHOD("SetFeedRate", SetFeedRate),
+		DECLARE_NAPI_METHOD("GetFeedRateSlider", GetFeedRateSlider),
+		DECLARE_NAPI_METHOD("SetFeedRateSlider", SetFeedRateSlider),
 
 		DECLARE_NAPI_METHOD("GetSpindleRate", GetSpindleRate),
-		DECLARE_NAPI_METHOD("SetSpindleRate", SetSpindleRate),
+		DECLARE_NAPI_METHOD("SetSpindleRateSlider", SetSpindleRateSlider),
 
 		DECLARE_NAPI_METHOD("GetPositionButton", GetPositionButton),
 		DECLARE_NAPI_METHOD("SetPositionButton", SetPositionButton),

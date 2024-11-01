@@ -79,12 +79,12 @@ class Operation extends React.Component {
     }
 
     componentDidMount() {
-        ipcRenderer.once("Settings::GetFeedRateResponse", (event, feedrate) => {
+        ipcRenderer.once("Settings::GetFeedRateSliderResponse", (event, feedrate) => {
             this.setState({
                 feedRate: feedrate,
             });
         });
-        ipcRenderer.send("Settings::GetFeedRate");
+        ipcRenderer.send("Settings::GetFeedRateSlider");
         this.setState({
             pause: this.props.settings.pauseAfterGCode,
             enableSlider: this.props.settings.enable_slider,
@@ -110,7 +110,7 @@ class Operation extends React.Component {
         );
 
         if (!this.state.enableSlider && this.state.feedRate > 100) {
-            ipcRenderer.send("Settings::SetFeedRate", 100);
+            ipcRenderer.send("Settings::SetFeedRateSlider", 100);
         }
         this.props.updateSetting(
             "enableEditButton",

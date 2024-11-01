@@ -285,12 +285,12 @@ void MillConnection::ExecuteProgram(const std::vector<GCodeLine>& gcodes, const 
 
         if (m_pFeedRate->IsUpdateRequired()) {
             MILL_LOG("FeedRate Update Required");
-            ExecuteLine(GCodeLine(StringUtil::Format("F%d", m_pFeedRate->GetFeedRate()), true), true, isManualEntry);
+            ExecuteLine(GCodeLine(StringUtil::Format("F%d", m_pFeedRate->GetFeedRate(true)), true), true, isManualEntry);
         }
 
         if (m_pSpindleRate->IsUpdateRequired()) {
             MILL_LOG("SpindleRate Update Required");
-            ExecuteLine(GCodeLine(StringUtil::Format("S%d", m_pFeedRate->GetFeedRate()), true), true, isManualEntry);
+            ExecuteLine(GCodeLine(StringUtil::Format("S%d", m_pSpindleRate->GetSpindleRate(true)), true), true, isManualEntry);
         }
 
         m_progress.SetCompleted(i + 1);

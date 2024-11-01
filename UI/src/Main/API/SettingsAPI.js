@@ -51,15 +51,19 @@ export default class SettingsAPI {
         });
 
         electron.ipcMain.on('Settings::GetFeedRate', function (event) {
-            APIUtility.handleAsyncApiResponse(event, 'Settings::GetFeedRate', crwrite.GetFeedRate);
+            APIUtility.handleAsyncApiResponse(event, 'Settings::GetFeedRateSlider', crwrite.GetFeedRate);
+        });
+        
+        electron.ipcMain.on('Settings::GetFeedRateSlider', function (event) {
+            APIUtility.handleAsyncApiResponse(event, 'Settings::GetFeedRateSlider', crwrite.GetFeedRateSlider);
         });
 
-        electron.ipcMain.on('Settings::SetFeedRate', function (event, feedRate) {
-            crwrite.SetFeedRate(feedRate);
+        electron.ipcMain.on('Settings::SetFeedRateSlider', function (event, feedRate) {
+            crwrite.SetFeedRateSlider(feedRate);
         });
 
-        electron.ipcMain.on('Settings::SetSpindleRate', function (event, feedRate) {
-            crwrite.SetSpindleRate(feedRate);
+        electron.ipcMain.on('Settings::SetSpindleRateSlider', function (event, feedRate) {
+            crwrite.SetSpindleRateSlider(feedRate);
         });
         
         electron.ipcMain.on('Settings::GetPositionButton', function (event, buttonNumber) {

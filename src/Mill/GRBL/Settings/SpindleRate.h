@@ -4,7 +4,8 @@
 #include <Common/Logger.h>
 using namespace MillLogger;
 
-class SpindleRate {
+class SpindleRate
+{
 public:
 	using Ptr = std::shared_ptr<SpindleRate>;
 
@@ -50,19 +51,23 @@ public:
 		return m_updateRequired;
 	}
 
-	int GetSpindleRate() noexcept
+	int GetSpindleRate(const bool sendToGRBL) noexcept
 	{
 		std::lock_guard<std::mutex> write(m_mutex);
+		const int calculatedSpindleRate = ((m_spindleRate * m_slider) / 100);
+		if (sendToGRBL)
+		{
+			m_updateRequired = false;
+		}
+		CR_LOG_F("Spindlerate requested: %d", calculatedSpindleRate);
 
-		m_updateRequired = false;
-
-		return ((m_spindleRate * m_slider) / 100);
+		return calculatedSpindleRate;
 	}
 
 private:
 	mutable std::mutex m_mutex;
 
-	bool m_updateRequired{ false };
-	int m_slider{ 100 };
-	int m_spindleRate{ 100 };
+	bool m_updateRequired{false};
+	int m_slider{100};
+	int m_spindleRate{100};
 };

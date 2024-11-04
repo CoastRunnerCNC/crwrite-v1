@@ -23,6 +23,8 @@ function Routes(props) {
         setOpenProbingWizard: props.setOpenProbingWizard,
         navigateToMilling: props.navigateToMilling,
         setNavigateToMilling: props.setNavigateToMilling,
+        setManualMode: props.setManualMode
+
     };
 
     return (
@@ -61,6 +63,10 @@ function Routes(props) {
                                 setShowJoggingResetAlert={props.setShowJoggingResetAlert}
                                 toggleStepsPanel={props.toggleStepsPanel}
                                 disableJoggingAbortOnMouseUp={props.disableJoggingAbortOnMouseUp}
+                                setDisableJoggingAbortOnMouseUp={
+                                    props.setDisableJoggingAbortOnMouseUp
+                                }
+                                manualMode={props.manualMode}
                             />
                         )}
                     />

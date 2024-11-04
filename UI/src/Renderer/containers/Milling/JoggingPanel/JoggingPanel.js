@@ -12,6 +12,7 @@ import {
     Tabs,
     Tab,
     Box,
+    Checkbox,
 } from "@material-ui/core";
 import app from "app";
 import Alert from "../../../components/Modals/Alert";
@@ -115,6 +116,9 @@ const styles = (theme) => ({
         justifyContent: "center",
         alignItems: "center",
     },
+    checkBox: {
+        padding: "0px"
+    }
 });
 
 const MillSVG = () => {
@@ -549,7 +553,7 @@ class JoggingPanel extends React.Component {
                     units: status.parserUnits,
                     movementType: status.movementType,
                     GRBLFeedRate: status.feedrate,
-                    GRBLSpindleRate: status.spindlerate
+                    GRBLSpindleRate: status.spindlerate,
                 });
             }
         } catch (e) {
@@ -2188,16 +2192,37 @@ class JoggingPanel extends React.Component {
                                     alignItems="center"
                                 >
                                     {getJoggingMode(this)}
+                                    {maxDistanceInput(this)}
                                 </Grid>
-                                {/* mode max */}
                                 <Grid
                                     item
                                     container
                                     spacing={1}
                                     alignItems="center"
                                 >
-                                    {maxDistanceInput(this)}
+                                    <Grid item>
+                                        <Checkbox
+                                            checked={
+                                                this.props
+                                                    .disableJoggingAbortOnMouseUp
+                                            }
+                                            onChange={(e) => {
+                                                this.props.setDisableJoggingAbortOnMouseUp(
+                                                    !this.props.disableJoggingAbortOnMouseUp
+                                                );
+                                            }}
+                                            style={{height: "32px", width: "32"}}
+                                            classes={{root: classes.checkBox}}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography>
+                                            Disable manual jogging abort on
+                                            mouse up
+                                        </Typography>
+                                    </Grid>
                                 </Grid>
+                                {/* mode max */}
                                 <Grid
                                     item
                                     container
@@ -2289,7 +2314,10 @@ class JoggingPanel extends React.Component {
                                         />
                                     </Grid>
                                     <Grid item xs={1}>
-                                        <Input disabled value={this.state.GRBLFeedRate} />
+                                        <Input
+                                            disabled
+                                            value={this.state.GRBLFeedRate}
+                                        />
                                     </Grid>
                                 </Grid>
                                 <Grid
@@ -2391,7 +2419,10 @@ class JoggingPanel extends React.Component {
                                         />
                                     </Grid>
                                     <Grid item xs={1}>
-                                        <Input disabled value={this.state.GRBLSpindleRate} />
+                                        <Input
+                                            disabled
+                                            value={this.state.GRBLSpindleRate}
+                                        />
                                     </Grid>
                                 </Grid>
                                 <Grid

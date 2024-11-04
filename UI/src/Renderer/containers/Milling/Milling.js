@@ -575,6 +575,10 @@ class Milling extends React.Component {
         setTimeout(this.progress, 100);
     }
 
+    componentWillUnmount() {
+        this.props.setManaulMode(false);
+    }
+
     progress() {
         const showNext = this.state.showNext;
         if (showNext === true) {
@@ -1344,6 +1348,7 @@ class Milling extends React.Component {
                             setShowJoggingResetAlert={this.props.setShowJoggingResetAlert}
                             toggleStepsPanel={this.props.toggleStepsPanel}
                             disableJoggingAbortOnMouseUp={this.props.disableJoggingAbortOnMouseUp}
+                            setDisableJoggingAbortOnMouseUp={this.props.setDisableJoggingAbortOnMouseUp}
                         /> : null}
                     </Box>
                     {this.props.openStepsPanel ? (

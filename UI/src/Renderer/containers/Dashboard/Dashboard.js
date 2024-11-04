@@ -23,6 +23,7 @@ import ItemPanel from "../../components/ItemPanel/ItemPanel";
 import ProbingWizard from "../../components/Modals/ProbingWizard/ProbingWizard";
 const crwrite = require("crwrite");
 import Shuttle from "../../components/Modals/Shuttle";
+import ManualModeButton from "../../components/ManualModeButton/ManualModeButton";
 
 const styles = (theme) => ({
     main: {
@@ -713,24 +714,12 @@ function Dashboard(props) {
                                         <GuidedModeSVG onClick={onClickRun} />
                                     </span>
                                 </Tooltip>
-                                <Shuttle
+                                <ManualModeButton
                                     showOpenIcon={true}
-                                    openShuttle={props.openShuttle}
-                                    shuttleSelectedTab={
-                                        props.shuttleSelectedTab
-                                    }
-                                    toggleShuttle={props.toggleShuttle}
+                                    setNavigateToMilling={props.setNavigateToMilling}
                                     milling={props.milling}
                                     status={props.status}
                                     firmware={props.firmware}
-                                    closeOperationsWindow={
-                                        props.closeOperationsWindow
-                                    }
-                                    setOperationsWindowOpen={
-                                        props.setOperationsWindowOpen
-                                    }
-                                    feedRate={props.feedRate}
-                                    updateFeedRate={props.updateFeedRate}
                                 />
                                 <FileCreater
                                     onClick={() => {

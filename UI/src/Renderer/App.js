@@ -12560,13 +12560,14 @@ export default class App extends React.Component {
             openShuttle: false,
             shuttleSelectedTab: 0,
             openImagePanel: false,
-            openJoggingPanel: true,
+            openJoggingPanel: false,
             openProbingWizard: false,
             openMachineOutputPanel: true,
-            openStepsPanel: false,
+            openStepsPanel: true,
             navigateToMilling: false,
             showJoggingResetAlert: false,
-            disableJoggingAbortOnMouseUp: false,
+            disableJoggingAbortOnMouseUp: true,
+            manualMode: false
         };
 
         this.updateStatus = this.updateStatus.bind(this);
@@ -12587,6 +12588,7 @@ export default class App extends React.Component {
             this.setDisableJoggingAbortOnMouseUp.bind(this);
         this.setShowJoggingResetAlert =
             this.setShowJoggingResetAlert.bind(this);
+        this.setManualMode = this.setManualMode.bind(this);
         this.commandKeys = {};
         this.eventKeyFrontEndCommandMap = {};
 
@@ -12602,12 +12604,18 @@ export default class App extends React.Component {
         }
     }
 
+    setManualMode(value) {
+        this.setState ({manualMode: value});
+    }
+
     toggleImagePanel() {
         this.setState({ openImagePanel: !this.state.openImagePanel });
     }
 
     toggleJoggingPanel() {
-        this.setState({ openJoggingPanel: !this.state.openJoggingPanel });
+        if (!this.state.manualMode) {
+            this.setState({ openJoggingPanel: !this.state.openJoggingPanel });
+        }
     }
 
     setShowJoggingResetAlert(value) {
@@ -12952,6 +12960,12 @@ export default class App extends React.Component {
                                 }
                                 toggleJoggingPanel={this.toggleJoggingPanel}
                                 toggleStepsPanel={this.toggleStepsPanel}
+                                disableJoggingAbortOnMouseUp={this.state.disableJoggingAbortOnMouseUp}
+                                setDisableJoggingAbortOnMouseUp={
+                                    this.setDisableJoggingAbortOnMouseUp
+                                }
+                                manualMode={this.state.manualMode}
+                                setManualMode={this.setManualMode}
                             />
 
                             {/* BottomToolbar component with shared props */}
@@ -12973,9 +12987,6 @@ export default class App extends React.Component {
                                 toggleMachineOutputPanel={
                                     this.toggleMachineOutputPanel
                                 }
-                                setDisableJoggingAbortOnMouseUp={
-                                    this.setDisableJoggingAbortOnMouseUp
-                                }
                             />
                         </Box>
                     </Box>
@@ -12984,21 +12995,3 @@ export default class App extends React.Component {
         );
     }
 }
-
-let moob = {
-    status: {
-        buffer: { free_planner_blocks: 14, free_rx_bytes: 128 },
-        limits: null,
-        line: 0,
-        machine_pos: {
-            x: { inch: 0.0, mm: 0.0 },
-            y: { inch: 0.0, mm: 0.0 },
-            z: { inch: 0.0, mm: 0.0 },
-        },
-        movementType: "absolute",
-        parserUnits: "mm",
-        raw: "<Alarm|M:0.000,0.000,0.000|B:14,128|L:0|0000>",
-        state: "Alarm",
-        substate: -1,
-    },
-};

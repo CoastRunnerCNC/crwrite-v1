@@ -88,6 +88,7 @@ const MachineOutputPanel = (props) => {
                     selectedStep={props.selectedStep}
                     millingInProgress={props.millingInProgress}
                     history={readWrites.slice()}
+                    manualMode={props.manualMode}
                 />
             </div>
         );
@@ -105,6 +106,9 @@ const MachineOutputPanel = (props) => {
             });
         }
     }
+    const onXClick = () => {
+        props.toggleMachineOutputPanel();
+    }
 
     if (props.open) {
         return (
@@ -112,6 +116,7 @@ const MachineOutputPanel = (props) => {
                 title="Machine Output"
                 color="secondary"
                 scrollContent
+                onXClick={onXClick}
                 small
             >
                 {getDisplay()}

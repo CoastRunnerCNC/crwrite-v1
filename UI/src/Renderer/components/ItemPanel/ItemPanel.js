@@ -7,18 +7,19 @@ const ItemPanel = (props) => {
     let svgHeight = props.small ? "12" : "12";
     let titleBarPadding = props.small ? "4px 4px 0px 4px" : "3px 5px";
 
-    const MinimizeIcon = () => {
+    const MinimizeIcon = (iconProps) => {
         let minimizeBackgroundColor =
             props.color === "secondary" ? "white" : "#E2D9CE";
 
         return (
             <svg
-                style={{ display: "block" }}
+                style={{ display: "block", cursor: iconProps.onXClick ? "pointer" : "default"}}
                 width={svgHeight}
                 height={svgHeight}
                 viewBox="0 0 6 7"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                onClick={iconProps.onXClick}
             >
                 <path
                     fill-rule="evenodd"
@@ -53,7 +54,7 @@ const ItemPanel = (props) => {
                         item
                         style={{ padding: "3px", marginLeft: "6px", border: "1px solid black" }}
                     >
-                        <MinimizeIcon />
+                        <MinimizeIcon onXClick={props.onXClick} />
                     </Grid>
                     <Grid item xs style={{marginLeft: "4px"}}>
                         <LineBox />

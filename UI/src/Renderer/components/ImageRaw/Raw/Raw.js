@@ -121,7 +121,8 @@ class Raw extends React.Component {
     render() {
         const { classes, selectedStep, millingInProgress, height } = this.props;
 
-        function getGCodeDisplay(milling, readWrites) {
+        function getGCodeDisplay(milling, readWrites, component) {
+            console.log(component.props.manualMode)
             if (milling) {
                 return readWrites.map((readWrite, index) => {
                     return (
@@ -130,7 +131,7 @@ class Raw extends React.Component {
                         </Typography>
                     )
                 });
-            } else {
+            } else if (!component.props.manualMode) {
                 console.log("second display");
                 var gcodes = [];
                 if (selectedStep.GCode != null) {
@@ -150,7 +151,7 @@ class Raw extends React.Component {
         function getDisplay(component) {
             return (
                 <div className={classes.gcodes} style={{height: height}} onScrollCapture={component.onOutputScroll}>
-                    {getGCodeDisplay(millingInProgress, component.state.readWrites)}
+                    {getGCodeDisplay(millingInProgress, component.state.readWrites, component)}
                     <div style={{float: "left", clear: "both"}} ref={component.gcodeEndRef}>
                     </div>
                 </div>

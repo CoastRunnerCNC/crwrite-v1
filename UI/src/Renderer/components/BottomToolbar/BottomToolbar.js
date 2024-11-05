@@ -408,7 +408,7 @@ function BottomToolbar(props) {
     };
 
     const handleClickImage = () => {
-        props.toggleImagePanel();
+        props.setImagePanel(props.openImagePanel ? false : true);
     };
 
     const handleClickProbingWizard = () => {
@@ -422,8 +422,8 @@ function BottomToolbar(props) {
             console.log("handleJoggingPanelClick - setting jogging alert");
             props.setShowJoggingResetAlert(true);
         } else {
-            props.toggleJoggingPanel();
-            props.toggleStepsPanel();
+            props.setJoggingPanel(props.openJoggingPanel ? false : true);
+            props.setStepsPanel(props.openStepsPanel ? false : true);
         }
     };
 
@@ -866,6 +866,7 @@ function BottomToolbar(props) {
                                                         onClick={
                                                             handleClickImage
                                                         }
+                                                        disabled={props.manualMode}
                                                     >
                                                         Image
                                                     </MenuItem>
@@ -883,6 +884,7 @@ function BottomToolbar(props) {
                                                         onClick={
                                                             handleJoggingPanelClick
                                                         }
+                                                        disabled={props.manualMode}
                                                     >
                                                         Jogging
                                                     </MenuItem>

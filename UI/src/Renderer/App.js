@@ -12559,7 +12559,7 @@ export default class App extends React.Component {
             spindleRate: 100,
             openShuttle: false,
             shuttleSelectedTab: 0,
-            openImagePanel: false,
+            openImagePanel: true,
             openJoggingPanel: false,
             openProbingWizard: false,
             openMachineOutputPanel: true,
@@ -12578,11 +12578,11 @@ export default class App extends React.Component {
         this.updateSpindleRate = this.updateSpindleRate.bind(this);
         this.updateSetting = this.updateSetting.bind(this);
         this.toggleShuttle = this.toggleShuttle.bind(this);
-        this.toggleImagePanel = this.toggleImagePanel.bind(this);
-        this.toggleJoggingPanel = this.toggleJoggingPanel.bind(this);
+        this.setImagePanel = this.setImagePanel.bind(this);
+        this.setJoggingPanel = this.setJoggingPanel.bind(this);
         this.toggleMachineOutputPanel =
             this.toggleMachineOutputPanel.bind(this);
-        this.toggleStepsPanel = this.toggleStepsPanel.bind(this);
+        this.setStepsPanel = this.setStepsPanel.bind(this);
         this.setNavigateToMilling = this.setNavigateToMilling.bind(this);
         this.setDisableJoggingAbortOnMouseUp =
             this.setDisableJoggingAbortOnMouseUp.bind(this);
@@ -12608,13 +12608,13 @@ export default class App extends React.Component {
         this.setState ({manualMode: value});
     }
 
-    toggleImagePanel() {
-        this.setState({ openImagePanel: !this.state.openImagePanel });
+    setImagePanel(value) {
+        this.setState({ openImagePanel: value });
     }
 
-    toggleJoggingPanel() {
+    setJoggingPanel(value) {
         if (!this.state.manualMode) {
-            this.setState({ openJoggingPanel: !this.state.openJoggingPanel });
+            this.setState({ openJoggingPanel: value });
         }
     }
 
@@ -12628,8 +12628,10 @@ export default class App extends React.Component {
         });
     }
 
-    toggleStepsPanel() {
-        this.setState({ openStepsPanel: !this.state.openStepsPanel });
+    setStepsPanel(value) {
+        if (!this.state.manualMode) {
+            this.setState({ openStepsPanel: value });
+        }
     }
 
     updateFeedrate(newFeedRate) {
@@ -12907,6 +12909,12 @@ export default class App extends React.Component {
             },
             disableJoggingAbortOnMouseUp:
                 this.state.disableJoggingAbortOnMouseUp,
+            setStepsPanel: this.setStepsPanel,
+            setJoggingPanel: this.setJoggingPanel,
+            manualMode: this.state.manualMode,
+            setImagePanel: this.setImagePanel,
+            toggleMachineOutputPanel: this.toggleMachineOutputPanel,
+            
         };
 
         return (
@@ -12958,13 +12966,10 @@ export default class App extends React.Component {
                                 eventKeyFrontEndCommandMap={
                                     this.eventKeyFrontEndCommandMap
                                 }
-                                toggleJoggingPanel={this.toggleJoggingPanel}
-                                toggleStepsPanel={this.toggleStepsPanel}
                                 disableJoggingAbortOnMouseUp={this.state.disableJoggingAbortOnMouseUp}
                                 setDisableJoggingAbortOnMouseUp={
                                     this.setDisableJoggingAbortOnMouseUp
                                 }
-                                manualMode={this.state.manualMode}
                                 setManualMode={this.setManualMode}
                             />
 
@@ -12981,12 +12986,6 @@ export default class App extends React.Component {
                                 checkFirmwareUpdates={this.checkFirmwareUpdates}
                                 updateMachineStatus={this.updateStatus}
                                 updateSetting={this.updateSetting}
-                                toggleImagePanel={this.toggleImagePanel}
-                                toggleStepsPanel={this.toggleStepsPanel}
-                                toggleJoggingPanel={this.toggleJoggingPanel}
-                                toggleMachineOutputPanel={
-                                    this.toggleMachineOutputPanel
-                                }
                             />
                         </Box>
                     </Box>

@@ -176,6 +176,7 @@ class Milling extends React.Component {
         this.handlePopupOkay = this.handlePopupOkay.bind(this);
         this.parseGoTo = this.parseGoTo.bind(this);
         this.setManualMode = this.setManualMode.bind(this);
+        this.setGoBack = this.setGoBack.bind(this);
         this.handleEmergencyStopResponse =
             this.handleEmergencyStopResponse.bind(this);
         ipcRenderer.removeAllListeners("CRFileDoubleClick");
@@ -558,17 +559,17 @@ class Milling extends React.Component {
             "Jobs::EmergencyStopResponse",
             this.handleEmergencyStopResponse
         );
-
-        this.setState({
-            editTitleValue: this.state.selectedStep.Title,
-            editJobTextValue: this.getJobEditText(),
-            editPromptValue: this.state.selectedStep.Prompt,
-            editMarkdownValue: this.state.selectedStep.Markdown,
-            editImage: this.state.selectedStep.ImagePath,
-            editGCode: this.state.selectedStep.RawGCode,
-            editGCodePath: this.state.selectedStep.GCodePath,
-        });
-
+        if (this.state.selectedStep) {
+            this.setState({
+                editTitleValue: this.state.selectedStep.Title,
+                editJobTextValue: this.getJobEditText(),
+                editPromptValue: this.state.selectedStep.Prompt,
+                editMarkdownValue: this.state.selectedStep.Markdown,
+                editImage: this.state.selectedStep.ImagePath,
+                editGCode: this.state.selectedStep.RawGCode,
+                editGCodePath: this.state.selectedStep.GCodePath,
+            });
+        }
         this.getFileNameFromPath(this.state.filePath);
         document.addEventListener("click", this.interceptClickEvent);
         this.status_loop = true;
@@ -576,7 +577,7 @@ class Milling extends React.Component {
     }
 
     componentWillUnmount() {
-        this.props.setManaulMode(false);
+        this.props.setManualMode(false);
     }
 
     progress() {
@@ -910,6 +911,12 @@ class Milling extends React.Component {
         this.setState({manualMode: value});
     }
 
+    setGoBack(value) {
+        this.setState({goBack: value});
+        console.log("setGoBack set to " + value);
+        console.log("showAlert: " + this.state.showAlert)
+    }
+
     render() {
         const { classes, status } = this.props;
 
@@ -1045,8 +1052,13 @@ class Milling extends React.Component {
             this.props.setNavigateToMilling(false);
             return <Redirect to="/" />;
         }
+        console.log("manual mode: " + this.props.manualMode);
+        console.log("open steps panel: " + this.props.openStepsPanel);
+        console.log("open jogging panel: " + this.props.openJoggingPanel);
         return (
             <React.Fragment>
+                { !this.props.manualMode && (
+                <>
                 <Throbber
                     start={this.state.writeInProgress}
                     setWritingStatus={this.handleSetWriteStatus}
@@ -1283,6 +1295,8 @@ class Milling extends React.Component {
                     feedRate={this.props.feedRate}
                     updateFeedRate={this.props.updateFeedRate}
                 />
+                </>
+                )} 
 
                 <Box
                     style={{
@@ -1302,6 +1316,7 @@ class Milling extends React.Component {
                             overflowY: "auto",
                         }}
                     >
+                        { !this.props.manualMode && (
                         <StepsPanel
                             fileName={this.state.fileName}
                             jobName={this.state.jobName}
@@ -1330,7 +1345,9 @@ class Milling extends React.Component {
                             }}
                             classes={classes}
                             openStepsPanel={this.props.openStepsPanel}
+                            setStepsPanel={this.props.setStepsPanel}
                         />
+                        )}
                         {this.props.openJoggingPanel ?
                         <JoggingPanel
                             commandKeys={this.props.commandKeys}
@@ -1343,12 +1360,15 @@ class Milling extends React.Component {
                             spindleRate={this.props.spindleRate}
                             updateSpindleRate={this.props.updateSpindleRate}
                             setManualMode={this.setManualMode}
+                            manualMode={this.props.manualMode}
                             showJoggingResetAlert={this.props.showJoggingResetAlert}
-                            toggleJoggingPanel={this.props.toggleJoggingPanel}
+                            setJoggingPanel={this.props.setJoggingPanel}
                             setShowJoggingResetAlert={this.props.setShowJoggingResetAlert}
-                            toggleStepsPanel={this.props.toggleStepsPanel}
+                            setStepsPanel={this.props.setStepsPanel}
+                            openStepsPanel={this.props.openStepsPanel}
                             disableJoggingAbortOnMouseUp={this.props.disableJoggingAbortOnMouseUp}
                             setDisableJoggingAbortOnMouseUp={this.props.setDisableJoggingAbortOnMouseUp}
+                            setGoBack={this.setGoBack}
                         /> : null}
                     </Box>
                     {this.props.openStepsPanel ? (
@@ -1430,6 +1450,7 @@ class Milling extends React.Component {
                         <ImagePanel
                             selectedStep={this.state.selectedStep}
                             open={this.props.openImagePanel}
+                            setImagePanel={this.props.setImagePanel}
                         />
                         <MachineOutputPanel
                             milling={this.state.milling}
@@ -1439,6 +1460,8 @@ class Milling extends React.Component {
                             editMode={this.state.editMode}
                             imagePanelOpen={this.props.openImagePanel}
                             open={this.props.openMachineOutputPanel}
+                            manualMode={this.props.manualMode}
+                            toggleMachineOutputPanel={this.props.toggleMachineOutputPanel}
                         />
                     </Box>
                 </Box>

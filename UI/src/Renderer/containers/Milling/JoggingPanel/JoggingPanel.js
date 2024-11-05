@@ -117,8 +117,8 @@ const styles = (theme) => ({
         alignItems: "center",
     },
     checkBox: {
-        padding: "0px"
-    }
+        padding: "0px",
+    },
 });
 
 const MillSVG = () => {
@@ -266,6 +266,7 @@ class JoggingPanel extends React.Component {
         this.onSpindleRateChange = this.onSpindleRateChange.bind(this);
         this.onSpindleRateNumberChange =
             this.onSpindleRateNumberChange.bind(this);
+        this.onXClick = this.onXClick.bind(this);
         this.currentJog = null;
         this.manual_entry_focused = false;
         this.manual_entry_ref = React.createRef();
@@ -1282,6 +1283,21 @@ class JoggingPanel extends React.Component {
         }
     }
 
+    onXClick() {
+        console.log("onXClick fired!");
+        console.log("manualMode: " + this.props.manualMode);
+        console.log("rtsDisplay: " + this.state.realTimeStatusDisplay)
+        if (this.state.realTimeStatusDisplay === "Run") {
+            this.props.setShowJoggingResetAlert(true);
+        } else if (this.props.manualMode) {
+            console.log("manual Mode true");
+            this.props.setGoBack(true);
+        } else {
+            this.props.setJoggingPanel(false);
+            this.props.setStepsPanel(true);
+        }
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -1803,6 +1819,7 @@ class JoggingPanel extends React.Component {
                 contentStyle={{
                     padding: "8px",
                 }}
+                onXClick={this.onXClick}
             >
                 <Alert
                     open={this.props.showJoggingResetAlert}
@@ -1812,9 +1829,14 @@ class JoggingPanel extends React.Component {
                     yesNo={true}
                     onOk={(event) => {
                         ipcRenderer.send("CNC::ExecuteCommand", "|");
-                        this.props.toggleJoggingPanel();
-                        this.props.toggleStepsPanel();
+                        this.props.setStepsPanel(
+                            this.props.openStepsPanel ? false : true
+                        );
                         this.props.setShowJoggingResetAlert(false);
+                        this.props.setJoggingPanel(false);
+                        if (this.props.manualMode) {
+                            this.props.setGoBack(true);
+                        }
                     }}
                     onCancel={(event) => {
                         this.props.setShowJoggingResetAlert(false);
@@ -2208,11 +2230,15 @@ class JoggingPanel extends React.Component {
                                             }
                                             onChange={(e) => {
                                                 this.props.setDisableJoggingAbortOnMouseUp(
-                                                    !this.props.disableJoggingAbortOnMouseUp
+                                                    !this.props
+                                                        .disableJoggingAbortOnMouseUp
                                                 );
                                             }}
-                                            style={{height: "32px", width: "32"}}
-                                            classes={{root: classes.checkBox}}
+                                            style={{
+                                                height: "32px",
+                                                width: "32",
+                                            }}
+                                            classes={{ root: classes.checkBox }}
                                         />
                                     </Grid>
                                     <Grid item>

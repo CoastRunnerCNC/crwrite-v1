@@ -64,9 +64,13 @@ const ImagePanel = (props) => {
         }
     }
 
+    const onXClick = () => {
+        props.setImagePanel(false);
+    }
+
     if (props.open) {
         return (
-            <ItemPanel title="Image" small>
+            <ItemPanel title="Image" onXClick={onXClick} small>
                 {getDisplay()}
             </ItemPanel>
         );

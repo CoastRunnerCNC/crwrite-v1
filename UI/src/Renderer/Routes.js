@@ -23,8 +23,11 @@ function Routes(props) {
         setOpenProbingWizard: props.setOpenProbingWizard,
         navigateToMilling: props.navigateToMilling,
         setNavigateToMilling: props.setNavigateToMilling,
-        setManualMode: props.setManualMode
-
+        setManualMode: props.setManualMode,
+        setStepsPanel: props.setStepsPanel,
+        setJoggingPanel: props.setJoggingPanel,
+        setImagePanel: props.setImagePanel,
+        toggleMachineOutputPanel: props.toggleMachineOutputPanel
     };
 
     return (
@@ -59,9 +62,7 @@ function Routes(props) {
                                 eventKeyFrontEndCommandMap={props.eventKeyFrontEndCommandMap}
                                 refreshShuttleKeys={props.refreshShuttleKeys}
                                 showJoggingResetAlert={props.showJoggingResetAlert}
-                                toggleJoggingPanel={props.toggleJoggingPanel}
                                 setShowJoggingResetAlert={props.setShowJoggingResetAlert}
-                                toggleStepsPanel={props.toggleStepsPanel}
                                 disableJoggingAbortOnMouseUp={props.disableJoggingAbortOnMouseUp}
                                 setDisableJoggingAbortOnMouseUp={
                                     props.setDisableJoggingAbortOnMouseUp

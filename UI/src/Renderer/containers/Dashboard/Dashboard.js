@@ -720,6 +720,10 @@ function Dashboard(props) {
                                     milling={props.milling}
                                     status={props.status}
                                     firmware={props.firmware}
+                                    setManualMode={props.setManualMode}
+                                    setStepsPanel={props.setStepsPanel}
+                                    setJoggingPanel={props.setJoggingPanel}
+                                    setImagePanel={props.setImagePanel}
                                 />
                                 <FileCreater
                                     onClick={() => {

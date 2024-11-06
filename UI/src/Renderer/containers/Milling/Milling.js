@@ -582,6 +582,7 @@ class Milling extends React.Component {
         this.props.setJoggingPanel(false);
         this.props.setImagePanel(true);
         this.props.setMachineOutputPanel(true);
+        ipcRenderer.removeAllListeners("Walkthrough::ResponseShouldDisplay");
     }
 
     progress() {

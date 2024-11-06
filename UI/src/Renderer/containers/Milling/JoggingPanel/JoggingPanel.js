@@ -462,6 +462,7 @@ class JoggingPanel extends React.Component {
         this.stopTimer();
         window.removeEventListener("keydown", this.keydownListener, true);
         window.removeEventListener("keyup", this.keyupListener, true);
+        ipcRenderer.removeListener("Jobs::ReadWrites", this.updateReadWrites);
         ipcRenderer.removeListener(
             "CR_UpdateRealtimeStatus",
             this.updateRealtimeStatus

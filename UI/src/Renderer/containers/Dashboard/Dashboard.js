@@ -475,6 +475,10 @@ function Dashboard(props) {
 
     function onClickRun() {
         if (status === 2 || enableEditButton) {
+            props.setImagePanel(true);
+            props.setMachineOutputPanel(true);
+            props.setStepsPanel(true);
+            props.setJoggingPanel(false);
             if (enableEditButton) {
                 setShowNewFileAlert(true);
             } else {
@@ -568,74 +572,6 @@ function Dashboard(props) {
     }
 
     return (
-        // <section className={classes.dashboardStyle}>
-
-        //         <Grid container
-        //             justify="space-evenly"
-        //             spacing={6}
-        //             style={{ height: '100%', padding: "38px" }}
-        //         >
-        //             <Grid item xs={4}>
-        //                 <Grid container direction='column' spacing={4}  style={{ flexWrap: 'inherit' }}>
-        //                     <Grid item>
-        //                         <CoastRunnerImage />
-        //                     </Grid>
-        //                     <Grid item>
-        //                         <ItemPanel title="Quick Actions" color="secondary">
-        //                             <Grid container direction='column' justify='space-evenly' alignItems='center' style={{height: '200px'}}>
-        //                                 <Grid item>
-        //                                     <Button disabled={true} classes={{root: classes.smallGreyButton}}>Open Last Job</Button>
-        //                                 </Grid>
-        //                                 <Grid item>
-        //                                     <Button disabled={true} classes={{root: classes.smallGreyButton}}>Set Home Position</Button>
-        //                                 </Grid>
-        //                                 <Grid item>
-        //                                     <Button disabled={true} classes={{root: classes.smallGreyButton}}>Auto Level</Button>
-        //                                 </Grid>
-        //                             </Grid>
-        //                         </ItemPanel>
-        //                     </Grid>
-        //                 </Grid>
-        //             </Grid>
-        //             <Grid item xs={8}>
-        //                 <Grid container direction='column' spacing={4}>
-        //                     <Grid item>
-        //                         <ItemPanel title="Guided Mode">
-        //                             <Grid container alignItems="center" justify="space-evenly" style={{height: '120px', width: '100%'}}>
-        //                                 <Grid item>
-        //                                     <Button id="run-code" onClick={onClickRun} classes={{root: classes.standardButton}}>Open</Button>
-        //                                 </Grid>
-        //                                 <Grid item>
-        //                                     <Button id="store" onClick={() => { shell.openExternal(app.dashboard.store.url) }}classes={{root: classes.standardButton}}>Store</Button>
-        //                                 </Grid>
-        //                                 <Grid item>
-        //                                     <Button disabled={true} classes={{root: classes.standardButton}}>Help</Button>
-        //                                 </Grid>
-        //                             </Grid>
-        //                         </ItemPanel>
-        //                     </Grid>
-        //                     <Grid item>
-        //                         <ItemPanel title="Manual Mode">
-        //                             <Grid container alignItems='center' style={{height: '120px', width: '100%'}}>
-        //                                 <Grid item>
-        //                                     <Button style={{marginLeft: '100px'}} onClick={handleManualOpenClick} classes={{root: classes.standardButton}}>Open</Button>
-        //                                 </Grid>
-        //                                 <Grid item>
-        //                                     <Button disabled={true} style={{marginLeft: '100px'}} classes={{root: classes.standardButton}}>File Editor</Button>
-        //                                 </Grid>
-        //                             </Grid>
-        //                         </ItemPanel>
-        //                     </Grid>
-        //                 </Grid>
-        //             </Grid>
-        //         </Grid>
-
-        //
-        //
-        //
-        //
-        //
-
         <div style={{ flexGrow: 1 }}>
             <Alert
                 open={alertMessage.length > 0}

@@ -12580,8 +12580,8 @@ export default class App extends React.Component {
         this.toggleShuttle = this.toggleShuttle.bind(this);
         this.setImagePanel = this.setImagePanel.bind(this);
         this.setJoggingPanel = this.setJoggingPanel.bind(this);
-        this.toggleMachineOutputPanel =
-            this.toggleMachineOutputPanel.bind(this);
+        this.setMachineOutputPanel =
+            this.setMachineOutputPanel.bind(this);
         this.setStepsPanel = this.setStepsPanel.bind(this);
         this.setNavigateToMilling = this.setNavigateToMilling.bind(this);
         this.setDisableJoggingAbortOnMouseUp =
@@ -12622,9 +12622,9 @@ export default class App extends React.Component {
         this.setState({ showJoggingResetAlert: value });
     }
 
-    toggleMachineOutputPanel() {
+    setMachineOutputPanel(value) {
         this.setState({
-            openMachineOutputPanel: !this.state.openMachineOutputPanel,
+            openMachineOutputPanel: value,
         });
     }
 
@@ -12913,7 +12913,7 @@ export default class App extends React.Component {
             setJoggingPanel: this.setJoggingPanel,
             manualMode: this.state.manualMode,
             setImagePanel: this.setImagePanel,
-            toggleMachineOutputPanel: this.toggleMachineOutputPanel,
+            setMachineOutputPanel: this.setMachineOutputPanel,
             
         };
 

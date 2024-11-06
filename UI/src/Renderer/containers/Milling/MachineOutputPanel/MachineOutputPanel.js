@@ -107,7 +107,7 @@ const MachineOutputPanel = (props) => {
         }
     }
     const onXClick = () => {
-        props.toggleMachineOutputPanel();
+        props.setMachineOutputPanel(false);
     }
 
     if (props.open) {

@@ -578,6 +578,10 @@ class Milling extends React.Component {
 
     componentWillUnmount() {
         this.props.setManualMode(false);
+        this.props.setStepsPanel(true);
+        this.props.setJoggingPanel(false);
+        this.props.setImagePanel(true);
+        this.props.setMachineOutputPanel(true);
     }
 
     progress() {
@@ -1041,7 +1045,7 @@ class Milling extends React.Component {
             return selectedStep.Prompt;
         }
 
-        if (this.state.goBack === true && this.state.showAlert === false) {
+        if (this.state.goBack === true && (this.state.showAlert === false || this.props.manualMode)) {
             if (this.state.millingProgress >= 0) {
                 ipcRenderer.send("Jobs::EmergencyStop");
             }
@@ -1461,7 +1465,7 @@ class Milling extends React.Component {
                             imagePanelOpen={this.props.openImagePanel}
                             open={this.props.openMachineOutputPanel}
                             manualMode={this.props.manualMode}
-                            toggleMachineOutputPanel={this.props.toggleMachineOutputPanel}
+                            setMachineOutputPanel={this.props.setMachineOutputPanel}
                         />
                     </Box>
                 </Box>

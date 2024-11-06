@@ -871,8 +871,8 @@ function BottomToolbar(props) {
                                                         Image
                                                     </MenuItem>
                                                     <MenuItem
-                                                        onClick={
-                                                            props.toggleMachineOutputPanel
+                                                        onClick={() => 
+                                                            props.setMachineOutputPanel(props.openMachineOutputPanel ? false : true)
                                                         }
                                                     >
                                                         Terminal

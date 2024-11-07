@@ -1011,6 +1011,9 @@ class JoggingPanel extends React.Component {
     }
 
     onModeChange(e) {
+        if (e.target.value === "Continuous") {
+            this.props.setDisableJoggingAbortOnMouseUp(false);
+        }
         this.setState({ mode: e.target.value });
         this.jogModeRef.current.blur();
         this.focusOnNothing();
@@ -2240,6 +2243,7 @@ class JoggingPanel extends React.Component {
                                                 width: "32",
                                             }}
                                             classes={{ root: classes.checkBox }}
+                                            disabled={this.state.mode === "Continuous"}
                                         />
                                     </Grid>
                                     <Grid item>

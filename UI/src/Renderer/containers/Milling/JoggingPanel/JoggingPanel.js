@@ -1993,7 +1993,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("plunge", 1);
+                                    this.handleJoggingClick("retract", 1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -2003,7 +2003,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("plunge", 0.1);
+                                    this.handleJoggingClick("retract", 0.1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -2013,7 +2013,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("plunge", 0.01);
+                                    this.handleJoggingClick("retract", 0.01);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -2029,7 +2029,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("retract", 0.01);
+                                    this.handleJoggingClick("plunge", 0.01);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -2039,7 +2039,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("retract", 0.1);
+                                    this.handleJoggingClick("plunge", 0.1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -2049,7 +2049,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("retract", 1);
+                                    this.handleJoggingClick("plunge", 1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}

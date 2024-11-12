@@ -11,6 +11,7 @@ import "./styles/global.scss";
 import os from "os";
 import BackgroundPhoto from "./components/BackgroundPhoto/BackgroundPhoto";
 import packageJSON from "../../package.json";
+import _ from "underscore";
 
 const theme = createMuiTheme({
     palette: {
@@ -12589,6 +12590,7 @@ export default class App extends React.Component {
         this.setShowJoggingResetAlert =
             this.setShowJoggingResetAlert.bind(this);
         this.setManualMode = this.setManualMode.bind(this);
+        this.refreshShuttleKeys = this.refreshShuttleKeys.bind(this);
         this.commandKeys = {};
         this.eventKeyFrontEndCommandMap = {};
 

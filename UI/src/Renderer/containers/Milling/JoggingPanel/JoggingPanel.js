@@ -2249,7 +2249,7 @@ class JoggingPanel extends React.Component {
                                     <Grid item>
                                         <Typography>
                                             Disable manual jogging abort on
-                                            mouse up
+                                            release
                                         </Typography>
                                     </Grid>
                                 </Grid>

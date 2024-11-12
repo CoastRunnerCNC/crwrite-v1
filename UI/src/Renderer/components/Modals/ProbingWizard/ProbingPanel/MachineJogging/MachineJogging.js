@@ -695,7 +695,7 @@ class Operations extends React.Component {
             feedRate: this.props.feedRate,
             feedRate2: 100,
             jogRate: 0,
-            homingAlertDialogOpen: false,
+            homingAlertDialogOpen: true,
             pathIdEventKeyMap: {},
             gCodeFilePath: "",
             gCodeFilePathDisplay: "",
@@ -1792,6 +1792,7 @@ class Operations extends React.Component {
         }
 
         function getHomingAlertDialog(component) {
+            console.log(component.state.homingAlertDialogOpen);
             let handleClose = () => {
                 component.setState({ homingAlertDialogOpen: false });
             };

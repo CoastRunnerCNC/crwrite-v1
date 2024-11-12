@@ -893,7 +893,7 @@ function BottomToolbar(props) {
                                                             handleClickProbingWizard
                                                         }
                                                         disabled={
-                                                            props.navigateToMilling
+                                                            props.navigateToMilling || props.status != 2
                                                         }
                                                     >
                                                         Probing Wizard

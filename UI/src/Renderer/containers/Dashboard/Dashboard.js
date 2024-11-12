@@ -590,7 +590,7 @@ function Dashboard(props) {
                 onOk={handleProbingPopupOk}
             />
             <ProbingWizard
-                open={props.openProbingWizard}
+                open={props.openProbingWizard && status === 2}
                 setOpenProbingWizard={props.setOpenProbingWizard}
                 setOpenProbingSuccess={setOpenProbingSuccess}
             />
@@ -661,12 +661,12 @@ function Dashboard(props) {
                                     setJoggingPanel={props.setJoggingPanel}
                                     setImagePanel={props.setImagePanel}
                                 />
-                                <FileCreater
+                                {/* <FileCreater
                                     onClick={() => {
                                         props.setOpenProbingWizard(true);
                                     }}
                                 />
-                                <Projects onClick={() => {}} />
+                                <Projects onClick={() => {}} /> */}
                             </Grid>
                         </Grid>
                     </Grid>

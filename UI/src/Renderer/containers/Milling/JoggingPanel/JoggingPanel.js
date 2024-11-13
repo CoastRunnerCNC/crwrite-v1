@@ -1888,7 +1888,7 @@ class JoggingPanel extends React.Component {
                                 className={classes.sideTopCell}
                                 style={{ gridRow: "1 / 2" }}
                             >
-                                +
+                                -
                             </div>
                             <div
                                 onMouseDown={() => {
@@ -1966,7 +1966,7 @@ class JoggingPanel extends React.Component {
                                 className={classes.sideBottomCell}
                                 style={{ gridRow: "9 / 10" }}
                             >
-                                -
+                                +
                             </div>
                         </Box>
 

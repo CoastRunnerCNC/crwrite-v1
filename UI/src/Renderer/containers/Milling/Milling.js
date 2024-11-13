@@ -1062,6 +1062,21 @@ class Milling extends React.Component {
         console.log("open jogging panel: " + this.props.openJoggingPanel);
         return (
             <React.Fragment>
+                
+                <Alert
+                    open={
+                        status != 2 &&
+                        this.props.settings.enableEditButton == false
+                    }
+                    message="Machine was disconnected!"
+                    onOk={(e) => {
+                        this.setState({ showAlert: false, goBack: true });
+                    }}
+                    onCancel={(e) => {
+                        this.setState({ showAlert: false, goBack: true });
+                    }}
+                />
+
                 { !this.props.manualMode && (
                 <>
                 <Throbber
@@ -1092,20 +1107,6 @@ class Milling extends React.Component {
                         this.setState({ showAlert: false, goBack: false });
                     }}
                     title={this.state.alertTitle}
-                />
-
-                <Alert
-                    open={
-                        status != 2 &&
-                        this.props.settings.enableEditButton == false
-                    }
-                    message="Machine was disconnected!"
-                    onOk={(e) => {
-                        this.setState({ showAlert: false, goBack: true });
-                    }}
-                    onCancel={(e) => {
-                        this.setState({ showAlert: false, goBack: true });
-                    }}
                 />
 
                 <Alert

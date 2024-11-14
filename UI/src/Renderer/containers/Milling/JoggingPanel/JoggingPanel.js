@@ -1925,7 +1925,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 className={classes.sideMiddleCell}
-                                style={{ gridRow: "5 / 6" }}
+                                style={{ gridRow: "5 / 6", cursor: "default" }}
                             >
                                 X
                             </div>
@@ -2023,7 +2023,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 className={classes.sideMiddleCell}
-                                style={{ gridRow: "5 / 6" }}
+                                style={{ gridRow: "5 / 6", cursor: "default" }}
                             >
                                 Z
                             </div>
@@ -2130,7 +2130,8 @@ class JoggingPanel extends React.Component {
                                 className={classes.bottomMiddleCell}
                                 style={{
                                     gridColumn: "5 / 6",
-                                    gridRow: "1 / 2",
+                                    gridRow: "1 / 2"
+                                    , cursor: "default"
                                 }}
                             >
                                 Y

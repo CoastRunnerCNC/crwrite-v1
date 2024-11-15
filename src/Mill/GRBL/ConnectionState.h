@@ -43,6 +43,7 @@ public:
 		m_statusRequested.store(false, release);
 		m_retryProbe.store(false, release);
 		m_wcs.store(54, release);
+		m_spindleDirection.store(5, release);
 		m_units.store(21, release);
 		m_movementType.store(90, release);
 		std::lock_guard<std::mutex> lock{ m_statusMutex };
@@ -67,6 +68,8 @@ public:
 	uint8_t GetUnits() const noexcept { return m_units.load(acquire); }
 	void SetMovementType(const uint8_t movementType) noexcept { m_movementType.store(movementType, release); }
 	uint8_t GetMovementType() const noexcept { return m_movementType.load(acquire); }
+	void SetSpindleDirection(const uint8_t direction) noexcept { m_spindleDirection.store(direction, release); }
+	uint8_t GetSpindleDirection() const noexcept { return m_spindleDirection.load(acquire); }
 
 	void SetConnected(const bool value) noexcept { value ? SetFlag(State::GS_CONNECTED) : UnsetFlag(State::GS_CONNECTED); }
 	void SetStartup(const bool value) noexcept { value ? SetFlag(State::GS_STARTUP) : UnsetFlag(State::GS_STARTUP); }
@@ -191,6 +194,7 @@ private:
 	std::atomic <uint8_t> m_wcs{ 54 };
 	std::atomic <uint8_t> m_units{ 21 };
 	std::atomic <uint8_t> m_movementType{ 90 };
+	std::atomic <uint8_t> m_spindleDirection{ 5 };
 	MillSettings m_settings;	// Not yet thread-safe
 
 	mutable std::mutex m_statusMutex;

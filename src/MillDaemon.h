@@ -124,6 +124,8 @@ public:
 
 	int GetSpindleRate() const;
 
+	int GetSpindleDirection() const;
+
 	int GetSpindleRateSlider() const;
 
 	bool SetSpindleRateSlider(const int spindleRate);

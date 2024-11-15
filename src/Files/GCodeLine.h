@@ -91,6 +91,7 @@ private:
     int m_value = 0;
     tl::optional<MCodeInfo> m_MCodeInfo;
     tl::optional<uint8_t> m_wcs;
+    tl::optional<uint8_t> m_spindleDirection;
     tl::optional<uint8_t> m_units;
     tl::optional<uint8_t> m_movementType;
 
@@ -120,6 +121,7 @@ public:
 
     tl::optional<MCodeInfo> GetMCodeInfo() const { return m_MCodeInfo; }
     tl::optional<uint8_t> GetWCS() const { return m_wcs; }
+    tl::optional<uint8_t> GetSpindleDirection() const { return m_spindleDirection; }
     tl::optional<uint8_t> GetUnits() const { return m_units; }
     tl::optional<uint8_t> GetMovementType() const { return m_movementType; }
 };

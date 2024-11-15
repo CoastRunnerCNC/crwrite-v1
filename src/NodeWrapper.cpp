@@ -841,11 +841,13 @@ napi_value GetStatus(napi_env env, napi_callback_info info)
 	auto status = MillDaemon::GetInstance().GetStatus();
 	auto spindleRate = MillDaemon::GetInstance().GetSpindleRate();
 	auto feedRate = MillDaemon::GetInstance().GetFeedRate();
+	auto spindleDirection = MillDaemon::GetInstance().GetSpindleDirection();
 	auto json = Json::Value{ };
 	if (status != nullptr) {
 		json["status"] = status->ToJSON();
 		json["status"]["feedrate"] = feedRate;
 		json["status"]["spindlerate"] = spindleRate;
+		json["status"]["spindleDirection"] = spindleDirection;
 	}
 	else {
 		json["error"] = "NO_STATUS"; // TODO: Determine error

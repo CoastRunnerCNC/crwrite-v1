@@ -20,6 +20,9 @@ void MillWriter::Write(const GCodeLine& line) {
         }
         case GCodeLine::TYPE_MCODE: {
             MILL_LOG("TYPE_MCODE");
+            if (line.GetGroup() == GCodeLine::GROUP_M_SPINDLE) {
+                m_pState->SetSpindleDirection(line.GetSpindleDirection().value());
+            }
             WriteMCodeLine(line);
             break;
         } 

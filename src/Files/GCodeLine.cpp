@@ -127,6 +127,7 @@ GCodeLine::GCodeLine(const std::string& line, const bool injected)
 		else if (sm[1] == "3" || sm[1] == "4" || sm[1] == "5")
 		{
 			m_group = GROUP_M_SPINDLE;
+			m_spindleDirection = tl::make_optional((uint8_t)std::stoul(sm[1]));
 		}
 		else if (sm[1] == "7" || sm[1] == "8" || sm[1] == "9")
 		{

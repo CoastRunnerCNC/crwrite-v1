@@ -108,6 +108,7 @@ public:
 	// Spindle Rate
 	int GetSpindleRate() const noexcept { return m_pSpindleRate->GetSpindleRate(false); }
 	int GetSpindleRateSlider() const noexcept { return m_pSpindleRate->GetSlider(); }
+	int GetSpindleDirection() const noexcept { return m_pState->GetSpindleDirection(); }
 	void SetSpindleRateSlider(const int slider) noexcept { m_pSpindleRate->SetSlider(slider); }
 
 	// Emergency Stop

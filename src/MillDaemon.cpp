@@ -395,6 +395,18 @@ int MillDaemon::GetSpindleRate() const
 	return spindleRate;
 }
 
+int MillDaemon::GetSpindleDirection() const {
+	int spindleDirection = -1;
+
+	auto pConnection = m_pConnector->GetNoLockConnection();
+	if (pConnection != nullptr)
+	{
+		spindleDirection = pConnection->GetSpindleDirection();
+	}
+
+	return spindleDirection;
+}
+
 int MillDaemon::GetSpindleRateSlider() const
 {
 	int spindleRateSlider = -1;

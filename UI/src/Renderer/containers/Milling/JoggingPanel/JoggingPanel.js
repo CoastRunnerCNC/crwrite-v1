@@ -218,6 +218,7 @@ class JoggingPanel extends React.Component {
             openShuttleSettings: false,
             GRBLFeedRate: 100,
             GRBLSpindleRate: 100,
+            direction: "disabled"
         };
 
         this.progress = this.progress.bind(this);
@@ -267,6 +268,7 @@ class JoggingPanel extends React.Component {
         this.onSpindleRateNumberChange =
             this.onSpindleRateNumberChange.bind(this);
         this.onXClick = this.onXClick.bind(this);
+        this.handleDirectionChange = this.handleDirectionChange.bind(this);
         this.currentJog = null;
         this.manual_entry_focused = false;
         this.manual_entry_ref = React.createRef();
@@ -541,11 +543,21 @@ class JoggingPanel extends React.Component {
             //     this.currentJog = null;
             // }
             if (parsed.error == null) {
-                // console.log(JSON.stringify(parsed));
+                console.log(parsed);
                 let status = parsed.status;
                 let wcs = this.state.WCS;
                 if (status.work_coordinates != null) {
                     wcs = status.work_coordinates.wcs;
+                }
+                const directionMap = {
+                    3: "clockwise",
+                    4: "counter-clockwise",
+                    5: "disable"
+                };
+                
+                const direction = directionMap[status.spindleDirection];
+                if (this.state.direction != direction) {
+                    this.setState({ direction });
                 }
 
                 this.setState({

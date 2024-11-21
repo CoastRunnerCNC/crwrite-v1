@@ -40,7 +40,6 @@ class Software extends React.Component {
         };
 
         this.getVersion = this.getVersion.bind(this);
-        this.selectGCodeFile = this.selectGCodeFile.bind(this);
         this.checkForMacOS = this.checkForMacOS.bind(this);
         this.onClickUploadCustomFirmware = this.onClickUploadCustomFirmware.bind(this);
     }
@@ -168,21 +167,6 @@ class Software extends React.Component {
                 )
             }
         }
-    }
-
-    selectGCodeFile() {
-        ipcRenderer.once('GCodeFileSelected', (event, gCodeFilePath) => {
-            let gCodeFilePathDisplay = gCodeFilePath;
-
-            // if (gCodeFilePathDisplay.length > 60) {
-            //     gCodeFilePathDisplay = gCodeFilePathDisplay.substr(gCodeFilePathDisplay.length - 60);
-            //     gCodeFilePathDisplay = `...${gCodeFilePathDisplay.substr(gCodeFilePathDisplay.indexOf(path.sep))}`;
-            // }
-
-            // this.setState({gCodeFilePath: gCodeFilePath, gCodeFilePathDisplay: gCodeFilePathDisplay});
-            console.log(gCodeFilePathDisplay);
-        });
-        ipcRenderer.send('File::OpenGCodeFileDialog');
     }
 
     // setAlertMessage(success) {

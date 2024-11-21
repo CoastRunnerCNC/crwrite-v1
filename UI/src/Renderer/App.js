@@ -12567,7 +12567,7 @@ export default class App extends React.Component {
             openStepsPanel: true,
             navigateToMilling: false,
             showJoggingResetAlert: false,
-            disableJoggingAbortOnMouseUp: true,
+            disableJoggingAbortOnMouseUp: false,
             manualMode: false
         };
 

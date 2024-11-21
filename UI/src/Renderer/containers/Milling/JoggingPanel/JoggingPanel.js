@@ -218,7 +218,7 @@ class JoggingPanel extends React.Component {
             openShuttleSettings: false,
             GRBLFeedRate: 100,
             GRBLSpindleRate: 100,
-            direction: "disabled"
+            direction: "disabled",
         };
 
         this.progress = this.progress.bind(this);
@@ -281,6 +281,7 @@ class JoggingPanel extends React.Component {
         this.preset2Ref = React.createRef();
         this.preset3Ref = React.createRef();
         this.preset4Ref = React.createRef();
+        this.plusMinusClicked = React.createRef();
         this.backEndKeyMap = {
             gantry_left: "LEFT",
             gantry_right: "RIGHT",
@@ -552,9 +553,9 @@ class JoggingPanel extends React.Component {
                 const directionMap = {
                     3: "clockwise",
                     4: "counter-clockwise",
-                    5: "disable"
+                    5: "disable",
                 };
-                
+
                 const direction = directionMap[status.spindleDirection];
                 if (this.state.direction != direction) {
                     this.setState({ direction });
@@ -771,7 +772,7 @@ class JoggingPanel extends React.Component {
     jogStart(
         frontEndCommand,
         distanceOverride = null,
-        forceNotContinuous = null
+        forceMovementType = null
     ) {
         if (this.currentJog != null || !this.allowedToJog()) {
             return;
@@ -797,10 +798,7 @@ class JoggingPanel extends React.Component {
 
         console.log("jogStart - converted value: " + value);
 
-        let joggingMode = this.state.mode;
-        if (forceNotContinuous) {
-            joggingMode = "Fixed";
-        }
+        let joggingMode = forceMovementType || this.state.mode;
         ipcRenderer.send(
             "CNC::Jog",
             backendCommand,
@@ -812,8 +810,12 @@ class JoggingPanel extends React.Component {
 
     jogEnd() {
         if (this.currentJog != null) {
-            if (!this.props.disableJoggingAbortOnMouseUp) {
+            if (
+                !this.props.disableJoggingAbortOnMouseUp ||
+                this.plusMinusClicked.current === true
+            ) {
                 ipcRenderer.send("CNC::CancelJog");
+                this.plusMinusClicked.current = false;
             }
             this.currentJog = null;
         }
@@ -866,6 +868,10 @@ class JoggingPanel extends React.Component {
                     });
                 }
 
+                return;
+            }
+
+            if (this.state.focusedInput == "slider_boxes") {
                 return;
             }
 
@@ -1035,11 +1041,18 @@ class JoggingPanel extends React.Component {
         this.setState({ speed: e.target.value });
     }
 
-    pathClickStarted(frontEndCommand, distance) {
-        console.log("frontend: " + frontEndCommand);
-        console.log("distance: " + distance);
-        if (frontEndCommand) {
-            this.jogStart(frontEndCommand, distance, true);
+    pathClickStarted(frontEndCommand, distance, movementType = "Fixed") {
+        // Used to make sure that + and - always can abort jog
+        if (movementType === "Continuous") {
+            this.plusMinusClicked.current = true;
+        }
+
+        if (this.state.realTimeStatusDisplay === "Idle") {
+            console.log("frontend: " + frontEndCommand);
+            console.log("distance: " + distance);
+            if (frontEndCommand) {
+                this.jogStart(frontEndCommand, distance, movementType);
+            }
         }
     }
 
@@ -1293,16 +1306,10 @@ class JoggingPanel extends React.Component {
         this.focusOnNothing();
     }
 
-    handleJoggingClick(frontEndCommand, distance) {
-        if (this.state.realTimeStatusDisplay === "Idle") {
-            this.pathClickStarted(frontEndCommand, distance);
-        }
-    }
-
     onXClick() {
         console.log("onXClick fired!");
         console.log("manualMode: " + this.props.manualMode);
-        console.log("rtsDisplay: " + this.state.realTimeStatusDisplay)
+        console.log("rtsDisplay: " + this.state.realTimeStatusDisplay);
         if (this.state.realTimeStatusDisplay === "Run") {
             this.props.setShowJoggingResetAlert(true);
         } else if (this.props.manualMode) {
@@ -1383,6 +1390,11 @@ class JoggingPanel extends React.Component {
                                         }
                                         onBlur={() =>
                                             component.handleInputNoLongerHasFocus()
+                                        }
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                {component.state.units}(s)
+                                            </InputAdornment>
                                         }
                                         style={{
                                             color: app.modal.color,
@@ -1898,15 +1910,25 @@ class JoggingPanel extends React.Component {
                         >
                             <div
                                 className={classes.sideTopCell}
+                                onMouseDown={() => {
+                                    this.pathClickStarted(
+                                        "raise_table",
+                                        1,
+                                        "Continuous"
+                                    );
+                                }}
+                                onMouseUp={this.jogEnd}
                                 style={{ gridRow: "1 / 2" }}
                             >
                                 -
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("raise_table", 1);
+                                    this.pathClickStarted("raise_table", 1);
                                 }}
-                                onMouseUp={this.jogEnd}
+                                onMouseUp={() => {
+                                    this.jogEnd;
+                                }}
                                 className={classes.sideMiddleCell}
                                 style={{ gridRow: "2 / 3" }}
                             >
@@ -1914,7 +1936,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("raise_table", 0.1);
+                                    this.pathClickStarted("raise_table", 0.1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -1924,10 +1946,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick(
-                                        "raise_table",
-                                        0.01
-                                    );
+                                    this.pathClickStarted("raise_table", 0.01);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -1939,14 +1958,11 @@ class JoggingPanel extends React.Component {
                                 className={classes.sideMiddleCell}
                                 style={{ gridRow: "5 / 6", cursor: "default" }}
                             >
-                                X
+                                <strong>X</strong>
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick(
-                                        "lower_table",
-                                        0.01
-                                    );
+                                    this.pathClickStarted("lower_table", 0.01);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -1956,7 +1972,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("lower_table", 0.1);
+                                    this.pathClickStarted("lower_table", 0.1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -1966,7 +1982,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("lower_table", 1);
+                                    this.pathClickStarted("lower_table", 1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -1976,6 +1992,14 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 className={classes.sideBottomCell}
+                                onMouseDown={() => {
+                                    this.pathClickStarted(
+                                        "lower_table",
+                                        0.01,
+                                        "Continuous"
+                                    );
+                                }}
+                                onMouseUp={this.jogEnd}
                                 style={{ gridRow: "9 / 10" }}
                             >
                                 +
@@ -2000,12 +2024,20 @@ class JoggingPanel extends React.Component {
                             <div
                                 className={classes.sideTopCell}
                                 style={{ gridRow: "1 / 2" }}
+                                onMouseDown={() => {
+                                    this.pathClickStarted(
+                                        "retract",
+                                        1,
+                                        "Continuous"
+                                    );
+                                }}
+                                onMouseUp={this.jogEnd}
                             >
                                 +
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("retract", 1);
+                                    this.pathClickStarted("retract", 1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -2015,7 +2047,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("retract", 0.1);
+                                    this.pathClickStarted("retract", 0.1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -2025,7 +2057,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("retract", 0.01);
+                                    this.pathClickStarted("retract", 0.01);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -2037,11 +2069,11 @@ class JoggingPanel extends React.Component {
                                 className={classes.sideMiddleCell}
                                 style={{ gridRow: "5 / 6", cursor: "default" }}
                             >
-                                Z
+                                <strong>Z</strong>
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("plunge", 0.01);
+                                    this.pathClickStarted("plunge", 0.01);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -2051,7 +2083,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("plunge", 0.1);
+                                    this.pathClickStarted("plunge", 0.1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -2061,7 +2093,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("plunge", 1);
+                                    this.pathClickStarted("plunge", 1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.sideMiddleCell}
@@ -2071,6 +2103,14 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 className={classes.sideBottomCell}
+                                onMouseDown={() => {
+                                    this.pathClickStarted(
+                                        "plunge",
+                                        0.1,
+                                        "Continuous"
+                                    );
+                                }}
+                                onMouseUp={this.jogEnd}
                                 style={{ gridRow: "9 / 10" }}
                             >
                                 -
@@ -2089,6 +2129,14 @@ class JoggingPanel extends React.Component {
                         >
                             <div
                                 className={classes.bottomLeftCell}
+                                onMouseDown={() => {
+                                    this.pathClickStarted(
+                                        "gantry_left",
+                                        1,
+                                        "Continuous"
+                                    );
+                                }}
+                                onMouseUp={this.jogEnd}
                                 style={{
                                     gridColumn: "1 / 2",
                                     gridRow: "1 / 2",
@@ -2098,7 +2146,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("gantry_left", 1);
+                                    this.pathClickStarted("gantry_left", 1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.bottomMiddleCell}
@@ -2111,7 +2159,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("gantry_left", 0.1);
+                                    this.pathClickStarted("gantry_left", 0.1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.bottomMiddleCell}
@@ -2124,10 +2172,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick(
-                                        "gantry_left",
-                                        0.01
-                                    );
+                                    this.pathClickStarted("gantry_left", 0.01);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.bottomMiddleCell}
@@ -2142,18 +2187,15 @@ class JoggingPanel extends React.Component {
                                 className={classes.bottomMiddleCell}
                                 style={{
                                     gridColumn: "5 / 6",
-                                    gridRow: "1 / 2"
-                                    , cursor: "default"
+                                    gridRow: "1 / 2",
+                                    cursor: "default",
                                 }}
                             >
-                                Y
+                                <strong>Y</strong>
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick(
-                                        "gantry_right",
-                                        0.01
-                                    );
+                                    this.pathClickStarted("gantry_right", 0.01);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.bottomMiddleCell}
@@ -2166,10 +2208,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick(
-                                        "gantry_right",
-                                        0.1
-                                    );
+                                    this.pathClickStarted("gantry_right", 0.1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.bottomMiddleCell}
@@ -2182,7 +2221,7 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 onMouseDown={() => {
-                                    this.handleJoggingClick("gantry_right", 1);
+                                    this.pathClickStarted("gantry_right", 1);
                                 }}
                                 onMouseUp={this.jogEnd}
                                 className={classes.bottomMiddleCell}
@@ -2195,6 +2234,14 @@ class JoggingPanel extends React.Component {
                             </div>
                             <div
                                 className={classes.bottomRightCell}
+                                onMouseDown={() => {
+                                    this.pathClickStarted(
+                                        "gantry_right",
+                                        1,
+                                        "Continuous"
+                                    );
+                                }}
+                                onMouseUp={this.jogEnd}
                                 style={{
                                     gridColumn: "9 / 10",
                                     gridRow: "1 / 2",
@@ -2256,7 +2303,9 @@ class JoggingPanel extends React.Component {
                                                 width: "32",
                                             }}
                                             classes={{ root: classes.checkBox }}
-                                            disabled={this.state.mode === "Continuous"}
+                                            disabled={
+                                                this.state.mode === "Continuous"
+                                            }
                                         />
                                     </Grid>
                                     <Grid item>
@@ -2326,42 +2375,74 @@ class JoggingPanel extends React.Component {
                                             }}
                                         />
                                     </Grid>
-                                    <Grid item xs={1}>
-                                        <Input
-                                            value={this.state.feedRate2}
-                                            min={30}
-                                            max={
-                                                this.state.settings.maxFeedRate
-                                            }
-                                            onChange={(event) => {
-                                                this.setState({
-                                                    feedRate2:
-                                                        event.target.value,
-                                                });
-                                            }}
-                                            onBlur={(event) => {
-                                                this.onFeedRateNumberChange(
-                                                    event,
-                                                    Number(event.target.value)
-                                                );
-                                            }}
-                                            onKeyDown={(event) => {
-                                                event.key === "Enter"
-                                                    ? this.onFeedRateNumberChange(
-                                                          event,
-                                                          Number(
-                                                              event.target.value
+                                    <Grid item>
+                                        <FormControl>
+                                            <Input
+                                                value={this.state.feedRate2}
+                                                min={30}
+                                                max={
+                                                    this.state.settings
+                                                        .maxFeedRate
+                                                }
+                                                onChange={(event) => {
+                                                    this.setState({
+                                                        feedRate2:
+                                                            event.target.value,
+                                                    });
+                                                }}
+                                                onFocus={() => {
+                                                    this.handleInputHasFocus(
+                                                        "slider_boxes"
+                                                    );
+                                                }}
+                                                onBlur={(event) => {
+                                                    this.onFeedRateNumberChange(
+                                                        event,
+                                                        Number(
+                                                            event.target.value
+                                                        )
+                                                    );
+                                                    this.handleInputNoLongerHasFocus()
+                                                }}
+                                                onKeyDown={(event) => {
+                                                    event.key === "Enter"
+                                                        ? this.onFeedRateNumberChange(
+                                                              event,
+                                                              Number(
+                                                                  event.target
+                                                                      .value
+                                                              )
                                                           )
-                                                      )
-                                                    : "";
-                                            }}
-                                        />
+                                                        : "";
+                                                }}
+                                                endAdornment={
+                                                    <InputAdornment position="end">
+                                                        %
+                                                    </InputAdornment>
+                                                }
+                                                style={{
+                                                    width: "90px",
+                                                    height: "32px",
+                                                }}
+                                            />
+                                        </FormControl>
                                     </Grid>
-                                    <Grid item xs={1}>
-                                        <Input
-                                            disabled
-                                            value={this.state.GRBLFeedRate}
-                                        />
+                                    <Grid item>
+                                        <FormControl>
+                                            <Input
+                                                disabled
+                                                value={this.state.GRBLFeedRate}
+                                                endAdornment={
+                                                    <InputAdornment position="end">
+                                                        {this.state.units}/min
+                                                    </InputAdornment>
+                                                }
+                                                style={{
+                                                    width: "130px",
+                                                    height: "32px",
+                                                }}
+                                            />
+                                        </FormControl>
                                     </Grid>
                                 </Grid>
                                 <Grid
@@ -2433,40 +2514,73 @@ class JoggingPanel extends React.Component {
                                             }}
                                         />
                                     </Grid>
-                                    <Grid item xs={1}>
-                                        <Input
-                                            value={this.state.spindleRate2}
-                                            min={30}
-                                            max={300}
-                                            onChange={(event) => {
-                                                this.setState({
-                                                    spindleRate2:
-                                                        event.target.value,
-                                                });
-                                            }}
-                                            onBlur={(event) => {
-                                                this.onSpindleRateNumberChange(
-                                                    event,
-                                                    Number(event.target.value)
-                                                );
-                                            }}
-                                            onKeyDown={(event) => {
-                                                event.key === "Enter"
-                                                    ? this.onSpindleRateNumberChange(
-                                                          event,
-                                                          Number(
-                                                              event.target.value
+                                    <Grid item>
+                                        <FormControl>
+                                            <Input
+                                                value={this.state.spindleRate2}
+                                                min={30}
+                                                max={300}
+                                                onChange={(event) => {
+                                                    this.setState({
+                                                        spindleRate2:
+                                                            event.target.value,
+                                                    });
+                                                }}
+                                                onFocus={() => {
+                                                    this.handleInputHasFocus(
+                                                        "slider_boxes"
+                                                    );
+                                                }}
+                                                onBlur={(event) => {
+                                                    this.onSpindleRateNumberChange(
+                                                        event,
+                                                        Number(
+                                                            event.target.value
+                                                        )
+                                                    );
+                                                    this.handleInputNoLongerHasFocus()
+                                                }}
+                                                onKeyDown={(event) => {
+                                                    event.key === "Enter"
+                                                        ? this.onSpindleRateNumberChange(
+                                                              event,
+                                                              Number(
+                                                                  event.target
+                                                                      .value
+                                                              )
                                                           )
-                                                      )
-                                                    : "";
-                                            }}
-                                        />
+                                                        : "";
+                                                }}
+                                                endAdornment={
+                                                    <InputAdornment position="end">
+                                                        %
+                                                    </InputAdornment>
+                                                }
+                                                style={{
+                                                    width: "90px",
+                                                    height: "32px",
+                                                }}
+                                            />
+                                        </FormControl>
                                     </Grid>
-                                    <Grid item xs={1}>
-                                        <Input
-                                            disabled
-                                            value={this.state.GRBLSpindleRate}
-                                        />
+                                    <Grid item>
+                                        <FormControl>
+                                            <Input
+                                                disabled
+                                                value={
+                                                    this.state.GRBLSpindleRate
+                                                }
+                                                endAdornment={
+                                                    <InputAdornment position="end">
+                                                        {this.state.units}/min
+                                                    </InputAdornment>
+                                                }
+                                                style={{
+                                                    width: "130px",
+                                                    height: "32px",
+                                                }}
+                                            />
+                                        </FormControl>
                                     </Grid>
                                 </Grid>
                                 <Grid
@@ -2535,7 +2649,7 @@ class JoggingPanel extends React.Component {
                                                                     .gCodeFilePath
                                                             }
                                                         >
-                                                            <ExecuteIcon />
+                                                            <SendIcon />
                                                         </IconButton>
                                                     </InputAdornment>
                                                 }

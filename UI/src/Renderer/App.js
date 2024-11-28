@@ -12568,7 +12568,8 @@ export default class App extends React.Component {
             navigateToMilling: false,
             showJoggingResetAlert: false,
             disableJoggingAbortOnMouseUp: false,
-            manualMode: false
+            manualMode: false,
+            focusedInput: ""
         };
 
         this.updateStatus = this.updateStatus.bind(this);
@@ -12591,6 +12592,7 @@ export default class App extends React.Component {
             this.setShowJoggingResetAlert.bind(this);
         this.setManualMode = this.setManualMode.bind(this);
         this.refreshShuttleKeys = this.refreshShuttleKeys.bind(this);
+        this.setFocusedInput = this.setFocusedInput.bind(this);
         this.commandKeys = {};
         this.eventKeyFrontEndCommandMap = {};
 
@@ -12606,8 +12608,13 @@ export default class App extends React.Component {
         }
     }
 
+    setFocusedInput(value) {
+        console.log("new focusedInput: " + value);
+        this.setState({ focusedInput: value });
+    }
+
     setManualMode(value) {
-        this.setState ({manualMode: value});
+        this.setState({manualMode: value});
     }
 
     setImagePanel(value) {
@@ -12793,6 +12800,7 @@ export default class App extends React.Component {
     }
 
     updateStatus(event, newConnectionStatus, newMillingStatus) {
+        console.log("connection: " + newConnectionStatus);
         if (
             newConnectionStatus != this.state.cncMillStatus ||
             newMillingStatus != this.state.millingInProgress
@@ -12916,9 +12924,10 @@ export default class App extends React.Component {
             manualMode: this.state.manualMode,
             setImagePanel: this.setImagePanel,
             setMachineOutputPanel: this.setMachineOutputPanel,
-            
+            focusedInput: this.state.focusedInput,
+            setFocusedInput: this.setFocusedInput
         };
-
+        console.log("status: " + this.state.cncMillStatus)
         return (
             <React.Fragment>
                 <MuiThemeProvider theme={theme}>

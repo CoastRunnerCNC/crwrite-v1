@@ -27,7 +27,9 @@ function Routes(props) {
         setStepsPanel: props.setStepsPanel,
         setJoggingPanel: props.setJoggingPanel,
         setImagePanel: props.setImagePanel,
-        setMachineOutputPanel: props.setMachineOutputPanel
+        setMachineOutputPanel: props.setMachineOutputPanel,
+        focusedInput: props.focusedInput,
+        setFocusedInput: props.setFocusedInput
     };
 
     return (

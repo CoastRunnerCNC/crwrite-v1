@@ -203,7 +203,6 @@ class JoggingPanel extends React.Component {
             forceShowUnitTooltip: false,
             forceShowJoggingTooltipMaxDistance: false,
             joggingTooltipText: "",
-            focusedInput: "",
             maxDistanceIsValid: true,
             milling: false,
             millingProgress: -1,
@@ -315,11 +314,11 @@ class JoggingPanel extends React.Component {
     }
 
     handleInputHasFocus(focusName) {
-        this.setState({ focusedInput: focusName });
+        this.props.setFocusedInput(focusName);
     }
 
     handleInputNoLongerHasFocus() {
-        this.setState({ focusedInput: "" });
+        this.props.setFocusedInput("");
     }
 
     updateMovementType(event, command) {
@@ -440,10 +439,6 @@ class JoggingPanel extends React.Component {
 
         window.addEventListener("keydown", this.keydownListener, true);
         window.addEventListener("keyup", this.keyupListener, true);
-
-        // this.interval = setInterval(() => {
-        //     ipcRenderer.send("CNC::GetStatus");
-        // }, 200);
 
         ipcRenderer.removeListener(
             "CR_UpdateRealtimeStatus",
@@ -580,7 +575,7 @@ class JoggingPanel extends React.Component {
         setTimeout(() => {
             if (document.activeElement instanceof HTMLElement) {
                 document.activeElement.blur();
-                this.setState({ focusedInput: "" });
+                this.props.setFocusedInput("");
                 console.log("focusOnNothing fired!");
             }
         }, 0);
@@ -825,17 +820,17 @@ class JoggingPanel extends React.Component {
         let eventKey = event.key;
         //console.log(eventKey);
 
-        if (this.state.focusedInput) {
+        if (this.props.focusedInput) {
             if (
                 eventKey == this.getCommandKey("escape_textbox") ||
-                (this.state.focusedInput == "max_distance" &&
+                (this.props.focusedInput == "max_distance" &&
                     eventKey == "Enter")
             ) {
                 this.focusOnNothing();
                 return;
             }
 
-            if (this.state.focusedInput == "manual_entry") {
+            if (this.props.focusedInput == "manual_entry") {
                 if (eventKey == "Enter") {
                     this.state.settings.disableLimitCatch
                         ? this.executeCommand()
@@ -871,7 +866,7 @@ class JoggingPanel extends React.Component {
                 return;
             }
 
-            if (this.state.focusedInput == "slider_boxes") {
+            if (this.props.focusedInput == "slider_boxes") {
                 return;
             }
 
@@ -1323,7 +1318,7 @@ class JoggingPanel extends React.Component {
 
     render() {
         const { classes } = this.props;
-
+        console.log("focusedInput: " + this.props.focusedInput)
         function handleMaxDistanceChange(component, e) {
             const value = e.currentTarget.value;
             const isValid = component.isMaxDistanceValid(value);

@@ -38,6 +38,7 @@ import MachineOutputPanel from "./MachineOutputPanel/MachineOutputPanel";
 import ImagePanel from "./ImagePanel/ImagePanel";
 import JoggingPanel from "./JoggingPanel/JoggingPanel";
 import Shuttle from "../../components/Modals/Shuttle";
+import TerminalPanel from "../../components/TerminalPanel/TerminalPanel";
 
 const styles = (theme) => ({
     millingStyle: {
@@ -1375,6 +1376,8 @@ class Milling extends React.Component {
                             disableJoggingAbortOnMouseUp={this.props.disableJoggingAbortOnMouseUp}
                             setDisableJoggingAbortOnMouseUp={this.props.setDisableJoggingAbortOnMouseUp}
                             setGoBack={this.setGoBack}
+                            focusedInput={this.props.focusedInput}
+                            setFocusedInput={this.props.setFocusedInput}
                         /> : null}
                     </Box>
                     {this.props.openStepsPanel ? (
@@ -1458,6 +1461,20 @@ class Milling extends React.Component {
                             open={this.props.openImagePanel}
                             setImagePanel={this.props.setImagePanel}
                         />
+                        <TerminalPanel 
+                            milling={this.state.milling}
+                            setting={this.props.settings}
+                            onEditGCode={this.showGCodePopUpInput}
+                            selectedStep={this.state.selectedStep}
+                            millingInProgress={this.state.millingProgress != -1 || this.props.openJoggingPanel === true}
+                            editMode={this.state.editMode}
+                            imagePanelOpen={this.props.openImagePanel}
+                            open={this.props.openMachineOutputPanel}
+                            manualMode={this.props.manualMode}
+                            setMachineOutputPanel={this.props.setMachineOutputPanel}
+                            focusedInput={this.props.focusedInput}
+                            setFocusedInput={this.props.setFocusedInput}
+                        />
                         <MachineOutputPanel
                             milling={this.state.milling}
                             onEditGCode={this.showGCodePopUpInput}
@@ -1465,7 +1482,7 @@ class Milling extends React.Component {
                             millingInProgress={this.state.millingProgress != -1 || this.props.openJoggingPanel === true}
                             editMode={this.state.editMode}
                             imagePanelOpen={this.props.openImagePanel}
-                            open={this.props.openMachineOutputPanel}
+                            open={/*this.props.openMachineOutputPanel*/ false}
                             manualMode={this.props.manualMode}
                             setMachineOutputPanel={this.props.setMachineOutputPanel}
                         />

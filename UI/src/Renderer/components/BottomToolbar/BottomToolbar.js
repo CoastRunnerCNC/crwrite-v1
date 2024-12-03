@@ -881,17 +881,16 @@ function BottomToolbar(props) {
                                                         onClick={() => 
                                                             props.setMachineOutputPanel(props.openMachineOutputPanel ? false : true)
                                                         }
+                                                        disabled={props.manualMode}
                                                     >
                                                         Machine Output
                                                     </MenuItem>
                                                     <MenuItem
                                                         onClick={handleTerminalClick}
+                                                        disabled={props.manualMode}
                                                     >
                                                         Terminal
                                                     </MenuItem>
-                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickViewManual.bind(this)}>{ getManualButton() }</MenuItem> */}
-                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickVisitSupport.bind(this)}>Visit Helpdesk</MenuItem> */}
-                                                    {/* <MenuItem className={classes.menuItem} onClick={onClickOpenDialog.bind(this)}>Contact Us</MenuItem> */}
                                                     <MenuItem
                                                         onClick={
                                                             handleJoggingPanelClick

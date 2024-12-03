@@ -660,6 +660,8 @@ function Dashboard(props) {
                                     setStepsPanel={props.setStepsPanel}
                                     setJoggingPanel={props.setJoggingPanel}
                                     setImagePanel={props.setImagePanel}
+                                    setMachineOutputPanel={props.setMachineOutputPanel}
+                                    setOpenTerminalPanel={props.setOpenTerminalPanel}
                                 />
                                 {/* <FileCreater
                                     onClick={() => {

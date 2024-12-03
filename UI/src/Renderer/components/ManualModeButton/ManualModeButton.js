@@ -167,6 +167,8 @@ class Shuttle extends React.Component {
                                     this.props.setStepsPanel(false);
                                     this.props.setJoggingPanel(true);
                                     this.props.setImagePanel(false);
+                                    this.props.setMachineOutputPanel(false)
+                                    this.props.setOpenTerminalPanel(true);
                                 }}
                             />
                         </span>

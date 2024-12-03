@@ -12564,6 +12564,7 @@ export default class App extends React.Component {
             openJoggingPanel: false,
             openProbingWizard: false,
             openMachineOutputPanel: true,
+            openTerminalPanel: false,
             openStepsPanel: true,
             navigateToMilling: false,
             showJoggingResetAlert: false,
@@ -12593,6 +12594,7 @@ export default class App extends React.Component {
         this.setManualMode = this.setManualMode.bind(this);
         this.refreshShuttleKeys = this.refreshShuttleKeys.bind(this);
         this.setFocusedInput = this.setFocusedInput.bind(this);
+        this.setOpenTerminalPanel = this.setOpenTerminalPanel.bind(this);
         this.commandKeys = {};
         this.eventKeyFrontEndCommandMap = {};
 
@@ -12611,6 +12613,12 @@ export default class App extends React.Component {
     setFocusedInput(value) {
         console.log("new focusedInput: " + value);
         this.setState({ focusedInput: value });
+    }
+
+    setOpenTerminalPanel(value) {
+        if (!this.state.manualMode) {
+            this.setState({openTerminalPanel: value})
+        }
     }
 
     setManualMode(value) {
@@ -12917,6 +12925,8 @@ export default class App extends React.Component {
             setOpenProbingWizard: (value) => {
                 this.setState({ openProbingWizard: value });
             },
+            openTerminalPanel: this.state.openTerminalPanel,
+            setOpenTerminalPanel: this.setOpenTerminalPanel,
             disableJoggingAbortOnMouseUp:
                 this.state.disableJoggingAbortOnMouseUp,
             setStepsPanel: this.setStepsPanel,

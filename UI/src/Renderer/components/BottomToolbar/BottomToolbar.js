@@ -537,6 +537,13 @@ function BottomToolbar(props) {
         setOpenShuttleSettings(false);
     };
 
+    const handleTerminalClick = () => {
+        props.setOpenTerminalPanel(props.openTerminalPanel ? false : true);
+        props.setImagePanel(false);
+        props.setMachineOutputPanel(false);
+
+    }
+
     useEffect(() => {
         // Set up the interval to send messages
         const interval = setInterval(() => {
@@ -874,6 +881,11 @@ function BottomToolbar(props) {
                                                         onClick={() => 
                                                             props.setMachineOutputPanel(props.openMachineOutputPanel ? false : true)
                                                         }
+                                                    >
+                                                        Machine Output
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        onClick={handleTerminalClick}
                                                     >
                                                         Terminal
                                                     </MenuItem>

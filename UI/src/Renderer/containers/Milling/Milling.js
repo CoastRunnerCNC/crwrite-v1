@@ -1058,9 +1058,7 @@ class Milling extends React.Component {
             this.props.setNavigateToMilling(false);
             return <Redirect to="/" />;
         }
-        console.log("manual mode: " + this.props.manualMode);
-        console.log("open steps panel: " + this.props.openStepsPanel);
-        console.log("open jogging panel: " + this.props.openJoggingPanel);
+        console.log("Miling focusedInput: " + this.props.focusedInput);
         return (
             <React.Fragment>
                 
@@ -1469,8 +1467,10 @@ class Milling extends React.Component {
                             millingInProgress={this.state.millingProgress != -1 || this.props.openJoggingPanel === true}
                             editMode={this.state.editMode}
                             imagePanelOpen={this.props.openImagePanel}
-                            open={this.props.openMachineOutputPanel}
+                            open={this.props.openTerminalPanel}
                             manualMode={this.props.manualMode}
+                            setOpenTerminalPanel={this.props.setOpenTerminalPanel}
+                            setImagePanel={this.props.setImagePanel}
                             setMachineOutputPanel={this.props.setMachineOutputPanel}
                             focusedInput={this.props.focusedInput}
                             setFocusedInput={this.props.setFocusedInput}
@@ -1482,7 +1482,7 @@ class Milling extends React.Component {
                             millingInProgress={this.state.millingProgress != -1 || this.props.openJoggingPanel === true}
                             editMode={this.state.editMode}
                             imagePanelOpen={this.props.openImagePanel}
-                            open={/*this.props.openMachineOutputPanel*/ false}
+                            open={this.props.openMachineOutputPanel}
                             manualMode={this.props.manualMode}
                             setMachineOutputPanel={this.props.setMachineOutputPanel}
                         />

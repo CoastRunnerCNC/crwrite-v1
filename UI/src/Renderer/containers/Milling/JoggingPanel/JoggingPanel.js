@@ -818,7 +818,6 @@ class JoggingPanel extends React.Component {
 
     keydownListener(event) {
         let eventKey = event.key;
-        //console.log(eventKey);
 
         if (this.props.focusedInput) {
             if (

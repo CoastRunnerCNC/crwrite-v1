@@ -38,11 +38,12 @@ const TerminalPanel = (props) => {
     const gcodeEnd = useRef(null);
     const manual_entry_ref = useRef(null);
     const prevProps = useRef();
+    const focusedInput = useRef();
     const outputPanelHeight = props.imagePanelOpen ? "30vh" : "75vh";
 
     const executeCommand = () => {
         manual_entry_ref.current.focus();
-        const command = manualEntry;
+        const command = manual_entry_ref.current.value;
 
         let history = entryHistory.slice();
         let searchIndex = history.indexOf(command);
@@ -131,7 +132,18 @@ const TerminalPanel = (props) => {
         }
     }
 
+    const keydownListener = (event) => {
+        if (focusedInput.current == "manual_entry" && event.key == "Enter") {
+            executeCommand();
+        }
+    }
+
     useEffect(() => {
+        focusedInput.current = props.focusedInput;
+    }, [props.focusedInput]);
+
+    useEffect(() => {
+
         let timerId;
 
         if (props.milling === true) {
@@ -147,6 +159,7 @@ const TerminalPanel = (props) => {
             if (timerId) {
                 clearInterval(timerId);
             }
+
         };
     }, [props.milling]);
 
@@ -155,10 +168,13 @@ const TerminalPanel = (props) => {
     });
 
     useEffect(() => {
+        window.removeEventListener("keydown", keydownListener, true);
+        window.addEventListener("keydown", keydownListener, true);
         ipcRenderer.removeListener("Jobs::ReadWrites", updateReadWrites);
         ipcRenderer.on("Jobs::ReadWrites", updateReadWrites);
         ipcRenderer.on("CR_UpdateRealtimeStatus", updateRealtimeStatus)
         return () => {
+            window.removeEventListener("keydown", keydownListener, true);
             ipcRenderer.removeListener("Jobs::ReadWrites", updateReadWrites);
             ipcRenderer.removeListener("CR_UpdateRealtimeStatus", updateRealtimeStatus);
         };
@@ -260,7 +276,7 @@ const TerminalPanel = (props) => {
         }
     }
     const onXClick = () => {
-        props.setMachineOutputPanel(false);
+        props.setOpenTerminalPanel(false);
     };
 
     if (props.open) {

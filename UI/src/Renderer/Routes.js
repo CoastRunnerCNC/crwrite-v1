@@ -28,6 +28,7 @@ function Routes(props) {
         setJoggingPanel: props.setJoggingPanel,
         setImagePanel: props.setImagePanel,
         setMachineOutputPanel: props.setMachineOutputPanel,
+        setOpenTerminalPanel: props.setOpenTerminalPanel,
         focusedInput: props.focusedInput,
         setFocusedInput: props.setFocusedInput
     };
@@ -60,6 +61,7 @@ function Routes(props) {
                                 openJoggingPanel={props.openJoggingPanel}
                                 openStepsPanel={props.openStepsPanel}
                                 openMachineOutputPanel={props.openMachineOutputPanel}
+                                openTerminalPanel={props.openTerminalPanel}
                                 commandKeys={props.commandKeys}
                                 eventKeyFrontEndCommandMap={props.eventKeyFrontEndCommandMap}
                                 refreshShuttleKeys={props.refreshShuttleKeys}

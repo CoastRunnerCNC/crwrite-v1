@@ -121,7 +121,6 @@ const TerminalPanel = (props) => {
         try {
             const parsed = JSON.parse(status);
             if (parsed.error == null) {
-                console.log(parsed);
                 let status = parsed.status;
 
                 setRealTimeStatus(status);
@@ -276,13 +275,14 @@ const TerminalPanel = (props) => {
         }
     }
     const onXClick = () => {
+        console.log("Terminal panel close");
         props.setOpenTerminalPanel(false);
     };
 
     if (props.open) {
         return (
             <ItemPanel
-                title="Machine Output"
+                title="Terminal"
                 color="secondary"
                 scrollContent
                 onXClick={onXClick}

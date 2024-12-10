@@ -162,12 +162,11 @@ class Shuttle extends React.Component {
                             <ManualModeSVG
                                 disabled={disabled}
                                 onClick={() => {
-                                    this.props.setNavigateToMilling(true);
                                     this.props.setManualMode(true);
                                     this.props.setStepsPanel(false);
                                     this.props.setJoggingPanel(true);
                                     this.props.setImagePanel(false);
-                                    this.props.setMachineOutputPanel(false)
+                                    this.props.setMachineOutputPanel(false);
                                     this.props.setOpenTerminalPanel(true);
                                 }}
                             />

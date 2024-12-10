@@ -12563,7 +12563,7 @@ export default class App extends React.Component {
             openImagePanel: true,
             openJoggingPanel: false,
             openProbingWizard: false,
-            openMachineOutputPanel: true,
+            openMachineOutputPanel: false,
             openTerminalPanel: false,
             openStepsPanel: true,
             navigateToMilling: false,
@@ -12616,12 +12616,11 @@ export default class App extends React.Component {
     }
 
     setOpenTerminalPanel(value) {
-        if (!this.state.manualMode) {
             this.setState({openTerminalPanel: value})
-        }
     }
 
     setManualMode(value) {
+        console.log("setManualMode: " + value);
         this.setState({manualMode: value});
     }
 
@@ -12630,9 +12629,7 @@ export default class App extends React.Component {
     }
 
     setJoggingPanel(value) {
-        if (!this.state.manualMode) {
             this.setState({ openJoggingPanel: value });
-        }
     }
 
     setShowJoggingResetAlert(value) {
@@ -12854,6 +12851,9 @@ export default class App extends React.Component {
     }
 
     setNavigateToMilling(value) {
+        if (value === true) {
+            this.setState({openMachineOutputPanel: true});
+        }
         this.setState({ navigateToMilling: value });
     }
 

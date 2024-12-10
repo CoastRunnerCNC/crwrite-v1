@@ -553,6 +553,11 @@ class Milling extends React.Component {
                 false
             );
         });
+        this.props.setImagePanel(true);
+        this.props.setMachineOutputPanel(true);
+        this.props.setOpenTerminalPanel(false);
+        this.props.setStepsPanel(true);
+        this.props.setJoggingPanel(false);
         ipcRenderer.send("Walkthrough::ShouldDisplay", "Milling");
 
         ipcRenderer.removeAllListeners("Jobs::EmergencyStopResponse");
@@ -579,10 +584,10 @@ class Milling extends React.Component {
 
     componentWillUnmount() {
         this.props.setManualMode(false);
-        this.props.setStepsPanel(true);
+        this.props.setStepsPanel(false);
         this.props.setJoggingPanel(false);
         this.props.setImagePanel(true);
-        this.props.setMachineOutputPanel(true);
+        this.props.setMachineOutputPanel(false);
         ipcRenderer.removeAllListeners("Walkthrough::ResponseShouldDisplay");
     }
 
@@ -659,8 +664,8 @@ class Milling extends React.Component {
                     }
                 }
             );
-
-            ipcRenderer.send("Jobs::GetProgress", this.state.selectedStepIndex);
+            // could this call be what is causing one screen to work and not the other
+            // ipcRenderer.send("Jobs::GetProgress", this.state.selectedStepIndex);
             return;
         }
 
@@ -1058,7 +1063,7 @@ class Milling extends React.Component {
             this.props.setNavigateToMilling(false);
             return <Redirect to="/" />;
         }
-        console.log("Miling focusedInput: " + this.props.focusedInput);
+        console.log("rerender");
         return (
             <React.Fragment>
                 

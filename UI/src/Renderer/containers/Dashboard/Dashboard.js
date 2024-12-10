@@ -11,6 +11,7 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
+    Box,
 } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { ipcRenderer, shell } from "electron";
@@ -24,6 +25,9 @@ import ProbingWizard from "../../components/Modals/ProbingWizard/ProbingWizard";
 const crwrite = require("crwrite");
 import Shuttle from "../../components/Modals/Shuttle";
 import ManualModeButton from "../../components/ManualModeButton/ManualModeButton";
+import JoggingPanel from "../Milling/JoggingPanel/JoggingPanel";
+import TerminalPanel from "../../components/TerminalPanel/TerminalPanel";
+import MachineOutputPanel from "../Milling/MachineOutputPanel/MachineOutputPanel";
 
 const styles = (theme) => ({
     main: {
@@ -475,10 +479,6 @@ function Dashboard(props) {
 
     function onClickRun() {
         if (status === 2 || enableEditButton) {
-            props.setImagePanel(true);
-            props.setMachineOutputPanel(true);
-            props.setStepsPanel(true);
-            props.setJoggingPanel(false);
             if (enableEditButton) {
                 setShowNewFileAlert(true);
             } else {
@@ -570,19 +570,10 @@ function Dashboard(props) {
         ipcRenderer.removeAllListeners("CRFileDoubleClick");
         return <Redirect to="/milling" />;
     }
-
+    console.log("Dashboard rerender");
+    console.log("openJoggingPanel: " + props.openJoggingPanel);
     return (
-        <div style={{ flexGrow: 1 }}>
-            <Alert
-                open={alertMessage.length > 0}
-                message={alertMessage}
-                onOk={(event) => {
-                    setAlertMessage("");
-                }}
-                onCancel={(e) => {
-                    setAlertMessage("");
-                }}
-            />
+        <>
             <Alert
                 open={openProbingSuccess}
                 message="Probing successfull."
@@ -594,87 +585,200 @@ function Dashboard(props) {
                 setOpenProbingWizard={props.setOpenProbingWizard}
                 setOpenProbingSuccess={setOpenProbingSuccess}
             />
-            <Alert
-                open={showNewFileAlert}
-                message="Would you like to create a new file?"
-                yesNo={true}
-                onOk={handleNewFileYes}
-                onCancel={handleNewFileNo}
-            />
-            <Menu />
-            <JobSelection
-                open={showJobSelection}
-                onClose={onCloseJobSelection}
-                jobs={availableJobs}
-                status={status}
-                refreshJobs={refreshJobs}
-                enableEditButton={enableEditButton}
-            />
-
-            <Grid container direction="column">
-                <Grid item>
-                    <Grid
-                        container
-                        justify="space-between"
+            {props.openJoggingPanel ||
+            props.openTerminalPanel ||
+            props.openMachineOutputPanel ? (
+                <Box
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr 1fr",
+                        gridTemplateRows: "1fr",
+                        gap: "12px",
+                        overflowY: "auto",
+                    }}
+                >
+                    <Box
                         style={{
-                            height: "60vh",
-                            paddingTop: "64px",
-                            paddingRight: "16px",
+                            gridColumn: "span 2",
+                            display: "grid",
+                            gridTemplateColumns: "1fr",
+                            gridTemplateRows: "1fr",
+                            overflowY: "auto",
                         }}
                     >
-                        <Grid item xs={3}></Grid>
+                        {props.openJoggingPanel && (
+                            <JoggingPanel
+                                commandKeys={props.commandKeys}
+                                openJoggingPanel={props.openJoggingPanel}
+                                eventKeyFrontEndCommandMap={
+                                    props.eventKeyFrontEndCommandMap
+                                }
+                                refreshShuttleKeys={props.refreshShuttleKeys}
+                                feedRate={props.feedRate}
+                                updateFeedRate={props.updateFeedRate}
+                                spindleRate={props.spindleRate}
+                                updateSpindleRate={props.updateSpindleRate}
+                                setManualMode={props.setManualMode}
+                                manualMode={props.manualMode}
+                                showJoggingResetAlert={
+                                    props.showJoggingResetAlert
+                                }
+                                setJoggingPanel={props.setJoggingPanel}
+                                setShowJoggingResetAlert={
+                                    props.setShowJoggingResetAlert
+                                }
+                                setStepsPanel={props.setStepsPanel}
+                                openStepsPanel={props.openStepsPanel}
+                                disableJoggingAbortOnMouseUp={
+                                    props.disableJoggingAbortOnMouseUp
+                                }
+                                setDisableJoggingAbortOnMouseUp={
+                                    props.setDisableJoggingAbortOnMouseUp
+                                }
+                                setGoBack={() => {}}
+                                focusedInput={props.focusedInput}
+                                setFocusedInput={props.setFocusedInput}
+                            />
+                        )}
+                    </Box>
+                    <Box
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr",
+                            gridTemplateRows: "1fr",
+                            gap: "8px",
+                            overflow: "hidden auto",
+                        }}
+                    >
+                        <TerminalPanel
+                            milling={false}
+                            setting={props.settings}
+                            onEditGCode={() => {}}
+                            selectedStep={null}
+                            millingInProgress={true}
+                            editMode={false}
+                            imagePanelOpen={props.openImagePanel}
+                            open={props.openTerminalPanel}
+                            manualMode={props.manualMode}
+                            setOpenTerminalPanel={props.setOpenTerminalPanel}
+                            setImagePanel={props.setImagePanel}
+                            setMachineOutputPanel={props.setMachineOutputPanel}
+                            focusedInput={props.focusedInput}
+                            setFocusedInput={props.setFocusedInput}
+                        />
+                        <MachineOutputPanel
+                            milling={false}
+                            onEditGCode={() => {}}
+                            selectedStep={null}
+                            millingInProgress={true}
+                            editMode={false}
+                            imagePanelOpen={props.openImagePanel}
+                            open={props.openMachineOutputPanel}
+                            manualMode={props.manualMode}
+                            setMachineOutputPanel={props.setMachineOutputPanel}
+                        />
+                    </Box>
+                </Box>
+            ) : (
+                <div style={{ flexGrow: 1 }}>
+                    <Alert
+                        open={alertMessage.length > 0}
+                        message={alertMessage}
+                        onOk={(event) => {
+                            setAlertMessage("");
+                        }}
+                        onCancel={(e) => {
+                            setAlertMessage("");
+                        }}
+                    />
+
+                    <Alert
+                        open={showNewFileAlert}
+                        message="Would you like to create a new file?"
+                        yesNo={true}
+                        onOk={handleNewFileYes}
+                        onCancel={handleNewFileNo}
+                    />
+                    <Menu />
+                    <JobSelection
+                        open={showJobSelection}
+                        onClose={onCloseJobSelection}
+                        jobs={availableJobs}
+                        status={status}
+                        refreshJobs={refreshJobs}
+                        enableEditButton={enableEditButton}
+                    />
+
+                    <Grid container direction="column">
                         <Grid item>
-                            <ItemPanel small title="CRWrite">
-                                <img
-                                    src={path.join(
-                                        __dirname,
-                                        "./static/img/DashboardBeach.png"
-                                    )}
-                                />
-                            </ItemPanel>
-                        </Grid>
-                        <Grid item xs={3}>
                             <Grid
                                 container
-                                direction="column"
-                                alignItems="flex-end"
+                                justify="space-between"
+                                style={{
+                                    height: "60vh",
+                                    paddingTop: "64px",
+                                    paddingRight: "16px",
+                                }}
                             >
-                                <Tooltip
-                                    disableFocusListener={true}
-                                    disableTouchListener={true}
-                                    disableHoverListener={status === 2}
-                                    placement="top-start"
-                                    title="Machine must be connected"
-                                >
-                                    <span>
-                                        <GuidedModeSVG onClick={onClickRun} />
-                                    </span>
-                                </Tooltip>
-                                <ManualModeButton
-                                    showOpenIcon={true}
-                                    setNavigateToMilling={props.setNavigateToMilling}
-                                    milling={props.milling}
-                                    status={props.status}
-                                    firmware={props.firmware}
-                                    setManualMode={props.setManualMode}
-                                    setStepsPanel={props.setStepsPanel}
-                                    setJoggingPanel={props.setJoggingPanel}
-                                    setImagePanel={props.setImagePanel}
-                                    setMachineOutputPanel={props.setMachineOutputPanel}
-                                    setOpenTerminalPanel={props.setOpenTerminalPanel}
-                                />
-                                {/* <FileCreater
-                                    onClick={() => {
-                                        props.setOpenProbingWizard(true);
-                                    }}
-                                />
-                                <Projects onClick={() => {}} /> */}
+                                <Grid item xs={3}></Grid>
+                                <Grid item>
+                                    <ItemPanel small title="CRWrite">
+                                        <img
+                                            src={path.join(
+                                                __dirname,
+                                                "./static/img/DashboardBeach.png"
+                                            )}
+                                        />
+                                    </ItemPanel>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Grid
+                                        container
+                                        direction="column"
+                                        alignItems="flex-end"
+                                    >
+                                        <Tooltip
+                                            disableFocusListener={true}
+                                            disableTouchListener={true}
+                                            disableHoverListener={status === 2}
+                                            placement="top-start"
+                                            title="Machine must be connected"
+                                        >
+                                            <span>
+                                                <GuidedModeSVG
+                                                    onClick={onClickRun}
+                                                />
+                                            </span>
+                                        </Tooltip>
+                                        <ManualModeButton
+                                            showOpenIcon={true}
+                                            setNavigateToMilling={
+                                                props.setNavigateToMilling
+                                            }
+                                            milling={props.milling}
+                                            status={props.status}
+                                            firmware={props.firmware}
+                                            setManualMode={props.setManualMode}
+                                            setStepsPanel={props.setStepsPanel}
+                                            setJoggingPanel={
+                                                props.setJoggingPanel
+                                            }
+                                            setImagePanel={props.setImagePanel}
+                                            setMachineOutputPanel={
+                                                props.setMachineOutputPanel
+                                            }
+                                            setOpenTerminalPanel={
+                                                props.setOpenTerminalPanel
+                                            }
+                                        />
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
-            </Grid>
-        </div>
+                </div>
+            )}
+        </>
     );
 }
 

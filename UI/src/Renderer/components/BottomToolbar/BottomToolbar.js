@@ -506,6 +506,7 @@ function BottomToolbar(props) {
     };
 
     const handleProgressResponse = (event, updatedProgress) => {
+        console.log("handlePrgressResponse");
         try {
             if (
                 updatedProgress.error != null &&
@@ -516,12 +517,11 @@ function BottomToolbar(props) {
                 setErrorTitle(updatedProgress.error.title);
                 setErrorText(updatedProgress.error.description);
             }
-            console.log("updating milling progress");
-            console.log(JSON.stringify(updatedProgress));
 
             if (updatedProgress.milling === false) {
                 setMillingProgress(-1);
             } else {
+                console.log("Progress: " + updatedProgress.progress.percentage);
                 setMillingProgress(updatedProgress.progress.percentage);
             }
         } catch (e) {
@@ -541,7 +541,11 @@ function BottomToolbar(props) {
         props.setOpenTerminalPanel(props.openTerminalPanel ? false : true);
         props.setImagePanel(false);
         props.setMachineOutputPanel(false);
+    }
 
+    const handleClickMachineOutputPanel = () => {
+        props.setMachineOutputPanel(props.openMachineOutputPanel ? false : true);
+        props.setOpenTerminalPanel(false);
     }
 
     useEffect(() => {
@@ -564,8 +568,13 @@ function BottomToolbar(props) {
         ipcRenderer.on("Jobs::GetProgressResponse", handleProgressResponse);
 
         const checkForMillingInterval = setInterval(() => {
-            if (status === 2 && !progressIntervalRef.current) {
+            console.log("progress interval");
+            console.log("status: " + status);
+            console.log("progressIntervalRef: ");
+            console.log(JSON.toString(progressIntervalRef.current))
+            if (!progressIntervalRef.current) {
                 progressIntervalRef.current = setInterval(() => {
+                    console.log("progress polled");
                     ipcRenderer.send("Jobs::GetProgress");
                 }, 500);
             }
@@ -878,16 +887,14 @@ function BottomToolbar(props) {
                                                         Image
                                                     </MenuItem>
                                                     <MenuItem
-                                                        onClick={() => 
-                                                            props.setMachineOutputPanel(props.openMachineOutputPanel ? false : true)
+                                                        onClick={
+                                                            handleClickMachineOutputPanel
                                                         }
-                                                        disabled={props.manualMode}
                                                     >
                                                         Machine Output
                                                     </MenuItem>
                                                     <MenuItem
                                                         onClick={handleTerminalClick}
-                                                        disabled={props.manualMode}
                                                     >
                                                         Terminal
                                                     </MenuItem>
@@ -895,7 +902,6 @@ function BottomToolbar(props) {
                                                         onClick={
                                                             handleJoggingPanelClick
                                                         }
-                                                        disabled={props.manualMode}
                                                     >
                                                         Jogging
                                                     </MenuItem>

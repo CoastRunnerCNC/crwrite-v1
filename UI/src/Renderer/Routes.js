@@ -30,7 +30,24 @@ function Routes(props) {
         setMachineOutputPanel: props.setMachineOutputPanel,
         setOpenTerminalPanel: props.setOpenTerminalPanel,
         focusedInput: props.focusedInput,
-        setFocusedInput: props.setFocusedInput
+        setFocusedInput: props.setFocusedInput,
+        openImagePanel: props.openImagePanel,
+        openJoggingPanel: props.openJoggingPanel,
+        openStepsPanel: props.openStepsPanel,
+        openMachineOutputPanel: props.openMachineOutputPanel,
+        openTerminalPanel: props.openTerminalPanel,
+        refreshShuttleKeys: props.refreshShuttleKeys,
+        showOperationsWindow: props.showOperationsWindow,
+        spindleRate: props.spindleRate,
+        updateSpindleRate: props.updateSpindleRate,
+        commandKeys: props.commandKeys,
+        eventKeyFrontEndCommandMap: props.eventKeyFrontEndCommandMap,
+        showJoggingResetAlert: props.showJoggingResetAlert,
+        setShowJoggingResetAlert: props.setShowJoggingResetAlert,
+        disableJoggingAbortOnMouseUp: props.disableJoggingAbortOnMouseUp,
+        setDisableJoggingAbortOnMouseUp: props.setDisableJoggingAbortOnMouseUp,
+        manualMode: props.manualMode,
+
     };
 
     return (
@@ -54,24 +71,6 @@ function Routes(props) {
                             <Milling
                                 {...routeProps}
                                 {...sharedProps}
-                                showOperationsWindow={props.showOperationsWindow}
-                                spindleRate={props.spindleRate}
-                                updateSpindleRate={props.updateSpindleRate}
-                                openImagePanel={props.openImagePanel}
-                                openJoggingPanel={props.openJoggingPanel}
-                                openStepsPanel={props.openStepsPanel}
-                                openMachineOutputPanel={props.openMachineOutputPanel}
-                                openTerminalPanel={props.openTerminalPanel}
-                                commandKeys={props.commandKeys}
-                                eventKeyFrontEndCommandMap={props.eventKeyFrontEndCommandMap}
-                                refreshShuttleKeys={props.refreshShuttleKeys}
-                                showJoggingResetAlert={props.showJoggingResetAlert}
-                                setShowJoggingResetAlert={props.setShowJoggingResetAlert}
-                                disableJoggingAbortOnMouseUp={props.disableJoggingAbortOnMouseUp}
-                                setDisableJoggingAbortOnMouseUp={
-                                    props.setDisableJoggingAbortOnMouseUp
-                                }
-                                manualMode={props.manualMode}
                             />
                         )}
                     />

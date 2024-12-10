@@ -539,7 +539,6 @@ class JoggingPanel extends React.Component {
             //     this.currentJog = null;
             // }
             if (parsed.error == null) {
-                console.log(parsed);
                 let status = parsed.status;
                 let wcs = this.state.WCS;
                 if (status.work_coordinates != null) {
@@ -1309,6 +1308,7 @@ class JoggingPanel extends React.Component {
         } else if (this.props.manualMode) {
             console.log("manual Mode true");
             this.props.setGoBack(true);
+            this.props.setJoggingPanel(false);
         } else {
             this.props.setJoggingPanel(false);
             this.props.setStepsPanel(true);
@@ -1832,7 +1832,6 @@ class JoggingPanel extends React.Component {
             ipcRenderer.send("CNC::ExecuteCommand", "M5");
         }
 
-        console.log(this.props.disableJoggingAbortOnMouseUp);
 
         return (
             <ItemPanel

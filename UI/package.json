@@ -35,7 +35,7 @@
         ],
         "afterSign": "./scripts/notarize.js",
         "nsis": {
-            "artifactName": "${productName} ${version} Setup.${ext}",
+            "artifactName": "${productName} ${version} Setup - testing.${ext}",
             "oneClick": false,
             "deleteAppDataOnUninstall": false,
             "createDesktopShortcut": true,
@@ -71,7 +71,7 @@
             "entitlementsInherit": "./scripts/entitlements.mac.plist"
         },
         "dmg": {
-            "artifactName": "CRWrite ${version} Setup.${ext}",
+            "artifactName": "CRWrite ${version} Setup - testing.${ext}",
             "icon": "./icon.icns"
         },
         "fileAssociations": {

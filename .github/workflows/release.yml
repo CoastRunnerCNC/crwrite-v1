@@ -46,6 +46,7 @@ jobs:
     - name: 'Run CMake'
       uses: lukka/run-cmake@v3.1
       with:
+        cmakeVersion: "3.21.1"
         cmakeGenerator: ${{ matrix.cmake_generator }}
         cmakeBuildType: 'Release'
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced

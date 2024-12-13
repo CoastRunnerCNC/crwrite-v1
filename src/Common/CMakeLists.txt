@@ -29,5 +29,5 @@ set(
 
 add_library(crwrite-common OBJECT ${cxx-sources} ${cxx-headers})
 set_property(TARGET crwrite-common PROPERTY POSITION_INDEPENDENT_CODE 1)
-target_link_libraries(crwrite-common PUBLIC jsoncpp_lib)
+target_link_libraries(crwrite-common PUBLIC jsoncpp_static)
 target_link_libraries(crwrite-common PRIVATE spdlog::spdlog_header_only Boost::headers)

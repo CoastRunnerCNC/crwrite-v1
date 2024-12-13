@@ -53,22 +53,26 @@ if(NOT APPLE)
 endif(NOT APPLE)
 
 find_package(jsoncpp CONFIG REQUIRED)
-get_target_property(jsoncpp_LIBRARIES jsoncpp_lib 
+get_target_property(jsoncpp_LIBRARIES jsoncpp_static
                     IMPORTED_LOCATION_${IMPORT_BUILD_TYPE})
-find_package(minizip CONFIG REQUIRED)
-get_target_property(minizip_LIBRARIES minizip::minizip
+find_package(unofficial-minizip CONFIG REQUIRED)
+get_target_property(minizip_LIBRARIES unofficial::minizip::minizip
                     IMPORTED_LOCATION_${IMPORT_BUILD_TYPE})
 find_package(OpenSSL REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 get_target_property(spdlog_LIBRARIES spdlog::spdlog
                     IMPORTED_LOCATION_${IMPORT_BUILD_TYPE})
 find_package(Threads REQUIRED)
-find_package(unofficial-tiny-process-library CONFIG REQUIRED)
+find_package(tiny-process-library CONFIG REQUIRED)
 get_target_property(
   tinyprocesslibrary_LIBRARIES
-  unofficial::tiny-process-library::tiny-process-library
+  tiny-process-library::tiny-process-library
   IMPORTED_LOCATION_${IMPORT_BUILD_TYPE})
 find_package(ZLIB REQUIRED)
+
+include_directories(
+  ${CMAKE_CURRENT_SOURCE_DIR}/../vcpkg/installed/x86-windows-static/include
+)
 
 include(NodeJS)
 nodejs_init()
@@ -123,11 +127,11 @@ add_library(MillDaemon STATIC ${MILL_SOFTWARE_SRC})
 set_property(TARGET MillDaemon PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_link_libraries(
   MillDaemon
-  INTERFACE jsoncpp_lib
-  PRIVATE jsoncpp_lib
+  INTERFACE jsoncpp_static
+  PRIVATE jsoncpp_static
           ZLIB::ZLIB
-          minizip::minizip
-          unofficial::tiny-process-library::tiny-process-library
+          unofficial::minizip::minizip
+          tiny-process-library::tiny-process-library
           OpenSSL::Crypto
           OpenSSL::SSL
           Threads::Threads

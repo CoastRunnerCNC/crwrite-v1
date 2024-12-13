@@ -46,4 +46,4 @@ endif(WIN32)
 
 add_library(crwrite-mill-grbl OBJECT ${cxx-sources} ${cxx-headers})
 set_property(TARGET crwrite-mill-grbl PROPERTY POSITION_INDEPENDENT_CODE 1)
-target_link_libraries(crwrite-mill-grbl PUBLIC jsoncpp_lib PRIVATE Boost::headers)
+target_link_libraries(crwrite-mill-grbl PUBLIC jsoncpp_static PRIVATE Boost::headers)

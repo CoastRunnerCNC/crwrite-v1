@@ -1,0 +1,24 @@
+{
+    "name": "your-project-name",
+    "version": "1.0.0",
+    "description": "This project uses vcpkg for package management.",
+    "dependencies": [
+      "boost-asio",
+      "boost-thread",
+      "boost-system",
+      "boost-iostreams",
+      "boost-filesystem",
+      "catch2",
+      "jsoncpp",
+      "minizip",
+      "openssl",
+      "spdlog",
+      "tiny-process-library",
+      "zlib"
+    ],
+    "overlays": [
+      "${{ github.workspace }}/custom-triplets"
+    ],
+    "default-triplet": "${{ matrix.vcpkg_triplet }}"
+  }
+  

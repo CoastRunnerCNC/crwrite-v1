@@ -35,7 +35,7 @@ jobs:
         path: ${{ github.workspace }}/vcpkg/
         key: ${{ hashFiles( 'vcpkg.txt' ) }}-${{ hashFiles( '.git/modules/vcpkg/HEAD' ) }}--${{ hashFiles( 'custom-triplets/x64-osx_b.cmake' ) }}${{ runner.os }}
     - name: Run vcpkg
-      uses: lukka/run-vcpkg@v7
+      uses: lukka/run-vcpkg@v10
       with:
         vcpkgArguments: '--debug --overlay-triplets=${{ github.workspace }}/custom-triplets --triplet ${{ matrix.vcpkg_triplet }} @${{ github.workspace }}/vcpkg.txt'
         vcpkgDirectory: '${{ github.workspace }}/vcpkg'

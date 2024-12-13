@@ -37,7 +37,6 @@ jobs:
     - name: Run vcpkg
       uses: lukka/run-vcpkg@v10
       with:
-        vcpkgArguments: '--debug --overlay-triplets=${{ github.workspace }}/custom-triplets --triplet ${{ matrix.vcpkg_triplet }} @${{ github.workspace }}/vcpkg.txt'
         vcpkgDirectory: '${{ github.workspace }}/vcpkg'
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3

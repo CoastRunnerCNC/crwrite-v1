@@ -45,7 +45,7 @@ else()
   set(IMPORT_BUILD_TYPE "RELEASE")
 endif()
 
-find_package(Boost REQUIRED COMPONENTS iostreams system thread filesystem)
+find_package(Boost CONFIG REQUIRED COMPONENTS iostreams system thread filesystem)
 find_package(Catch2 CONFIG REQUIRED)
 
 if(NOT APPLE)

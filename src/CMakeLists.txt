@@ -46,8 +46,8 @@ else()
   set(IMPORT_BUILD_TYPE "RELEASE")
 endif()
 
-set(Boost_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../vcpkg/installed/x86-windows-static/share/boost")
-find_package(Boost CONFIG REQUIRED COMPONENTS iostreams system thread filesystem)
+# set(Boost_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../vcpkg/installed/x86-windows-static/share/boost")
+# find_package(Boost CONFIG REQUIRED COMPONENTS iostreams system thread filesystem)
 find_package(Catch2 CONFIG REQUIRED)
 
 if(NOT APPLE)

@@ -15,10 +15,6 @@
       "spdlog",
       "tiny-process-library",
       "zlib"
-    ],
-    "overlays": [
-      "${{ github.workspace }}/custom-triplets"
-    ],
-    "default-triplet": "${{ matrix.vcpkg_triplet }}"
+    ]
   }
   

@@ -10,9 +10,9 @@
 	* git checkout 769f5bc
 	* (OS X / Linux) ./bootstrap-vcpkg.sh
 	* (Windows) bootstrap-vcpkg.bat
-	* (OS X) ./vcpkg install --overlay-triplets=../custom-triplets @../vcpkg.txt --triplet x64-osx_b
-	* (Linux) ./vcpkg install --overlay-triplets=../custom-triplets @../vcpkg.txt --triplet x64-linux
-	* (Windows) vcpkg install --overlay-triplets=../custom-triplets @../vcpkg.txt --triplet x86-windows-static
+	* (OS X) ./vcpkg install --overlay-triplets=../custom-triplets --triplet x64-osx_b
+	* (Linux) ./vcpkg install --overlay-triplets=../custom-triplets --triplet x64-linux
+	* (Windows) vcpkg install --overlay-triplets=../custom-triplets --triplet x86-windows-static
 3. From root directory:
 	* (Windows) mkdir build && cd build && cmake -DVCPKG_TARGET_TRIPLET=x86-windows-static -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -A Win32 -DOPENSSL_ROOT_DIR:PATH=../vcpkg/installed/x86-windows-static ../src
 	* (OS X) mkdir -p build && cd build && cmake -DVCPKG_TARGET_TRIPLET=x64-osx_b -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON ../src

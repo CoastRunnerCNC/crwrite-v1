@@ -38,6 +38,8 @@ jobs:
       uses: lukka/run-vcpkg@v10
       with:
         vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+    - name: List vcpkg packages
+      run: $ENV{VCPKG_ROOT}/vcpkg list
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -52,7 +54,7 @@ jobs:
         useVcpkgToolchainFile: true
         vcpkgTriplet: '${{ matrix.vcpkg_triplet }}'
         buildDirectory: '${{ github.workspace }}/build'
-        cmakeAppendedArgs: ' ${{ matrix.cmake_platform_args }} -DCR_AUTH_KEY="${{ secrets.AUTH_KEY }}"'
+        cmakeAppendedArgs: ' ${{ matrix.cmake_platform_args }} -DCR_AUTH_KEY="${{ secrets.AUTH_KEY }}" --debug-output --trace-expand'
         buildWithCMake: false
     - name: npm install, build, and test (Win)
       if: matrix.platform == 'windows-2019'

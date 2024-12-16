@@ -39,7 +39,8 @@ jobs:
       with:
         vcpkgDirectory: '${{ github.workspace }}/vcpkg'
     - name: List vcpkg packages
-      run: &"$env:VCPKG_ROOT/vcpkg" list
+      run: |
+        $VCPKG_ROOT/vcpkg list
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:

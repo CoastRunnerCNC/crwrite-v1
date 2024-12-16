@@ -40,7 +40,13 @@ jobs:
         vcpkgDirectory: '${{ github.workspace }}/vcpkg'
     - name: List vcpkg packages
       run: |
-        $VCPKG_ROOT/vcpkg list
+        if [ "$RUNNER_OS" = "Windows" ]; then
+          & "$env:VCPKG_ROOT\vcpkg" list
+        else
+          $VCPKG_ROOT/vcpkg list
+        fi
+      shell: bash
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:

@@ -42,8 +42,10 @@ jobs:
       run: |
         if [ "$RUNNER_OS" = "Windows" ]; then
           "$VCPKG_ROOT/vcpkg" list
+          ls -l "$VCPKG_ROOT"
         else
           $VCPKG_ROOT/vcpkg list
+          ls -l $VCPKG_ROOT
         fi
       shell: bash
     - name: Use Node.js ${{ matrix.node-version }}

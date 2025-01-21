@@ -47,7 +47,6 @@ bool MillingManager::RunAsyncGCodeBatch(MillConnection::Ptr pConnection, std::ve
 
     if (m_thread.joinable()) { m_thread.join(); }
     m_inProgress.store(true, std::memory_order_release);
-    m_ManualOperation.store(true, std::memory_order_release);
 
     m_thread = std::thread(&MillingManager::Thread_MillCodeBlock, this, pConnection, std::move(gcodes), false, true);
 

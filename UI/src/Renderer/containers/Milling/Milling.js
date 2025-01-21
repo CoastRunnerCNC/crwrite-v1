@@ -654,7 +654,7 @@ class Milling extends React.Component {
                             showNext: true,
                             milling: false,
                         });
-                     } else if (this.state.manualMode && this.state.millingProgress === 100) {
+                    } else if (this.state.millingProgress === 100) {
                         console.log("Manual mode updated progress to -1");
                         this.setState({millingProgress: -1})
                     }

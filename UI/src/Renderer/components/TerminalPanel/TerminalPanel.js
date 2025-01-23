@@ -344,7 +344,7 @@ const TerminalPanel = (props) => {
                                             }}
                                             onClick={uploadGCodeFile}
                                             color="primary"
-                                            disabled={!gCodeFilePath}
+                                            disabled={!gCodeFilePath || realTimeStatusDisplay === "Run"}
                                         >
                                             <SendIcon />
                                         </IconButton>

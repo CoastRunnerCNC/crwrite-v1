@@ -1058,6 +1058,7 @@ class Milling extends React.Component {
             }
 
             this.status_loop = false;
+            this.props.setOpenTerminalPanel(false);
             ipcRenderer.send("CNC::ExecuteCommand", "|");
             ipcRenderer.send("CR_SetCurrentPage", "Dashboard");
             this.props.setNavigateToMilling(false);

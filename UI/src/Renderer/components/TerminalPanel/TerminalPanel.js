@@ -190,7 +190,6 @@ const TerminalPanel = (props) => {
 
 
     function getManualEntryRow(component) {
-        if (!props.milling) {
             return (
                 <FormControl
                     fullWidth
@@ -240,7 +239,6 @@ const TerminalPanel = (props) => {
                     />
                 </FormControl>
             );
-        }
     }
 
     const updateReadWrites = (event, newLines) => {

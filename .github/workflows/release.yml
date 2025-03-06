@@ -30,10 +30,11 @@ jobs:
       with:
         submodules: 'recursive'
     - name: Cache vcpkg artifacts
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ github.workspace }}/vcpkg/
         key: ${{ hashFiles( 'vcpkg.txt' ) }}-${{ hashFiles( '.git/modules/vcpkg/HEAD' ) }}--${{ hashFiles( 'custom-triplets/x64-osx_b.cmake' ) }}${{ runner.os }}
+
     - name: Run vcpkg
       uses: lukka/run-vcpkg@v7
       with:
